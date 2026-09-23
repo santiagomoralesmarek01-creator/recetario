@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#c8553d" />
+  <meta name="description" content="Recetas caseras y del mundo, con modo cocina para ir tildando ingredientes y pasos." />
   <title>Recetario</title>
   <link rel="icon" href="img/plato-generico.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/estilos.css" />
@@ -15,17 +16,19 @@
       <span>Recetario</span>
     </a>
     <form class="buscador" id="buscador" role="search">
-      <input id="busqueda" type="search" placeholder="Buscar receta (ej: pollo, pasta, tarta)…" autocomplete="off" />
+      <input id="busqueda" type="search" placeholder="Buscar receta o ingrediente…" autocomplete="off" aria-label="Buscar" />
       <button type="submit">Buscar</button>
     </form>
-    <button class="boton-secundario" id="sorpresa" type="button">🎲 Sorpresa</button>
+    <nav class="menu">
+      <button class="boton-secundario" id="sorpresa" type="button">🎲 Sorpresa</button>
+      <span id="menu" class="menu-sesion"></span>
+    </nav>
   </header>
 
-  <main id="contenido" aria-live="polite"></main>
+  <main id="contenido" aria-live="polite"><p class="estado">Cargando…</p></main>
 
   <footer class="pie">
-    Recetas e imágenes de <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a>.
-    Íconos de reemplazo propios.
+    Recetas del mundo e imágenes de ingredientes: <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a>.
   </footer>
 
   <script type="module" src="js/app.js"></script>

@@ -1,0 +1,276 @@
+[
+  {
+    "slug": "empanadas-de-carne",
+    "nombre": "Empanadas de carne cortada a cuchillo",
+    "categoria": "Beef",
+    "origen": "Argentina",
+    "porciones": 24,
+    "minutos": 90,
+    "descripcion": "Las clásicas empanadas criollas, jugosas y bien condimentadas, al horno.",
+    "etiquetas": ["Criolla", "Horno", "Para compartir"],
+    "ingredientes": [
+      { "nombre": "Tapas de empanada", "medida": "24 unidades", "imagen": "Puff Pastry" },
+      { "nombre": "Carne vacuna (nalga o matambre)", "medida": "1 kg", "imagen": "Beef" },
+      { "nombre": "Cebollas", "medida": "3 grandes" },
+      { "nombre": "Cebolla de verdeo", "medida": "1 atado" },
+      { "nombre": "Morrón rojo", "medida": "1" },
+      { "nombre": "Huevos", "medida": "3 (duros)" },
+      { "nombre": "Aceitunas verdes", "medida": "100 g" },
+      { "nombre": "Pimentón", "medida": "1 cda" },
+      { "nombre": "Comino", "medida": "1 cdta" },
+      { "nombre": "Ají molido", "medida": "1 cdta" },
+      { "nombre": "Grasa vacuna", "medida": "100 g" },
+      { "nombre": "Sal", "medida": "a gusto" }
+    ],
+    "pasos": [
+      "Cortar la carne en cubos pequeños y reservar en la heladera.",
+      "Derretir la grasa en una olla y rehogar las cebollas y el morrón picados hasta que estén transparentes.",
+      "Sumar la carne y cocinar a fuego fuerte hasta que pierda el color rosado.",
+      "Condimentar con pimentón, comino, ají molido y sal. Retirar del fuego y agregar la cebolla de verdeo picada.",
+      "Dejar enfriar el relleno por completo (idealmente unas horas en la heladera).",
+      "Rellenar las tapas agregando huevo duro picado y aceitunas. Cerrar con repulgue.",
+      "Hornear a 220 °C durante 15 a 18 minutos, hasta que estén doradas."
+    ]
+  },
+  {
+    "slug": "milanesa-napolitana",
+    "nombre": "Milanesa a la napolitana",
+    "categoria": "Beef",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 45,
+    "descripcion": "Milanesa de carne con salsa de tomate, jamón y mozzarella gratinada.",
+    "etiquetas": ["Clásico", "Horno"],
+    "ingredientes": [
+      { "nombre": "Bifes de nalga", "medida": "4", "imagen": "Beef" },
+      { "nombre": "Huevos", "medida": "2" },
+      { "nombre": "Pan rallado", "medida": "250 g" },
+      { "nombre": "Ajo", "medida": "1 diente" },
+      { "nombre": "Perejil", "medida": "2 cdas" },
+      { "nombre": "Salsa de tomate", "medida": "200 ml", "imagen": "Tomato Puree" },
+      { "nombre": "Jamón cocido", "medida": "4 fetas", "imagen": "Ham" },
+      { "nombre": "Mozzarella", "medida": "250 g" },
+      { "nombre": "Orégano", "medida": "a gusto" },
+      { "nombre": "Aceite vegetal", "medida": "para freír" }
+    ],
+    "pasos": [
+      "Batir los huevos con el ajo y el perejil picados y una pizca de sal.",
+      "Pasar cada bife por el huevo y luego por el pan rallado, presionando bien.",
+      "Freír en aceite caliente hasta dorar de ambos lados. Escurrir sobre papel.",
+      "Colocar las milanesas en una fuente, cubrir con salsa de tomate, una feta de jamón y mozzarella.",
+      "Gratinar en horno fuerte hasta que el queso se derrita. Terminar con orégano."
+    ]
+  },
+  {
+    "slug": "guiso-de-lentejas",
+    "nombre": "Guiso de lentejas",
+    "categoria": "Pork",
+    "origen": "Argentina",
+    "porciones": 6,
+    "minutos": 75,
+    "descripcion": "Guiso de invierno bien espeso, con chorizo colorado y panceta.",
+    "etiquetas": ["Invierno", "Olla"],
+    "ingredientes": [
+      { "nombre": "Lentejas", "medida": "500 g" },
+      { "nombre": "Chorizo colorado", "medida": "2", "imagen": "Chorizo" },
+      { "nombre": "Panceta", "medida": "150 g" },
+      { "nombre": "Cebolla", "medida": "1" },
+      { "nombre": "Morrón rojo", "medida": "1" },
+      { "nombre": "Zanahorias", "medida": "2" },
+      { "nombre": "Papas", "medida": "2" },
+      { "nombre": "Puré de tomate", "medida": "520 g" },
+      { "nombre": "Pimentón", "medida": "1 cda" },
+      { "nombre": "Laurel", "medida": "2 hojas" },
+      { "nombre": "Caldo de verdura", "medida": "1,5 l" }
+    ],
+    "pasos": [
+      "Dejar las lentejas en remojo 2 horas (o toda la noche) y escurrir.",
+      "Dorar la panceta y el chorizo en rodajas en una olla grande.",
+      "Agregar cebolla, morrón y zanahoria picados y rehogar 10 minutos.",
+      "Sumar el pimentón, el puré de tomate, el laurel y las lentejas. Cubrir con caldo.",
+      "Cocinar a fuego bajo 30 minutos. Agregar las papas en cubos y cocinar 20 minutos más, hasta que espese.",
+      "Rectificar sal y dejar reposar 10 minutos antes de servir."
+    ]
+  },
+  {
+    "slug": "chipa",
+    "nombre": "Chipá",
+    "categoria": "Side",
+    "origen": "Paraguay",
+    "porciones": 20,
+    "minutos": 40,
+    "descripcion": "Pancitos de queso sin gluten, crocantes por fuera y tiernos por dentro.",
+    "etiquetas": ["Sin TACC", "Merienda"],
+    "ingredientes": [
+      { "nombre": "Almidón de mandioca", "medida": "500 g", "imagen": "Tapioca" },
+      { "nombre": "Queso (tipo Mar del Plata o Pategrás)", "medida": "250 g", "imagen": "Cheese" },
+      { "nombre": "Queso rallado", "medida": "100 g" },
+      { "nombre": "Huevos", "medida": "2" },
+      { "nombre": "Manteca", "medida": "100 g" },
+      { "nombre": "Leche", "medida": "100 ml" },
+      { "nombre": "Sal", "medida": "1 cdta" }
+    ],
+    "pasos": [
+      "Mezclar el almidón con la sal y los quesos rallados.",
+      "Agregar la manteca blanda y los huevos, e integrar con las manos.",
+      "Sumar la leche de a poco hasta lograr una masa suave que no se pegue.",
+      "Formar bolitas del tamaño de una nuez y colocarlas en una placa aceitada.",
+      "Hornear a 200 °C durante 15 a 20 minutos, hasta que estén apenas doradas."
+    ]
+  },
+  {
+    "slug": "flan-casero",
+    "nombre": "Flan casero con dulce de leche",
+    "categoria": "Dessert",
+    "origen": "Argentina",
+    "porciones": 8,
+    "minutos": 70,
+    "descripcion": "Flan de huevo a baño María con caramelo, para servir con dulce de leche.",
+    "etiquetas": ["Postre", "Horno"],
+    "ingredientes": [
+      { "nombre": "Huevos", "medida": "6" },
+      { "nombre": "Leche", "medida": "1 l" },
+      { "nombre": "Azúcar", "medida": "200 g + 150 g para el caramelo" },
+      { "nombre": "Esencia de vainilla", "medida": "1 cdta" },
+      { "nombre": "Dulce de leche", "medida": "para servir" }
+    ],
+    "pasos": [
+      "Hacer un caramelo con 150 g de azúcar en la flanera y cubrir bien las paredes.",
+      "Calentar la leche con la vainilla sin que llegue a hervir.",
+      "Batir los huevos con 200 g de azúcar y agregar la leche tibia de a poco.",
+      "Colar la mezcla y verterla en la flanera caramelizada.",
+      "Cocinar a baño María en horno a 160 °C durante 50 a 60 minutos, hasta que al pinchar salga limpio.",
+      "Enfriar y llevar a la heladera al menos 4 horas antes de desmoldar."
+    ]
+  },
+  {
+    "slug": "tortilla-de-papas",
+    "nombre": "Tortilla de papas",
+    "categoria": "Vegetarian",
+    "origen": "España",
+    "porciones": 4,
+    "minutos": 40,
+    "descripcion": "Tortilla jugosa por dentro, con o sin cebolla (acá, con).",
+    "etiquetas": ["Sartén", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "1 kg" },
+      { "nombre": "Cebolla", "medida": "1" },
+      { "nombre": "Huevos", "medida": "6" },
+      { "nombre": "Aceite de oliva", "medida": "cantidad necesaria" },
+      { "nombre": "Sal", "medida": "a gusto" }
+    ],
+    "pasos": [
+      "Pelar las papas y cortarlas en láminas finas. Picar la cebolla.",
+      "Freír papas y cebolla en abundante aceite a fuego medio hasta que estén tiernas, sin dorar.",
+      "Escurrir y mezclar con los huevos batidos y sal. Dejar reposar 5 minutos.",
+      "Volcar en una sartén con un hilo de aceite y cocinar 3 a 4 minutos.",
+      "Dar vuelta con ayuda de un plato y cocinar 2 a 3 minutos más del otro lado."
+    ]
+  },
+  {
+    "slug": "pollo-al-horno-con-papas",
+    "nombre": "Pollo al horno con papas",
+    "categoria": "Chicken",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 80,
+    "descripcion": "Pata muslo dorada con papas, limón y romero, todo en una asadera.",
+    "etiquetas": ["Horno", "Fácil"],
+    "ingredientes": [
+      { "nombre": "Pata muslo", "medida": "4" },
+      { "nombre": "Papas", "medida": "1 kg" },
+      { "nombre": "Limón", "medida": "1" },
+      { "nombre": "Ajo", "medida": "4 dientes" },
+      { "nombre": "Romero", "medida": "2 ramitas" },
+      { "nombre": "Pimentón", "medida": "1 cdta" },
+      { "nombre": "Aceite de oliva", "medida": "4 cdas" },
+      { "nombre": "Sal", "medida": "a gusto" },
+      { "nombre": "Pimienta", "medida": "a gusto" }
+    ],
+    "pasos": [
+      "Precalentar el horno a 200 °C.",
+      "Condimentar el pollo con jugo de limón, ajo picado, pimentón, sal, pimienta y aceite.",
+      "Cortar las papas en gajos y distribuirlas en la asadera junto con el pollo y el romero.",
+      "Hornear 60 minutos, dando vuelta las papas a mitad de cocción.",
+      "Subir el horno a máximo los últimos 10 minutos para que la piel quede crocante."
+    ]
+  },
+  {
+    "slug": "chimichurri",
+    "nombre": "Chimichurri",
+    "categoria": "Side",
+    "origen": "Argentina",
+    "porciones": 10,
+    "minutos": 15,
+    "descripcion": "La salsa infaltable del asado. Mejor si se prepara un día antes.",
+    "etiquetas": ["Asado", "Salsa", "Vegano"],
+    "ingredientes": [
+      { "nombre": "Perejil", "medida": "1 taza" },
+      { "nombre": "Ajo", "medida": "4 dientes" },
+      { "nombre": "Orégano", "medida": "2 cdas" },
+      { "nombre": "Ají molido", "medida": "1 cdta" },
+      { "nombre": "Vinagre de vino", "medida": "1/2 taza" },
+      { "nombre": "Aceite vegetal", "medida": "1 taza" },
+      { "nombre": "Agua", "medida": "1/4 taza" },
+      { "nombre": "Sal", "medida": "1 cdta" }
+    ],
+    "pasos": [
+      "Hervir el agua con la sal y dejar enfriar.",
+      "Picar bien fino el perejil y el ajo.",
+      "Mezclar en un frasco el perejil, el ajo, el orégano y el ají molido.",
+      "Agregar el vinagre, el agua salada y el aceite. Tapar y agitar.",
+      "Dejar reposar al menos 2 horas (mejor de un día para otro) antes de usar."
+    ]
+  },
+  {
+    "slug": "noquis-de-papa",
+    "nombre": "Ñoquis de papa",
+    "categoria": "Pasta",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 60,
+    "descripcion": "Los ñoquis del 29, livianos y caseros, con la salsa que más te guste.",
+    "etiquetas": ["Pasta casera", "29"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "1 kg" },
+      { "nombre": "Harina", "medida": "250 g" },
+      { "nombre": "Huevo", "medida": "1" },
+      { "nombre": "Queso rallado", "medida": "3 cdas" },
+      { "nombre": "Nuez moscada", "medida": "una pizca" },
+      { "nombre": "Sal", "medida": "a gusto" }
+    ],
+    "pasos": [
+      "Hervir las papas con cáscara hasta que estén tiernas. Pelarlas y pisarlas en caliente.",
+      "Dejar entibiar el puré y agregar el huevo, el queso, la nuez moscada y la sal.",
+      "Incorporar la harina de a poco hasta lograr una masa suave que no se pegue.",
+      "Formar cilindros de 2 cm de diámetro y cortar trozos de 2 cm. Marcar con un tenedor.",
+      "Cocinar en abundante agua hirviendo con sal. Retirar cuando suban a la superficie.",
+      "Servir con salsa de tomate, bolognesa o manteca y salvia."
+    ]
+  },
+  {
+    "slug": "arroz-con-leche",
+    "nombre": "Arroz con leche",
+    "categoria": "Dessert",
+    "origen": "Argentina",
+    "porciones": 6,
+    "minutos": 50,
+    "descripcion": "Cremoso, con canela y un toque de limón. Se come tibio o frío.",
+    "etiquetas": ["Postre", "Olla"],
+    "ingredientes": [
+      { "nombre": "Arroz", "medida": "200 g" },
+      { "nombre": "Leche", "medida": "1 l" },
+      { "nombre": "Azúcar", "medida": "150 g" },
+      { "nombre": "Canela", "medida": "1 rama + en polvo" },
+      { "nombre": "Limón", "medida": "cáscara de 1" },
+      { "nombre": "Esencia de vainilla", "medida": "1 cdta" }
+    ],
+    "pasos": [
+      "Hervir el arroz en agua 5 minutos y escurrir.",
+      "Calentar la leche con la rama de canela y la cáscara de limón.",
+      "Agregar el arroz y cocinar a fuego bajo, revolviendo seguido, unos 30 minutos.",
+      "Sumar el azúcar y la vainilla y cocinar 5 minutos más, hasta que esté cremoso.",
+      "Retirar la canela y el limón. Servir espolvoreado con canela en polvo."
+    ]
+  }
+]

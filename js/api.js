@@ -1,6 +1,9 @@
 // Cliente mínimo de TheMealDB (https://www.themealdb.com/api.php).
 // La clave "1" es la de prueba/desarrollo. Para publicar el sitio conviene
 // conseguir una clave propia (se obtiene apoyando el proyecto en Patreon).
+import { urlIngrediente } from './imagenes.js';
+import { traducirIngrediente } from './traducciones.js';
+
 const API_KEY = '1';
 const BASE = `https://www.themealdb.com/api/json/v1/${API_KEY}`;
 
@@ -21,32 +24,45 @@ async function pedir(ruta) {
   return promesa;
 }
 
+// Separa el texto de instrucciones en pasos, quitando rótulos como "STEP 1" o "2.".
+export function separarPasos(texto = '') {
+  return texto
+    .split(/\r?\n+/)
+    .map((p) => p.replace(/^\s*(step\s*)?\d+[.):-]?\s*/i, '').trim())
+    .filter((p) => p.length > 1);
+}
+
 // Convierte el formato plano de TheMealDB (strIngredient1..20 / strMeasure1..20)
-// en un objeto más cómodo de usar.
+// al formato común que usa toda la app (ver repositorio.js).
 export function normalizarReceta(m) {
   const ingredientes = [];
   for (let i = 1; i <= 20; i++) {
     const nombre = (m[`strIngredient${i}`] || '').trim();
     if (!nombre) continue;
-    ingredientes.push({ nombre, medida: (m[`strMeasure${i}`] || '').trim() });
+    ingredientes.push({
+      nombre: traducirIngrediente(nombre),
+      medida: (m[`strMeasure${i}`] || '').trim(),
+      imagen: urlIngrediente(nombre),
+    });
   }
   return {
     id: m.idMeal,
+    origenDatos: 'mealdb',
     nombre: m.strMeal,
     categoria: m.strCategory || '',
     origen: m.strArea || '',
-    instrucciones: m.strInstructions || '',
     imagen: m.strMealThumb || '',
     video: m.strYoutube || '',
-    fuente: m.strSource || '',
+    enlace: m.strSource || '',
     etiquetas: (m.strTags || '').split(',').map((t) => t.trim()).filter(Boolean),
     ingredientes,
+    pasos: separarPasos(m.strInstructions),
   };
 }
 
 // Resumen liviano (lo que devuelve filter.php): sólo id, nombre e imagen.
 function normalizarResumen(m) {
-  return { id: m.idMeal, nombre: m.strMeal, imagen: m.strMealThumb || '' };
+  return { id: m.idMeal, origenDatos: 'mealdb', nombre: m.strMeal, imagen: m.strMealThumb || '' };
 }
 
 export async function buscarPorNombre(texto) {

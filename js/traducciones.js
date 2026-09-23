@@ -58,10 +58,24 @@ export const INGREDIENTES = {
   'red wine': 'vino tinto', 'yogurt': 'yogur', 'zucchini': 'zucchini', 'courgettes': 'zucchinis',
 };
 
+// Ingredientes en español que no están arriba, para encontrar su imagen.
+const SOLO_IMAGEN = {
+  'carne picada': 'minced beef', 'harina 0000': 'plain flour', 'harina': 'plain flour',
+  'huevo': 'egg', 'huevos': 'eggs', 'papa': 'potatoes', 'papas': 'potatoes',
+  'aceitunas': 'green olives', 'aceitunas verdes': 'green olives', 'grasa vacuna': 'lard',
+  'lentejas': 'lentils', 'chorizo': 'chorizo', 'panceta': 'bacon', 'morron': 'red pepper',
+  'queso': 'cheese', 'queso rallado': 'parmesan', 'nuez moscada': 'nutmeg',
+  'vinagre de vino': 'red wine vinegar', 'pimienta': 'black pepper', 'caldo': 'vegetable stock',
+  'caldo de verdura': 'vegetable stock', 'dulce de leche': 'condensed milk', 'nalga': 'beef',
+  'cuadril': 'beef', 'muslos de pollo': 'chicken legs', 'pata muslo': 'chicken legs',
+};
+
 // Índice inverso español -> inglés, para las búsquedas.
-const INVERSO = Object.fromEntries(
-  Object.entries(INGREDIENTES).map(([en, es]) => [sinTildes(es), en])
-);
+const INGREDIENTE_EN = {
+  ...Object.fromEntries(Object.entries(INGREDIENTES).map(([en, es]) => [sinTildes(es), en])),
+  ...SOLO_IMAGEN,
+};
+const INVERSO = { ...INGREDIENTE_EN };
 Object.entries(CATEGORIAS).forEach(([en, es]) => { INVERSO[sinTildes(es)] ??= en.toLowerCase(); });
 Object.assign(INVERSO, {
   pasta: 'pasta', tarta: 'tart', torta: 'cake', sopa: 'soup', guiso: 'stew',
@@ -76,6 +90,14 @@ function sinTildes(texto) {
 export function traducirIngrediente(nombreEn) {
   const es = INGREDIENTES[nombreEn.toLowerCase()];
   return es ? es.charAt(0).toUpperCase() + es.slice(1) : nombreEn;
+}
+
+// Nombre en inglés (con mayúsculas, como en TheMealDB) para buscar la imagen de un
+// ingrediente escrito en español. Devuelve '' si no lo conoce.
+export function ingredienteEnIngles(nombreEs) {
+  const base = sinTildes(nombreEs).replace(/\s*\(.*\)\s*/g, '');
+  const en = INGREDIENTE_EN[base] || INGREDIENTE_EN[base.replace(/s$/, '')] || '';
+  return en.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export const traducirCategoria = (c) => CATEGORIAS[c] || c;

@@ -1,11 +1,27 @@
 # Recetario
 
-Web de recetas con imágenes de platos e ingredientes. Es un proyecto independiente
-del resto del repo: HTML, CSS y JavaScript sin build ni dependencias.
+Web de recetas con cuentas de usuario, recetas propias y modo cocina.
+Es un proyecto independiente del resto del repo: HTML, CSS y JavaScript
+sin build ni dependencias que instalar.
 
-## Cómo correrlo
+## Qué hace
 
-Los módulos de JavaScript necesitan un servidor (no alcanza con abrir el archivo):
+- **Repertorio de tres fuentes**
+  - *De la casa*: recetas en español en `data/recetas-casa.json` (10 clásicos para empezar).
+  - *De la comunidad*: las que cargan los usuarios (públicas).
+  - *Del mundo*: ~300 recetas de TheMealDB (en inglés).
+- **Búsqueda** en las tres fuentes, por nombre o ingrediente, con traducción
+  básica al inglés para TheMealDB ("pollo" → "chicken").
+- **Cuentas** (Supabase): registro, ingreso, recuperar contraseña.
+- **Mis recetas**: crear, editar y borrar recetas con foto (subida desde el
+  celular, se achica automáticamente) y elegir si son públicas o privadas.
+- **Modo cocina** en cada receta: tildás ingredientes y pasos, ves el progreso,
+  se resalta el paso que sigue, el avance queda guardado en el dispositivo y
+  podés mantener la pantalla encendida.
+- **Imágenes sin huecos**: si una receta no tiene foto se muestra un collage de
+  sus ingredientes; si una imagen no carga aparece un ícono de reemplazo.
+
+## Correrlo en tu computadora
 
 ```bash
 cd recetas
@@ -13,56 +29,85 @@ python3 -m http.server 8000
 # abrir http://localhost:8000
 ```
 
-También se puede publicar tal cual en GitHub Pages, Netlify o Vercel.
+Sin configurar Supabase ya funciona todo menos las cuentas y las recetas propias.
 
-## Qué hace
+## Publicar en Vercel
 
-- **Inicio**: receta destacada al azar y grilla de categorías.
-- **Búsqueda**: primero por nombre de receta y, si no hay resultados, por ingrediente.
-  Traduce términos comunes del español ("pollo" → "chicken").
-- **Receta**: foto, ingredientes con su imagen y medida, pasos, video y fuente.
-- **🎲 Sorpresa**: abre una receta aleatoria.
+1. Entrá a <https://vercel.com/new> e importá el repositorio `Marekk`.
+2. En **Root Directory** elegí `recetas`.
+3. **Framework Preset**: `Other`. Dejá vacíos Build Command y Output Directory.
+4. Deploy. Vercel publica la rama de producción (normalmente `main`), así que
+   estos cambios tienen que estar mergeados ahí; las demás ramas generan
+   *previews* con su propia URL.
 
-## De dónde salen las imágenes
+Cada push posterior vuelve a publicar solo.
 
-| Qué | Fuente | Archivo |
-|---|---|---|
-| Fotos de platos | `strMealThumb` de TheMealDB (miniatura con `/small`) | `js/imagenes.js` |
-| Ingredientes | `https://www.themealdb.com/images/ingredients/<Nombre>-Small.png` | `js/imagenes.js` |
-| Categorías | `strCategoryThumb` de TheMealDB | `js/api.js` |
-| Reemplazos | `img/plato-generico.svg`, `img/ingrediente-generico.svg` (propios) | `img/` |
+## Activar cuentas y recetas propias (Supabase)
 
-Si una imagen no carga, `crearImagen()` prueba la versión grande y, si también
-falla, muestra el ícono genérico. Nunca queda una imagen rota.
-
-Para cambiar de proveedor de imágenes (Spoonacular, Unsplash/Pexels, fotos propias
-en Cloudinary, etc.) sólo hay que modificar `js/imagenes.js`.
+1. Creá un proyecto gratis en <https://supabase.com> (o usá uno existente).
+2. **SQL Editor → New query**: pegá todo `supabase/esquema.sql` y ejecutalo.
+   Crea la tabla `recetas`, las reglas de seguridad y el bucket de fotos.
+3. **Settings → API**: copiá *Project URL* y *anon public key* en `js/config.js`.
+   La anon key es pública por diseño; la seguridad la dan las reglas RLS.
+   Nunca uses la *service_role key* en la web.
+4. **Authentication → URL Configuration**: poné la URL de Vercel en *Site URL*
+   y agregala también en *Redirect URLs* (y `http://localhost:8000` para probar).
+   Así funcionan los emails de confirmación y de recuperar contraseña.
+5. Opcional: en **Authentication → Providers → Email** podés desactivar
+   *Confirm email* si no querés que se confirme el correo al registrarse.
 
 ## Estructura
 
 ```
 recetas/
 ├── index.html
+├── vercel.json               cabeceras y caché para Vercel
 ├── css/estilos.css
-├── img/                  íconos de reemplazo (SVG)
+├── data/recetas-casa.json    recetas propias del sitio (se pueden sumar más)
+├── img/                      íconos de reemplazo (SVG)
+├── supabase/esquema.sql      tabla, seguridad y bucket de fotos
 └── js/
-    ├── app.js            vistas y ruteo (#/, #/buscar/…, #/categoria/…, #/receta/…)
-    ├── api.js            cliente de TheMealDB + normalización de datos
-    ├── imagenes.js       URLs de imágenes y manejo de fallos
-    └── traducciones.js   diccionario español ↔ inglés
+    ├── app.js                ruteo y menú de sesión
+    ├── config.js             URL y anon key de Supabase
+    ├── supabase.js           carga el cliente de Supabase sólo si está configurado
+    ├── auth.js               registro, ingreso, salida
+    ├── repositorio.js        une las tres fuentes de recetas
+    ├── recetasCasa.js        recetas de data/recetas-casa.json
+    ├── misRecetas.js         recetas de usuarios (tabla + fotos)
+    ├── api.js                cliente de TheMealDB
+    ├── cocina.js             progreso del modo cocina y pantalla encendida
+    ├── imagenes.js           URLs de imágenes y reemplazos
+    ├── traducciones.js       diccionario español ↔ inglés
+    ├── dom.js                helpers de interfaz
+    └── vistas/               inicio, búsqueda, receta, cuenta, formulario
 ```
 
-## Antes de publicar
+## Sumar recetas de la casa
 
-- La clave `1` de TheMealDB es de prueba/desarrollo. Para un sitio público conviene
-  conseguir una clave propia (se obtiene apoyando el proyecto en Patreon) y
-  cambiarla en `js/api.js`.
+Agregá un objeto a `data/recetas-casa.json`:
+
+```json
+{
+  "slug": "nombre-unico",
+  "nombre": "Nombre visible",
+  "categoria": "Beef",
+  "origen": "Argentina",
+  "porciones": 4,
+  "minutos": 30,
+  "descripcion": "Una línea.",
+  "etiquetas": ["Horno"],
+  "imagen": "",
+  "ingredientes": [{ "nombre": "Cebolla", "medida": "2", "imagen": "Onion" }],
+  "pasos": ["Paso uno.", "Paso dos."]
+}
+```
+
+`categoria` usa las claves en inglés de `CATEGORIAS` en `js/traducciones.js`.
+En los ingredientes, `imagen` (el nombre en inglés de TheMealDB) es opcional:
+si falta se intenta deducir del diccionario.
+
+## Antes de tener mucho tráfico
+
+- La clave `1` de TheMealDB es de prueba. Para un sitio público conviene una
+  propia (se obtiene apoyando el proyecto en Patreon) y cambiarla en `js/api.js`.
 - Mantener el crédito a TheMealDB en el pie de página.
-- Las instrucciones de las recetas vienen en inglés. El diccionario de
-  `js/traducciones.js` cubre ingredientes y categorías, y se puede ampliar.
-
-## Próximos pasos posibles
-
-- Recetas propias en español (un JSON o una base de datos) mezcladas con las de la API.
-- Favoritos guardados en el navegador.
-- Filtro por país de origen (`filter.php?a=`).
