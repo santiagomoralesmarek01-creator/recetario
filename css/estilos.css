@@ -1,0 +1,216 @@
+:root {
+  --fondo: #faf6f0;
+  --superficie: #ffffff;
+  --texto: #2b2420;
+  --texto-suave: #6f635b;
+  --acento: #c8553d;
+  --acento-oscuro: #a6402b;
+  --borde: #ebe2d6;
+  --radio: 14px;
+  --sombra: 0 2px 10px rgba(60, 40, 20, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #1c1917;
+    --superficie: #292420;
+    --texto: #f3ede6;
+    --texto-suave: #b5a99e;
+    --acento: #e07a5f;
+    --acento-oscuro: #f0937a;
+    --borde: #3b342e;
+    --sombra: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.5;
+}
+
+a { color: var(--acento); }
+img { max-width: 100%; display: block; }
+h1, h2, h3 { line-height: 1.2; }
+
+/* ---------- cabecera ---------- */
+
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.buscador {
+  flex: 1 1 260px;
+  display: flex;
+  gap: 8px;
+}
+
+.buscador input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+button, .boton {
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--acento);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+button:hover, .boton:hover { background: var(--acento-oscuro); }
+
+.boton-secundario {
+  background: transparent;
+  color: var(--acento);
+  border: 1px solid var(--acento);
+}
+.boton-secundario:hover { background: var(--acento); color: #fff; }
+
+/* ---------- contenido ---------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 70vh;
+}
+
+.estado { text-align: center; color: var(--texto-suave); padding: 48px 0; }
+.meta { color: var(--texto-suave); margin: 4px 0; }
+.volver { display: inline-block; margin: 8px 0; text-decoration: none; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; color: var(--acento); margin: 0; }
+
+.destacada {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  background: var(--superficie);
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  margin-bottom: 24px;
+}
+.destacada img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.destacada > div { padding: 16px 24px 16px 0; }
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.tarjeta {
+  background: var(--superficie);
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  color: var(--texto);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.tarjeta:hover { transform: translateY(-3px); }
+.tarjeta-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--borde); }
+.tarjeta-cuerpo { padding: 10px 14px 14px; }
+.tarjeta h3 { font-size: 1rem; margin: 0; }
+
+.grilla-categorias { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.categoria { text-align: center; padding: 12px; }
+.categoria img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; }
+.categoria h3 { margin-top: 8px; }
+
+/* ---------- receta ---------- */
+
+.receta-cabecera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: start;
+}
+.receta-foto { width: 100%; border-radius: var(--radio); aspect-ratio: 1; object-fit: cover; }
+.receta h1 { font-size: 2rem; margin: 0 0 8px; }
+
+.etiquetas { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.etiquetas li {
+  font-size: 0.8rem;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--borde);
+}
+.enlaces { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.ingredientes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.ingrediente {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+.ingrediente img {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  object-fit: contain;
+}
+.ingrediente strong { display: block; }
+.medida { color: var(--texto-suave); font-size: 0.9rem; }
+
+.pasos { padding-left: 1.4rem; max-width: 70ch; }
+.pasos li { margin-bottom: 12px; }
+
+.pie {
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  padding: 24px 16px;
+}
+
+@media (max-width: 700px) {
+  .destacada, .receta-cabecera { grid-template-columns: 1fr; }
+  .destacada > div { padding: 0 16px 16px; }
+  .receta h1 { font-size: 1.6rem; }
+  .grilla { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}

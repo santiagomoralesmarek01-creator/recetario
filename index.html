@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#c8553d" />
+  <title>Recetario</title>
+  <link rel="icon" href="img/plato-generico.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <header class="cabecera">
+    <a class="marca" href="#/">
+      <img src="img/plato-generico.svg" alt="" width="32" height="32" />
+      <span>Recetario</span>
+    </a>
+    <form class="buscador" id="buscador" role="search">
+      <input id="busqueda" type="search" placeholder="Buscar receta (ej: pollo, pasta, tarta)…" autocomplete="off" />
+      <button type="submit">Buscar</button>
+    </form>
+    <button class="boton-secundario" id="sorpresa" type="button">🎲 Sorpresa</button>
+  </header>
+
+  <main id="contenido" aria-live="polite"></main>
+
+  <footer class="pie">
+    Recetas e imágenes de <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a>.
+    Íconos de reemplazo propios.
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
