@@ -70,3 +70,7 @@ export async function buscar(texto) {
 export async function deCategoria(categoria) {
   return (await todas()).filter((r) => r.categoria === categoria);
 }
+
+export async function dePais(pais) {
+  return (await todas()).filter((r) => r.origen === pais);
+}

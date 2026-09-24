@@ -97,6 +97,10 @@ export async function deCategoria(categoria) {
   return (await todas()).filter((r) => r.categoria === categoria);
 }
 
+export async function dePais(pais) {
+  return (await todas()).filter((r) => r.origen === pais);
+}
+
 export async function aleatoria() {
   const lista = await todas();
   return obtener(lista[Math.floor(Math.random() * lista.length)].id);

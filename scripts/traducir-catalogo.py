@@ -82,6 +82,47 @@ GLOSARIO = [
 ]
 
 
+# Verbos que Argos a veces deja en inglés al principio de una oración.
+VERBOS = {
+    "boil": "hervir", "fry": "freír", "mash": "pisar", "simmer": "cocinar a fuego lento", "slice": "cortar en rodajas",
+    "drain": "escurrir", "stir": "revolver", "grill": "grillar", "knead": "amasar", "whisk": "batir", "chop": "picar",
+    "bake": "hornear", "roast": "asar", "toss": "mezclar", "season": "condimentar", "preheat": "precalentar",
+    "sauté": "saltear", "saute": "saltear", "blend": "licuar", "sift": "tamizar", "grate": "rallar",
+}
+
+# Correcciones de términos que la traducción automática confunde (sensibles a mayúsculas: "Chile" es el país).
+TERMINOS = [
+    (r"\buna (?:lata|bandeja) (?:de|para) (?:hornear|horneado|pastel|torta|pan)\b", "un molde"),
+    (r"\b[Ll]as langostinos\b", "los langostinos"), (r"\b[Uu]nas langostinos\b", "unos langostinos"),
+    (r"\b[Ll]a langostino\b", "el langostino"),
+    (r"\b(lata|bandeja|molde) (?:de|para) (?:hornear|horneado|pastel|torta|pan)\b", "molde"),
+    (r"\b(?:hoja|bandeja) (?:de|para) (?:hornear|horneado|galletas)\b", "placa para horno"),
+    (r"\bpapel (?:de )?pergamino\b|\bpergamino(?: para hornear)?\b", "papel manteca"),
+    (r"\bcebollas de primavera\b", "cebollas de verdeo"), (r"\bcebolla de primavera\b", "cebolla de verdeo"),
+    (r"\bazúcar de hielo\b|\bazúcar glaseado\b", "azúcar impalpable"), (r"\bcrema doble\b", "crema de leche"),
+    (r"\balcantarillas\b", "brochetas"), (r"\balcantarilla\b", "brocheta"),
+    (r"\bchiles\b", "ajíes"), (r"\bchile\b", "ají"),
+]
+
+
+def pulir(texto):
+    """Arreglos finales sobre la traducción: temperaturas, verbos en inglés y términos."""
+    # "180C/160C ventilador/gas 4" -> "180 °C"
+    texto = re.sub(r"(\d{2,3})\s*[°ºo]?\s*C\s*/\s*\d{2,3}\s*[°ºo]?\s*C\s*(?:ventilador|fan|ventilado|con ventilador)?"
+                   r"\s*/\s*(?:marca de )?gas\s*(?:marca\s*)?\d+(?:\s*/\s*\d+)?", r"\1 °C", texto, flags=re.I)
+    texto = re.sub(r"(\d{2,3})\s*[°ºo]?\s*C\s*/\s*(?:marca de )?gas\s*(?:marca\s*)?\d+", r"\1 °C", texto, flags=re.I)
+    # "350°F (175°C)" -> "175 °C"; "350F" -> "175 °C"
+    texto = re.sub(r"(\d{3})\s*[°º]?\s*F\s*\(\s*(\d{2,3})\s*[°º]?\s*C\s*\)", r"\2 °C", texto)
+    texto = re.sub(r"(\d{3})\s*[°º]?\s*(?:grados\s*)?F\b",
+                   lambda m: f"{int(round((int(m.group(1)) - 32) * 5 / 9 / 5) * 5)} °C", texto)
+    texto = re.sub(r"(\d)\s*[°º]\s*C\b|(\d)\s?C\b", lambda m: f"{m.group(1) or m.group(2)} °C", texto)
+    texto = re.sub(r"\b(" + "|".join(VERBOS) + r")\b", lambda m: con_mayuscula(m.group(0), VERBOS[m.group(0).lower()]),
+                   texto, flags=re.I)
+    for patron, reemplazo in TERMINOS:
+        texto = re.sub(patron, lambda m, r=reemplazo: con_mayuscula(m.group(0), r), texto)
+    return texto
+
+
 def con_mayuscula(original, reemplazo):
     return reemplazo[:1].upper() + reemplazo[1:] if original[:1].isupper() else reemplazo
 
@@ -155,6 +196,8 @@ def traducir_fragmento(catalogo, cache, numero, total):
 def armar(catalogo, cache):
     nombres = json.loads((FUENTE / "nombres-es.json").read_text())
     ingredientes = json.loads((FUENTE / "ingredientes-es.json").read_text())
+    # TheMealDB no trae el país de algunas recetas: se completa a mano acá.
+    origenes = json.loads((FUENTE / "origenes-es.json").read_text())
     SALIDA.mkdir(parents=True, exist_ok=True)
     for viejo in SALIDA.glob("*.json"):
         viejo.unlink()
@@ -165,7 +208,7 @@ def armar(catalogo, cache):
         rid = receta["id"]
         ings = [[ingredientes[n.lower()], traducir_medida(m), n] for n, m in receta["ingredientes"]]
         pasos_en = separar_pasos(receta["instrucciones"])
-        pasos = [cache.get(clave(p), p) for p in pasos_en]
+        pasos = [pulir(aplicar_glosario(cache[clave(p)])) if clave(p) in cache else p for p in pasos_en]
         faltan = any(clave(p) not in cache for p in pasos_en)
         sin_traducir += faltan
         detalle = {
@@ -173,7 +216,7 @@ def armar(catalogo, cache):
             "nombre": nombres[rid],
             "original": receta["nombre"],
             "categoria": receta["categoria"],
-            "origen": ORIGENES.get(receta["origen"], receta["origen"]),
+            "origen": origenes.get(rid) or ORIGENES.get(receta["origen"], receta["origen"]),
             "imagen": receta["imagen"],
             "video": receta["video"],
             "enlace": receta["enlace"],

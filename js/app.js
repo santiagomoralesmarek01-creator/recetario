@@ -2,7 +2,7 @@ import { el, mostrar, aviso, nuevaNavegacion } from './dom.js';
 import * as repo from './repositorio.js';
 import { iniciarAuth, alCambiarSesion, usuario, nombreVisible, salir, cambiarClave } from './auth.js';
 import { hayBackend } from './supabase.js';
-import { vistaInicio, vistaCategoria, vistaBusqueda } from './vistas/listados.js';
+import { vistaInicio, vistaCategoria, vistaBusqueda, vistaPaises, vistaPais } from './vistas/listados.js';
 import { vistaReceta } from './vistas/receta.js';
 import { vistaEntrar, vistaMisRecetas, vistaNuevaClave } from './vistas/cuenta.js';
 import { vistaFormulario } from './vistas/formulario.js';
@@ -66,6 +66,8 @@ async function router() {
       case 'receta': return param ? await vistaReceta(param) : await vistaInicio();
       case 'categoria': return param ? await vistaCategoria(param) : await vistaInicio();
       case 'buscar': return param ? await vistaBusqueda(param) : await vistaInicio();
+      case 'paises': return await vistaPaises();
+      case 'pais': return param ? await vistaPais(param) : await vistaPaises();
       case 'entrar': return vistaEntrar('entrar');
       case 'registro': return vistaEntrar('registro');
       case 'recuperar': return vistaEntrar('recuperar');

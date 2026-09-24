@@ -8,6 +8,7 @@ on:
       - scripts/medidas.py
       - data/fuente/nombres-es.json
       - data/fuente/ingredientes-es.json
+      - data/fuente/origenes-es.json
       - data/fuente/mealdb-en.json
       - .github/workflows/traducir-catalogo.yml
 

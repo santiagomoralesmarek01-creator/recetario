@@ -57,6 +57,10 @@ export function deCategoria(categoria) {
   return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('categoria', categoria).limit(50));
 }
 
+export function dePais(pais) {
+  return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('origen', pais).limit(50));
+}
+
 export async function obtener(uuid) {
   const filas = await consultar((q) => q.select('*').eq('id', uuid).limit(1));
   return filas[0] || null;

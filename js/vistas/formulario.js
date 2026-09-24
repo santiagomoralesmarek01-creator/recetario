@@ -5,6 +5,7 @@ import * as misRecetas from '../misRecetas.js';
 import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
+import { NOMBRES_PAISES } from '../paises.js';
 
 const MAX_LADO = 1600;
 
@@ -161,7 +162,8 @@ export async function vistaFormulario(uuid = null) {
           Object.entries(CATEGORIAS).map(([valor, texto]) =>
             el('option', { value: valor, selected: (receta?.categoria || 'Miscellaneous') === valor }, texto)))),
       el('label', { class: 'campo' }, el('span', {}, 'Origen'),
-        el('input', { name: 'origen', placeholder: 'ej: Argentina', maxlength: '40', value: receta?.origen || '' })),
+        el('input', { name: 'origen', placeholder: 'ej: Argentina', maxlength: '40', value: receta?.origen || '', list: 'lista-paises' }),
+        el('datalist', { id: 'lista-paises' }, NOMBRES_PAISES.map((p) => el('option', { value: p })))),
       el('label', { class: 'campo' }, el('span', {}, 'Porciones'),
         el('input', { name: 'porciones', type: 'number', min: '1', max: '100', value: receta?.porciones ?? '' })),
       el('label', { class: 'campo' }, el('span', {}, 'Minutos'),

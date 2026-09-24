@@ -8,6 +8,7 @@ import {
   leerProgreso, guardarProgreso, pantallaSoportada, mantenerPantalla, pantallaActiva,
 } from '../cocina.js';
 import { portada } from './componentes.js';
+import { bandera, rutaPais } from '../paises.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -144,9 +145,10 @@ export async function vistaReceta(id) {
     el('article', { class: 'receta' },
       el('header', { class: 'receta-titulo' },
         el('h1', {}, r.nombre),
+        r.origen && el('a', { class: 'enlace-pais', href: rutaPais(traducirOrigen(r.origen)) },
+          bandera(traducirOrigen(r.origen)), traducirOrigen(r.origen)),
         el('p', { class: 'meta' }, [
           r.categoria && traducirCategoria(r.categoria),
-          r.origen && traducirOrigen(r.origen),
           r.autor && `Receta de ${r.autor}${r.publica === false ? ' · 🔒 privada' : ''}`,
           r.nombreOriginal && r.nombreOriginal !== r.nombre && `En su idioma: ${r.nombreOriginal}`,
         ].filter(Boolean).join(' · ')),

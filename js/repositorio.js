@@ -55,6 +55,29 @@ export async function deCategoria(categoria) {
   return [...deCasa, ...deComunidad, ...internacionales];
 }
 
+// Países con cantidad de recetas (casa + catálogo), de mayor a menor.
+export async function paises() {
+  const [deCasa, delMundo] = await Promise.all([
+    casa.todas(),
+    catalogo.disponible().then((ok) => (ok ? catalogo.todas() : [])),
+  ]);
+  const cuenta = new Map();
+  for (const r of [...deCasa, ...delMundo]) {
+    if (r.origen) cuenta.set(r.origen, (cuenta.get(r.origen) || 0) + 1);
+  }
+  return [...cuenta].map(([nombre, cantidad]) => ({ nombre, cantidad }))
+    .sort((a, b) => b.cantidad - a.cantidad || a.nombre.localeCompare(b.nombre, 'es'));
+}
+
+export async function dePais(pais) {
+  const [deCasa, deComunidad, internacionales] = await Promise.all([
+    casa.dePais(pais),
+    hayBackend ? seguro(comunidad.dePais(pais)) : [],
+    catalogo.disponible().then((ok) => (ok ? catalogo.dePais(pais) : [])),
+  ]);
+  return { deCasa, deComunidad, internacionales };
+}
+
 export const recetasDeLaCasa = () => casa.todas();
 export const recetasDeLaComunidad = () => (hayBackend ? seguro(comunidad.listarPublicas()) : Promise.resolve([]));
 

@@ -11,6 +11,7 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
   - *Del mundo*: las 791 recetas de TheMealDB, **traducidas al español**
     (ver "Catálogo en español" más abajo).
 - **Búsqueda** en español en las tres fuentes, por nombre o ingrediente.
+- **Recetas por país**: más de 60 países agrupados por continente, con banderas.
 - **Cuentas** (Supabase): registro, ingreso, recuperar contraseña.
 - **Mis recetas**: crear, editar y borrar recetas con foto (subida desde el
   celular, se achica automáticamente) y elegir si son públicas o privadas.
@@ -94,8 +95,10 @@ en GitHub Actions, para que la web cargue todo en español sin depender de nadie
 2. **Traducir catálogo** (`scripts/traducir-catalogo.py`) genera `data/mealdb/`:
    - nombres de recetas e ingredientes: traducidos a mano en
      `data/fuente/nombres-es.json` y `data/fuente/ingredientes-es.json`;
-   - medidas: `scripts/medidas.py` ("2 tbsp" → "2 cdas");
-   - pasos: Argos Translate (traductor libre) + glosario rioplatense. Quedan en
+   - medidas: `scripts/medidas.py` ("2 tbsp" → "2 cdas", libras y onzas a gramos);
+   - países que TheMealDB no trae: `data/fuente/origenes-es.json`;
+   - pasos: Argos Translate (traductor libre) + glosario rioplatense + arreglos
+     de temperaturas (°C) y términos de cocina. Quedan en
      `data/fuente/pasos-es.json`; si corregís uno a mano ahí, se respeta.
 
 Para corregir una traducción, editá esos archivos y hacé push: la Action vuelve
