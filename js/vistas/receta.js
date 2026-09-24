@@ -10,6 +10,7 @@ import {
 } from '../cocina.js';
 import { portada } from './componentes.js';
 import { bandera, rutaPais } from '../paises.js';
+import { rutaAutor } from './comunidad.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -184,9 +185,11 @@ export async function vistaReceta(id) {
           bandera(traducirOrigen(r.origen)), traducirOrigen(r.origen)),
         el('p', { class: 'meta' }, [
           r.categoria && traducirCategoria(r.categoria),
-          r.autor && `Receta de ${r.autor}${r.publica === false ? ' · 🔒 privada' : ''}`,
           r.nombreOriginal && r.nombreOriginal !== r.nombre && `En su idioma: ${r.nombreOriginal}`,
         ].filter(Boolean).join(' · ')),
+        r.autor && el('p', { class: 'meta' }, 'Receta de ',
+          r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor),
+          r.publica === false ? ' · 🔒 privada' : ''),
         r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
         el('ul', { class: 'datos-rapidos' },
           datos.map(([icono, valor, texto]) =>

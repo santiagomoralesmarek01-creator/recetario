@@ -731,3 +731,31 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
   body.panel-abierto .panel-fondo { display: block; position: fixed; inset: 0; z-index: 55; background: rgba(0, 0, 0, 0.35); }
   .panel-cerrar-cajon { display: inline-block; }
 }
+
+/* =====================================================================
+   Comunidad
+   ===================================================================== */
+
+.categoria-comunidad { background: linear-gradient(160deg, var(--superficie), var(--fondo)); outline: 2px solid var(--acento); outline-offset: -2px; }
+.categoria-comunidad h3 { color: var(--acento); }
+
+.comunidad-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.comunidad-cabecera h1 { margin-bottom: 0; }
+.comunidad-filtros { display: flex; flex-direction: column; gap: 12px; margin: 16px 0 20px; }
+.comunidad-filtros input { max-width: 420px; }
+
+.chips-filtro { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips-filtro a {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.chips-filtro a:hover { border-color: var(--acento); }
+.chips-filtro a.activa { background: var(--acento); border-color: var(--acento); color: #fff; }
+
+.comunidad-vacia { text-align: center; padding: 40px 16px; color: var(--texto-suave); }
+.comunidad-vacia img { margin: 0 auto 8px; }

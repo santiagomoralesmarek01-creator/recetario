@@ -61,6 +61,21 @@ export function listarPublicas(limite = 12) {
   return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('publica', true).order('created_at', { ascending: false }).limit(limite));
 }
 
+// Recetas públicas de la comunidad, de a páginas, con filtros opcionales.
+// Devuelve { recetas, hayMas }.
+export async function explorarComunidad({ desde = 0, cantidad = 24, categoria = '', texto = '', autor = '' } = {}) {
+  const limpio = texto.replace(/[%_,()]/g, ' ').trim();
+  // Se pide una de más para saber si hay otra página.
+  const filas = await consultar((q) => {
+    let consulta = q.select(COLUMNAS_RESUMEN).eq('publica', true);
+    if (categoria) consulta = consulta.eq('categoria', categoria);
+    if (autor) consulta = consulta.eq('user_id', autor);
+    if (limpio) consulta = consulta.ilike('nombre', `%${limpio}%`);
+    return consulta.order('created_at', { ascending: false }).range(desde, desde + cantidad);
+  });
+  return { recetas: filas.slice(0, cantidad), hayMas: filas.length > cantidad };
+}
+
 // Devuelve las públicas y (por RLS) también las propias privadas.
 export function buscar(texto) {
   const limpio = texto.replace(/[%_,()]/g, ' ').trim();

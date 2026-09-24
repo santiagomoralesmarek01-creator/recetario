@@ -80,6 +80,7 @@ export async function dePais(pais) {
 
 export const recetasDeLaCasa = () => casa.todas();
 export const recetasDeLaComunidad = () => (hayBackend ? seguro(comunidad.listarPublicas()) : Promise.resolve([]));
+export const explorarComunidad = (opciones) => comunidad.explorarComunidad(opciones);
 
 export async function categorias() {
   return (await catalogo.disponible()) ? catalogo.categorias() : seguro(mealdb.listarCategorias());

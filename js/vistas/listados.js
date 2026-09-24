@@ -6,6 +6,7 @@ import { usuario } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import { portada, metaReceta, seccion, grillaRecetas } from './componentes.js';
 import { bandera, chipPais, continenteDe, CONTINENTES } from '../paises.js';
+import { rutaComunidad } from './comunidad.js';
 
 export async function vistaInicio() {
   const vigente = vigencia();
@@ -43,11 +44,20 @@ export async function vistaInicio() {
         el('a', { href: '#/paises' }, `Ver los ${paises.length} países →`)),
       el('div', { class: 'chips-paises' },
         [...paises].sort((a, b) => (b.nombre === 'Argentina') - (a.nombre === 'Argentina')).slice(0, 14).map(chipPais))),
-    seccion('De la comunidad', deComunidad),
+    hayBackend && el('section', { class: 'seccion' },
+      el('div', { class: 'seccion-titulo' },
+        el('h2', {}, 'Recetas de la comunidad'),
+        el('a', { href: rutaComunidad() }, deComunidad.length ? 'Ver todas →' : 'Ir a la comunidad →')),
+      deComunidad.length
+        ? grillaRecetas(deComunidad.slice(0, 10))
+        : el('p', { class: 'meta' }, 'Todavía nadie compartió recetas. ¡Podés ser la primera persona en subir una!')),
     invitacion,
     categorias.length > 0 && el('section', { class: 'seccion' },
-      el('h2', {}, 'Recetas del mundo por categoría'),
+      el('h2', {}, 'Categorías'),
       el('div', { class: 'grilla grilla-categorias' },
+        hayBackend && el('a', { class: 'tarjeta categoria categoria-comunidad', href: rutaComunidad() },
+          el('img', { src: 'img/comunidad.svg', alt: '' }),
+          el('h3', {}, 'Comunidad')),
         categorias.map((c) =>
           el('a', { class: 'tarjeta categoria', href: `#/categoria/${encodeURIComponent(c.nombre)}` },
             crearImagen(c.imagen, c.nombre, IMG_PLATO_GENERICO),

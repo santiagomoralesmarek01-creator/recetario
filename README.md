@@ -11,6 +11,9 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
   - *Del mundo*: las 791 recetas de TheMealDB, **traducidas al español**
     (ver "Catálogo en español" más abajo).
 - **Búsqueda** en español en las tres fuentes, por nombre o ingrediente.
+- **Comunidad** (`#/comunidad`): todas las recetas públicas que suben los
+  usuarios, con filtro por categoría, buscador y "Ver más"; también aparece
+  como primera categoría en el inicio. Cada autor tiene su página (`#/autor/…`).
 - **Recetas por país**: más de 60 países agrupados por continente, con banderas.
 - **Cuentas** (Supabase): registro, ingreso, recuperar contraseña.
 - **Mis recetas** (requiere cuenta; el resto de la web no): crear, editar y
@@ -90,7 +93,7 @@ Cada push posterior vuelve a publicar solo.
     ├── imagenes.js           URLs de imágenes y reemplazos
     ├── traducciones.js       diccionario español ↔ inglés
     ├── dom.js                helpers de interfaz
-    └── vistas/               inicio, búsqueda, receta, cuenta, formulario
+    └── vistas/               inicio, búsqueda, receta, cuenta, formulario, comunidad
 ```
 
 ## Catálogo en español
