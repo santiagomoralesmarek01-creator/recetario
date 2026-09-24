@@ -42,6 +42,15 @@ Sin configurar Supabase ya funciona todo menos las cuentas y las recetas propias
 
 Cada push posterior vuelve a publicar solo.
 
+**Convivencia con la app de finanzas.** El repo tiene dos proyectos de Vercel.
+Para que no se mezclen, cada uno tiene un `ignoreCommand` que saltea el build
+cuando el commit no toca su parte:
+
+- `vercel.json` (raíz, app de finanzas): no construye si sólo cambió `recetas/`.
+- `recetas/vercel.json` (recetario): no construye si no cambió nada en `recetas/`.
+
+Los builds salteados aparecen en Vercel como *Canceled*, es normal.
+
 ## Activar cuentas y recetas propias (Supabase)
 
 1. Creá un proyecto gratis en <https://supabase.com> (o usá uno existente).
