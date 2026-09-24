@@ -1,8 +1,7 @@
 # Recetario
 
 Web de recetas con cuentas de usuario, recetas propias y modo cocina.
-Es un proyecto independiente del resto del repo: HTML, CSS y JavaScript
-sin build ni dependencias que instalar.
+Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 
 ## Qué hace
 
@@ -24,7 +23,6 @@ sin build ni dependencias que instalar.
 ## Correrlo en tu computadora
 
 ```bash
-cd recetas
 python3 -m http.server 8000
 # abrir http://localhost:8000
 ```
@@ -33,23 +31,13 @@ Sin configurar Supabase ya funciona todo menos las cuentas y las recetas propias
 
 ## Publicar en Vercel
 
-1. Entrá a <https://vercel.com/new> e importá el repositorio `Marekk`.
-2. En **Root Directory** elegí `recetas`.
-3. **Framework Preset**: `Other`. Dejá vacíos Build Command y Output Directory.
-4. Deploy. Vercel publica la rama de producción (normalmente `main`), así que
-   estos cambios tienen que estar mergeados ahí; las demás ramas generan
+1. Entrá a <https://vercel.com/new> e importá el repositorio `recetario`.
+2. **Framework Preset**: `Other`. Dejá vacíos Build Command y Output Directory.
+3. Deploy. La rama `main` se publica en producción; las demás ramas generan
    *previews* con su propia URL.
 
 Cada push posterior vuelve a publicar solo.
 
-**Convivencia con la app de finanzas.** El repo tiene dos proyectos de Vercel.
-Para que no se mezclen, cada uno tiene un `ignoreCommand` que saltea el build
-cuando el commit no toca su parte:
-
-- `vercel.json` (raíz, app de finanzas): no construye si sólo cambió `recetas/`.
-- `recetas/vercel.json` (recetario): no construye si no cambió nada en `recetas/`.
-
-Los builds salteados aparecen en Vercel como *Canceled*, es normal.
 
 ## Activar cuentas y recetas propias (Supabase)
 
@@ -68,7 +56,6 @@ Los builds salteados aparecen en Vercel como *Canceled*, es normal.
 ## Estructura
 
 ```
-recetas/
 ├── index.html
 ├── vercel.json               cabeceras y caché para Vercel
 ├── css/estilos.css
