@@ -43,8 +43,22 @@ export function tarjetaReceta(r) {
       ].filter(Boolean).join(' · '))));
 }
 
-export function grillaRecetas(recetas) {
-  return el('div', { class: 'grilla' }, recetas.map(tarjetaReceta));
+// Con "tanda" muestra de a N tarjetas y un botón para ver más (listas largas).
+export function grillaRecetas(recetas, { tanda = 0 } = {}) {
+  if (!tanda || recetas.length <= tanda) return el('div', { class: 'grilla' }, recetas.map(tarjetaReceta));
+  const grilla = el('div', { class: 'grilla' });
+  let mostradas = 0;
+  const boton = el('button', { type: 'button', class: 'boton-secundario', onclick: () => mostrarMas() });
+  const pie = el('div', { class: 'ver-mas' }, boton);
+  function mostrarMas() {
+    grilla.append(...recetas.slice(mostradas, mostradas + tanda).map(tarjetaReceta));
+    mostradas = Math.min(recetas.length, mostradas + tanda);
+    const quedan = recetas.length - mostradas;
+    boton.textContent = `Ver más (${quedan} restantes)`;
+    pie.hidden = quedan === 0;
+  }
+  mostrarMas();
+  return el('div', {}, grilla, pie);
 }
 
 export function seccion(titulo, recetas, extra = null) {

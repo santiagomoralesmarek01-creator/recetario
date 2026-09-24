@@ -56,7 +56,7 @@ export async function vistaCategoria(nombre) {
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, traducirCategoria(nombre)),
     el('p', { class: 'meta' }, `${recetas.length} recetas`),
-    recetas.length ? grillaRecetas(recetas) : el('p', { class: 'estado' }, 'Todavía no hay recetas en esta categoría.')
+    recetas.length ? grillaRecetas(recetas, { tanda: 24 }) : el('p', { class: 'estado' }, 'Todavía no hay recetas en esta categoría.')
   );
 }
 
@@ -64,7 +64,7 @@ export async function vistaBusqueda(texto) {
   const vigente = vigencia();
   document.getElementById('busqueda').value = texto;
   cargando(`Buscando “${texto}”…`);
-  const { termino, deCasa, deComunidad, internacionales, porIngrediente } = await repo.buscar(texto);
+  const { deCasa, deComunidad, internacionales } = await repo.buscar(texto);
   if (!vigente()) return;
   const total = deCasa.length + deComunidad.length + internacionales.length;
 
@@ -75,10 +75,8 @@ export async function vistaBusqueda(texto) {
     seccion('De la casa', deCasa),
     seccion('De la comunidad', deComunidad),
     internacionales.length > 0 && el('section', { class: 'seccion' },
-      el('h2', {}, porIngrediente ? 'Del mundo, con ese ingrediente' : 'Del mundo'),
-      termino.toLowerCase() !== texto.trim().toLowerCase() &&
-        el('p', { class: 'meta' }, `Buscado como “${termino}” (estas recetas están en inglés).`),
-      grillaRecetas(internacionales)),
+      el('h2', {}, 'Del mundo'),
+      grillaRecetas(internacionales, { tanda: 24 })),
     total === 0 && el('p', { class: 'estado' }, 'No encontramos recetas. Probá con otra palabra o con un ingrediente.')
   );
 }

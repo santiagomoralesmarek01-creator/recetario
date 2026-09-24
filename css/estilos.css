@@ -155,15 +155,6 @@ main {
 
 /* ---------- receta ---------- */
 
-.receta-cabecera {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 24px;
-  align-items: start;
-}
-.receta-foto { width: 100%; border-radius: var(--radio); aspect-ratio: 1; object-fit: cover; }
-.receta-cabecera > div > h1 { margin-top: 0; }
-.receta h1 { font-size: 2rem; margin: 0 0 8px; }
 
 .etiquetas { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .etiquetas li {
@@ -197,8 +188,6 @@ main {
 .ingrediente strong { display: block; }
 .medida { color: var(--texto-suave); font-size: 0.9rem; }
 
-.pasos { padding-left: 1.4rem; max-width: 70ch; }
-.pasos li { margin-bottom: 12px; }
 
 .pie {
   text-align: center;
@@ -208,9 +197,8 @@ main {
 }
 
 @media (max-width: 700px) {
-  .destacada, .receta-cabecera { grid-template-columns: 1fr; }
+  .destacada { grid-template-columns: 1fr; }
   .destacada > div { padding: 0 16px 16px; }
-  .receta h1 { font-size: 1.6rem; }
   .grilla { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
 
@@ -298,7 +286,7 @@ button:disabled { opacity: 0.6; cursor: wait; }
 }
 .collage img { width: 100%; height: 100%; object-fit: contain; min-height: 0; }
 .collage-3 img:first-child { grid-column: span 2; }
-.destacada .collage, .receta-foto.collage { border-radius: var(--radio); }
+.destacada .collage { border-radius: var(--radio); }
 .destacada .collage { aspect-ratio: 4 / 3; border-radius: 0; }
 
 .invitacion {
@@ -320,21 +308,6 @@ button:disabled { opacity: 0.6; cursor: wait; }
 /* =====================================================================
    Modo cocina
    ===================================================================== */
-
-.panel-cocina {
-  margin: 24px 0;
-  padding: 16px 20px;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  box-shadow: var(--sombra);
-  position: sticky;
-  top: 70px;
-  z-index: 5;
-}
-.panel-cocina h2 { margin: 0; font-size: 1.2rem; }
-.panel-cocina .meta { font-size: 0.9rem; }
-.panel-cocina-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-.panel-cocina .boton-secundario { padding: 6px 14px; font-size: 0.9rem; }
 
 .progreso-barra {
   height: 10px;
@@ -461,9 +434,94 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 @media (max-width: 700px) {
   .cabecera { position: static; }
   .menu { width: 100%; justify-content: space-between; }
-  .panel-cocina { top: 0; position: relative; }
   .foto-editor { grid-template-columns: 1fr; }
   .foto-vista { max-width: 220px; }
   .fila-editable { flex-wrap: wrap; }
   .fila-editable > input { flex: 1 1 45%; }
 }
+
+/* =====================================================================
+   Ficha de receta
+   ===================================================================== */
+
+.receta { padding-bottom: 24px; }
+
+.receta-titulo { margin-bottom: 20px; }
+.receta-titulo h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 4px 0 6px; }
+.receta-titulo .descripcion { max-width: 70ch; margin: 8px 0 0; }
+
+.datos-rapidos {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.datos-rapidos li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+}
+.datos-rapidos strong { font-size: 1.15rem; }
+.datos-rapidos li > span:last-child { color: var(--texto-suave); font-size: 0.9rem; }
+
+.receta-extras { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 14px; }
+.receta-extras .etiquetas { margin: 0; }
+.boton-chico { padding: 6px 14px; font-size: 0.9rem; text-decoration: none; border-radius: 999px; }
+.enlace-fuente { font-size: 0.9rem; }
+
+.receta-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 28px;
+  align-items: start;
+}
+.receta-foto-columna { position: sticky; top: 86px; }
+.receta-foto { width: 100%; border-radius: var(--radio); aspect-ratio: 4 / 3; object-fit: cover; box-shadow: var(--sombra); }
+.receta-foto.collage { aspect-ratio: 4 / 3; border-radius: var(--radio); }
+
+.receta-ingredientes h2, .receta-pasos h2 { margin: 0 0 2px; }
+.receta-ingredientes .ingredientes {
+  margin-top: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+.receta-ingredientes .ingrediente img { width: 44px; height: 44px; }
+
+.receta-pasos { margin-top: 36px; }
+.pasos { list-style: none; padding: 0; margin: 16px 0 0; max-width: 80ch; }
+
+/* Barra de progreso fija abajo mientras se lee la receta */
+.barra-cocina {
+  position: sticky;
+  bottom: 12px;
+  z-index: 6;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+.barra-cocina-progreso { flex: 1; min-width: 0; }
+.barra-cocina .progreso-texto { margin: 0 0 6px; font-size: 0.95rem; }
+.barra-cocina .progreso-barra { margin: 0; height: 8px; }
+.barra-cocina .boton-secundario { padding: 6px 12px; font-size: 0.85rem; white-space: nowrap; }
+
+@media (max-width: 800px) {
+  .receta-cuerpo { grid-template-columns: 1fr; gap: 20px; }
+  .receta-foto-columna { position: static; }
+  .barra-cocina { bottom: 0; margin-left: -16px; margin-right: -16px; border-radius: var(--radio) var(--radio) 0 0; flex-wrap: wrap; gap: 8px; }
+  .barra-cocina .acciones { width: 100%; justify-content: flex-end; }
+}
+
+.ver-mas { display: flex; justify-content: center; margin-top: 20px; }
+.nota-traduccion { font-size: 0.85rem; color: var(--texto-suave); font-style: italic; margin-top: 12px; }

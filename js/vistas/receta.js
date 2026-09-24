@@ -2,12 +2,12 @@ import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
 import * as repo from '../repositorio.js';
 import * as misRecetas from '../misRecetas.js';
 import { crearImagen, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
-import { traducirCategoria } from '../traducciones.js';
+import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 import { usuario } from '../auth.js';
 import {
   leerProgreso, guardarProgreso, pantallaSoportada, mantenerPantalla, pantallaActiva,
 } from '../cocina.js';
-import { portada, metaReceta } from './componentes.js';
+import { portada } from './componentes.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -82,33 +82,33 @@ export async function vistaReceta(id) {
 
   const botonPantalla = pantallaSoportada() && el('button', {
     type: 'button',
-    class: 'boton-secundario',
+    class: `boton-secundario${pantallaActiva() ? ' activo' : ''}`,
+    title: 'Evita que la pantalla se apague mientras cocinás',
+    'aria-pressed': String(pantallaActiva()),
     onclick: async (e) => {
       const activa = await mantenerPantalla(!pantallaActiva());
       try { sessionStorage.setItem('recetario:pantalla', activa ? '1' : '0'); } catch { /* sin almacenamiento */ }
-      e.target.textContent = activa ? '🔆 Pantalla encendida' : '🔅 Mantener pantalla encendida';
-      e.target.classList.toggle('activo', activa);
+      e.currentTarget.classList.toggle('activo', activa);
+      e.currentTarget.setAttribute('aria-pressed', String(activa));
     },
-  }, pantallaActiva() ? '🔆 Pantalla encendida' : '🔅 Mantener pantalla encendida');
+  }, '🔆 No apagar pantalla');
 
-  const panelCocina = el('section', { class: 'panel-cocina' },
-    el('div', { class: 'panel-cocina-cabecera' },
-      el('h2', {}, '👩‍🍳 Modo cocina'),
-      el('div', { class: 'acciones' },
-        botonPantalla,
-        el('button', {
-          type: 'button',
-          class: 'boton-secundario',
-          onclick: () => {
-            progreso.ingredientes.clear();
-            progreso.pasos.clear();
-            itemsIngredientes.concat(itemsPasos).forEach((li) => { li.querySelector('input').checked = false; });
-            refrescar();
-          },
-        }, '↺ Reiniciar'))),
-    el('p', { class: 'meta' }, 'Tildá los ingredientes a medida que los usás y los pasos que vas terminando. Tu avance queda guardado en este dispositivo.'),
-    barra,
-    textoProgreso);
+  const botonReiniciar = el('button', {
+    type: 'button',
+    class: 'boton-secundario',
+    title: 'Destildar todo',
+    onclick: () => {
+      progreso.ingredientes.clear();
+      progreso.pasos.clear();
+      itemsIngredientes.concat(itemsPasos).forEach((li) => { li.querySelector('input').checked = false; });
+      refrescar();
+    },
+  }, '↺ Reiniciar');
+
+  // Barra fija abajo: siempre a mano mientras se cocina.
+  const barraCocina = el('div', { class: 'barra-cocina', role: 'region', 'aria-label': 'Progreso de la receta' },
+    el('div', { class: 'barra-cocina-progreso' }, textoProgreso, barra),
+    el('div', { class: 'acciones' }, botonPantalla, botonReiniciar));
 
   // ---------- acciones del dueño ----------
   const accionesDueno = esMia && el('p', { class: 'acciones' },
@@ -132,30 +132,48 @@ export async function vistaReceta(id) {
     ? el('a', { class: 'volver', href: `#/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
     : el('a', { class: 'volver', href: '#/' }, '← Inicio');
 
+  const datos = [
+    ['🥕', r.ingredientes.length, 'ingredientes'],
+    ['📝', r.pasos.length, 'pasos'],
+    r.minutos && ['⏱', r.minutos, 'minutos'],
+    r.porciones && ['🍽', r.porciones, 'porciones'],
+  ].filter(Boolean);
+
   mostrar(
     volver,
     el('article', { class: 'receta' },
-      el('header', { class: 'receta-cabecera' },
-        portada(r, { clase: 'receta-foto' }),
-        el('div', {},
-          el('h1', {}, r.nombre),
-          el('p', { class: 'meta' }, metaReceta(r)),
-          r.autor && el('p', { class: 'meta' }, `Receta de ${r.autor}${r.publica === false ? ' · 🔒 privada' : ''}`),
-          r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
+      el('header', { class: 'receta-titulo' },
+        el('h1', {}, r.nombre),
+        el('p', { class: 'meta' }, [
+          r.categoria && traducirCategoria(r.categoria),
+          r.origen && traducirOrigen(r.origen),
+          r.autor && `Receta de ${r.autor}${r.publica === false ? ' · 🔒 privada' : ''}`,
+          r.nombreOriginal && r.nombreOriginal !== r.nombre && `En su idioma: ${r.nombreOriginal}`,
+        ].filter(Boolean).join(' · ')),
+        r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
+        el('ul', { class: 'datos-rapidos' },
+          datos.map(([icono, valor, texto]) =>
+            el('li', {}, el('span', { class: 'dato-icono', 'aria-hidden': 'true' }, icono),
+              el('strong', {}, valor), el('span', {}, texto)))),
+        (r.etiquetas?.length > 0 || r.video || r.enlace) && el('div', { class: 'receta-extras' },
           r.etiquetas?.length > 0 && el('ul', { class: 'etiquetas' }, r.etiquetas.map((t) => el('li', {}, t))),
-          el('p', { class: 'enlaces' },
-            r.video && el('a', { href: r.video, target: '_blank', rel: 'noopener' }, '▶ Ver video'),
-            r.enlace && el('a', { href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
-          accionesDueno)),
-      panelCocina,
-      el('section', {},
-        el('h2', {}, `Ingredientes (${r.ingredientes.length})`),
-        el('ul', { class: 'ingredientes' }, itemsIngredientes)),
-      el('section', {},
+          r.video && el('a', { class: 'boton-secundario boton-chico', href: r.video, target: '_blank', rel: 'noopener' }, '▶ Ver video'),
+          r.enlace && el('a', { class: 'enlace-fuente', href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
+        accionesDueno),
+      el('div', { class: 'receta-cuerpo' },
+        el('div', { class: 'receta-foto-columna' }, portada(r, { clase: 'receta-foto' })),
+        el('section', { class: 'receta-ingredientes' },
+          el('h2', {}, 'Ingredientes'),
+          el('p', { class: 'meta' }, 'Tildalos a medida que los vas usando.'),
+          el('ul', { class: 'ingredientes' }, itemsIngredientes))),
+      el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length
           ? el('ol', { class: 'pasos' }, itemsPasos)
-          : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.')))
+          : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.'),
+        r.origenDatos === 'mealdb' && r.nombreOriginal &&
+          el('p', { class: 'nota-traduccion' }, 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.')),
+      barraCocina)
   );
   refrescar();
 }

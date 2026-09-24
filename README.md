@@ -8,9 +8,9 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 - **Repertorio de tres fuentes**
   - *De la casa*: recetas en español en `data/recetas-casa.json` (10 clásicos para empezar).
   - *De la comunidad*: las que cargan los usuarios (públicas).
-  - *Del mundo*: ~300 recetas de TheMealDB (en inglés).
-- **Búsqueda** en las tres fuentes, por nombre o ingrediente, con traducción
-  básica al inglés para TheMealDB ("pollo" → "chicken").
+  - *Del mundo*: las 791 recetas de TheMealDB, **traducidas al español**
+    (ver "Catálogo en español" más abajo).
+- **Búsqueda** en español en las tres fuentes, por nombre o ingrediente.
 - **Cuentas** (Supabase): registro, ingreso, recuperar contraseña.
 - **Mis recetas**: crear, editar y borrar recetas con foto (subida desde el
   celular, se achica automáticamente) y elegir si son públicas o privadas.
@@ -60,6 +60,10 @@ Cada push posterior vuelve a publicar solo.
 ├── vercel.json               cabeceras y caché para Vercel
 ├── css/estilos.css
 ├── data/recetas-casa.json    recetas propias del sitio (se pueden sumar más)
+├── data/mealdb/              catálogo del mundo en español (generado)
+├── data/fuente/              catálogo original y traducciones a mano
+├── scripts/                  descarga y traducción del catálogo
+├── .github/workflows/        Actions que corren esos scripts
 ├── img/                      íconos de reemplazo (SVG)
 ├── supabase/esquema.sql      tabla, seguridad y bucket de fotos
 └── js/
@@ -70,13 +74,33 @@ Cada push posterior vuelve a publicar solo.
     ├── repositorio.js        une las tres fuentes de recetas
     ├── recetasCasa.js        recetas de data/recetas-casa.json
     ├── misRecetas.js         recetas de usuarios (tabla + fotos)
-    ├── api.js                cliente de TheMealDB
+    ├── catalogo.js           catálogo en español (data/mealdb/)
+    ├── api.js                API de TheMealDB (respaldo en inglés)
     ├── cocina.js             progreso del modo cocina y pantalla encendida
     ├── imagenes.js           URLs de imágenes y reemplazos
     ├── traducciones.js       diccionario español ↔ inglés
     ├── dom.js                helpers de interfaz
     └── vistas/               inicio, búsqueda, receta, cuenta, formulario
 ```
+
+## Catálogo en español
+
+Las recetas del mundo salen de TheMealDB (en inglés) y se traducen una sola vez,
+en GitHub Actions, para que la web cargue todo en español sin depender de nadie:
+
+1. **Descargar catálogo** (`scripts/descargar-mealdb.mjs`) baja todo a
+   `data/fuente/mealdb-en.json`. Se puede volver a correr desde la pestaña
+   *Actions* de GitHub para sumar recetas nuevas.
+2. **Traducir catálogo** (`scripts/traducir-catalogo.py`) genera `data/mealdb/`:
+   - nombres de recetas e ingredientes: traducidos a mano en
+     `data/fuente/nombres-es.json` y `data/fuente/ingredientes-es.json`;
+   - medidas: `scripts/medidas.py` ("2 tbsp" → "2 cdas");
+   - pasos: Argos Translate (traductor libre) + glosario rioplatense. Quedan en
+     `data/fuente/pasos-es.json`; si corregís uno a mano ahí, se respeta.
+
+Para corregir una traducción, editá esos archivos y hacé push: la Action vuelve
+a armar el catálogo sola. Si `data/mealdb/` no existiera, la web usa la API de
+TheMealDB en inglés como respaldo.
 
 ## Sumar recetas de la casa
 
