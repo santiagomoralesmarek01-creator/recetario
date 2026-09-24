@@ -427,6 +427,8 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 .fila-editable { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 .fila-editable > input { flex: 1 1 0; min-width: 0; }
 .fila-editable > textarea { flex: 1; }
+.paso-controles { display: grid; grid-template-columns: repeat(2, auto); gap: 4px; flex: none; }
+.paso-controles .boton-icono { padding: 3px 9px; }
 .ingrediente-vista { width: 40px; height: 40px; object-fit: contain; flex: none; }
 
 .foto-editor { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 16px; align-items: start; }
@@ -759,3 +761,25 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 
 .comunidad-vacia { text-align: center; padding: 40px 16px; color: var(--texto-suave); }
 .comunidad-vacia img { margin: 0 auto 8px; }
+
+/* =====================================================================
+   ¿Qué tengo en casa?
+   ===================================================================== */
+
+.despensa { margin-bottom: 20px; }
+.despensa-buscador { position: relative; max-width: 520px; margin: 14px 0 12px; }
+.despensa-buscador input { width: 100%; }
+.chips-despensa { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.chip-despensa {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 6px 4px 12px; border-radius: 999px;
+  background: var(--acento); color: #fff; font-weight: 600; font-size: 0.9rem;
+}
+.chip-despensa button {
+  padding: 0 6px; background: transparent; border: 0; color: inherit; font-size: 0.85rem; line-height: 1.4;
+}
+.despensa-basicos { display: flex; gap: 8px; align-items: center; font-size: 0.9rem; color: var(--texto-suave); }
+.despensa-faltan, .despensa-completa { margin: 6px 0 0; font-size: 0.85rem; }
+.despensa-faltan { color: var(--texto-suave); }
+.despensa-faltan span { color: var(--texto); }
+.despensa-completa { color: #2e7d32; font-weight: 600; }

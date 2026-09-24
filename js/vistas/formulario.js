@@ -132,10 +132,30 @@ function filaIngrediente(datos = {}) {
   return fila;
 }
 
+// Cada paso se puede subir, bajar o tener uno nuevo justo debajo, para no
+// tener que reescribir todo cuando uno se olvida algo del principio.
 function filaPaso(texto = '') {
-  const fila = el('li', { class: 'fila-editable' },
-    el('textarea', { name: 'paso', rows: '2', placeholder: 'Describí este paso…', 'aria-label': 'Paso', maxlength: '1000' }, texto),
-    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', onclick: () => fila.remove() }, '✕'));
+  const area = el('textarea', { name: 'paso', rows: '2', placeholder: 'Describí este paso…', 'aria-label': 'Paso', maxlength: '1000' }, texto);
+  const mover = (haciaArriba) => {
+    const vecino = haciaArriba ? fila.previousElementSibling : fila.nextElementSibling;
+    if (!vecino) return;
+    fila.parentNode.insertBefore(fila, haciaArriba ? vecino : vecino.nextElementSibling);
+    area.focus();
+  };
+  const fila = el('li', { class: 'fila-editable fila-paso' },
+    area,
+    el('div', { class: 'paso-controles' },
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Subir paso', title: 'Subir', onclick: () => mover(true) }, '↑'),
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Bajar paso', title: 'Bajar', onclick: () => mover(false) }, '↓'),
+      el('button', {
+        type: 'button', class: 'boton-icono', 'aria-label': 'Insertar un paso debajo', title: 'Insertar paso debajo',
+        onclick: () => {
+          const nueva = filaPaso();
+          fila.after(nueva);
+          nueva.querySelector('textarea').focus();
+        },
+      }, '+'),
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', title: 'Quitar', onclick: () => fila.remove() }, '✕')));
   return fila;
 }
 
@@ -183,7 +203,7 @@ export async function vistaFormulario(uuid = null) {
   const listaIngredientes = el('ul', { class: 'lista-editable' },
     (receta?.ingredientesCrudos?.length ? receta.ingredientesCrudos : [{}, {}, {}]).map(filaIngrediente));
   const listaPasos = el('ol', { class: 'lista-editable' },
-    (receta?.pasos?.length ? receta.pasos : ['', '']).map(filaPaso));
+    (receta?.pasos?.length ? receta.pasos : ['', '']).map((p) => filaPaso(p)));
 
   const error = el('p', { class: 'error', role: 'alert' });
   const botonGuardar = el('button', { type: 'submit' }, uuid ? 'Guardar cambios' : 'Guardar receta');

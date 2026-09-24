@@ -7,6 +7,7 @@ import { vistaReceta } from './vistas/receta.js';
 import { vistaEntrar, vistaMisRecetas, vistaNuevaClave } from './vistas/cuenta.js';
 import { vistaFormulario } from './vistas/formulario.js';
 import { vistaComunidad, vistaAutor } from './vistas/comunidad.js';
+import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
 
 const menu = document.getElementById('menu');
@@ -73,6 +74,7 @@ async function router() {
       case 'categoria': return param ? await vistaCategoria(param) : await vistaInicio();
       case 'buscar': return param ? await vistaBusqueda(param) : await vistaInicio();
       case 'paises': return await vistaPaises();
+      case 'que-tengo': return await vistaDespensa();
       case 'comunidad': return await vistaComunidad(param);
       case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();

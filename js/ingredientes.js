@@ -17,20 +17,23 @@ export function cargarIngredientes() {
 
 export const normalizar = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 
-// Primero los que empiezan con el texto, después los que lo contienen; dentro
+// Primero los que empiezan con el texto, después los que tienen una palabra
+// que empieza así ("caldo de pollo") y al final los que lo contienen; dentro
 // de cada grupo, los más usados en recetas.
 export async function sugerir(texto, limite = 8) {
   const q = normalizar(texto);
   if (!q) return [];
   const lista = await cargarIngredientes();
   const empiezan = [];
+  const palabra = [];
   const contienen = [];
   for (const ing of lista) {
-    if (ing.normal.startsWith(q) || ing.normal.includes(` ${q}`)) empiezan.push(ing);
+    if (ing.normal.startsWith(q)) empiezan.push(ing);
+    else if (ing.normal.includes(` ${q}`)) palabra.push(ing);
     else if (ing.normal.includes(q)) contienen.push(ing);
     if (empiezan.length >= limite) break;
   }
-  return [...empiezan, ...contienen].slice(0, limite);
+  return [...empiezan, ...palabra, ...contienen].slice(0, limite);
 }
 
 export async function buscarExacto(nombre) {
