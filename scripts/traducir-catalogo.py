@@ -212,8 +212,11 @@ def armar(catalogo, cache):
         rid = receta["id"]
         ings = [[ingredientes[n.lower()], traducir_medida(m), n] for n, m in receta["ingredientes"]]
         pasos_en = separar_pasos(receta["instrucciones"])
-        pasos = [revisados.get(clave(p)) or (pulir(aplicar_glosario(cache[clave(p)])) if clave(p) in cache else p)
+        # Un texto revisado vacío descarta la línea (pies de foto, publicidad).
+        pasos = [revisados[clave(p)] if clave(p) in revisados
+                 else pulir(aplicar_glosario(cache[clave(p)])) if clave(p) in cache else p
                  for p in pasos_en]
+        pasos = [p for p in pasos if p]
         faltan = any(clave(p) not in cache and clave(p) not in revisados for p in pasos_en)
         sin_traducir += faltan
         detalle = {
