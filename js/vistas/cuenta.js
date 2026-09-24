@@ -1,5 +1,5 @@
 import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
-import { entrar, registrarse, recuperarClave, usuario, nombreVisible } from '../auth.js';
+import { entrar, registrarse, recuperarClave, usuario, nombreVisible, pedirLogin, hayDestinoPendiente, tomarDestino } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
 import { grillaRecetas } from './componentes.js';
@@ -17,7 +17,7 @@ function campo(etiqueta, props) {
 
 export function vistaEntrar(modo = 'entrar') {
   if (!hayBackend) return sinBackend();
-  if (usuario()) { location.hash = '#/mis-recetas'; return; }
+  if (usuario()) { location.hash = tomarDestino(); return; }
 
   const titulos = { entrar: 'Entrar', registro: 'Crear cuenta', recuperar: 'Recuperar contraseña' };
   const error = el('p', { class: 'error', role: 'alert' });
@@ -45,12 +45,12 @@ export function vistaEntrar(modo = 'entrar') {
         if (modo === 'entrar') {
           await entrar(email, datos.get('clave'));
           aviso(`¡Hola, ${nombreVisible()}!`);
-          location.hash = '#/mis-recetas';
+          location.hash = tomarDestino();
         } else if (modo === 'registro') {
           const activa = await registrarse(datos.get('nombre').trim(), email, datos.get('clave'));
           if (activa) {
             aviso('¡Cuenta creada!');
-            location.hash = '#/mis-recetas';
+            location.hash = tomarDestino();
           } else {
             form.replaceChildren(el('p', { class: 'exito' },
               `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`));
@@ -78,6 +78,9 @@ export function vistaEntrar(modo = 'entrar') {
       el('a', { href: m === 'entrar' ? '#/entrar' : '#/registro', class: m === modo ? 'activa' : '' }, titulos[m])));
 
   mostrar(el('div', { class: 'tarjeta-cuenta' },
+    modo !== 'recuperar' && el('p', { class: 'explicacion-cuenta' }, hayDestinoPendiente()
+      ? '✍️ Para crear y guardar tus recetas necesitás una cuenta. Es gratis, y el resto de la página se usa sin registrarte.'
+      : 'Con una cuenta podés crear tus propias recetas y tenerlas guardadas. Para ver y cocinar recetas no hace falta.'),
     modo !== 'recuperar' ? pestanas : el('h1', {}, titulos[modo]),
     form,
     modo === 'entrar' && el('p', { class: 'meta' }, el('a', { href: '#/recuperar' }, '¿Olvidaste tu contraseña?')),
@@ -110,7 +113,7 @@ export function vistaNuevaClave(cambiarClave) {
 export async function vistaMisRecetas() {
   if (!hayBackend) return sinBackend();
   const u = usuario();
-  if (!u) { location.hash = '#/entrar'; return; }
+  if (!u) { pedirLogin(); return; }
   const vigente = vigencia();
   cargando();
   const recetas = await misRecetas.listarMias(u.id);

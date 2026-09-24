@@ -236,6 +236,28 @@ def armar(catalogo, cache):
          "categorias": categorias, "recetas": indice},
         ensure_ascii=False, separators=(",", ":")))
     print(f"Listo: {len(indice)} recetas en {SALIDA.relative_to(RAIZ)} ({sin_traducir} con pasos aún en inglés)")
+    armar_ingredientes(catalogo, ingredientes)
+
+
+def armar_ingredientes(catalogo, ingredientes):
+    """data/ingredientes.json: [nombre en español, clave de imagen, cantidad de recetas que lo usan].
+    Lo usa el buscador de ingredientes del formulario de recetas propias."""
+    lista = {}
+    for receta in catalogo["recetas"]:
+        for nombre_en, _ in receta["ingredientes"]:
+            es = ingredientes[nombre_en.lower()]
+            item = lista.setdefault(es.lower(), [es, nombre_en, 0])
+            item[2] += 1
+    casa = json.loads((RAIZ / "data" / "recetas-casa.json").read_text())
+    for receta in casa:
+        for ing in receta["ingredientes"]:
+            item = lista.setdefault(ing["nombre"].lower(), [ing["nombre"], ing.get("imagen", ""), 0])
+            item[2] += 1
+            if not item[1] and ing.get("imagen"):
+                item[1] = ing["imagen"]
+    ordenada = sorted(lista.values(), key=lambda i: (-i[2], i[0]))
+    (RAIZ / "data" / "ingredientes.json").write_text(json.dumps(ordenada, ensure_ascii=False, separators=(",", ":")))
+    print(f"{len(ordenada)} ingredientes en data/ingredientes.json")
 
 
 def main():

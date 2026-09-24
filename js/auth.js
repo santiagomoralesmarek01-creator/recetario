@@ -81,3 +81,25 @@ export async function salir() {
   await sb.auth.signOut();
   actualizar(null);
 }
+
+// Página a la que volver después de entrar (por ejemplo, "Crear receta").
+const CLAVE_VOLVER = 'recetario:volverA';
+
+export function pedirLogin(volverA = location.hash) {
+  try { sessionStorage.setItem(CLAVE_VOLVER, volverA); } catch { /* sin almacenamiento */ }
+  location.hash = '#/entrar';
+}
+
+export function hayDestinoPendiente() {
+  try { return Boolean(sessionStorage.getItem(CLAVE_VOLVER)); } catch { return false; }
+}
+
+export function tomarDestino(porDefecto = '#/mis-recetas') {
+  try {
+    const destino = sessionStorage.getItem(CLAVE_VOLVER);
+    sessionStorage.removeItem(CLAVE_VOLVER);
+    return destino || porDefecto;
+  } catch {
+    return porDefecto;
+  }
+}

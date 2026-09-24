@@ -13,8 +13,11 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 - **Búsqueda** en español en las tres fuentes, por nombre o ingrediente.
 - **Recetas por país**: más de 60 países agrupados por continente, con banderas.
 - **Cuentas** (Supabase): registro, ingreso, recuperar contraseña.
-- **Mis recetas**: crear, editar y borrar recetas con foto (subida desde el
-  celular, se achica automáticamente) y elegir si son públicas o privadas.
+- **Mis recetas** (requiere cuenta; el resto de la web no): crear, editar y
+  borrar recetas con foto (subida desde el celular, se achica automáticamente)
+  y elegir si son públicas o privadas. Los ingredientes se eligen de una lista
+  de ~880 (con imagen, buscando por nombre) o se escriben libres, y la cantidad
+  se carga con número + unidad (g, taza, cda, a gusto…).
 - **Modo cocina** en cada receta: tildás ingredientes y pasos, ves el progreso,
   se resalta el paso que sigue, el avance queda guardado en el dispositivo y
   podés mantener la pantalla encendida.
@@ -77,6 +80,7 @@ Cada push posterior vuelve a publicar solo.
     ├── misRecetas.js         recetas de usuarios (tabla + fotos)
     ├── catalogo.js           catálogo en español (data/mealdb/)
     ├── api.js                API de TheMealDB (respaldo en inglés)
+    ├── ingredientes.js       lista de ingredientes y unidades para el formulario
     ├── cocina.js             progreso del modo cocina y pantalla encendida
     ├── imagenes.js           URLs de imágenes y reemplazos
     ├── traducciones.js       diccionario español ↔ inglés

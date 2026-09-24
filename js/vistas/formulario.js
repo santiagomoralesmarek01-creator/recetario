@@ -1,10 +1,11 @@
 import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
-import { usuario, nombreVisible } from '../auth.js';
+import { usuario, nombreVisible, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
 import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
+import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedida, cargarIngredientes } from '../ingredientes.js';
 import { NOMBRES_PAISES } from '../paises.js';
 
 const MAX_LADO = 1600;
@@ -27,23 +28,107 @@ async function reducirImagen(archivo) {
   }
 }
 
+// Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
+// Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
 function filaIngrediente(datos = {}) {
+  let clave = datos.imagen || '';
   const vista = crearImagen(IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO, 'ingrediente-vista');
-  const actualizarVista = (nombre) => {
-    const clave = ingredienteEnIngles(nombre);
-    vista.src = clave ? urlIngrediente(clave) : IMG_INGREDIENTE_GENERICO;
+  const mostrarImagen = () => {
+    const k = clave || ingredienteEnIngles(nombre.value);
+    vista.src = k ? urlIngrediente(k) : IMG_INGREDIENTE_GENERICO;
   };
+
+  const lista = el('ul', { class: 'sugerencias', role: 'listbox', hidden: true });
+  let opciones = [];
+  let activa = -1;
+
   const nombre = el('input', {
-    name: 'ing-nombre', placeholder: 'Ingrediente (ej: cebolla)', value: datos.nombre || '',
-    'aria-label': 'Ingrediente', maxlength: '80',
-    onchange: (e) => actualizarVista(e.target.value),
+    name: 'ing-nombre', placeholder: 'Buscá un ingrediente…', value: datos.nombre || '',
+    'aria-label': 'Ingrediente', maxlength: '80', autocomplete: 'off', role: 'combobox', 'aria-autocomplete': 'list',
   });
-  const fila = el('li', { class: 'fila-editable' },
+
+  function cerrar() {
+    lista.hidden = true;
+    activa = -1;
+    nombre.setAttribute('aria-expanded', 'false');
+  }
+
+  function marcar(i) {
+    activa = i;
+    [...lista.children].forEach((li, j) => li.classList.toggle('activa', j === i));
+  }
+
+  function elegir(ing) {
+    nombre.value = ing.nombre;
+    clave = ing.clave;
+    mostrarImagen();
+    cerrar();
+    cantidad.focus();
+  }
+
+  async function actualizarSugerencias() {
+    const texto = nombre.value;
+    opciones = await sugerir(texto);
+    if (nombre.value !== texto) return; // el usuario siguió escribiendo
+    lista.replaceChildren(...opciones.map((ing, i) =>
+      el('li', {
+        role: 'option',
+        // mousedown en vez de click: se dispara antes de que el input pierda el foco
+        onmousedown: (e) => { e.preventDefault(); elegir(ing); },
+        onmouseenter: () => marcar(i),
+      },
+      crearImagen(ing.clave ? urlIngrediente(ing.clave) : IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO),
+      el('span', {}, ing.nombre))));
+    lista.hidden = opciones.length === 0;
+    nombre.setAttribute('aria-expanded', String(!lista.hidden));
+    marcar(opciones.length ? 0 : -1);
+  }
+
+  nombre.addEventListener('input', () => { clave = ''; actualizarSugerencias(); });
+  nombre.addEventListener('focus', () => { if (nombre.value) actualizarSugerencias(); });
+  nombre.addEventListener('blur', async () => {
+    cerrar();
+    if (!clave && nombre.value.trim()) {
+      const exacto = await buscarExacto(nombre.value);
+      if (exacto) clave = exacto.clave;
+    }
+    mostrarImagen();
+  });
+  nombre.addEventListener('keydown', (e) => {
+    if (lista.hidden) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); marcar((activa + 1) % opciones.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); marcar((activa - 1 + opciones.length) % opciones.length); }
+    else if (e.key === 'Enter' && activa >= 0) { e.preventDefault(); elegir(opciones[activa]); }
+    else if (e.key === 'Escape') cerrar();
+  });
+
+  const { cantidad: cant, unidad: unid } = separarMedida(datos.medida || '');
+  const cantidad = el('input', {
+    name: 'ing-cantidad', placeholder: 'Cant.', value: cant, 'aria-label': 'Cantidad',
+    inputmode: 'decimal', maxlength: '12', class: 'campo-cantidad',
+  });
+  const unidad = el('select', {
+    name: 'ing-unidad', 'aria-label': 'Unidad',
+    onchange: () => {
+      cantidad.disabled = SIN_CANTIDAD.has(unidad.value);
+      if (cantidad.disabled) cantidad.value = '';
+    },
+  }, UNIDADES.map(([valor, singular, plural]) =>
+    el('option', { value: valor, selected: valor === unid }, valor ? plural : 'unidades')));
+  cantidad.disabled = SIN_CANTIDAD.has(unid);
+
+  const fila = el('li', { class: 'fila-editable fila-ingrediente' },
     vista,
-    nombre,
-    el('input', { name: 'ing-medida', placeholder: 'Cantidad (ej: 2 unidades)', value: datos.medida || '', 'aria-label': 'Cantidad', maxlength: '60' }),
+    el('div', { class: 'combo' }, nombre, lista),
+    cantidad,
+    unidad,
     el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar ingrediente', onclick: () => fila.remove() }, '✕'));
-  actualizarVista(datos.nombre || '');
+  fila.leer = () => ({
+    nombre: nombre.value.trim(),
+    medida: armarMedida(cantidad.value, unidad.value),
+    ...(clave ? { imagen: clave } : {}),
+  });
+  mostrarImagen();
   return fila;
 }
 
@@ -57,7 +142,8 @@ function filaPaso(texto = '') {
 export async function vistaFormulario(uuid = null) {
   if (!hayBackend) return sinBackend();
   const u = usuario();
-  if (!u) { location.hash = '#/entrar'; return; }
+  if (!u) { pedirLogin(); return; }
+  cargarIngredientes(); // se precarga para que el buscador responda al instante
 
   let receta = null;
   if (uuid) {
@@ -109,10 +195,7 @@ export async function vistaFormulario(uuid = null) {
       error.textContent = '';
       const d = new FormData(form);
       const ingredientes = [...listaIngredientes.children]
-        .map((li) => ({
-          nombre: li.querySelector('[name=ing-nombre]').value.trim(),
-          medida: li.querySelector('[name=ing-medida]').value.trim(),
-        }))
+        .map((li) => li.leer())
         .filter((i) => i.nombre);
       const pasos = [...listaPasos.querySelectorAll('textarea')].map((t) => t.value.trim()).filter(Boolean);
 

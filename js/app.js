@@ -37,7 +37,10 @@ function dibujarMenu(u) {
         },
       }, 'Salir'),
     ]
-    : [el('a', { class: 'boton', href: '#/entrar' }, 'Entrar')]));
+    : [
+      el('a', { href: '#/nueva' }, '✍️ Crear receta'),
+      el('a', { class: 'boton', href: '#/entrar' }, 'Entrar'),
+    ]));
 }
 
 // ---------- ruteo por hash ----------
