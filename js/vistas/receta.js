@@ -6,6 +6,7 @@ import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 import { usuario } from '../auth.js';
 import {
   leerProgreso, guardarProgreso, pantallaSoportada, mantenerPantalla, pantallaActiva,
+  recetaActual, fijarActual, soltarActual, alCambiarCocina,
 } from '../cocina.js';
 import { portada } from './componentes.js';
 import { bandera, rutaPais } from '../paises.js';
@@ -23,7 +24,8 @@ export async function vistaReceta(id) {
   }
   document.title = `${r.nombre} · Recetario`;
 
-  const progreso = leerProgreso(r.id);
+  let progreso = leerProgreso(r.id);
+  const ORIGEN = 'ficha';
   const esMia = r.origenDatos === 'usuario' && usuario()?.id === r.userId;
 
   // ---------- seguimiento de cocina ----------
@@ -32,7 +34,7 @@ export async function vistaReceta(id) {
   const itemsIngredientes = [];
   const itemsPasos = [];
 
-  function refrescar() {
+  function pintar() {
     const ing = progreso.ingredientes.size;
     const pas = progreso.pasos.size;
     const total = r.ingredientes.length + r.pasos.length;
@@ -48,16 +50,25 @@ export async function vistaReceta(id) {
       li.classList.toggle('hecho', progreso.pasos.has(i));
       li.classList.toggle('actual', i === siguiente);
     });
-    guardarProgreso(r.id, progreso);
+    itemsIngredientes.forEach((li, i) => { li.querySelector('input').checked = progreso.ingredientes.has(i); });
+    itemsPasos.forEach((li, i) => { li.querySelector('input').checked = progreso.pasos.has(i); });
+  }
+
+  // Cambio hecho acá: se guarda, y la receta pasa a ser la que se está cocinando.
+  function refrescar() {
+    pintar();
+    guardarProgreso(r.id, progreso, ORIGEN);
+    if (recetaActual()?.id !== r.id && (progreso.ingredientes.size || progreso.pasos.size)) fijarActual(r);
   }
 
   function casilla(conjunto, indice, texto) {
     return el('input', {
       type: 'checkbox',
-      checked: conjunto.has(indice),
+      checked: (conjunto === 'ingredientes' ? progreso.ingredientes : progreso.pasos).has(indice),
       'aria-label': texto,
       onchange: (e) => {
-        if (e.target.checked) conjunto.add(indice); else conjunto.delete(indice);
+        const actual = conjunto === 'ingredientes' ? progreso.ingredientes : progreso.pasos;
+        if (e.target.checked) actual.add(indice); else actual.delete(indice);
         refrescar();
       },
     });
@@ -66,7 +77,7 @@ export async function vistaReceta(id) {
   r.ingredientes.forEach((ing, i) => {
     itemsIngredientes.push(el('li', { class: 'ingrediente' },
       el('label', {},
-        casilla(progreso.ingredientes, i, ing.nombre),
+        casilla('ingredientes', i, ing.nombre),
         crearImagen(ing.imagen, '', IMG_INGREDIENTE_GENERICO),
         el('span', { class: 'ingrediente-texto' },
           el('strong', {}, ing.nombre),
@@ -76,7 +87,7 @@ export async function vistaReceta(id) {
   r.pasos.forEach((paso, i) => {
     itemsPasos.push(el('li', { class: 'paso' },
       el('label', {},
-        casilla(progreso.pasos, i, `Paso ${i + 1}`),
+        casilla('pasos', i, `Paso ${i + 1}`),
         el('span', { class: 'paso-numero' }, i + 1),
         el('span', {}, paso))));
   });
@@ -101,15 +112,39 @@ export async function vistaReceta(id) {
     onclick: () => {
       progreso.ingredientes.clear();
       progreso.pasos.clear();
-      itemsIngredientes.concat(itemsPasos).forEach((li) => { li.querySelector('input').checked = false; });
       refrescar();
     },
   }, '↺ Reiniciar');
 
+  // Seguir la receta en el panel lateral "Cocinando ahora".
+  const botonSeguir = el('button', {
+    type: 'button',
+    class: 'boton-secundario',
+    onclick: () => (recetaActual()?.id === r.id ? soltarActual() : fijarActual(r)),
+  });
+  function pintarSeguir() {
+    const siguiendo = recetaActual()?.id === r.id;
+    botonSeguir.textContent = siguiendo ? '📌 Siguiendo' : '📌 Seguir al costado';
+    botonSeguir.title = siguiendo ? 'Dejar de mostrarla en el panel lateral' : 'Mostrarla en el panel lateral mientras navegás';
+    botonSeguir.classList.toggle('activo', siguiendo);
+    botonSeguir.setAttribute('aria-pressed', String(siguiendo));
+  }
+  pintarSeguir();
+
   // Barra fija abajo: siempre a mano mientras se cocina.
   const barraCocina = el('div', { class: 'barra-cocina', role: 'region', 'aria-label': 'Progreso de la receta' },
     el('div', { class: 'barra-cocina-progreso' }, textoProgreso, barra),
-    el('div', { class: 'acciones' }, botonPantalla, botonReiniciar));
+    el('div', { class: 'acciones' }, botonSeguir, botonPantalla, botonReiniciar));
+
+  // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
+  const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {
+    if (!barraCocina.isConnected) { dejarDeEscuchar(); return; }
+    if (actual) { pintarSeguir(); return; }
+    if (id === r.id && origen !== ORIGEN) {
+      progreso = leerProgreso(r.id);
+      pintar();
+    }
+  });
 
   // ---------- acciones del dueño ----------
   const accionesDueno = esMia && el('p', { class: 'acciones' },
@@ -178,5 +213,5 @@ export async function vistaReceta(id) {
           : 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.')),
       barraCocina)
   );
-  refrescar();
+  pintar();
 }

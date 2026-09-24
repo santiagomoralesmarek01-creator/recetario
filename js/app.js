@@ -6,6 +6,7 @@ import { vistaInicio, vistaCategoria, vistaBusqueda, vistaPaises, vistaPais } fr
 import { vistaReceta } from './vistas/receta.js';
 import { vistaEntrar, vistaMisRecetas, vistaNuevaClave } from './vistas/cuenta.js';
 import { vistaFormulario } from './vistas/formulario.js';
+import { iniciarPanel } from './panelCocina.js';
 
 const menu = document.getElementById('menu');
 
@@ -25,7 +26,7 @@ function dibujarMenu(u) {
   if (!hayBackend) { menu.replaceChildren(); return; }
   menu.replaceChildren(...(u
     ? [
-      el('a', { href: '#/mis-recetas' }, 'Mis recetas'),
+      el('a', { class: 'boton boton-secundario', href: '#/mis-recetas' }, 'Mis recetas'),
       el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva'),
       el('button', {
         type: 'button',
@@ -39,7 +40,7 @@ function dibujarMenu(u) {
       }, 'Salir'),
     ]
     : [
-      el('a', { href: '#/nueva' }, '✍️ Crear receta'),
+      el('a', { class: 'boton boton-secundario', href: '#/nueva' }, 'Crear receta'),
       el('a', { class: 'boton', href: '#/entrar' }, 'Entrar'),
     ]));
 }
@@ -117,6 +118,7 @@ alCambiarSesion((u) => {
 
 (async () => {
   dibujarMenu(null);
+  iniciarPanel();
   try {
     await iniciarAuth();
   } catch (err) {

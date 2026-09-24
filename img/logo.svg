@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Recetario">
+  <!-- Plato -->
+  <circle cx="32" cy="33" r="21" fill="#ffffff" stroke="#e7d6c3" stroke-width="2"/>
+  <circle cx="32" cy="33" r="14" fill="#fbf4ec" stroke="#efe2d3" stroke-width="1.5"/>
+  <!-- Tenedor -->
+  <g fill="none" stroke="#c8553d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12v9a3.5 3.5 0 0 0 7 0v-9"/>
+    <path d="M8.5 12v9"/>
+    <path d="M8.5 24.5V54"/>
+    <!-- Cuchillo -->
+    <path d="M58 12c-3.5 2.5-4.5 8.5-4.5 13v5h4.5V54"/>
+  </g>
+</svg>

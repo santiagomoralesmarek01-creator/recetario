@@ -207,7 +207,8 @@ main {
    ===================================================================== */
 
 .menu { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.menu-sesion { display: flex; gap: 12px; align-items: center; }
+.menu-sesion { display: flex; gap: 8px; align-items: center; }
+.menu .boton-secundario, .menu .boton { white-space: nowrap; }
 .menu-sesion a:not(.boton) { font-weight: 600; text-decoration: none; }
 
 .boton-texto {
@@ -629,4 +630,104 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
   .fila-ingrediente .combo { flex: 1 1 calc(100% - 56px); }
   .fila-ingrediente .campo-cantidad { flex: 0 0 84px; width: 84px; margin-left: 48px; }
   .fila-ingrediente select { flex: 1 1 0; min-width: 0; }
+}
+
+/* =====================================================================
+   Panel "Cocinando ahora"
+   ===================================================================== */
+
+:root { --ancho-panel: 340px; --alto-cabecera: 71px; }
+
+.panel-actual {
+  position: fixed;
+  z-index: 30;
+  top: var(--alto-cabecera);
+  right: 0;
+  bottom: 0;
+  width: var(--ancho-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px 0;
+  background: var(--superficie);
+  border-left: 1px solid var(--borde);
+}
+.panel-actual[hidden] { display: none; }
+
+.panel-actual-cabecera { display: flex; justify-content: space-between; align-items: center; }
+.panel-actual-titulo {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--acento);
+}
+.panel-actual-acciones { display: flex; gap: 6px; }
+.panel-actual-acciones .boton-icono { padding: 4px 9px; font-size: 0.85rem; }
+.panel-cerrar-cajon { display: none; }
+
+.panel-actual-receta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--texto);
+  text-decoration: none;
+}
+.panel-actual-receta img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex: none; }
+.panel-actual-receta strong { line-height: 1.25; }
+.panel-actual-receta:hover strong { color: var(--acento); }
+.panel-actual .progreso-barra { margin-top: 2px; height: 8px; }
+.panel-actual-progreso { margin: 0; font-size: 0.85rem; color: var(--texto-suave); }
+
+.panel-actual-cuerpo { flex: 1; overflow-y: auto; margin: 0 -16px; padding: 0 16px 16px; border-top: 1px solid var(--borde); }
+.panel-actual-cuerpo h3 { font-size: 0.95rem; margin: 14px 0 6px; }
+
+.panel-lista { list-style: none; padding: 0; margin: 0; }
+.panel-lista li { border-radius: 8px; }
+.panel-lista label { display: flex; align-items: flex-start; gap: 8px; padding: 5px 4px; cursor: pointer; font-size: 0.9rem; line-height: 1.35; }
+.panel-lista input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; }
+.panel-lista small { display: block; color: var(--texto-suave); font-size: 0.8rem; }
+.panel-ing-img { width: 26px; height: 26px; object-fit: contain; flex: none; }
+.panel-lista li.hecho { opacity: 0.5; }
+.panel-lista li.hecho .panel-ing-nombre, .panel-pasos li.hecho label > span:last-child { text-decoration: line-through; }
+.panel-pasos .paso-numero { width: 22px; height: 22px; font-size: 0.75rem; }
+.panel-pasos li.actual { background: var(--fondo); outline: 1px solid var(--acento); }
+.panel-pasos li.actual .paso-numero { background: var(--acento); color: #fff; }
+
+/* Botón flotante y cajón (pantallas angostas) */
+.panel-flotante {
+  position: fixed;
+  z-index: 25;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 10px 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+.panel-flotante[hidden] { display: none; }
+.panel-flotante-texto { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panel-flotante-cuenta { font-size: 0.8rem; background: rgba(255, 255, 255, 0.25); border-radius: 999px; padding: 1px 8px; }
+.panel-fondo { display: none; }
+
+@media (min-width: 1280px) {
+  /* Hay lugar: el panel queda fijo y el contenido se corre para no taparse */
+  body.con-panel main, body.con-panel .pie { margin-right: var(--ancho-panel); }
+  body.con-panel main { margin-left: max(16px, calc((100vw - var(--ancho-panel) - 1100px) / 2)); }
+  .panel-flotante { display: none !important; }
+}
+
+@media (max-width: 1279px) {
+  .panel-actual {
+    top: 0;
+    width: min(360px, 92vw);
+    z-index: 60;
+    transform: translateX(105%);
+    transition: transform 0.25s ease;
+  }
+  body.panel-abierto .panel-actual { transform: none; box-shadow: -8px 0 32px rgba(0, 0, 0, 0.25); }
+  body.panel-abierto .panel-fondo { display: block; position: fixed; inset: 0; z-index: 55; background: rgba(0, 0, 0, 0.35); }
+  .panel-cerrar-cajon { display: inline-block; }
 }

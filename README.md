@@ -21,6 +21,10 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 - **Modo cocina** en cada receta: tildás ingredientes y pasos, ves el progreso,
   se resalta el paso que sigue, el avance queda guardado en el dispositivo y
   podés mantener la pantalla encendida.
+- **Panel "Cocinando ahora"**: al tildar algo (o con "📌 Seguir al costado") la
+  receta queda fija en una columna a la derecha con sus ingredientes y pasos,
+  aunque sigas navegando. En pantallas angostas es un botón flotante que abre un
+  cajón lateral. Todo se sincroniza con la ficha de la receta.
 - **Imágenes sin huecos**: si una receta no tiene foto se muestra un collage de
   sus ingredientes; si una imagen no carga aparece un ícono de reemplazo.
 
@@ -81,7 +85,8 @@ Cada push posterior vuelve a publicar solo.
     ├── catalogo.js           catálogo en español (data/mealdb/)
     ├── api.js                API de TheMealDB (respaldo en inglés)
     ├── ingredientes.js       lista de ingredientes y unidades para el formulario
-    ├── cocina.js             progreso del modo cocina y pantalla encendida
+    ├── cocina.js             progreso del modo cocina, receta actual y pantalla encendida
+    ├── panelCocina.js        panel lateral "Cocinando ahora"
     ├── imagenes.js           URLs de imágenes y reemplazos
     ├── traducciones.js       diccionario español ↔ inglés
     ├── dom.js                helpers de interfaz
