@@ -198,6 +198,10 @@ def armar(catalogo, cache):
     ingredientes = json.loads((FUENTE / "ingredientes-es.json").read_text())
     # TheMealDB no trae el país de algunas recetas: se completa a mano acá.
     origenes = json.loads((FUENTE / "origenes-es.json").read_text())
+    # Traducciones de pasos revisadas a mano: tienen prioridad sobre las automáticas.
+    revisados = {}
+    for f in sorted((FUENTE / "pasos-revisados").glob("*.json")):
+        revisados.update(json.loads(f.read_text()))
     SALIDA.mkdir(parents=True, exist_ok=True)
     for viejo in SALIDA.glob("*.json"):
         viejo.unlink()
@@ -208,8 +212,9 @@ def armar(catalogo, cache):
         rid = receta["id"]
         ings = [[ingredientes[n.lower()], traducir_medida(m), n] for n, m in receta["ingredientes"]]
         pasos_en = separar_pasos(receta["instrucciones"])
-        pasos = [pulir(aplicar_glosario(cache[clave(p)])) if clave(p) in cache else p for p in pasos_en]
-        faltan = any(clave(p) not in cache for p in pasos_en)
+        pasos = [revisados.get(clave(p)) or (pulir(aplicar_glosario(cache[clave(p)])) if clave(p) in cache else p)
+                 for p in pasos_en]
+        faltan = any(clave(p) not in cache and clave(p) not in revisados for p in pasos_en)
         sin_traducir += faltan
         detalle = {
             "id": rid,
@@ -235,7 +240,9 @@ def armar(catalogo, cache):
         {"campos": ["id", "nombre", "categoria", "origen", "imagen", "ingredientes"],
          "categorias": categorias, "recetas": indice},
         ensure_ascii=False, separators=(",", ":")))
-    print(f"Listo: {len(indice)} recetas en {SALIDA.relative_to(RAIZ)} ({sin_traducir} con pasos aún en inglés)")
+    total_pasos = sum(len(separar_pasos(r["instrucciones"])) for r in catalogo["recetas"])
+    print(f"Listo: {len(indice)} recetas en {SALIDA.relative_to(RAIZ)} ({sin_traducir} con pasos aún en inglés;"
+          f" {len(revisados)} pasos revisados a mano de ~{total_pasos})")
     armar_ingredientes(catalogo, ingredientes)
 
 
