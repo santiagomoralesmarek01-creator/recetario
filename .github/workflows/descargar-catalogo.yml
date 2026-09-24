@@ -1,0 +1,29 @@
+name: Descargar catálogo de TheMealDB
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/descargar-mealdb.mjs
+      - .github/workflows/descargar-catalogo.yml
+
+permissions:
+  contents: write
+
+jobs:
+  descargar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/descargar-mealdb.mjs
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/fuente/mealdb-en.json
+          git diff --cached --quiet && echo "Sin cambios" && exit 0
+          git commit -m "Actualizar catálogo de TheMealDB (inglés)"
+          git push
