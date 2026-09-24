@@ -30,11 +30,26 @@ export function normalizarFila(f) {
   };
 }
 
+// Traduce los errores de configuración más comunes a algo entendible.
+function errorLegible(error) {
+  const m = `${error?.message || ''} ${error?.code || ''}`;
+  if (/relation .*recetas.* does not exist|42P01|PGRST205|schema cache/i.test(m)) {
+    return new Error('Falta crear la tabla de recetas en Supabase (ejecutar supabase/esquema.sql).');
+  }
+  if (/bucket not found/i.test(m)) {
+    return new Error('Falta crear el espacio para fotos en Supabase (ejecutar supabase/esquema.sql).');
+  }
+  if (/row-level security|permission denied|42501/i.test(m)) {
+    return new Error('No tenés permiso para hacer eso. Probá cerrar sesión y volver a entrar.');
+  }
+  return error instanceof Error ? error : new Error(error?.message || 'Error inesperado');
+}
+
 async function consultar(armar) {
   const sb = await cliente();
   if (!sb) return [];
   const { data, error } = await armar(sb.from(TABLA));
-  if (error) throw error;
+  if (error) throw errorLegible(error);
   return (data || []).map(normalizarFila);
 }
 
@@ -74,7 +89,7 @@ export async function subirFoto(userId, archivo) {
     cacheControl: '31536000',
     contentType: archivo.type,
   });
-  if (error) throw error;
+  if (error) throw errorLegible(error);
   return sb.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
 }
 
@@ -85,12 +100,12 @@ export async function guardar(datos, uuid = null) {
     ? sb.from(TABLA).update(datos).eq('id', uuid)
     : sb.from(TABLA).insert(datos);
   const { data, error } = await consulta.select('*').single();
-  if (error) throw error;
+  if (error) throw errorLegible(error);
   return normalizarFila(data);
 }
 
 export async function borrar(uuid) {
   const sb = await cliente();
   const { error } = await sb.from(TABLA).delete().eq('id', uuid);
-  if (error) throw error;
+  if (error) throw errorLegible(error);
 }

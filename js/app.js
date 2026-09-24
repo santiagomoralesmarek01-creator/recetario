@@ -14,6 +14,7 @@ function error(err) {
   mostrar(
     el('div', { class: 'estado' },
       el('p', {}, 'No se pudo cargar esta página. Revisá tu conexión.'),
+      err?.message && el('p', { class: 'meta' }, err.message),
       el('button', { type: 'button', onclick: () => router() }, 'Reintentar'))
   );
 }
