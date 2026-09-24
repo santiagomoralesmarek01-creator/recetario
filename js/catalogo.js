@@ -67,6 +67,7 @@ export async function obtener(id) {
       nombre, medida, imagen: urlIngrediente(claveImagen),
     })),
     pasos: d.pasos,
+    pasosEnIngles: Boolean(d.pasosEnIngles),
   };
 }
 

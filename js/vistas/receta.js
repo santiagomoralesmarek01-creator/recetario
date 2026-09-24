@@ -171,8 +171,9 @@ export async function vistaReceta(id) {
         r.pasos.length
           ? el('ol', { class: 'pasos' }, itemsPasos)
           : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.'),
-        r.origenDatos === 'mealdb' && r.nombreOriginal &&
-          el('p', { class: 'nota-traduccion' }, 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.')),
+        r.origenDatos === 'mealdb' && r.nombreOriginal && el('p', { class: 'nota-traduccion' }, r.pasosEnIngles
+          ? 'Estamos terminando de traducir los pasos de esta receta: por ahora se muestran en inglés.'
+          : 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.')),
       barraCocina)
   );
   refrescar();

@@ -114,7 +114,7 @@ PALABRAS = {
 
 # Casos puntuales que las reglas no resuelven bien
 EXACTAS = {
-    "1 – 14-ounce can": "1 lata de 14 onzas",
+    "1 – 14-ounce can": "1 lata de 400 g",
     "2 juice": "Jugo de 2",
     "2 juice of 1, the other halved": "2 (jugo de 1 y el otro en mitades)",
     "3rd": "1/3",
@@ -128,7 +128,7 @@ EXACTAS = {
     "1 red": "1 rojo",
     "white": "Clara",
     "1 part": "1 parte",
-    "8-ounce sliced": "8 onzas, en rodajas",
+    "8-ounce sliced": "230 g, en rodajas",
     "1.5 tablespoons minced garlic": "1,5 cdas de ajo picado",
     "5 chopped cloves": "5 dientes picados",
     "6 medium cloves sliced": "6 dientes medianos en rodajas",
@@ -184,9 +184,57 @@ def traducir_medida(texto):
                   lambda m: f"{m.group(1)} {ADJETIVOS_PLURAL.get(m.group(2), m.group(2))}" if m.group(1).split()[0] != "1" else m.group(0), bajo)
     # "2 grande" -> "2 grandes" (sólo si el número es mayor que uno)
     bajo = re.sub(r"^(\S+) ([a-záéíóúñ]+)\b", lambda m: f"{m.group(1)} {ADJETIVOS_PLURAL.get(m.group(2), m.group(2)) if _mayor_que_uno(m.group(1)) else m.group(2)}", bajo)
+    bajo = a_gramos(bajo)
     bajo = re.sub(r"(\d)\.(\d)", r"\1,\2", bajo)
     bajo = re.sub(r"\s+", " ", bajo).strip(" ,;")
     return bajo[:1].upper() + bajo[1:] if bajo and not bajo[0].isdigit() else bajo
+
+
+FRACCIONES = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3}
+
+
+def _numero(texto):
+    """'1 1/2' -> 1.5, '¾' -> 0.75, '2,5' -> 2.5"""
+    total = 0.0
+    for parte in texto.replace(",", ".").split():
+        for simbolo, valor in FRACCIONES.items():
+            if parte.endswith(simbolo):
+                total += valor
+                parte = parte[:-1]
+        if "/" in parte:
+            a, b = parte.split("/")
+            total += float(a) / float(b)
+        elif parte:
+            total += float(parte)
+    return total
+
+
+def _redondear_gramos(g):
+    return int(round(g / 10) * 10) if g >= 100 else max(5, int(round(g / 5) * 5))
+
+
+def a_gramos(texto):
+    """Pasa libras y onzas a gramos: '1 lb' -> '450 g', '8 onzas' -> '230 g'."""
+    patron = r"(\d+(?:[.,]\d+)?(?:\s?(?:\d/\d|[½¼¾⅓]))?|\d/\d|[½¼¾⅓])\s*(lb|libras?|oz|onzas?)\b(?!\s*\()"
+
+    def convertir(m):
+        valor = _numero(m.group(1)) * (453.6 if m.group(2).startswith(("lb", "libra")) else 28.35)
+        return f"{_redondear_gramos(valor)} g"
+
+    # Si ya trae la equivalencia métrica entre paréntesis, se usa esa
+    texto = re.sub(r"[\d.,/ ½¼¾⅓]+\s*(?:lb|libras?|oz|onzas?)\.?\s*\((\d+ ?(?:g|ml))\)", r"\1", texto)
+    # Rangos: "4-5 libras" -> "1800-2270 g"
+    texto = re.sub(r"(\d+)-(\d+)\s*(lb|libras?|oz|onzas?)\b", lambda m: "{}-{} g".format(
+        *(_redondear_gramos(int(x) * (453.6 if m.group(3).startswith(("lb", "libra")) else 28.35)) for x in m.group(1, 2))), texto)
+    # "6oz/180g": se deja la parte métrica
+    texto = re.sub(r"^[\d.,½¼¾⅓ ]+\s*(?:oz|lb)\s*/\s*(\d+ ?g)\b", r"\1", texto)
+    # "650 g/1 lb 8 oz" ya trae gramos: se deja sólo la parte métrica
+    texto = re.sub(r"^(\d+ ?g)\s*/.*$", r"\1", texto)
+    texto = re.sub(r"^(.*?)\s*/\s*\d.*(oz|fl).*$", r"\1", texto) if re.match(r"^\d+ ?(g|ml)\b", texto) else texto
+    texto = re.sub(patron, convertir, texto)
+    texto = re.sub(r"\b(g|ml)\.", r"\1", texto)
+    # "400 g frasco" -> "frasco de 400 g"
+    return re.sub(r"^(\d+ (?:g|ml)) (frasco|lata|paquete)$", r"\2 de \1", texto)
 
 
 def _mayor_que_uno(n):

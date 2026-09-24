@@ -28,6 +28,7 @@ from medidas import traducir_medida  # noqa: E402
 RAIZ = Path(__file__).resolve().parent.parent
 FUENTE = RAIZ / "data" / "fuente"
 SALIDA = RAIZ / "data" / "mealdb"
+FRAGMENTOS = RAIZ / "fragmentos-traduccion"
 
 ORIGENES = {
     "": "", "Algerian": "Argelia", "Argentina": "Argentina", "Australian": "Australia", "British": "Reino Unido",
@@ -122,40 +123,51 @@ def cargar_traductor():
     return lambda texto: argostranslate.translate.translate(texto, "en", "es")
 
 
-def main():
-    catalogo = json.loads((FUENTE / "mealdb-en.json").read_text())
-    nombres = json.loads((FUENTE / "nombres-es.json").read_text())
-    ingredientes = json.loads((FUENTE / "ingredientes-es.json").read_text())
-    ruta_cache = FUENTE / "pasos-es.json"
-    cache = json.loads(ruta_cache.read_text()) if ruta_cache.exists() else {}
-
+def pasos_pendientes(catalogo, cache):
     pendientes = {}
     for receta in catalogo["recetas"]:
         for paso in separar_pasos(receta["instrucciones"]):
             if clave(paso) not in cache:
                 pendientes[clave(paso)] = paso
+    return dict(sorted(pendientes.items()))
 
-    print(f"Pasos a traducir: {len(pendientes)} (en caché: {len(cache)})", flush=True)
-    if pendientes and os.environ.get("SIN_TRADUCTOR"):
-        # Sólo para probar el armado: deja los pasos en inglés y no toca la caché.
-        cache = {**cache, **pendientes}
-    elif pendientes:
-        traducir = cargar_traductor()
-        for n, (k, paso) in enumerate(pendientes.items(), 1):
-            cache[k] = aplicar_glosario(traducir(paso))
-            if n % 200 == 0:
-                print(f"  {n}/{len(pendientes)}", flush=True)
-                ruta_cache.write_text(json.dumps(cache, ensure_ascii=False, indent=0, sort_keys=True))
-        ruta_cache.write_text(json.dumps(cache, ensure_ascii=False, indent=0, sort_keys=True))
 
+def guardar_json(ruta, datos):
+    ruta.write_text(json.dumps(datos, ensure_ascii=False, indent=0, sort_keys=True))
+
+
+def traducir_fragmento(catalogo, cache, numero, total):
+    """Traduce sólo la parte `numero` de `total` de los pasos pendientes (para correr en paralelo)."""
+    pendientes = list(pasos_pendientes(catalogo, cache).items())[numero::total]
+    print(f"Fragmento {numero + 1}/{total}: {len(pendientes)} pasos", flush=True)
+    FRAGMENTOS.mkdir(parents=True, exist_ok=True)
+    salida = FRAGMENTOS / f"pasos-{numero}.json"
+    traducidos = {}
+    traducir = cargar_traductor()
+    for n, (k, paso) in enumerate(pendientes, 1):
+        traducidos[k] = aplicar_glosario(traducir(paso))
+        if n % 50 == 0:
+            print(f"  {n}/{len(pendientes)}", flush=True)
+            guardar_json(salida, traducidos)
+    guardar_json(salida, traducidos)
+
+
+def armar(catalogo, cache):
+    nombres = json.loads((FUENTE / "nombres-es.json").read_text())
+    ingredientes = json.loads((FUENTE / "ingredientes-es.json").read_text())
     SALIDA.mkdir(parents=True, exist_ok=True)
     for viejo in SALIDA.glob("*.json"):
         viejo.unlink()
 
     indice = []
+    sin_traducir = 0
     for receta in catalogo["recetas"]:
         rid = receta["id"]
         ings = [[ingredientes[n.lower()], traducir_medida(m), n] for n, m in receta["ingredientes"]]
+        pasos_en = separar_pasos(receta["instrucciones"])
+        pasos = [cache.get(clave(p), p) for p in pasos_en]
+        faltan = any(clave(p) not in cache for p in pasos_en)
+        sin_traducir += faltan
         detalle = {
             "id": rid,
             "nombre": nombres[rid],
@@ -167,8 +179,10 @@ def main():
             "enlace": receta["enlace"],
             "etiquetas": sorted({ETIQUETAS[t.lower()] for t in receta["etiquetas"] if t.lower() in ETIQUETAS}),
             "ingredientes": ings,
-            "pasos": [cache[clave(p)] for p in separar_pasos(receta["instrucciones"])],
+            "pasos": pasos,
         }
+        if faltan:
+            detalle["pasosEnIngles"] = True
         (SALIDA / f"{rid}.json").write_text(json.dumps(detalle, ensure_ascii=False, separators=(",", ":")))
         indice.append([rid, nombres[rid], receta["categoria"], detalle["origen"], receta["imagen"],
                        "|".join(i[0] for i in ings)])
@@ -178,7 +192,41 @@ def main():
         {"campos": ["id", "nombre", "categoria", "origen", "imagen", "ingredientes"],
          "categorias": categorias, "recetas": indice},
         ensure_ascii=False, separators=(",", ":")))
-    print(f"Listo: {len(indice)} recetas en {SALIDA.relative_to(RAIZ)}")
+    print(f"Listo: {len(indice)} recetas en {SALIDA.relative_to(RAIZ)} ({sin_traducir} con pasos aún en inglés)")
+
+
+def main():
+    """
+    Sin argumentos: suma los fragmentos traducidos a la caché y arma data/mealdb/.
+    Los pasos que todavía no estén traducidos quedan en inglés (marcados).
+    Con --fragmento N/TOTAL: traduce esa parte de los pasos pendientes.
+    Con TRADUCIR=1: además traduce acá mismo todo lo que falte antes de armar.
+    """
+    catalogo = json.loads((FUENTE / "mealdb-en.json").read_text())
+    ruta_cache = FUENTE / "pasos-es.json"
+    cache = json.loads(ruta_cache.read_text()) if ruta_cache.exists() else {}
+
+    if len(sys.argv) == 3 and sys.argv[1] == "--fragmento":
+        numero, total = (int(x) for x in sys.argv[2].split("/"))
+        traducir_fragmento(catalogo, cache, numero - 1, total)
+        return
+
+    fragmentos = sorted(FRAGMENTOS.glob("pasos-*.json")) if FRAGMENTOS.exists() else []
+    for f in fragmentos:
+        cache.update(json.loads(f.read_text()))
+    if fragmentos:
+        print(f"Sumados {len(fragmentos)} fragmentos a la caché")
+
+    if os.environ.get("TRADUCIR") == "1":
+        pendientes = pasos_pendientes(catalogo, cache)
+        if pendientes:
+            traducir = cargar_traductor()
+            for k, paso in pendientes.items():
+                cache[k] = aplicar_glosario(traducir(paso))
+
+    if cache:
+        guardar_json(ruta_cache, cache)
+    armar(catalogo, cache)
 
 
 if __name__ == "__main__":
