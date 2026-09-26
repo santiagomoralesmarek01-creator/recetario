@@ -195,6 +195,9 @@ main {
   font-size: 0.85rem;
   padding: 24px 16px;
 }
+.pie p { margin: 4px 0; }
+.firma { font-size: 0.95rem; letter-spacing: 0.02em; }
+.firma strong { color: var(--acento); font-weight: 800; }
 
 @media (max-width: 700px) {
   .destacada { grid-template-columns: 1fr; }
