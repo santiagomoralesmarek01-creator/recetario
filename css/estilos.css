@@ -21,8 +21,9 @@
   --ancho: 1180px;
 }
 
+/* Modo oscuro: sigue al sistema salvo que se elija a mano (data-tema en <html>) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-tema="claro"]) {
     --fondo: #171412;
     --superficie: #221d1a;
     --crema: #2c2521;
@@ -34,7 +35,22 @@
     --borde: #362f2a;
     --sombra: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
     --sombra-alta: 0 2px 6px rgba(0, 0, 0, 0.35), 0 18px 40px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
   }
+}
+:root[data-tema="oscuro"] {
+  --fondo: #171412;
+  --superficie: #221d1a;
+  --crema: #2c2521;
+  --texto: #f4ede4;
+  --texto-suave: #b3a79b;
+  --acento: #e4845f;
+  --acento-oscuro: #f09a78;
+  --acento-suave: #3a2820;
+  --borde: #362f2a;
+  --sombra: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
+  --sombra-alta: 0 2px 6px rgba(0, 0, 0, 0.35), 0 18px 40px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -983,4 +999,32 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
   .categoria { padding: 12px 6px 10px; }
   .categoria img { width: 64px; height: 64px; padding: 6px; }
   .categoria h3 { font-size: 0.85rem; }
+}
+
+/* Botón de modo claro / oscuro */
+.boton-tema {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--borde);
+}
+.boton-tema:hover { background: var(--crema); }
+.boton-tema svg { width: 20px; height: 20px; }
+.boton-tema .icono-sol { display: none; }
+.boton-tema[aria-pressed="true"] .icono-sol { display: block; }
+.boton-tema[aria-pressed="true"] .icono-luna { display: none; }
+@media (max-width: 960px) {
+  /* En pantallas chicas va al lado del buscador */
+  .buscador { flex: 1 1 220px; }
+  .boton-tema { order: 3; }
+}
+@media (max-width: 700px) {
+  .boton-tema { width: 34px; height: 34px; }
+  .boton-tema svg { width: 18px; height: 18px; }
 }

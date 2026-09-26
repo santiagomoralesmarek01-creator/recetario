@@ -9,7 +9,9 @@ import { vistaFormulario } from './vistas/formulario.js';
 import { vistaComunidad, vistaAutor } from './vistas/comunidad.js';
 import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
+import { iniciarTema } from './tema.js';
 
+iniciarTema();
 const menu = document.getElementById('menu');
 const enlacesNav = [...document.querySelectorAll('.nav-principal a')];
 if (!hayBackend) enlacesNav.find((a) => a.dataset.ruta.startsWith('comunidad'))?.remove();
