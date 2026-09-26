@@ -11,6 +11,8 @@ import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
 
 const menu = document.getElementById('menu');
+const enlacesNav = [...document.querySelectorAll('.nav-principal a')];
+if (!hayBackend) enlacesNav.find((a) => a.dataset.ruta.startsWith('comunidad'))?.remove();
 
 function error(err) {
   console.error(err);
@@ -68,6 +70,7 @@ async function router() {
   const [ruta, ...resto] = hash.replace(/^#\/?/, '').split('/');
   const param = decodeURIComponent(resto.join('/'));
   document.title = 'Recetario';
+  for (const a of enlacesNav) a.classList.toggle('activo', a.dataset.ruta.split(' ').includes(ruta));
   try {
     switch (ruta) {
       case 'receta': return param ? await vistaReceta(param) : await vistaInicio();
@@ -98,7 +101,10 @@ document.getElementById('buscador').addEventListener('submit', (e) => {
   if (texto) location.hash = `#/buscar/${encodeURIComponent(texto)}`;
 });
 
-document.getElementById('sorpresa').addEventListener('click', async () => {
+// Cualquier botón con data-sorpresa lleva a una receta al azar.
+document.addEventListener('click', async (e) => {
+  if (!e.target.closest('[data-sorpresa]')) return;
+  e.preventDefault();
   try {
     const r = await repo.aleatoria();
     location.hash = `#/receta/${r.id}`;

@@ -1,23 +1,29 @@
 import { el } from '../dom.js';
-import { crearImagen, urlPlato, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
+import { crearImagen, urlPlato, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
-// Si la receta no tiene foto, armamos un collage con sus ingredientes:
-// así ninguna tarjeta queda con una imagen genérica.
+// Recetas sin foto: un fondo cálido con el emoji de su categoría, en lugar
+// de una imagen genérica.
+const ESTILO_CATEGORIA = {
+  Beef: ['🥩', '#f3c9b8', '#fbe6dc'], Chicken: ['🍗', '#f5d2a6', '#fdebd3'], Pork: ['🥓', '#f2c3c0', '#fce4e1'],
+  Lamb: ['🍖', '#eecbb0', '#fae5d6'], Goat: ['🍖', '#eecbb0', '#fae5d6'], Seafood: ['🦐', '#bfe0e6', '#e3f3f6'],
+  Pasta: ['🍝', '#f6dca0', '#fdf0d0'], Vegetarian: ['🥗', '#cfe3b6', '#ecf5e0'], Vegan: ['🌱', '#cfe3b6', '#ecf5e0'],
+  Dessert: ['🍰', '#f4cfdc', '#fce8ef'], Breakfast: ['🍳', '#f7e2a8', '#fdf3d6'], Side: ['🥖', '#ecd6b5', '#f8ecda'],
+  Starter: ['🥟', '#efd7bd', '#f9ecde'], Miscellaneous: ['🍲', '#e8d3c1', '#f6ebe1'],
+};
+
 export function portada(receta, { miniatura = false, clase = '' } = {}) {
   if (receta.imagen) {
-    return crearImagen(urlPlato(receta.imagen, { miniatura: miniatura && receta.origenDatos === 'mealdb' }),
-      receta.nombre, IMG_PLATO_GENERICO, clase);
+    const achicar = miniatura && /themealdb\.com\/images\/media/.test(receta.imagen);
+    return crearImagen(urlPlato(receta.imagen, { miniatura: achicar }), receta.nombre, IMG_PLATO_GENERICO, clase);
   }
-  const conImagen = (receta.ingredientes || []).filter((i) => i.imagen && i.imagen !== IMG_INGREDIENTE_GENERICO);
-  if (conImagen.length < 2) {
-    return crearImagen(IMG_PLATO_GENERICO, receta.nombre, IMG_PLATO_GENERICO, clase);
-  }
-  const cuatro = conImagen.slice(0, 4);
-  return el('div', { class: `collage ${clase} collage-${cuatro.length}`, role: 'img', 'aria-label': receta.nombre },
-    cuatro.map((i) => crearImagen(i.imagen, '', IMG_INGREDIENTE_GENERICO)));
+  const [emoji, tono, claro] = ESTILO_CATEGORIA[receta.categoria] || ESTILO_CATEGORIA.Miscellaneous;
+  return el('div', {
+    class: `portada-sin-foto ${clase}`, role: 'img', 'aria-label': receta.nombre,
+    style: `--tono: ${tono}; --tono-claro: ${claro}`,
+  }, el('span', { 'aria-hidden': 'true' }, emoji));
 }
 
 export function metaReceta(r) {

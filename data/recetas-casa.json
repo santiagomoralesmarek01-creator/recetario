@@ -1,6 +1,7 @@
 [
   {
     "slug": "empanadas-de-carne",
+    "imagen": "https://www.themealdb.com/images/media/meals/dxpc7j1764370714.jpg",
     "nombre": "Empanadas de carne cortada a cuchillo",
     "categoria": "Beef",
     "origen": "Argentina",
@@ -34,6 +35,7 @@
   },
   {
     "slug": "milanesa-napolitana",
+    "imagen": "https://www.themealdb.com/images/media/meals/wdfa171763065079.jpg",
     "nombre": "Milanesa a la napolitana",
     "categoria": "Beef",
     "origen": "Argentina",
@@ -63,6 +65,7 @@
   },
   {
     "slug": "guiso-de-lentejas",
+    "imagen": "https://www.themealdb.com/images/media/meals/vwwspt1487394060.jpg",
     "nombre": "Guiso de lentejas",
     "categoria": "Pork",
     "origen": "Argentina",
@@ -94,6 +97,7 @@
   },
   {
     "slug": "chipa",
+    "imagen": "https://www.themealdb.com/images/media/meals/sl7cr91782588539.jpg",
     "nombre": "Chipá",
     "categoria": "Side",
     "origen": "Paraguay",
@@ -120,6 +124,7 @@
   },
   {
     "slug": "flan-casero",
+    "imagen": "https://www.themealdb.com/images/media/meals/0s80wo1764374393.jpg",
     "nombre": "Flan casero con dulce de leche",
     "categoria": "Dessert",
     "origen": "Argentina",
@@ -145,6 +150,7 @@
   },
   {
     "slug": "tortilla-de-papas",
+    "imagen": "https://www.themealdb.com/images/media/meals/quuxsx1511476154.jpg",
     "nombre": "Tortilla de papas",
     "categoria": "Vegetarian",
     "origen": "España",
@@ -169,6 +175,7 @@
   },
   {
     "slug": "pollo-al-horno-con-papas",
+    "imagen": "https://www.themealdb.com/images/media/meals/kzxflc1763194887.jpg",
     "nombre": "Pollo al horno con papas",
     "categoria": "Chicken",
     "origen": "Argentina",
@@ -197,6 +204,7 @@
   },
   {
     "slug": "chimichurri",
+    "imagen": "https://www.themealdb.com/images/media/meals/kgfh3q1763075438.jpg",
     "nombre": "Chimichurri",
     "categoria": "Side",
     "origen": "Argentina",
@@ -250,6 +258,7 @@
   },
   {
     "slug": "arroz-con-leche",
+    "imagen": "https://www.themealdb.com/images/media/meals/jp09191782856005.jpg",
     "nombre": "Arroz con leche",
     "categoria": "Dessert",
     "origen": "Argentina",

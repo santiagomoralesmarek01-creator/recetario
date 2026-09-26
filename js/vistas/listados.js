@@ -29,18 +29,50 @@ export async function vistaInicio() {
     el('a', { class: 'boton', href: usuario() ? '#/nueva' : '#/entrar' },
       usuario() ? '+ Nueva receta' : 'Crear cuenta'));
 
-  mostrar(
-    destacada && el('section', { class: 'destacada' },
-      portada(destacada, { clase: 'destacada-img' }),
-      el('div', {},
+  const totalRecetas = paises.reduce((suma, p) => suma + p.cantidad, 0);
+  const buscar = el('input', { type: 'search', placeholder: 'Probá con “empanadas”, “pollo” o “flan”…', 'aria-label': 'Buscar recetas' });
+  const portadaInicio = el('section', { class: 'portada-inicio' },
+    el('div', { class: 'portada-texto' },
+      el('p', { class: 'eyebrow' }, 'Recetario · Cocina casera y del mundo'),
+      el('h1', {}, '¿Qué cocinamos ', el('em', {}, 'hoy'), '?'),
+      el('p', { class: 'portada-bajada' },
+        'Recetas explicadas paso a paso, en español, con modo cocina para ir tildando ingredientes y pasos mientras cocinás.'),
+      el('form', {
+        class: 'buscador-grande', role: 'search',
+        onsubmit: (e) => {
+          e.preventDefault();
+          const texto = buscar.value.trim();
+          if (texto) location.hash = `#/buscar/${encodeURIComponent(texto)}`;
+        },
+      }, buscar, el('button', { type: 'submit' }, 'Buscar')),
+      el('div', { class: 'accesos' },
+        el('a', { class: 'acceso', href: '#/que-tengo' }, '🧺 Con lo que tengo'),
+        el('a', { class: 'acceso', href: '#/pais/Argentina' }, '🧉 Argentinas'),
+        el('a', { class: 'acceso', href: '#/categoria/Dessert' }, '🍰 Postres'),
+        el('a', { class: 'acceso', href: '#/categoria/Pasta' }, '🍝 Pastas'),
+        el('a', { class: 'acceso', href: '#/categoria/Vegetarian' }, '🥗 Vegetarianas'),
+        el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, '🎲 Sorprendeme')),
+      totalRecetas > 0 && el('div', { class: 'cifras' },
+        el('div', {}, el('strong', {}, `${Math.floor(totalRecetas / 50) * 50}+`), el('span', {}, 'recetas')),
+        el('div', {}, el('strong', {}, String(paises.length)), el('span', {}, 'países')),
+        el('div', {}, el('strong', {}, '100%'), el('span', {}, 'en español')))),
+    destacada && el('a', { class: 'portada-destacada', href: `#/receta/${destacada.id}` },
+      portada(destacada),
+      el('div', { class: 'portada-destacada-texto' },
         el('p', { class: 'eyebrow' }, 'Receta del momento'),
-        el('h1', {}, destacada.nombre),
+        el('h2', {}, destacada.nombre),
         el('p', { class: 'meta' }, `${destacada.ingredientes.length} ingredientes · ${metaReceta(destacada)}`),
-        el('a', { class: 'boton', href: `#/receta/${destacada.id}` }, 'Ver receta'))),
-    seccion('Recetas de la casa', deCasa),
+        el('span', { class: 'portada-destacada-ir' }, 'Ver receta →'))));
+
+  mostrar(
+    portadaInicio,
+    deCasa.length > 0 && el('section', { class: 'seccion' },
+      el('div', { class: 'seccion-titulo' }, el('h2', {}, 'Clásicos de la casa')),
+      el('p', { class: 'seccion-bajada' }, 'Las recetas de siempre, probadas y explicadas a nuestra manera.'),
+      grillaRecetas(deCasa)),
     paises.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
-        el('h2', {}, 'Recetas por país'),
+        el('h2', {}, 'Viajá por la cocina del mundo'),
         el('a', { href: '#/paises' }, `Ver los ${paises.length} países →`)),
       el('div', { class: 'chips-paises' },
         [...paises].sort((a, b) => (b.nombre === 'Argentina') - (a.nombre === 'Argentina')).slice(0, 14).map(chipPais))),
@@ -53,7 +85,7 @@ export async function vistaInicio() {
         : el('p', { class: 'meta' }, 'Todavía nadie compartió recetas. ¡Podés ser la primera persona en subir una!')),
     invitacion,
     categorias.length > 0 && el('section', { class: 'seccion' },
-      el('h2', {}, 'Categorías'),
+      el('h2', {}, 'Explorá por categoría'),
       el('div', { class: 'grilla grilla-categorias' },
         hayBackend && el('a', { class: 'tarjeta categoria categoria-comunidad', href: rutaComunidad() },
           el('img', { src: 'img/comunidad.svg', alt: '' }),
