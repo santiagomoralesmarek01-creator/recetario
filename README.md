@@ -80,7 +80,14 @@ por día cada una.
 3. En Supabase, volvé a ejecutar `supabase/esquema.sql` completo (se puede
    repetir sin problema): suma la tabla que cuenta los mensajes de cada día.
 
-Opcional: `GEMINI_MODELO` cambia el modelo (por defecto `gemini-flash-latest`).
+Respaldo (recomendado): Gemini gratis a veces está saturado. Si además cargás
+`GROQ_API_KEY` (clave gratis, sin tarjeta, en <https://console.groq.com/keys>),
+cuando Gemini no responde contesta Groq automáticamente.
+
+Para comprobar la configuración abrí `/api/ayudante` en el navegador: tiene que
+decir `"listo":true`.
+
+Opcional: `GEMINI_MODELO` / `GROQ_MODELO` fuerzan un modelo en particular.
 El plan gratuito tiene un tope diario por proyecto; si se alcanza, el chat avisa
 que tiene mucha demanda y vuelve a andar al día siguiente. En el plan gratuito,
 Google puede usar las conversaciones para mejorar sus productos: no hace falta

@@ -186,7 +186,7 @@ export function iniciarAyudante() {
           ? `¡Hola! ¿Qué duda tenés sobre "${receta.nombre}"?`
           : '¡Hola! ¿En qué te ayudo? Preguntame por reemplazos, medidas, técnicas o qué cocinar con lo que tenés.'),
         chips(receta ? SUGERENCIAS_RECETA : SUGERENCIAS),
-        el('p', { class: 'ayudante-nota' }, 'Responde una IA gratuita (Google Gemini). No compartas datos personales.'))];
+        el('p', { class: 'ayudante-nota' }, 'Responde una IA gratuita (Google Gemini o Groq). No compartas datos personales.'))];
     if (esperando) {
       hijos.push(el('div', { class: 'ayudante-msj ayudante-msj-ayudante ayudante-escribiendo', 'aria-label': 'Escribiendo' },
         el('span'), el('span'), el('span')));
