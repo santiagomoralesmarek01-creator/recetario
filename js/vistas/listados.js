@@ -165,13 +165,14 @@ export async function vistaBusqueda(texto) {
   const vigente = vigencia();
   document.getElementById('busqueda').value = texto;
   cargando(`Buscando “${texto}”…`);
-  const { deCasa, deComunidad, internacionales } = await repo.buscar(texto);
+  const { deCasa, deComunidad, internacionales, tambien = [] } = await repo.buscar(texto);
   if (!vigente()) return;
   const total = deCasa.length + deComunidad.length + internacionales.length;
 
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, `Resultados para “${texto}”`),
+    tambien.length > 0 && el('p', { class: 'meta busqueda-tambien' }, t('buscar.tambien'), tambien.slice(0, 5).join(', '), '.'),
     total === 0
       ? el('p', { class: 'estado' }, 'No encontramos recetas. Probá con otra palabra o con un ingrediente.')
       : listadoFiltrable([

@@ -16,6 +16,7 @@ import * as comunidad from './misRecetas.js';
 import { hayBackend } from './supabase.js';
 import { terminoDeBusqueda } from './traducciones.js';
 import { aplicarFotos } from './fotos.js';
+import { expandirBusqueda } from './sinonimos.js';
 
 // Una fuente que falla no debe tirar abajo toda la página.
 const seguro = (promesa) => promesa.catch((err) => { console.warn(err); return []; });
@@ -41,13 +42,24 @@ async function buscarEnApi(texto) {
   return seguro(mealdb.buscarPorIngrediente(termino.replace(/\s+/g, '_')));
 }
 
+// Une resultados de varias búsquedas sin repetir, en el orden en que llegan.
+const unir = (listas) => {
+  const vistos = new Set();
+  return listas.flat().filter((r) => !vistos.has(r.id) && vistos.add(r.id));
+};
+
+// También busca los sinónimos regionales ("elote" encuentra "choclo").
+// `tambien` son las palabras que se sumaron, para mostrarlas.
 export async function buscar(texto) {
+  const { variantes, cambios } = expandirBusqueda(texto);
+  const consultas = [texto, ...variantes.slice(1)];
+  const hayCatalogo = await catalogo.disponible();
   const [deCasa, deComunidad, internacionales] = await Promise.all([
-    casa.buscar(texto),
-    hayBackend ? seguro(comunidad.buscar(texto)) : [],
-    catalogo.disponible().then((ok) => (ok ? catalogo.buscar(texto) : buscarEnApi(texto))),
+    Promise.all(consultas.map((q) => casa.buscar(q))).then(unir),
+    hayBackend ? Promise.all(consultas.slice(0, 3).map((q) => seguro(comunidad.buscar(q)))).then(unir) : [],
+    hayCatalogo ? Promise.all(consultas.map((q) => catalogo.buscar(q))).then(unir) : buscarEnApi(texto),
   ]);
-  return { deCasa, deComunidad, internacionales };
+  return { deCasa, deComunidad, internacionales, tambien: cambios };
 }
 
 export async function deCategoria(categoria) {

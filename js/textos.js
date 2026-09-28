@@ -22,6 +22,8 @@ const TEXTOS = {
   'cabecera.nueva': 'Nueva',
   'pie.promesa': 'Con lo que hay, alcanza.',
 
+  'buscar.tambien': 'También se buscó como: ',
+
   // Inicio
   'buscar.titulo': { neutro: '¿Qué hay a mano hoy?', vos: '¿Qué tenés a mano hoy?', tu: '¿Qué tienes a mano hoy?' },
   'inicio.bajada': {

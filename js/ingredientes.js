@@ -2,6 +2,8 @@
 // scripts/traducir-catalogo.py): [nombre, clave de imagen, recetas que lo usan].
 // La usa el buscador de ingredientes del formulario de recetas propias.
 
+import { equivalentesDePrefijo } from './sinonimos.js';
+
 let promesa = null;
 
 export function cargarIngredientes() {
@@ -24,6 +26,9 @@ export async function sugerir(texto, limite = 8) {
   const q = normalizar(texto);
   if (!q) return [];
   const lista = await cargarIngredientes();
+  // Sinónimos regionales: "elote" también sugiere "Choclo".
+  const otros = equivalentesDePrefijo(q);
+  const regionales = otros.length ? lista.filter((ing) => otros.includes(ing.normal)) : [];
   const empiezan = [];
   const palabra = [];
   const contienen = [];
@@ -33,7 +38,8 @@ export async function sugerir(texto, limite = 8) {
     else if (ing.normal.includes(q)) contienen.push(ing);
     if (empiezan.length >= limite) break;
   }
-  return [...empiezan, ...palabra, ...contienen].slice(0, limite);
+  const vistos = new Set();
+  return [...empiezan, ...regionales, ...palabra, ...contienen].filter((i) => !vistos.has(i.normal) && vistos.add(i.normal)).slice(0, limite);
 }
 
 export async function buscarExacto(nombre) {

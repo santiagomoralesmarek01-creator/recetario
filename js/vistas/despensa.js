@@ -8,6 +8,7 @@ import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO } from '../imagen
 import { tarjetaReceta } from './componentes.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { equivalentes } from '../sinonimos.js';
 
 const CLAVE_GUARDADO = 'recetario:despensa';
 const TANDA = 24;
@@ -20,6 +21,8 @@ function variantes(nombre) {
   const v = new Set([n]);
   if (n.endsWith('es')) v.add(n.slice(0, -2));
   if (n.endsWith('s')) v.add(n.slice(0, -1));
+  // Sinónimos regionales: elegir "elote" cubre el "choclo" de la receta.
+  for (const x of [...v]) for (const s of equivalentes(x)) v.add(s);
   return [...v];
 }
 

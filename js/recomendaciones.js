@@ -6,6 +6,7 @@ import * as casa from './recetasCasa.js';
 import { traducirCategoria } from './traducciones.js';
 import { urlPlato } from './imagenes.js';
 import { NIVELES } from './dificultad.js';
+import { equivalentes } from './sinonimos.js';
 
 const MAX_CANDIDATAS = 12;
 
@@ -68,6 +69,7 @@ function cargarIndice() {
 export async function buscarCandidatas(texto) {
   const buscadas = [...new Set(palabras(texto).filter((p) => p.length >= 3 && !VACIAS.has(p)))];
   if (!buscadas.length) return [];
+  const alternativas = new Map(buscadas.map((b) => [b, [b, ...equivalentes(b).filter((x) => !x.includes(' '))]]));
   const recetas = await cargarIndice();
   // Ingredientes que están en casi todo (sal, aceite…) no sirven para elegir.
   const comunes = new Set(buscadas.filter((b) => recetas.filter((r) => enTexto(b, r.pIngredientes)).length > recetas.length / 4));
@@ -78,10 +80,13 @@ export async function buscarCandidatas(texto) {
     let acertadas = 0;
     for (const b of buscadas) {
       let p = 0;
-      if (enTexto(b, r.pNombre)) p += 3;
+      // La palabra o un sinónimo regional ("elote" también es "choclo").
+      const formas = alternativas.get(b);
+      const en = (lista) => formas.some((f) => enTexto(f, lista));
+      if (en(r.pNombre)) p += 3;
       if (enTexto(b, r.pOrigen)) p += 3;
       if (enTexto(b, r.pCategoria) || SINONIMOS[b] === r.codigoCategoria) p += 2;
-      if (!comunes.has(b) && enTexto(b, r.pIngredientes)) p += 1;
+      if (!comunes.has(b) && en(r.pIngredientes)) p += 1;
       if (p) { puntos += p; acertadas++; }
     }
     if (puntos) puntuadas.push({ r, puntos, acertadas });
