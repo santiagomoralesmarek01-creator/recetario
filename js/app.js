@@ -23,6 +23,7 @@ import { iniciarPreferencias, EVENTO as CAMBIO_PREFERENCIAS } from './preferenci
 import { vistaPreferencias } from './vistas/preferencias.js';
 import { iniciarAnalitica } from './analitica.js';
 import { ir, ruta as rutaActual, alCambiarRuta, iniciarRutas, idDeRuta, rutaReceta } from './rutas.js';
+import { vistaPrivacidad, vistaTerminos } from './vistas/legales.js';
 
 iniciarTema();
 aplicarTextos();
@@ -136,6 +137,8 @@ async function router() {
       case 'medallas': return await vistaMedallas();
       case 'fotos': return await vistaFotos();
       case 'preferencias': return vistaPreferencias();
+      case 'privacidad': return vistaPrivacidad();
+      case 'terminos': return vistaTerminos();
       case 'comunidad': return await vistaComunidad(param);
       case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();

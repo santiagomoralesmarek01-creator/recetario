@@ -253,7 +253,7 @@ export function iniciarAyudante() {
       : [el('div', { class: 'ayudante-bienvenida' },
         el('p', {}, receta ? t('manitas.hola-receta', { nombre: receta.nombre }) : t('manitas.hola')),
         receta ? chipsRapidos() : chips(SUGERENCIAS),
-        el('p', { class: 'ayudante-nota' }, t('manitas.nota')))];
+        el('p', { class: 'ayudante-nota' }, t('manitas.nota'), ' ', el('a', { href: '/privacidad' }, 'Privacidad'), '.'))];
     if (esperando) {
       hijos.push(el('div', { class: 'ayudante-msj ayudante-msj-ayudante ayudante-escribiendo', 'aria-label': 'Escribiendo' },
         el('span'), el('span'), el('span')));

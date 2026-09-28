@@ -25,6 +25,8 @@ const SECCIONES = {
   'que-tengo': { titulo: '¿Qué hay a mano? Recetas con lo que tenés · A Mano', descripcion: 'Elegí los ingredientes que hay en casa y mirá qué recetas se pueden hacer.' },
   juegos: { titulo: 'Juegos de cocina: Plato del día y más · A Mano', descripcion: 'Adiviná el plato del día, el país de cada receta y el ingrediente que falta.' },
   comunidad: { titulo: 'Recetas de la comunidad · A Mano', descripcion: 'Recetas caseras que comparte la gente de A Mano.' },
+  privacidad: { titulo: 'Política de privacidad · A Mano', descripcion: 'Qué datos guarda A Mano, para qué y cómo pedir acceso o borrarlos.' },
+  terminos: { titulo: 'Términos y condiciones · A Mano', descripcion: 'Condiciones de uso de A Mano, sus recetas, Manitas y la comunidad.' },
 };
 
 function duracion(minutos) {

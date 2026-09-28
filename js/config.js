@@ -11,3 +11,7 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 //               (cuenta las secciones y los eventos: ¿Qué hay a mano?, medallas, Manitas, juegos)
 //   cloudflare: el token de Cloudflare Web Analytics (sólo cuenta visitas, no secciones ni eventos)
 export const ANALITICA = { plausible: '', cloudflare: '' };
+
+// Email de contacto que aparece en la Política de privacidad y los Términos
+// (pedidos de acceso o borrado de datos, reclamos). Vacío = todavía no se publicó.
+export const CONTACTO = '';

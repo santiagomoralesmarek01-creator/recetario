@@ -140,7 +140,7 @@ const TEXTOS = {
   },
   'manitas.entrar': 'Entrar o crear cuenta',
   'manitas.pregunta': { neutro: 'Escribir una pregunta de cocina…', vos: 'Preguntá lo que quieras de cocina…', tu: 'Pregunta lo que quieras de cocina…' },
-  'manitas.nota': 'Responde una IA gratuita (Groq o Google Gemini). Mejor no compartir datos personales.',
+  'manitas.nota': 'Responde una IA gratuita (Groq o Google Gemini) y puede equivocarse. Mejor no compartir datos personales.',
   'manitas.sobre': 'Receta: ',
   'manitas.nueva': 'Nueva charla',
 

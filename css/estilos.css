@@ -2096,3 +2096,10 @@ ul.cifras { list-style: none; padding: 0; }
 .pagina-estatica { max-width: 760px; }
 .pagina-estatica ul, .pagina-estatica ol { padding-left: 22px; }
 .pagina-estatica li { margin: 4px 0; }
+
+/* Política de privacidad y términos */
+.legal { max-width: 760px; }
+.legal h2 { font-size: 1.25rem; margin: 28px 0 8px; }
+.legal p, .legal li { line-height: 1.65; }
+.legal ul { padding-left: 22px; }
+.aceptacion { margin: 4px 0 12px; font-size: 0.88rem; }

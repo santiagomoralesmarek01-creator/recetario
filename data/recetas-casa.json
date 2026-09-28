@@ -388,6 +388,9 @@
   },
   {
     "slug": "humita-en-olla",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Relleno_de_una_humita_en_chala.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Relleno_de_una_humita_en_chala.JPG",
     "nombre": "Humita en olla",
     "categoria": "Vegetarian",
     "origen": "Argentina",
@@ -1028,6 +1031,9 @@
   },
   {
     "slug": "bolones-de-verde",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Bolon_ecuatoriano_de_queso_y_chicharr%C3%B3n.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Bolon_ecuatoriano_de_queso_y_chicharr%C3%B3n.jpg",
     "nombre": "Bolones de verde",
     "categoria": "Breakfast",
     "origen": "Ecuador",
@@ -1380,6 +1386,9 @@
   },
   {
     "slug": "arroz-rojo-mexicano",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Mexican_rice_and_beans.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Mexican_rice_and_beans.jpg",
     "nombre": "Arroz rojo mexicano",
     "categoria": "Side",
     "origen": "México",
@@ -1689,6 +1698,9 @@
   },
   {
     "slug": "sancocho-panameno",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Sancocho_de_gallina_criolla.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Sancocho_de_gallina_criolla.jpg",
     "nombre": "Sancocho panameño",
     "categoria": "Chicken",
     "origen": "Panamá",

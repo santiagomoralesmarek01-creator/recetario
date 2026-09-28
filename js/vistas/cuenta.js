@@ -75,6 +75,8 @@ export function vistaEntrar(modo = 'entrar') {
     modo === 'registro' && campos.nombre,
     campos.email,
     modo !== 'recuperar' && campos.clave,
+    modo === 'registro' && el('p', { class: 'meta aceptacion' }, 'Crear una cuenta implica aceptar los ',
+      el('a', { href: '/terminos' }, 'Términos'), ' y la ', el('a', { href: '/privacidad' }, 'Política de privacidad'), '.'),
     error,
     boton);
 
