@@ -13,4 +13,4 @@ Disallow: /buscar/
 Disallow: /medallas
 Disallow: /preferencias
 
-Sitemap: https://www.amanorecetas.com.ar/sitemap.xml
+Sitemap: https://amanorecetas.com.ar/sitemap.xml
