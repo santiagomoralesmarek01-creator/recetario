@@ -15,7 +15,7 @@ export function iniciarTema() {
     boton.setAttribute('aria-pressed', String(oscuro));
     boton.setAttribute('aria-label', texto);
     boton.title = texto;
-    colorBarra?.setAttribute('content', oscuro ? '#171412' : '#c8553d');
+    colorBarra?.setAttribute('content', oscuro ? '#16130F' : '#C8401F');
   }
   boton.addEventListener('click', () => {
     const tema = esOscuro() ? 'claro' : 'oscuro';

@@ -107,7 +107,9 @@ export async function vistaReceta(id) {
         el('span', { class: 'ingrediente-texto' },
           el('strong', {}, ing.nombre),
           ing.medida && el('span', { class: 'medida' }, ing.medida),
-          dificil && el('span', { class: 'reemplazo' }, dificil.reemplazo ? `🛒 Si no conseguís: ${dificil.reemplazo}` : '🛒 Difícil de conseguir')))));
+          dificil && (dificil.reemplazo
+            ? el('span', { class: 'reemplazo' }, iconoIntercambio(), `Si no conseguís: ${dificil.reemplazo}`)
+            : el('span', { class: 'reemplazo sin-reemplazo' }, 'Difícil de conseguir'))))));
   });
 
   r.pasos.forEach((paso, i) => {
@@ -304,6 +306,17 @@ function botonDeMeGusta(recetaId) {
     .catch((err) => console.warn('Me gusta:', err.message));
   pintar();
   return boton;
+}
+
+// Ícono de intercambio (dos flechas) para la insignia de reemplazo.
+function iconoIntercambio() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  for (const [k, v] of Object.entries({ viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'reemplazo-icono', 'aria-hidden': 'true' })) svg.setAttribute(k, v);
+  const trazo = document.createElementNS(ns, 'path');
+  trazo.setAttribute('d', 'M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4');
+  svg.append(trazo);
+  return svg;
 }
 
 // Foto de la receta, con su crédito y (para administradores) un botón para cambiarla.

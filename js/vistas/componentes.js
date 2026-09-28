@@ -51,7 +51,8 @@ export function tarjetaReceta(r) {
     el('div', { class: 'tarjeta-portada' },
       portada(r, { miniatura: true, clase: 'tarjeta-img' }),
       INSIGNIAS[r.origenDatos] && el('span', { class: `insignia insignia-${r.origenDatos}` }, INSIGNIAS[r.origenDatos]),
-      r.origenDatos === 'usuario' && r.publica === false && el('span', { class: 'insignia insignia-privada' }, '🔒 Privada')),
+      r.origenDatos === 'usuario' && r.publica === false && el('span', { class: 'insignia insignia-privada' }, '🔒 Privada'),
+      r.origen && el('span', { class: 'insignia insignia-pais' }, traducirOrigen(r.origen))),
     el('div', { class: 'tarjeta-cuerpo' },
       el('h3', {}, r.nombre),
       el('p', { class: 'meta' }, [
@@ -59,7 +60,7 @@ export function tarjetaReceta(r) {
         r.autor && `por ${r.autor}`,
       ].filter(Boolean).join(' · ')),
       r.dificultad && el('p', { class: `tarjeta-dificultad nivel-${r.dificultad}` },
-        el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre,
+        el('span', { class: 'pildora-dificultad' }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre),
         r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · 🛒 ingredientes especiales'))));
 }
 
