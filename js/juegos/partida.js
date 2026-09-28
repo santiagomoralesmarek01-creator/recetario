@@ -5,6 +5,7 @@ import { usuario, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import { registrarActividad } from '../actividad.js';
 import { guardarRecord, leerRecords, compartir, MODOS, modoGuardado, guardarModo } from './datos.js';
+import { icono } from '../iconos.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -14,7 +15,7 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
     type: 'button', class: 'modo-opcion', 'aria-pressed': 'false',
     onclick: () => { modo = clave; pintar(); },
   },
-  el('span', { class: 'modo-titulo' }, `${m.icono} ${m.nombre}`),
+  el('span', { class: `modo-titulo nivel-${m.nivel}` }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), m.nombre),
   el('span', { class: 'modo-detalle' }, detalles[clave]),
   records[`${juego}:${clave}`]?.mejor != null && el('small', {}, `Tu récord: ${records[`${juego}:${clave}`].mejor} puntos`)));
   function pintar() {
@@ -28,7 +29,7 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
   return el('div', { class: 'modo-elegir' },
     el('p', { class: 'falta-pregunta' }, 'Elegí la dificultad'),
     el('div', { class: 'modo-opciones' }, botones),
-    el('p', { class: 'meta modo-nota' }, '🌎 Priorizamos platos latinoamericanos: en Fácil son todos de la región y en Difícil se suma más cocina del mundo.'),
+    el('p', { class: 'meta modo-nota' }, icono('pais'), ' Priorizamos platos latinoamericanos: en Fácil son todos de la región y en Difícil se suma más cocina del mundo.'),
     el('div', { class: 'juego-siguiente' },
       el('button', { type: 'button', class: 'boton', onclick: () => { guardarModo(juego, modo); alEmpezar(modo); } }, '¡A jugar!')));
 }
@@ -40,15 +41,14 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
   registrarActividad(`juego-${juego}`, { puntos, detalle: modo }).catch((err) => console.warn(err));
   const invitado = hayBackend && !usuario();
   const porcentaje = puntos / maximo;
-  const emoji = porcentaje >= 0.9 ? '🏆' : porcentaje >= 0.6 ? '🎉' : porcentaje >= 0.3 ? '👍' : '💪';
 
   return el('div', { class: 'juego-fin' },
-    el('div', { class: 'juego-fin-emoji', 'aria-hidden': 'true' }, emoji),
-    el('p', { class: 'portada-antetitulo' }, modo ? `${titulo} · ${MODOS[modo].icono} ${MODOS[modo].nombre}` : titulo),
+    el('div', { class: 'juego-fin-emoji', 'aria-hidden': 'true' }, icono(porcentaje >= 0.6 ? 'trofeo' : 'plato')),
+    el('p', { class: `portada-antetitulo${modo ? ` nivel-${MODOS[modo].nivel}` : ''}` }, titulo, modo && [' · ', el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), MODOS[modo].nombre]),
     el('p', { class: 'juego-fin-puntos' }, el('strong', {}, puntos), ` / ${maximo} puntos`),
     detalle && el('p', { class: 'meta' }, detalle),
     esRecord
-      ? el('p', { class: 'juego-record' }, '⭐ ¡Nuevo récord personal!')
+      ? el('p', { class: 'juego-record' }, icono('trofeo'), ' Nuevo récord personal')
       : recordAnterior > 0 && el('p', { class: 'meta' }, `Tu récord${modo ? ` en ${MODOS[modo].nombre.toLowerCase()}` : ''}: ${Math.max(recordAnterior, puntos)} puntos`),
     invitado && el('p', { class: 'juego-invitacion' },
       el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, 'Entrá'),
@@ -70,7 +70,7 @@ export function marcador() {
     nodo,
     pintar({ ronda: r, total, puntos: p }) {
       ronda.textContent = `Ronda ${r} de ${total}`;
-      puntos.textContent = `⭐ ${p}`;
+      puntos.textContent = `${p} pts`;
     },
     tiempo(fraccion) {
       barra.hidden = fraccion == null;

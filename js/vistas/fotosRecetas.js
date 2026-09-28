@@ -6,6 +6,7 @@ import * as repo from '../repositorio.js';
 import { soyAdmin, guardarFoto } from '../fotos.js';
 import { portada } from './componentes.js';
 import { traducirCategoria } from '../traducciones.js';
+import { icono } from '../iconos.js';
 
 // Ventana para elegir la foto, ver cómo queda y guardarla.
 export function dialogoFoto(receta, alGuardar) {
@@ -46,7 +47,7 @@ export function dialogoFoto(receta, alGuardar) {
           receta.creditoFoto = credito.value.trim();
           receta.fuenteFoto = '';
           cerrar();
-          aviso('¡Foto guardada! 📷');
+          aviso('Foto guardada.');
           alGuardar?.(url);
         } catch (err) {
           error.textContent = `No se pudo guardar: ${err.message}`;
@@ -55,7 +56,7 @@ export function dialogoFoto(receta, alGuardar) {
         }
       },
     },
-    el('h2', {}, '📷 Foto de la receta'),
+    el('h2', {}, 'Foto de la receta'),
     el('p', { class: 'meta' }, receta.nombre),
     vista,
     el('label', { class: 'boton-secundario foto-dialogo-elegir' }, entrada, receta.imagen ? 'Elegir otra foto' : 'Elegir foto'),
@@ -90,7 +91,7 @@ export async function vistaFotos() {
 
   function fila(r) {
     const img = el('div', { class: 'fotos-lista-img' }, portada(r, { miniatura: true }));
-    const estado = el('small', {}, r.imagen ? '✓ Tiene foto' : 'Sin foto');
+    const estado = el('small', {}, r.imagen ? 'Tiene foto' : 'Sin foto');
     return el('li', {},
       img,
       el('span', { class: 'fotos-lista-texto' },
@@ -101,10 +102,10 @@ export async function vistaFotos() {
         type: 'button', class: 'boton-secundario',
         onclick: () => dialogoFoto(r, () => {
           img.replaceChildren(portada(r, { miniatura: true }));
-          estado.textContent = '✓ Tiene foto';
+          estado.textContent = 'Tiene foto';
           if (soloSinFoto) pintarContador();
         }),
-      }, r.imagen ? 'Cambiar' : '📷 Subir'));
+      }, icono('foto'), r.imagen ? 'Cambiar' : 'Subir'));
   }
 
   const sinFoto = () => todas.filter((r) => !r.imagen);
@@ -118,7 +119,7 @@ export async function vistaFotos() {
   }
 
   mostrar(
-    el('h1', {}, '📷 Fotos de recetas'),
+    el('h1', {}, 'Fotos de recetas'),
     el('p', { class: 'seccion-bajada' }, 'Subí la foto de cada plato desde acá (también desde el celular: podés sacarla en el momento). Aparece enseguida en toda la página.'),
     contador,
     el('label', { class: 'filtro-conseguir' }, casillaTodas, ' Mostrar todas las recetas de la casa (para cambiar alguna foto)'),

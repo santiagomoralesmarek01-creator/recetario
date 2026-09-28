@@ -18,6 +18,7 @@ import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from
 import { clasificar, explicar, NIVELES } from '../dificultad.js';
 import { soyAdmin } from '../fotos.js';
 import { dialogoFoto } from './fotosRecetas.js';
+import { icono } from '../iconos.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -50,7 +51,7 @@ export async function vistaReceta(id) {
     const hechos = ing + pas;
     barra.firstChild.style.width = total ? `${(hechos / total) * 100}%` : '0';
     textoProgreso.textContent = hechos === total && total > 0
-      ? '¡Listo! Buen provecho 🎉'
+      ? 'Listo. Buen provecho.'
       : `Ingredientes ${ing}/${r.ingredientes.length} · Pasos ${pas}/${r.pasos.length}`;
 
     itemsIngredientes.forEach((li, i) => li.classList.toggle('hecho', progreso.ingredientes.has(i)));
@@ -77,7 +78,7 @@ export async function vistaReceta(id) {
     if (terminadaAvisada || !r.pasos.length || progreso.pasos.size < r.pasos.length) return;
     terminadaAvisada = true;
     registrarActividad('receta-cocinada', { detalle: r.id })
-      .then((nueva) => { if (nueva) aviso('¡Receta completada! 🎉 Suma para tus medallas.'); })
+      .then((nueva) => { if (nueva) aviso('Receta completada. Suma para tus medallas.'); })
       .catch((err) => console.warn(err));
   }
 
@@ -123,7 +124,7 @@ export async function vistaReceta(id) {
       tiempos.length > 0 && el('div', { class: 'paso-tiempos' }, tiempos.map((seg) => el('button', {
         type: 'button', class: 'boton-tiempo', title: `Empezar un temporizador de ${textoDuracion(seg)}`,
         onclick: () => iniciarTemporizador(seg, `Paso ${i + 1} · ${r.nombre}`),
-      }, `⏱ ${textoDuracion(seg)}`)))));
+      }, icono('temporizador'), textoDuracion(seg))))));
   });
 
   const botonPantalla = pantallaSoportada() && el('button', {
@@ -137,7 +138,7 @@ export async function vistaReceta(id) {
       e.currentTarget.classList.toggle('activo', activa);
       e.currentTarget.setAttribute('aria-pressed', String(activa));
     },
-  }, '🔆 No apagar pantalla');
+  }, icono('pantalla'), 'No apagar pantalla');
 
   const botonReiniciar = el('button', {
     type: 'button',
@@ -148,7 +149,7 @@ export async function vistaReceta(id) {
       progreso.pasos.clear();
       refrescar();
     },
-  }, '↺ Reiniciar');
+  }, icono('reiniciar'), 'Reiniciar');
 
   // Seguir la receta en el panel lateral "Cocinando ahora".
   const botonSeguir = el('button', {
@@ -158,7 +159,7 @@ export async function vistaReceta(id) {
   });
   function pintarSeguir() {
     const siguiendo = recetaActual()?.id === r.id;
-    botonSeguir.textContent = siguiendo ? '📌 Siguiendo' : '📌 Seguir al costado';
+    botonSeguir.replaceChildren(icono('fijar'), siguiendo ? 'Siguiendo' : 'Seguir al costado');
     botonSeguir.title = siguiendo ? 'Dejar de mostrarla en el panel lateral' : 'Mostrarla en el panel lateral mientras navegás';
     botonSeguir.classList.toggle('activo', siguiendo);
     botonSeguir.setAttribute('aria-pressed', String(siguiendo));
@@ -172,11 +173,11 @@ export async function vistaReceta(id) {
       el('button', {
         type: 'button', class: 'boton-secundario', title: 'Poner un temporizador',
         onclick: () => elegirTiempo(r.nombre),
-      }, '⏱ Temporizador'),
+      }, icono('temporizador'), 'Temporizador'),
       ayudanteDisponible() && el('button', {
         type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
         onclick: abrirAyudante,
-      }, '🍳 Ayudante')));
+      }, icono('manitas'), 'Ayudante')));
 
   // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
   const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {
@@ -190,7 +191,7 @@ export async function vistaReceta(id) {
 
   // ---------- acciones del dueño ----------
   const accionesDueno = esMia && el('p', { class: 'acciones' },
-    el('a', { class: 'boton', href: `#/editar/${r.uuid}` }, '✏️ Editar'),
+    el('a', { class: 'boton', href: `#/editar/${r.uuid}` }, icono('editar'), 'Editar'),
     el('button', {
       type: 'button',
       class: 'boton-peligro',
@@ -213,11 +214,11 @@ export async function vistaReceta(id) {
     : el('a', { class: 'volver', href: '#/' }, '← Inicio');
 
   const datos = [
-    ['🥕', r.ingredientes.length, 'ingredientes'],
-    ['📝', r.pasos.length, 'pasos'],
-    [NIVELES[clasificacion.nivel].icono, NIVELES[clasificacion.nivel].nombre, ''],
-    r.minutos && ['⏱', r.minutos, 'minutos'],
-    r.porciones && ['🍽', r.porciones, 'porciones'],
+    [icono('ingrediente'), r.ingredientes.length, 'ingredientes'],
+    [icono('pasos'), r.pasos.length, 'pasos'],
+    [el('span', { class: 'punto-nivel' }), NIVELES[clasificacion.nivel].nombre, '', `nivel-${clasificacion.nivel}`],
+    r.minutos && [icono('reloj'), r.minutos, 'minutos'],
+    r.porciones && [icono('porciones'), r.porciones, 'porciones'],
   ].filter(Boolean);
 
   mostrar(
@@ -233,17 +234,17 @@ export async function vistaReceta(id) {
         ].filter(Boolean).join(' · ')),
         r.autor && el('p', { class: 'meta' }, 'Receta de ',
           r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor),
-          r.publica === false ? ' · 🔒 privada' : ''),
+          r.publica === false && [' · ', icono('candado'), 'privada']),
         r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
         el('ul', { class: 'datos-rapidos' },
-          datos.map(([icono, valor, texto]) =>
-            el('li', {}, el('span', { class: 'dato-icono', 'aria-hidden': 'true' }, icono),
+          datos.map(([simbolo, valor, texto, clase]) =>
+            el('li', { class: clase || false }, el('span', { class: 'dato-icono', 'aria-hidden': 'true' }, simbolo),
               el('strong', {}, valor), el('span', {}, texto)))),
         el('p', { class: `explicacion-dificultad nivel-${clasificacion.nivel}` },
           el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), explicar(clasificacion)),
         (r.etiquetas?.length > 0 || r.video || r.enlace) && el('div', { class: 'receta-extras' },
           r.etiquetas?.length > 0 && el('ul', { class: 'etiquetas' }, r.etiquetas.map((t) => el('li', {}, t))),
-          r.video && el('a', { class: 'boton-secundario boton-chico', href: r.video, target: '_blank', rel: 'noopener' }, '▶ Ver video'),
+          r.video && el('a', { class: 'boton-secundario boton-chico', href: r.video, target: '_blank', rel: 'noopener' }, icono('play'), 'Ver video'),
           r.enlace && el('a', { class: 'enlace-fuente', href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
         accionesDueno),
       el('div', { class: 'receta-cuerpo' },
@@ -252,9 +253,9 @@ export async function vistaReceta(id) {
           el('h2', {}, 'Ingredientes'),
           el('p', { class: 'meta' }, 'Tildalos a medida que los vas usando.'),
           el('ul', { class: 'ingredientes' }, itemsIngredientes),
-          el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, dificiles.size
-            ? `🛒 ${dificiles.size === 1 ? 'Un ingrediente puede' : `${dificiles.size} ingredientes pueden`} ser difícil${dificiles.size === 1 ? '' : 'es'} de conseguir en Latinoamérica: te dejamos con qué reemplazarlo${dificiles.size === 1 ? '' : 's'}.`
-            : '🛒 Todos los ingredientes se consiguen fácil en cualquier supermercado.'))),
+          el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, icono('canasta'), dificiles.size
+            ? `${dificiles.size === 1 ? 'Un ingrediente puede' : `${dificiles.size} ingredientes pueden`} ser difícil${dificiles.size === 1 ? '' : 'es'} de conseguir en Latinoamérica: te dejamos con qué reemplazarlo${dificiles.size === 1 ? '' : 's'}.`
+            : 'Todos los ingredientes se consiguen fácil en cualquier supermercado.'))),
       el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length
@@ -272,7 +273,7 @@ export async function vistaReceta(id) {
 function botonDeMeGusta(recetaId) {
   let mio = false;
   let cantidad = 0;
-  const icono = el('span', { class: 'me-gusta-icono', 'aria-hidden': 'true' }, '🤍');
+  const corazon = el('span', { class: 'me-gusta-icono', 'aria-hidden': 'true' }, icono('corazon'));
   const numero = el('span', { class: 'me-gusta-numero' }, '');
   const boton = el('button', {
     type: 'button', class: 'boton-me-gusta', 'aria-pressed': 'false', 'aria-label': 'Me gusta',
@@ -292,9 +293,8 @@ function botonDeMeGusta(recetaId) {
         aviso(`No se pudo guardar el me gusta: ${err.message}`, 'error');
       }
     },
-  }, icono, numero);
+  }, corazon, numero);
   function pintar(animar = false) {
-    icono.textContent = mio ? '❤️' : '🤍';
     numero.textContent = cantidad > 0 ? String(cantidad) : '';
     boton.classList.toggle('activo', mio);
     boton.setAttribute('aria-pressed', String(mio));
@@ -325,8 +325,8 @@ function columnaFoto(r) {
   const foto = el('div', { class: 'receta-foto-marco' }, portada(r, { clase: 'receta-foto' }));
   // Con fuente (fotos de Wikimedia Commons), el crédito enlaza a la página con autor y licencia.
   const pintarCredito = () => credito.replaceChildren(...(!r.creditoFoto ? [] : r.fuenteFoto
-    ? ['📷 ', el('a', { href: r.fuenteFoto, target: '_blank', rel: 'noopener' }, r.creditoFoto)]
-    : [`📷 ${r.creditoFoto}`]));
+    ? [icono('foto'), ' ', el('a', { href: r.fuenteFoto, target: '_blank', rel: 'noopener' }, r.creditoFoto)]
+    : [icono('foto'), ` ${r.creditoFoto}`]));
   pintarCredito();
   const columna = el('div', { class: 'receta-foto-columna' }, foto, credito);
   soyAdmin().then((admin) => {
@@ -337,7 +337,7 @@ function columnaFoto(r) {
         foto.firstChild.replaceWith(portada(r, { clase: 'receta-foto' }));
         pintarCredito();
       }),
-    }, r.imagen ? '📷 Cambiar foto' : '📷 Subir foto'));
+    }, icono('foto'), r.imagen ? 'Cambiar foto' : 'Subir foto'));
   });
   return columna;
 }

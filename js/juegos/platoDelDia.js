@@ -10,6 +10,7 @@ import { registrarActividad } from '../actividad.js';
 import { diaArgentina, sumarDias } from '../medallas.js';
 import { cargarDatos, azarConSemilla, mezclar, esTrivial, compartir } from './datos.js';
 import { portada } from '../vistas/componentes.js';
+import { icono } from '../iconos.js';
 
 const INTENTOS = 6;
 const PUNTOS = [600, 500, 400, 300, 200, 100];
@@ -143,19 +144,19 @@ export async function juegoPlatoDelDia() {
     }
     if (p.tipo === 'paso') {
       return el('li', { class: `plato-pista pista-paso${clase}` },
-        el('span', { class: 'plato-pista-icono' }, '📝'),
+        el('span', { class: 'plato-pista-icono' }, icono('pasos')),
         el('span', {}, el('small', {}, 'Un paso de la receta'), p.texto));
     }
     return el('li', { class: `plato-pista pista-${p.tipo}${clase}` },
       p.tipo === 'ingrediente' ? crearImagen(p.imagen, '', IMG_INGREDIENTE_GENERICO, 'plato-pista-img')
         : p.tipo === 'pais' ? bandera(p.texto, 'plato-pista-img bandera')
-          : el('span', { class: 'plato-pista-icono' }, '🏷️'),
+          : el('span', { class: 'plato-pista-icono' }, icono('plato')),
       el('span', {}, el('small', {}, p.tipo === 'ingrediente' ? 'Ingrediente' : p.tipo === 'pais' ? 'País' : 'Categoría'), p.texto));
   }
 
   function pintarIntentos() {
     zonaIntentos.replaceChildren(...partida.intentos.map((i) => el('li', { class: esCorrecto(i) ? 'bien' : 'mal' },
-      esCorrecto(i) ? '✓ ' : '✗ ', i === '' ? 'Pasé' : i)));
+      icono(esCorrecto(i) ? 'tilde' : 'cerrar'), ' ', i === '' ? 'Pasé' : i)));
   }
 
   function cuadritos() {
@@ -177,7 +178,7 @@ export async function juegoPlatoDelDia() {
       el('p', { class: 'plato-cuadritos', 'aria-label': `${partida.intentos.length} intentos` }, cuadritos()),
       el('ul', { class: 'cifras' },
         el('li', {}, el('strong', {}, puntos), el('span', {}, 'puntos')),
-        el('li', {}, el('strong', {}, `🔥 ${racha}`), el('span', {}, `día${racha === 1 ? '' : 's'} de racha`))),
+        el('li', {}, el('strong', {}, icono('fuego'), ` ${racha}`), el('span', {}, `día${racha === 1 ? '' : 's'} de racha`))),
       invitado && el('p', { class: 'juego-invitacion' },
         el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, 'Entrá'),
         ' para sumar los puntos al ranking y ganar medallas.'),
@@ -269,7 +270,7 @@ export async function juegoPlatoDelDia() {
     el('section', { class: 'juego plato-del-dia' },
       el('header', { class: 'juego-cabecera' },
         el('p', { class: 'portada-antetitulo' }, `Desafío diario #${numero}`),
-        el('h1', {}, '🍳 Plato del día'),
+        el('h1', {}, icono('plato', { clase: 'icono-titulo' }), 'Plato del día'),
         el('p', { class: 'meta' }, 'Adiviná el plato con la menor cantidad de pistas. Cada error revela una pista nueva. Es el mismo para todos: ¡compará con tus amigos!')),
       zonaPistas, zonaIntentos, zonaJuego));
   pintar();

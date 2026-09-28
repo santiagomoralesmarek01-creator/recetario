@@ -6,6 +6,7 @@ import * as casa from '../recetasCasa.js';
 import { sugerir, normalizar } from '../ingredientes.js';
 import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { tarjetaReceta } from './componentes.js';
+import { icono } from '../iconos.js';
 
 const CLAVE_GUARDADO = 'recetario:despensa';
 const TANDA = 24;
@@ -130,7 +131,7 @@ export async function vistaDespensa() {
       ? el('p', { class: 'despensa-faltan' },
         `Te ${r.faltan.length === 1 ? 'falta' : 'faltan'} ${r.faltan.length}: `,
         el('span', {}, r.faltan.slice(0, 4).join(', ') + (r.faltan.length > 4 ? '…' : '')))
-      : el('p', { class: 'despensa-completa' }, '✓ Tenés todo'));
+      : el('p', { class: 'despensa-completa' }, icono('tilde'), ' Tenés todo'));
     return t;
   }
 
@@ -182,7 +183,7 @@ export async function vistaDespensa() {
       el('button', {
         type: 'button', 'aria-label': `Quitar ${nombre}`,
         onclick: () => { estado.lista = estado.lista.filter((x) => x !== nombre); actualizar(); },
-      }, '✕'))),
+      }, icono('cerrar')))),
     estado.lista.length > 1 && el('button', {
       type: 'button', class: 'boton-texto',
       onclick: () => { estado.lista = []; actualizar(); },

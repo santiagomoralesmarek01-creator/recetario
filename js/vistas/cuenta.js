@@ -5,6 +5,7 @@ import * as misRecetas from '../misRecetas.js';
 import { grillaRecetas } from './componentes.js';
 import * as repo from '../repositorio.js';
 import { misMeGusta } from '../actividad.js';
+import { icono } from '../iconos.js';
 
 export function sinBackend() {
   mostrar(el('div', { class: 'estado' },
@@ -81,7 +82,7 @@ export function vistaEntrar(modo = 'entrar') {
 
   mostrar(el('div', { class: 'tarjeta-cuenta' },
     modo !== 'recuperar' && el('p', { class: 'explicacion-cuenta' }, hayDestinoPendiente()
-      ? '✍️ Para crear y guardar tus recetas necesitás una cuenta. Es gratis, y el resto de la página se usa sin registrarte.'
+      ? 'Para crear y guardar tus recetas necesitás una cuenta. Es gratis, y el resto de la página se usa sin registrarte.'
       : 'Con una cuenta podés crear tus propias recetas y tenerlas guardadas. Para ver y cocinar recetas no hace falta.'),
     modo !== 'recuperar' ? pestanas : el('h1', {}, titulos[modo]),
     form,
@@ -127,8 +128,8 @@ export async function vistaMisRecetas() {
     el('div', { class: 'seccion-titulo' },
       el('h1', {}, `Mis recetas`),
       el('div', { class: 'acciones' },
-        el('a', { class: 'boton-secundario boton', href: '#/medallas' }, '🏅 Mis medallas'),
-        el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva receta'))),
+        el('a', { class: 'boton-secundario boton', href: '#/medallas' }, icono('medalla'), 'Mis medallas'),
+        el('a', { class: 'boton', href: '#/nueva' }, icono('mas'), 'Nueva receta'))),
     el('p', { class: 'meta' }, `Hola, ${nombreVisible(u)}. Tenés ${recetas.length} receta${recetas.length === 1 ? '' : 's'} guardada${recetas.length === 1 ? '' : 's'}.`),
     recetas.length
       ? grillaRecetas(recetas)
@@ -136,7 +137,7 @@ export async function vistaMisRecetas() {
         el('p', {}, 'Todavía no cargaste ninguna receta.'),
         el('a', { class: 'boton', href: '#/nueva' }, 'Crear la primera')),
     el('section', { class: 'seccion' },
-      el('h2', {}, '❤️ Tus favoritas'),
+      el('h2', {}, 'Tus favoritas'),
       favoritas.length
         ? grillaRecetas(favoritas)
         : el('p', { class: 'meta' }, 'Tocá el corazón en las recetas que te gusten y las vas a encontrar acá.'))

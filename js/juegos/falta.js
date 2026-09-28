@@ -5,6 +5,7 @@ import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../im
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
+import { icono } from '../iconos.js';
 
 const RONDAS = 10;
 
@@ -52,7 +53,7 @@ export async function juegoFalta() {
     el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
-        el('h1', {}, '🧩 ¿Qué le falta?'),
+        el('h1', {}, icono('rompecabezas', { clase: 'icono-titulo' }), '¿Qué le falta?'),
         el('p', { class: 'meta' }, 'A cada receta le tapamos un ingrediente. ¿Sabés cuál es?')),
       tablero.nodo, zona));
 

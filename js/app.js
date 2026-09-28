@@ -17,6 +17,7 @@ import { vistaMedallas } from './vistas/medallas.js';
 import { iniciarMedallas } from './medallas.js';
 import { vistaFotos } from './vistas/fotosRecetas.js';
 import { soyAdmin } from './fotos.js';
+import { icono } from './iconos.js';
 
 iniciarTema();
 const menu = document.getElementById('menu');
@@ -52,13 +53,13 @@ function dibujarMenu(u) {
 function menuUsuario(u) {
   const nombre = nombreVisible(u);
   // Sólo para administradores: se agrega cuando se confirma.
-  const enlaceAdmin = el('a', { href: '#/fotos', role: 'menuitem', hidden: true }, '📷 Fotos de recetas');
+  const enlaceAdmin = el('a', { href: '#/fotos', role: 'menuitem', hidden: true }, icono('foto'), 'Fotos de recetas');
   soyAdmin().then((si) => { enlaceAdmin.hidden = !si; });
   const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
     el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
-    el('a', { href: '#/mis-recetas', role: 'menuitem' }, '📖 Mis recetas y favoritas'),
-    el('a', { href: '#/medallas', role: 'menuitem' }, '🏅 Mis medallas'),
-    el('a', { href: '#/juegos', role: 'menuitem' }, '🎮 Juegos'),
+    el('a', { href: '#/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
+    el('a', { href: '#/medallas', role: 'menuitem' }, icono('medalla'), 'Mis medallas'),
+    el('a', { href: '#/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
     enlaceAdmin,
     el('button', {
       type: 'button', role: 'menuitem',
@@ -68,7 +69,7 @@ function menuUsuario(u) {
         aviso('Sesión cerrada');
         location.hash = '#/';
       },
-    }, '↩ Salir'));
+    }, icono('salir'), 'Salir'));
   const boton = el('button', {
     type: 'button', class: 'usuario-boton', 'aria-haspopup': 'menu', 'aria-expanded': 'false',
     'aria-label': `Cuenta de ${nombre}`, title: nombre,

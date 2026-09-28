@@ -6,6 +6,7 @@ import { urlIngrediente, urlPlato, IMG_INGREDIENTE_GENERICO } from '../imagenes.
 import { traducirCategoria } from '../traducciones.js';
 import { NOMBRES_PAISES, LATINOAMERICA } from '../paises.js';
 import { aviso } from '../dom.js';
+import { icono } from '../iconos.js';
 
 // Ingredientes que están en casi todo: no sirven como pista ni como pregunta.
 const TRIVIAL = /^(sal|pimienta|agua|aceite|hielo)( |$)/;
@@ -70,9 +71,9 @@ export function cargarDatos() {
 // Las partidas priorizan recetas latinoamericanas: en fácil son todas de
 // Latinoamérica y en difícil se suma más cocina del resto del mundo.
 export const MODOS = {
-  facil: { nombre: 'Fácil', icono: '🟢', latinas: 1 },
-  normal: { nombre: 'Normal', icono: '🟡', latinas: 0.7 },
-  dificil: { nombre: 'Difícil', icono: '🔴', latinas: 0.35 },
+  facil: { nombre: 'Fácil', nivel: 1, latinas: 1 },
+  normal: { nombre: 'Normal', nivel: 2, latinas: 0.7 },
+  dificil: { nombre: 'Difícil', nivel: 3, latinas: 0.35 },
 };
 
 // Elige recetas al azar respetando la proporción de latinoamericanas.
@@ -171,7 +172,7 @@ export async function compartir(texto) {
   }
   try {
     await navigator.clipboard.writeText(completo);
-    aviso('Resultado copiado: pegalo donde quieras 📋');
+    aviso('Resultado copiado: pegalo donde quieras');
   } catch {
     window.open(`https://wa.me/?text=${encodeURIComponent(completo)}`, '_blank', 'noopener');
   }

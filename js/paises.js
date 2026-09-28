@@ -1,6 +1,7 @@
 // Datos de cada país: código ISO (para la bandera) y continente.
 // Las banderas son imágenes (flagcdn.com) porque Windows no muestra los emojis de banderas.
 import { el } from './dom.js';
+import { icono } from './iconos.js';
 
 const PAISES = {
   // América
@@ -51,7 +52,7 @@ export const LATINOAMERICA = new Set([
 
 export function bandera(pais, clase = 'bandera') {
   const codigo = PAISES[pais]?.[0];
-  if (!codigo) return el('span', { class: `${clase} bandera-texto`, 'aria-hidden': 'true' }, '🌎');
+  if (!codigo) return el('span', { class: `${clase} bandera-texto`, 'aria-hidden': 'true' }, icono('mundo'));
   const img = el('img', {
     class: clase,
     src: `https://flagcdn.com/w40/${codigo}.png`,

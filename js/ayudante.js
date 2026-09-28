@@ -6,6 +6,7 @@ import { usuario, alCambiarSesion, tokenAcceso, pedirLogin } from './auth.js';
 import { traducirCategoria, traducirOrigen } from './traducciones.js';
 import { crearImagen, IMG_PLATO_GENERICO } from './imagenes.js';
 import { buscarCandidatas, recetasCitadas } from './recomendaciones.js';
+import { icono } from './iconos.js';
 
 const CLAVE = 'recetario:ayudante';
 const MAX_HISTORIAL = 20;
@@ -88,9 +89,9 @@ function tarjetasRecetas(recetas) {
   return el('div', { class: 'ayudante-recetas' }, recetas.map((r) => el('a', {
     class: 'ayudante-receta', href: `#/receta/${r.id}`, onclick: () => alElegirReceta(),
   },
-  r.imagen ? crearImagen(r.imagen, '', IMG_PLATO_GENERICO) : el('span', { class: 'ayudante-receta-sin-foto', 'aria-hidden': 'true' }, '🍽️'),
+  r.imagen ? crearImagen(r.imagen, '', IMG_PLATO_GENERICO) : el('span', { class: 'ayudante-receta-sin-foto', 'aria-hidden': 'true' }, icono('plato')),
   el('span', {}, el('strong', {}, r.nombre), r.detalle && el('small', {}, r.detalle)),
-  el('span', { class: 'ayudante-receta-ir', 'aria-hidden': 'true' }, '→'))));
+  el('span', { class: 'ayudante-receta-ir', 'aria-hidden': 'true' }, icono('flecha')))));
 }
 
 function formatear(texto, recetas = []) {
@@ -140,7 +141,7 @@ export function iniciarAyudante() {
   const entrada = el('textarea', {
     rows: 1, maxlength: 1500, placeholder: 'Preguntá lo que quieras de cocina…', 'aria-label': 'Tu pregunta',
   });
-  const enviarBtn = el('button', { type: 'submit', class: 'ayudante-enviar', 'aria-label': 'Enviar' }, '➤');
+  const enviarBtn = el('button', { type: 'submit', class: 'ayudante-enviar', 'aria-label': 'Enviar' }, icono('enviar'));
   const formulario = el('form', { class: 'ayudante-form' }, entrada, enviarBtn);
   const contexto = el('p', { class: 'ayudante-contexto', hidden: true });
   const nueva = el('button', {
@@ -155,13 +156,13 @@ export function iniciarAyudante() {
         el('strong', {}, 'Ayudante de cocina'),
         el('small', {}, 'Con IA · puede equivocarse')),
       nueva,
-      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Cerrar', onclick: () => abrir(false) }, '✕')),
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Cerrar', onclick: () => abrir(false) }, icono('cerrar'))),
     lista, contexto, formulario);
 
   const boton = el('button', {
     type: 'button', class: 'ayudante-boton', 'aria-label': 'Abrir el ayudante de cocina', title: 'Ayudante de cocina',
     onclick: () => abrir(panel.hidden),
-  }, el('span', { 'aria-hidden': 'true' }, '🍳'), el('span', { class: 'ayudante-boton-texto' }, 'Ayudante'));
+  }, icono('manitas'), el('span', { class: 'ayudante-boton-texto' }, 'Ayudante'));
 
   document.body.append(boton, panel);
   document.body.classList.add('con-ayudante');
@@ -194,7 +195,7 @@ export function iniciarAyudante() {
     formulario.hidden = !logueado;
     nueva.hidden = !logueado || !mensajes.length;
     contexto.hidden = !logueado || !receta;
-    if (receta) contexto.replaceChildren('📖 Te ayudo con ', el('strong', {}, receta.nombre));
+    if (receta) contexto.replaceChildren(icono('libro'), ' Te ayudo con ', el('strong', {}, receta.nombre));
 
     if (!logueado) {
       lista.replaceChildren(el('div', { class: 'ayudante-bienvenida' },

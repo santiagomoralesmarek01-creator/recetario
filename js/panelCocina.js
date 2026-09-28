@@ -6,6 +6,7 @@ import { crearImagen, urlPlato, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } f
 import {
   recetaActual, soltarActual, leerProgreso, guardarProgreso, alCambiarCocina,
 } from './cocina.js';
+import { icono } from './iconos.js';
 
 const ORIGEN = 'panel';
 let panel;
@@ -74,7 +75,7 @@ function dibujar() {
   }
 
   const textoProgreso = hechos === total && total > 0
-    ? '¡Listo! Buen provecho 🎉'
+    ? 'Listo. Buen provecho.'
     : `${progreso.ingredientes.size}/${r.ingredientes.length} ingredientes · ${progreso.pasos.size}/${r.pasos.length} pasos`;
 
   // Conserva el scroll del panel al redibujar.
@@ -87,11 +88,11 @@ function dibujar() {
         el('button', {
           type: 'button', class: 'boton-icono panel-cerrar-cajon', 'aria-label': 'Ocultar panel',
           onclick: () => alternar(false),
-        }, '→'),
+        }, icono('flecha')),
         el('button', {
           type: 'button', class: 'boton-icono', title: 'Dejar de seguir esta receta', 'aria-label': 'Dejar de seguir esta receta',
           onclick: () => soltarActual(),
-        }, '✕'))),
+        }, icono('cerrar')))),
     el('a', { class: 'panel-actual-receta', href: `#/receta/${r.id}` },
       crearImagen(r.imagen ? urlPlato(r.imagen, { miniatura: /^\d+$/.test(r.id) }) : IMG_PLATO_GENERICO, '', IMG_PLATO_GENERICO),
       el('strong', {}, r.nombre)),
@@ -116,7 +117,7 @@ function dibujar() {
   panel.querySelector('.panel-actual-cuerpo').scrollTop = scroll;
 
   botonFlotante.replaceChildren(
-    el('span', { 'aria-hidden': 'true' }, '🍳'),
+    icono('modo-cocina'),
     el('span', { class: 'panel-flotante-texto' }, r.nombre),
     el('span', { class: 'panel-flotante-cuenta' }, `${hechos}/${total}`));
   botonFlotante.setAttribute('aria-label', `Abrir la receta que estás cocinando: ${r.nombre}`);

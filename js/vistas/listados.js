@@ -7,6 +7,7 @@ import { hayBackend } from '../supabase.js';
 import { portada, metaReceta, grillaRecetas, listadoFiltrable } from './componentes.js';
 import { bandera, chipPais, continenteDe, CONTINENTES, LATINOAMERICA } from '../paises.js';
 import { rutaComunidad } from './comunidad.js';
+import { icono } from '../iconos.js';
 
 export async function vistaInicio() {
   const vigente = vigencia();
@@ -49,13 +50,13 @@ export async function vistaInicio() {
         },
       }, buscar, el('button', { type: 'submit' }, 'Buscar')),
       el('div', { class: 'accesos' },
-        el('a', { class: 'acceso', href: '#/faciles' }, '⚡ Fáciles'),
-        el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, '🍳 Plato del día'),
-        el('a', { class: 'acceso', href: '#/pais/Argentina' }, '🧉 Argentinas'),
-        el('a', { class: 'acceso', href: '#/categoria/Dessert' }, '🍰 Postres'),
-        el('a', { class: 'acceso', href: '#/categoria/Pasta' }, '🍝 Pastas'),
-        el('a', { class: 'acceso', href: '#/categoria/Vegetarian' }, '🥗 Vegetarianas'),
-        el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, '🎲 Sorprendeme')),
+        el('a', { class: 'acceso', href: '#/faciles' }, icono('faciles'), 'Fáciles'),
+        el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, icono('plato'), 'Plato del día'),
+        el('a', { class: 'acceso', href: '#/pais/Argentina' }, icono('ubicacion'), 'Argentinas'),
+        el('a', { class: 'acceso', href: '#/categoria/Dessert' }, icono('postre'), 'Postres'),
+        el('a', { class: 'acceso', href: '#/categoria/Pasta' }, icono('pasta'), 'Pastas'),
+        el('a', { class: 'acceso', href: '#/categoria/Vegetarian' }, icono('hoja'), 'Vegetarianas'),
+        el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, icono('sorpresa'), 'Sorprendeme')),
       totalRecetas > 0 && el('div', { class: 'cifras' },
         el('div', {}, el('strong', {}, `${Math.floor(totalRecetas / 50) * 50}+`), el('span', {}, 'recetas')),
         el('div', {}, el('strong', {}, String(paises.length)), el('span', {}, 'países')),
@@ -149,7 +150,7 @@ export async function vistaFaciles() {
   const faciles = todas.filter((r) => r.dificultad === 1 && !r.dificiles);
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
-    el('h1', {}, '⚡ Fáciles y con ingredientes de todos los días'),
+    el('h1', {}, 'Fáciles y con ingredientes de todos los días'),
     el('p', { class: 'meta' }, 'Recetas con pocos pasos, sin técnicas complicadas y con ingredientes que se consiguen en cualquier supermercado de Latinoamérica.'),
     listadoFiltrable([{ recetas: faciles, tanda: 24 }], { dificultad: false })
   );

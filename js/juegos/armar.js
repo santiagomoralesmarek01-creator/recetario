@@ -6,6 +6,7 @@ import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../im
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, raiz, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
+import { icono } from '../iconos.js';
 
 const RONDAS = 5;
 
@@ -55,7 +56,7 @@ export async function juegoArmar() {
     el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
-        el('h1', {}, '🥘 Armá el plato'),
+        el('h1', {}, icono('olla', { clase: 'icono-titulo' }), 'Armá el plato'),
         el('p', { class: 'meta' }, 'Elegí de la alacena los ingredientes de cada plato y serví. Los aciertos suman y los errores restan.')),
       tablero.nodo, zona));
 
@@ -84,7 +85,7 @@ export async function juegoArmar() {
 
       const contador = el('span', { class: 'armar-contador' });
       const olla = el('div', { class: 'armar-olla-contenido' });
-      const servir = el('button', { type: 'button', class: 'boton', onclick: () => servirPlato() }, '🍽️ Servir');
+      const servir = el('button', { type: 'button', class: 'boton', onclick: () => servirPlato() }, icono('plato'), 'Servir');
       const aviso = el('p', { class: 'juego-aviso', role: 'status' });
       const siguiente = el('button', {
         type: 'button', class: 'boton', hidden: true, onclick: () => { indice++; ronda(); },
@@ -152,7 +153,7 @@ export async function juegoArmar() {
               el('strong', {}, receta.nombre),
               el('span', { class: 'meta' }, [receta.categoria, receta.origen].filter(Boolean).join(' · ')))),
           el('div', { class: 'armar-olla' },
-            el('div', { class: 'armar-olla-cabecera' }, el('span', {}, '🍲 La olla'), contador),
+            el('div', { class: 'armar-olla-cabecera' }, el('span', {}, icono('olla'), ' La olla'), contador),
             olla)),
         el('p', { class: 'falta-pregunta' }, `La alacena: elegí ${necesarios} ingredientes`),
         el('div', { class: `armar-alacena armar-${alacena.length}` }, fichas),

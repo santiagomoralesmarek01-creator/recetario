@@ -1,6 +1,7 @@
 // Temporizadores de cocina: se guardan con su hora de fin, así siguen andando
 // al cambiar de página o recargar. Al terminar muestran un cartel con sonido.
 import { el } from './dom.js';
+import { icono } from './iconos.js';
 
 const CLAVE = 'recetario:temporizadores';
 const MAX_TEMPORIZADORES = 5;
@@ -166,10 +167,10 @@ function dibujar() {
       !terminado && el('button', {
         type: 'button', class: 'temporizador-boton', onclick: () => alternarPausa(t),
         'aria-label': t.pausado ? 'Seguir' : 'Pausar', title: t.pausado ? 'Seguir' : 'Pausar',
-      }, t.pausado ? '▶' : '❚❚'),
+      }, icono(t.pausado ? 'play' : 'pausa')),
       el('button', {
         type: 'button', class: 'temporizador-boton', onclick: () => quitar(t.id), 'aria-label': 'Quitar', title: 'Quitar',
-      }, '✕'));
+      }, icono('cerrar')));
   }));
 }
 
@@ -278,7 +279,7 @@ export function elegirTiempo(etiqueta) {
       },
       onkeydown: (e) => { if (e.key === 'Escape') cerrar(); },
     },
-    el('h2', {}, '⏱ Temporizador'),
+    el('h2', {}, icono('temporizador'), ' Temporizador'),
     el('p', { class: 'meta' }, etiqueta),
     el('div', { class: 'tiempos-rapidos' },
       RAPIDOS.map((m) => el('button', { type: 'button', class: 'boton-secundario', onclick: () => empezar(m * 60) }, `${m} min`))),

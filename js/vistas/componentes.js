@@ -3,6 +3,7 @@ import { crearImagen, urlPlato, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 import { NIVELES } from '../dificultad.js';
 import { MOMENTOS, SABORES, momentoDe, saborDe } from '../tipoPlato.js';
+import { icono } from '../iconos.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -41,8 +42,8 @@ export function metaReceta(r) {
   return [
     r.categoria && traducirCategoria(r.categoria),
     r.origen && traducirOrigen(r.origen),
-    r.minutos && `⏱ ${r.minutos} min`,
-    r.porciones && `🍽 ${r.porciones} porciones`,
+    r.minutos && `${r.minutos} min`,
+    r.porciones && `${r.porciones} porciones`,
   ].filter(Boolean).join(' · ');
 }
 
@@ -51,7 +52,7 @@ export function tarjetaReceta(r) {
     el('div', { class: 'tarjeta-portada' },
       portada(r, { miniatura: true, clase: 'tarjeta-img' }),
       INSIGNIAS[r.origenDatos] && el('span', { class: `insignia insignia-${r.origenDatos}` }, INSIGNIAS[r.origenDatos]),
-      r.origenDatos === 'usuario' && r.publica === false && el('span', { class: 'insignia insignia-privada' }, '🔒 Privada'),
+      r.origenDatos === 'usuario' && r.publica === false && el('span', { class: 'insignia insignia-privada' }, icono('candado'), 'Privada'),
       r.origen && el('span', { class: 'insignia insignia-pais' }, traducirOrigen(r.origen))),
     el('div', { class: 'tarjeta-cuerpo' },
       el('h3', {}, r.nombre),
@@ -61,7 +62,7 @@ export function tarjetaReceta(r) {
       ].filter(Boolean).join(' · ')),
       r.dificultad && el('p', { class: `tarjeta-dificultad nivel-${r.dificultad}` },
         el('span', { class: 'pildora-dificultad' }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre),
-        r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · 🛒 ingredientes especiales'))));
+        r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · ', icono('canasta'), 'ingredientes especiales'))));
 }
 
 // ---------- filtro por dificultad ----------
@@ -84,7 +85,7 @@ function tipoDe(r) {
 function selector(etiqueta, opciones, valor, alCambiar) {
   const select = el('select', { onchange: () => alCambiar(select.value) },
     el('option', { value: '' }, `Todos`),
-    Object.entries(opciones).map(([clave, o]) => el('option', { value: clave, selected: clave === valor }, `${o.icono} ${o.nombre}`)));
+    Object.entries(opciones).map(([clave, o]) => el('option', { value: clave, selected: clave === valor }, o.nombre)));
   return el('label', { class: 'filtro-selector' }, el('span', {}, etiqueta), select);
 }
 
@@ -135,7 +136,7 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
       selector('Momento', MOMENTOS, estado.momento, (v) => { estado.momento = v; actualizar(); }),
       selector('Sabor', SABORES, estado.sabor, (v) => { estado.sabor = v; actualizar(); }),
       dificultad && el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
-      el('label', { class: 'filtro-conseguir' }, conseguibles, ' 🛒 Sólo ingredientes fáciles de conseguir'),
+      el('label', { class: 'filtro-conseguir' }, conseguibles, icono('canasta'), 'Sólo ingredientes fáciles de conseguir'),
       dificultad && leyendaDificultad()),
     contador, cuerpo);
 }
@@ -146,7 +147,7 @@ export function leyendaDificultad() {
     el('summary', {}, '¿Qué significa cada nivel?'),
     el('ul', {}, Object.entries(NIVELES).map(([n, d]) => el('li', { class: `nivel-${n}` },
       el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), el('strong', {}, d.nombre), `: ${d.descripcion}`))),
-    el('p', {}, 'Se calcula con la cantidad de pasos e ingredientes, el tiempo y las técnicas de cada receta. 🛒 marca los ingredientes difíciles de conseguir en Latinoamérica.'));
+    el('p', {}, 'Se calcula con la cantidad de pasos e ingredientes, el tiempo y las técnicas de cada receta. La ', icono('canasta'), ' marca los ingredientes difíciles de conseguir en Latinoamérica.'));
 }
 
 // Con "tanda" muestra de a N tarjetas y un botón para ver más (listas largas).

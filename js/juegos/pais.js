@@ -8,6 +8,7 @@ import { normalizar } from '../ingredientes.js';
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
+import { icono } from '../iconos.js';
 
 const RONDAS = 10;
 
@@ -65,7 +66,7 @@ export async function juegoPais() {
     el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
-        el('h1', {}, '🌎 Adiviná el país'),
+        el('h1', {}, icono('pais', { clase: 'icono-titulo' }), 'Adiviná el país'),
         el('p', { class: 'meta' }, `¿De qué país es cada plato? ${RONDAS} rondas contra reloj: cuanto más rápido, más puntos.`)),
       tablero.nodo, zona));
 
@@ -116,7 +117,7 @@ export async function juegoPais() {
           else if (opciones[i] === pais) b.classList.add('incorrecta');
         });
         tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
-        aviso.textContent = pais == null ? `⏰ ¡Se acabó el tiempo! Era ${receta.origen}.` : bien ? '¡Correcto! 🎉' : `Era ${receta.origen}.`;
+        aviso.textContent = pais == null ? `Se acabó el tiempo. Era ${receta.origen}.` : bien ? '¡Correcto! 🎉' : `Era ${receta.origen}.`;
         aviso.className = `juego-aviso ${bien ? 'bien' : 'mal'}`;
         setTimeout(() => { indice++; ronda(); }, bien ? 1000 : 1800);
       }

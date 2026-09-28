@@ -9,6 +9,7 @@ import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedi
 import { revisarMedallas } from '../medallas.js';
 import { reducirImagen } from '../fotos.js';
 import { NOMBRES_PAISES } from '../paises.js';
+import { icono } from '../iconos.js';
 
 // Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
 // Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
@@ -104,7 +105,7 @@ function filaIngrediente(datos = {}) {
     el('div', { class: 'combo' }, nombre, lista),
     cantidad,
     unidad,
-    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar ingrediente', onclick: () => fila.remove() }, '✕'));
+    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar ingrediente', onclick: () => fila.remove() }, icono('cerrar')));
   fila.leer = () => ({
     nombre: nombre.value.trim(),
     medida: armarMedida(cantidad.value, unidad.value),
@@ -137,7 +138,7 @@ function filaPaso(texto = '') {
           nueva.querySelector('textarea').focus();
         },
       }, '+'),
-      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', title: 'Quitar', onclick: () => fila.remove() }, '✕')));
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', title: 'Quitar', onclick: () => fila.remove() }, icono('cerrar'))));
   return fila;
 }
 
