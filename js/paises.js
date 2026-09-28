@@ -11,6 +11,9 @@ const PAISES = {
   'Jamaica': ['jm', 'América'], 'Dominica': ['dm', 'América'], 'Barbados': ['bb', 'América'],
   'Islas Caimán': ['ky', 'América'], 'Aruba': ['aw', 'América'], 'Antigua y Barbuda': ['ag', 'América'],
   'Bahamas': ['bs', 'América'], 'Perú': ['pe', 'América'], 'Bolivia': ['bo', 'América'],
+  'Ecuador': ['ec', 'América'], 'Guatemala': ['gt', 'América'], 'Honduras': ['hn', 'América'],
+  'El Salvador': ['sv', 'América'], 'Nicaragua': ['ni', 'América'], 'Panamá': ['pa', 'América'],
+  'Puerto Rico': ['pr', 'América'], 'República Dominicana': ['do', 'América'],
   // Europa
   'España': ['es', 'Europa'], 'Italia': ['it', 'Europa'], 'Francia': ['fr', 'Europa'],
   'Reino Unido': ['gb', 'Europa'], 'Irlanda': ['ie', 'Europa'], 'Portugal': ['pt', 'Europa'],
@@ -38,6 +41,13 @@ export const NOMBRES_PAISES = Object.keys(PAISES).sort((a, b) => a.localeCompare
 export const CONTINENTES = ['América', 'Europa', 'Asia', 'África', 'Oceanía', 'Otros'];
 
 export const continenteDe = (pais) => PAISES[pais]?.[1] || 'Otros';
+
+// Países de habla hispana y portuguesa de América: la página se ordena pensando en ellos.
+export const LATINOAMERICA = new Set([
+  'Argentina', 'Uruguay', 'Chile', 'Paraguay', 'Bolivia', 'Perú', 'Ecuador', 'Colombia', 'Venezuela', 'Brasil',
+  'México', 'Cuba', 'Puerto Rico', 'República Dominicana', 'Costa Rica', 'Panamá', 'Guatemala', 'Honduras',
+  'El Salvador', 'Nicaragua',
+]);
 
 export function bandera(pais, clase = 'bandera') {
   const codigo = PAISES[pais]?.[0];

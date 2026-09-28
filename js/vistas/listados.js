@@ -5,7 +5,7 @@ import { traducirCategoria } from '../traducciones.js';
 import { usuario } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import { portada, metaReceta, grillaRecetas, listadoFiltrable } from './componentes.js';
-import { bandera, chipPais, continenteDe, CONTINENTES } from '../paises.js';
+import { bandera, chipPais, continenteDe, CONTINENTES, LATINOAMERICA } from '../paises.js';
 import { rutaComunidad } from './comunidad.js';
 
 export async function vistaInicio() {
@@ -76,10 +76,13 @@ export async function vistaInicio() {
       grillaRecetas(elegirDelDia(deCasa, 8))),
     paises.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
-        el('h2', {}, 'Viajá por la cocina del mundo'),
+        el('h2', {}, 'Viajá por la cocina de Latinoamérica y el mundo'),
         el('a', { href: '#/paises' }, `Ver los ${paises.length} países →`)),
       el('div', { class: 'chips-paises' },
-        [...paises].sort((a, b) => (b.nombre === 'Argentina') - (a.nombre === 'Argentina')).slice(0, 14).map(chipPais))),
+        // Primero Latinoamérica (Argentina adelante) y después el resto del mundo.
+        [...paises].sort((a, b) => (b.nombre === 'Argentina') - (a.nombre === 'Argentina')
+          || LATINOAMERICA.has(b.nombre) - LATINOAMERICA.has(a.nombre)
+          || b.cantidad - a.cantidad).slice(0, 18).map(chipPais))),
     hayBackend && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Recetas de la comunidad'),

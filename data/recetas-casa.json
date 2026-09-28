@@ -281,5 +281,1369 @@
       "Sumar el azúcar y la vainilla y cocinar 5 minutos más, hasta que esté cremoso.",
       "Retirar la canela y el limón. Servir espolvoreado con canela en polvo."
     ]
+  },
+  {
+    "slug": "pastel-de-papa",
+    "nombre": "Pastel de papa",
+    "categoria": "Beef",
+    "origen": "Argentina",
+    "porciones": 6,
+    "minutos": 80,
+    "descripcion": "Carne picada bien condimentada con aceitunas y huevo, tapada con puré de papas gratinado.",
+    "etiquetas": ["Clásico", "Horno", "Familiar"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "1,5 kg", "imagen": "Potatoes" },
+      { "nombre": "Carne picada", "medida": "800 g", "imagen": "Minced Beef" },
+      { "nombre": "Cebolla", "medida": "2", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "1", "imagen": "Red Pepper" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Huevos", "medida": "3 (2 duros)", "imagen": "Eggs" },
+      { "nombre": "Aceitunas verdes", "medida": "80 g", "imagen": "Green Olives" },
+      { "nombre": "Pasas de uva", "medida": "50 g (opcional)", "imagen": "Raisins" },
+      { "nombre": "Manteca", "medida": "40 g", "imagen": "butter" },
+      { "nombre": "Leche", "medida": "150 ml", "imagen": "Milk" },
+      { "nombre": "Queso rallado", "medida": "50 g" },
+      { "nombre": "Pimentón", "medida": "1 cda", "imagen": "paprika" },
+      { "nombre": "Comino", "medida": "1 cdta", "imagen": "Cumin" },
+      { "nombre": "Nuez moscada", "medida": "una pizca", "imagen": "nutmeg" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Pelar las papas, cortarlas en trozos y hervirlas en agua con sal unos 20 minutos, hasta que estén tiernas.",
+      "Mientras tanto, rehogar en el aceite la cebolla, el morrón y el ajo picados hasta que estén transparentes.",
+      "Agregar la carne picada y cocinar a fuego fuerte, desarmándola con una cuchara, hasta que pierda el color rosado. Condimentar con pimentón, comino y sal.",
+      "Retirar del fuego y sumar las aceitunas en rodajas, las pasas y los huevos duros picados.",
+      "Pisar las papas con la manteca, la leche caliente, la nuez moscada y sal hasta lograr un puré liso.",
+      "En una fuente para horno poner la carne, cubrir con el puré, pintar con el huevo batido y espolvorear con queso rallado.",
+      "Hornear a 200 °C unos 25 minutos, hasta que la superficie esté bien dorada."
+    ]
+  },
+  {
+    "slug": "tarta-de-jamon-y-queso",
+    "nombre": "Tarta de jamón y queso",
+    "categoria": "Pork",
+    "origen": "Argentina",
+    "porciones": 6,
+    "minutos": 50,
+    "descripcion": "La tarta de todos los días: masa comprada, jamón, queso y un relleno cremoso de huevo.",
+    "etiquetas": ["Rápida", "Horno", "Para la vianda"],
+    "ingredientes": [
+      { "nombre": "Tapas de tarta", "medida": "2", "imagen": "Shortcrust Pastry" },
+      { "nombre": "Jamón cocido", "medida": "200 g", "imagen": "Deli Ham" },
+      { "nombre": "Queso (tipo Mar del Plata o Pategrás)", "medida": "250 g", "imagen": "Cheese" },
+      { "nombre": "Huevos", "medida": "3", "imagen": "Eggs" },
+      { "nombre": "Crema de leche", "medida": "200 ml", "imagen": "Heavy Cream" },
+      { "nombre": "Cebolla", "medida": "1 (opcional)", "imagen": "onion" },
+      { "nombre": "Orégano", "medida": "a gusto", "imagen": "oregano" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" },
+      { "nombre": "Pimienta", "medida": "a gusto", "imagen": "pepper" }
+    ],
+    "pasos": [
+      "Precalentar el horno a 180 °C y forrar un molde de tarta con una de las tapas.",
+      "Si se usa cebolla, rehogarla picada en un poco de aceite hasta que esté tierna.",
+      "Batir los huevos con la crema, sal, pimienta y orégano.",
+      "Cortar el jamón y el queso en cubos o tiras y repartirlos sobre la masa junto con la cebolla.",
+      "Volcar la mezcla de huevos, tapar con la otra tapa, repulgar los bordes y pinchar la superficie con un tenedor.",
+      "Hornear unos 35 minutos, hasta que la masa esté dorada. Dejar entibiar antes de cortar."
+    ]
+  },
+  {
+    "slug": "pastafrola-de-membrillo",
+    "nombre": "Pastafrola de membrillo",
+    "categoria": "Dessert",
+    "origen": "Argentina",
+    "porciones": 10,
+    "minutos": 60,
+    "descripcion": "Masa sablé de manteca con dulce de membrillo y el infaltable enrejado.",
+    "etiquetas": ["Merienda", "Clásico"],
+    "ingredientes": [
+      { "nombre": "Harina leudante", "medida": "300 g", "imagen": "self-raising flour" },
+      { "nombre": "Manteca", "medida": "150 g", "imagen": "butter" },
+      { "nombre": "Azúcar", "medida": "120 g", "imagen": "sugar" },
+      { "nombre": "Huevo", "medida": "1", "imagen": "Egg" },
+      { "nombre": "Yemas", "medida": "2", "imagen": "Egg Yolks" },
+      { "nombre": "Esencia de vainilla", "medida": "1 cdta", "imagen": "Vanilla Extract" },
+      { "nombre": "Ralladura de limón", "medida": "1 limón", "imagen": "Lemon Zest" },
+      { "nombre": "Dulce de membrillo", "medida": "500 g", "imagen": "Jam" },
+      { "nombre": "Agua caliente", "medida": "3 cdas", "imagen": "water" }
+    ],
+    "pasos": [
+      "Batir la manteca blanda con el azúcar hasta que esté cremosa. Sumar el huevo, las yemas, la vainilla y la ralladura.",
+      "Agregar la harina de a poco y unir sin amasar demasiado. Envolver y llevar a la heladera 20 minutos.",
+      "Pisar el membrillo con el agua caliente hasta que quede untable.",
+      "Estirar dos tercios de la masa y forrar una tartera enmantecada. Rellenar con el membrillo.",
+      "Con la masa restante hacer tiras y armar el enrejado sobre el dulce.",
+      "Hornear a 180 °C durante 35 minutos, hasta que la masa esté dorada. Dejar enfriar en el molde."
+    ]
+  },
+  {
+    "slug": "humita-en-olla",
+    "nombre": "Humita en olla",
+    "categoria": "Vegetarian",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 45,
+    "descripcion": "Choclo cremoso con zapallo, cebolla y queso: un plato del norte argentino, reconfortante y sencillo.",
+    "etiquetas": ["Norte argentino", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Choclo", "medida": "6 (o 2 latas de choclo cremoso)", "imagen": "Corn On The Cob" },
+      { "nombre": "Zapallo", "medida": "300 g", "imagen": "Squash" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "1", "imagen": "Red Pepper" },
+      { "nombre": "Leche", "medida": "250 ml", "imagen": "Milk" },
+      { "nombre": "Queso fresco", "medida": "150 g", "imagen": "Queso Fresco" },
+      { "nombre": "Pimentón", "medida": "1 cdta", "imagen": "paprika" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Albahaca", "medida": "unas hojas", "imagen": "basil" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Rallar los choclos con rallador grueso (o usar el choclo cremoso de lata).",
+      "Rehogar en el aceite la cebolla y el morrón picados hasta que estén tiernos. Condimentar con pimentón y comino.",
+      "Agregar el zapallo rallado y cocinar 5 minutos.",
+      "Sumar el choclo y la leche y cocinar a fuego bajo, revolviendo seguido, unos 20 minutos hasta que espese.",
+      "Salar, apagar el fuego y agregar el queso en cubos y la albahaca picada. Servir bien caliente."
+    ]
+  },
+  {
+    "slug": "guiso-de-arroz-con-pollo",
+    "nombre": "Guiso de arroz con pollo",
+    "categoria": "Chicken",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 50,
+    "descripcion": "Un guiso de olla única con arroz, pollo y verduras, de esos que resuelven cualquier noche.",
+    "etiquetas": ["Olla única", "Económico"],
+    "ingredientes": [
+      { "nombre": "Pata muslo", "medida": "4", "imagen": "Chicken Legs" },
+      { "nombre": "Arroz", "medida": "300 g", "imagen": "Rice" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "1", "imagen": "Red Pepper" },
+      { "nombre": "Zanahorias", "medida": "1", "imagen": "Carrots" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Tomates triturados", "medida": "400 g", "imagen": "Chopped tomatoes" },
+      { "nombre": "Caldo de pollo", "medida": "1 litro", "imagen": "Chicken Stock" },
+      { "nombre": "Pimentón", "medida": "1 cda", "imagen": "paprika" },
+      { "nombre": "Laurel", "medida": "1 hoja", "imagen": "Bay Leaf" },
+      { "nombre": "Arvejas", "medida": "1 lata (opcional)", "imagen": "Peas" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Salar el pollo y dorarlo en el aceite en una olla grande. Retirar y reservar.",
+      "En la misma olla rehogar la cebolla, el morrón, la zanahoria y el ajo picados hasta que estén tiernos.",
+      "Agregar el tomate, el pimentón y el laurel. Volver a poner el pollo, cubrir con la mitad del caldo y cocinar 20 minutos.",
+      "Sumar el arroz y el resto del caldo caliente. Cocinar a fuego medio unos 18 minutos, revolviendo de vez en cuando, hasta que el arroz esté a punto.",
+      "Agregar las arvejas, dejar reposar 5 minutos tapado y servir."
+    ]
+  },
+  {
+    "slug": "pizza-casera-de-molde",
+    "nombre": "Pizza casera de molde",
+    "categoria": "Vegetarian",
+    "origen": "Argentina",
+    "porciones": 4,
+    "minutos": 90,
+    "descripcion": "Pizza alta y esponjosa, al estilo de pizzería porteña, con salsa y mucha mozzarella.",
+    "etiquetas": ["Horno", "Para compartir"],
+    "ingredientes": [
+      { "nombre": "Harina 0000", "medida": "500 g", "imagen": "plain flour" },
+      { "nombre": "Levadura", "medida": "25 g fresca o 7 g seca", "imagen": "Yeast" },
+      { "nombre": "Agua tibia", "medida": "300 ml", "imagen": "Warm Water" },
+      { "nombre": "Aceite de oliva", "medida": "3 cdas", "imagen": "Olive oil" },
+      { "nombre": "Azúcar", "medida": "1 cdta", "imagen": "sugar" },
+      { "nombre": "Sal", "medida": "2 cdtas", "imagen": "salt" },
+      { "nombre": "Salsa de tomate", "medida": "300 ml", "imagen": "Tomato Sauce" },
+      { "nombre": "Mozzarella", "medida": "400 g", "imagen": "Mozzarella" },
+      { "nombre": "Orégano", "medida": "a gusto", "imagen": "oregano" },
+      { "nombre": "Aceitunas verdes", "medida": "a gusto", "imagen": "Green Olives" }
+    ],
+    "pasos": [
+      "Disolver la levadura en el agua tibia con el azúcar y dejar 10 minutos hasta que espume.",
+      "En un bol mezclar la harina con la sal, agregar la levadura y el aceite y amasar 10 minutos hasta lograr una masa suave.",
+      "Tapar y dejar levar en un lugar cálido hasta que duplique su tamaño, aproximadamente 1 hora.",
+      "Aceitar una pizzera, estirar la masa con las manos hasta cubrirla y dejar levar 15 minutos más.",
+      "Cubrir con la salsa y hornear a máxima temperatura 12 minutos (prepizza).",
+      "Agregar la mozzarella en cubos, el orégano y las aceitunas y volver al horno hasta que el queso se derrita."
+    ]
+  },
+  {
+    "slug": "tortas-fritas",
+    "nombre": "Tortas fritas",
+    "categoria": "Breakfast",
+    "origen": "Argentina",
+    "porciones": 12,
+    "minutos": 40,
+    "descripcion": "Las tortas fritas de los días de lluvia, doradas y con azúcar por arriba.",
+    "etiquetas": ["Merienda", "Día de lluvia"],
+    "ingredientes": [
+      { "nombre": "Harina 0000", "medida": "500 g", "imagen": "plain flour" },
+      { "nombre": "Grasa vacuna", "medida": "80 g (o manteca)" },
+      { "nombre": "Agua tibia", "medida": "250 ml", "imagen": "Warm Water" },
+      { "nombre": "Sal", "medida": "1 cdta", "imagen": "salt" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Azúcar", "medida": "para espolvorear", "imagen": "sugar" }
+    ],
+    "pasos": [
+      "Mezclar la harina con la sal y agregar la grasa derretida y tibia.",
+      "Sumar el agua de a poco y amasar hasta que la masa esté lisa. Dejar descansar tapada 15 minutos.",
+      "Separar bollitos del tamaño de una nuez grande, estirarlos en discos finos y hacerles un agujerito en el centro.",
+      "Freír en abundante aceite caliente hasta que se inflen y doren de ambos lados.",
+      "Escurrir sobre papel y pasar por azúcar mientras están calientes."
+    ]
+  },
+  {
+    "slug": "revuelto-gramajo",
+    "nombre": "Revuelto gramajo",
+    "categoria": "Pork",
+    "origen": "Argentina",
+    "porciones": 2,
+    "minutos": 25,
+    "descripcion": "Papas pay, jamón, huevo y arvejas en un revuelto porteño de bodegón.",
+    "etiquetas": ["Rápida", "Bodegón"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "3", "imagen": "Potatoes" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Jamón cocido", "medida": "150 g", "imagen": "Deli Ham" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Arvejas", "medida": "½ lata", "imagen": "Peas" },
+      { "nombre": "Manteca", "medida": "20 g", "imagen": "butter" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" },
+      { "nombre": "Pimienta", "medida": "a gusto", "imagen": "pepper" }
+    ],
+    "pasos": [
+      "Cortar las papas en bastones muy finos (tipo paja) y freírlas en aceite caliente hasta que estén crocantes. Escurrir.",
+      "En una sartén con la manteca rehogar la cebolla en pluma y el jamón en tiras.",
+      "Batir los huevos con sal y pimienta, volcarlos en la sartén y revolver a fuego bajo.",
+      "Cuando el huevo empiece a cuajar, sumar las papas y las arvejas y mezclar. Servir enseguida, con el huevo todavía cremoso."
+    ]
+  },
+  {
+    "slug": "pascualina",
+    "nombre": "Pascualina",
+    "categoria": "Vegetarian",
+    "origen": "Uruguay",
+    "porciones": 8,
+    "minutos": 70,
+    "descripcion": "Tarta de acelga con huevos enteros escondidos en el relleno, típica del Río de la Plata.",
+    "etiquetas": ["Horno", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Tapas de tarta", "medida": "2", "imagen": "Shortcrust Pastry" },
+      { "nombre": "Acelga", "medida": "2 atados", "imagen": "spinach" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Ricota", "medida": "250 g", "imagen": "Ricotta" },
+      { "nombre": "Queso rallado", "medida": "80 g" },
+      { "nombre": "Huevos", "medida": "6", "imagen": "Eggs" },
+      { "nombre": "Nuez moscada", "medida": "una pizca", "imagen": "nutmeg" },
+      { "nombre": "Aceite de oliva", "medida": "2 cdas", "imagen": "Olive oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Lavar la acelga, hervirla 3 minutos, escurrirla muy bien apretándola y picarla.",
+      "Rehogar la cebolla picada en el aceite, sumar la acelga y cocinar 5 minutos. Dejar enfriar.",
+      "Mezclar la acelga con la ricota, el queso rallado, 2 huevos, nuez moscada y sal.",
+      "Forrar un molde con una tapa, poner el relleno y hacer 4 huecos. Romper un huevo en cada hueco.",
+      "Tapar con la otra masa, repulgar y pintar con un poco de huevo o leche.",
+      "Hornear a 180 °C durante 40 minutos, hasta que esté dorada."
+    ]
+  },
+  {
+    "slug": "capeletis-a-la-caruso",
+    "nombre": "Capeletis a la Caruso",
+    "categoria": "Pasta",
+    "origen": "Uruguay",
+    "porciones": 4,
+    "minutos": 30,
+    "descripcion": "La salsa Caruso nació en Montevideo: crema, jamón, champiñones y queso sobre capeletis.",
+    "etiquetas": ["Pastas", "Rápida"],
+    "ingredientes": [
+      { "nombre": "Capeletis", "medida": "750 g", "imagen": "Noodles" },
+      { "nombre": "Crema de leche", "medida": "350 ml", "imagen": "Heavy Cream" },
+      { "nombre": "Jamón cocido", "medida": "150 g", "imagen": "Deli Ham" },
+      { "nombre": "Champiñones", "medida": "200 g", "imagen": "mushrooms" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Manteca", "medida": "30 g", "imagen": "butter" },
+      { "nombre": "Queso rallado", "medida": "60 g" },
+      { "nombre": "Nuez moscada", "medida": "una pizca", "imagen": "nutmeg" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Poner a hervir abundante agua con sal para la pasta.",
+      "En una sartén con la manteca rehogar la cebolla picada y los champiñones fileteados hasta que se doren.",
+      "Agregar el jamón en tiras y la crema. Cocinar a fuego bajo 5 minutos, hasta que espese un poco. Sumar la nuez moscada y el queso.",
+      "Cocinar los capeletis según el paquete, escurrirlos y mezclarlos con la salsa. Servir con más queso."
+    ]
+  },
+  {
+    "slug": "charquican",
+    "nombre": "Charquicán",
+    "categoria": "Beef",
+    "origen": "Chile",
+    "porciones": 4,
+    "minutos": 45,
+    "descripcion": "Guiso chileno de papa, zapallo y carne picada, coronado con un huevo frito.",
+    "etiquetas": ["Olla única", "Casero"],
+    "ingredientes": [
+      { "nombre": "Carne picada", "medida": "400 g", "imagen": "Minced Beef" },
+      { "nombre": "Papas", "medida": "4", "imagen": "Potatoes" },
+      { "nombre": "Zapallo", "medida": "400 g", "imagen": "Squash" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Zanahorias", "medida": "1", "imagen": "Carrots" },
+      { "nombre": "Choclo en granos", "medida": "1 taza", "imagen": "Sweetcorn" },
+      { "nombre": "Arvejas", "medida": "½ taza", "imagen": "Peas" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Comino", "medida": "1 cdta", "imagen": "Cumin" },
+      { "nombre": "Pimentón", "medida": "1 cdta", "imagen": "paprika" },
+      { "nombre": "Caldo de carne", "medida": "500 ml", "imagen": "beef stock" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Rehogar en el aceite la cebolla, el ajo y la zanahoria picados.",
+      "Agregar la carne y dorarla. Condimentar con comino, pimentón y sal.",
+      "Sumar las papas y el zapallo en cubos y cubrir con el caldo. Cocinar tapado unos 20 minutos, hasta que estén tiernos.",
+      "Agregar el choclo y las arvejas y aplastar un poco las verduras con un pisapapas: tiene que quedar un guiso espeso con trozos.",
+      "Servir cada plato con un huevo frito encima."
+    ]
+  },
+  {
+    "slug": "porotos-con-riendas",
+    "nombre": "Porotos con riendas",
+    "categoria": "Vegetarian",
+    "origen": "Chile",
+    "porciones": 6,
+    "minutos": 150,
+    "descripcion": "Porotos con zapallo y tallarines: el guiso de invierno más querido de Chile.",
+    "etiquetas": ["Legumbres", "Invierno", "Económico"],
+    "ingredientes": [
+      { "nombre": "Porotos blancos secos", "medida": "400 g", "imagen": "Dried white beans" },
+      { "nombre": "Zapallo", "medida": "300 g", "imagen": "Squash" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "1", "imagen": "Red Pepper" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Fideos", "medida": "150 g de tallarines", "imagen": "Noodles" },
+      { "nombre": "Chorizo colorado", "medida": "1 (opcional)", "imagen": "Chorizo" },
+      { "nombre": "Pimentón", "medida": "1 cda", "imagen": "paprika" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Dejar los porotos en remojo toda la noche. Escurrirlos, cubrirlos con agua fresca y hervirlos 1 hora y media, hasta que estén tiernos.",
+      "Mientras tanto hacer un sofrito con la cebolla, el morrón, el ajo y el chorizo picados. Condimentar con pimentón, comino y orégano.",
+      "Agregar el sofrito y el zapallo en cubos a los porotos y cocinar 20 minutos.",
+      "Sumar los tallarines partidos y cocinar hasta que estén a punto, agregando agua si hace falta. Salar y servir."
+    ]
+  },
+  {
+    "slug": "sopa-paraguaya",
+    "nombre": "Sopa paraguaya",
+    "categoria": "Side",
+    "origen": "Paraguay",
+    "porciones": 8,
+    "minutos": 60,
+    "descripcion": "Aunque se llama sopa, es un pan de maíz húmedo con queso y cebolla. Un clásico de Paraguay.",
+    "etiquetas": ["Horno", "Para acompañar"],
+    "ingredientes": [
+      { "nombre": "Harina de maíz (polenta)", "medida": "300 g", "imagen": "Cornmeal" },
+      { "nombre": "Cebolla", "medida": "2", "imagen": "onion" },
+      { "nombre": "Queso fresco", "medida": "300 g", "imagen": "Queso Fresco" },
+      { "nombre": "Leche", "medida": "400 ml", "imagen": "Milk" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Manteca", "medida": "100 g", "imagen": "butter" },
+      { "nombre": "Polvo de hornear", "medida": "1 cdta", "imagen": "baking powder" },
+      { "nombre": "Sal", "medida": "1 cdta", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Rehogar las cebollas picadas en la mitad de la manteca hasta que estén transparentes.",
+      "En un bol batir los huevos, sumar la leche, el resto de la manteca derretida, la sal y las cebollas.",
+      "Agregar la harina de maíz con el polvo de hornear y el queso en cubos. Mezclar bien.",
+      "Volcar en una fuente enmantecada y hornear a 190 °C durante 40 minutos, hasta que esté dorada y firme.",
+      "Dejar entibiar y cortar en cuadrados."
+    ]
+  },
+  {
+    "slug": "mbeju",
+    "nombre": "Mbejú",
+    "categoria": "Breakfast",
+    "origen": "Paraguay",
+    "porciones": 4,
+    "minutos": 25,
+    "descripcion": "Tortilla de almidón de mandioca y queso, crocante por fuera y tierna por dentro.",
+    "etiquetas": ["Desayuno", "Sin gluten"],
+    "ingredientes": [
+      { "nombre": "Almidón de mandioca", "medida": "300 g", "imagen": "Tapioca" },
+      { "nombre": "Queso fresco", "medida": "200 g", "imagen": "Queso Fresco" },
+      { "nombre": "Manteca", "medida": "60 g", "imagen": "butter" },
+      { "nombre": "Leche", "medida": "100 ml", "imagen": "Milk" },
+      { "nombre": "Sal", "medida": "1 cdta", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Mezclar la manteca blanda con la sal y el queso rallado.",
+      "Agregar el almidón y unir con las manos hasta obtener una textura arenosa. Sumar la leche de a poco: tiene que quedar granulada, no una masa.",
+      "Calentar una sartén y volcar la mezcla en una capa de 1 cm, aplastándola suavemente.",
+      "Cocinar a fuego medio hasta que se forme una costra dorada, dar vuelta con un plato y dorar del otro lado. Servir caliente."
+    ]
+  },
+  {
+    "slug": "sopa-de-mani",
+    "nombre": "Sopa de maní",
+    "categoria": "Beef",
+    "origen": "Bolivia",
+    "porciones": 6,
+    "minutos": 90,
+    "descripcion": "La sopa más famosa de Bolivia: caldo de carne espesado con maní, con papas fritas por encima.",
+    "etiquetas": ["Sopas", "Invierno"],
+    "ingredientes": [
+      { "nombre": "Carne vacuna", "medida": "500 g (con hueso)", "imagen": "Beef" },
+      { "nombre": "Maní sin sal", "medida": "150 g crudo", "imagen": "Unsalted Peanuts" },
+      { "nombre": "Papas", "medida": "4", "imagen": "Potatoes" },
+      { "nombre": "Zanahorias", "medida": "1", "imagen": "Carrots" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "½", "imagen": "Red Pepper" },
+      { "nombre": "Arvejas", "medida": "½ taza", "imagen": "Peas" },
+      { "nombre": "Fideos", "medida": "50 g de fideos finos", "imagen": "Noodles" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Perejil", "medida": "a gusto", "imagen": "Parsley" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hervir la carne en 2,5 litros de agua con sal durante 1 hora, espumando de vez en cuando.",
+      "Licuar el maní con un poco de agua hasta lograr una crema fina.",
+      "Agregar al caldo la cebolla, el morrón y la zanahoria picados, el maní licuado, el comino y el orégano. Cocinar 20 minutos revolviendo para que no se pegue.",
+      "Sumar los fideos y las arvejas y cocinar 8 minutos más.",
+      "Mientras tanto, freír las papas en bastones finos. Servir la sopa con las papas fritas y perejil picado por encima."
+    ]
+  },
+  {
+    "slug": "silpancho",
+    "nombre": "Silpancho",
+    "categoria": "Beef",
+    "origen": "Bolivia",
+    "porciones": 4,
+    "minutos": 50,
+    "descripcion": "Plato de Cochabamba: milanesa muy fina sobre arroz y papas, con huevo frito y ensalada.",
+    "etiquetas": ["Contundente"],
+    "ingredientes": [
+      { "nombre": "Bifes de nalga", "medida": "4 muy finos", "imagen": "Beef" },
+      { "nombre": "Pan rallado", "medida": "200 g", "imagen": "breadcrumbs" },
+      { "nombre": "Arroz", "medida": "300 g", "imagen": "Rice" },
+      { "nombre": "Papas", "medida": "4", "imagen": "Potatoes" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Tomate", "medida": "2", "imagen": "Tomato" },
+      { "nombre": "Cebolla morada", "medida": "1", "imagen": "red onions" },
+      { "nombre": "Perejil", "medida": "a gusto", "imagen": "Parsley" },
+      { "nombre": "Vinagre", "medida": "2 cdas", "imagen": "vinegar" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cocinar el arroz blanco. Hervir las papas con cáscara, pelarlas, cortarlas en rodajas y dorarlas en la sartén.",
+      "Golpear los bifes hasta dejarlos muy finos, salarlos y apretarlos sobre el pan rallado de ambos lados.",
+      "Freír las milanesas en poco aceite hasta dorar.",
+      "Picar el tomate y la cebolla, mezclar con perejil, vinagre y sal.",
+      "Armar cada plato con arroz, papas, la milanesa encima, un huevo frito y la ensalada."
+    ]
+  },
+  {
+    "slug": "ceviche-peruano",
+    "nombre": "Ceviche peruano",
+    "categoria": "Seafood",
+    "origen": "Perú",
+    "porciones": 4,
+    "minutos": 30,
+    "descripcion": "Pescado blanco 'cocido' en jugo de limón con cebolla morada, ají y cilantro.",
+    "etiquetas": ["Sin cocción", "Fresco"],
+    "ingredientes": [
+      { "nombre": "Pescado blanco", "medida": "600 g muy fresco (merluza, corvina o lenguado)", "imagen": "white fish" },
+      { "nombre": "Limones", "medida": "12 (jugo)", "imagen": "lemons" },
+      { "nombre": "Cebolla morada", "medida": "1", "imagen": "red onions" },
+      { "nombre": "Ají picante", "medida": "1 (ají limo, rocoto o el que consigas)", "imagen": "chilli" },
+      { "nombre": "Cilantro", "medida": "un puñado", "imagen": "coriander" },
+      { "nombre": "Ajo", "medida": "1 diente", "imagen": "garlic" },
+      { "nombre": "Batatas", "medida": "2 (hervidas, para acompañar)", "imagen": "Sweet Potatoes" },
+      { "nombre": "Choclo", "medida": "1 (hervido, para acompañar)", "imagen": "Corn On The Cob" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cortar el pescado en cubos de 2 cm, ponerlo en un bol de vidrio y salarlo.",
+      "Cortar la cebolla en pluma fina y lavarla con agua fría para suavizarla.",
+      "Agregar al pescado el ajo rallado, el ají picado sin semillas y el jugo de limón recién exprimido (sin apretar de más los limones para que no amargue).",
+      "Mezclar y dejar 5 minutos: el pescado se pone blanco por fuera.",
+      "Sumar la cebolla y el cilantro picado, ajustar la sal y servir enseguida con batata y choclo."
+    ]
+  },
+  {
+    "slug": "lomo-saltado",
+    "nombre": "Lomo saltado",
+    "categoria": "Beef",
+    "origen": "Perú",
+    "porciones": 4,
+    "minutos": 35,
+    "descripcion": "Salteado de carne, cebolla y tomate con salsa de soja, servido con papas fritas y arroz.",
+    "etiquetas": ["Rápida", "Wok"],
+    "ingredientes": [
+      { "nombre": "Carne vacuna", "medida": "600 g de lomo o cuadril", "imagen": "Beef" },
+      { "nombre": "Cebolla morada", "medida": "2", "imagen": "red onions" },
+      { "nombre": "Tomates", "medida": "3", "imagen": "tomatoes" },
+      { "nombre": "Ají picante", "medida": "1 (opcional)", "imagen": "chilli" },
+      { "nombre": "Ajo", "medida": "3 dientes", "imagen": "garlic" },
+      { "nombre": "Salsa de soja", "medida": "4 cdas", "imagen": "soy sauce" },
+      { "nombre": "Vinagre de vino tinto", "medida": "2 cdas", "imagen": "Red Wine Vinegar" },
+      { "nombre": "Cilantro", "medida": "un puñado", "imagen": "coriander" },
+      { "nombre": "Papas", "medida": "4 (fritas)", "imagen": "Potatoes" },
+      { "nombre": "Arroz", "medida": "300 g (cocido)", "imagen": "Rice" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cortar la carne en tiras gruesas y salpimentarlas con el comino.",
+      "Calentar muy bien una sartén grande o wok con el aceite y dorar la carne en tandas, a fuego muy fuerte. Retirar.",
+      "En la misma sartén saltear el ajo, la cebolla en gajos gruesos y el ají por 1 minuto.",
+      "Volver a poner la carne, sumar el tomate en gajos, la salsa de soja y el vinagre, y saltear 1 minuto más: el tomate tiene que quedar entero.",
+      "Apagar el fuego, agregar el cilantro y las papas fritas y servir con arroz blanco."
+    ]
+  },
+  {
+    "slug": "aji-de-gallina",
+    "nombre": "Ají de gallina",
+    "categoria": "Chicken",
+    "origen": "Perú",
+    "porciones": 6,
+    "minutos": 60,
+    "descripcion": "Pollo deshilachado en una salsa cremosa de ají amarillo, pan y queso.",
+    "etiquetas": ["Clásico", "Cremoso"],
+    "ingredientes": [
+      { "nombre": "Pechugas de pollo", "medida": "2", "imagen": "chicken breasts" },
+      { "nombre": "Pan", "medida": "4 rebanadas de pan de molde", "imagen": "bread" },
+      { "nombre": "Leche evaporada", "medida": "1 lata (o 400 ml de leche)", "imagen": "Evaporated Milk" },
+      { "nombre": "Ají amarillo en pasta", "medida": "3 cdas (o 1 morrón amarillo y una pizca de ají picante)", "imagen": "Red Chilli" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Queso parmesano", "medida": "50 g", "imagen": "parmesan" },
+      { "nombre": "Nueces", "medida": "50 g", "imagen": "Walnuts" },
+      { "nombre": "Papas", "medida": "6 (hervidas)", "imagen": "Potatoes" },
+      { "nombre": "Huevos", "medida": "3 (duros)", "imagen": "Eggs" },
+      { "nombre": "Aceitunas negras", "medida": "a gusto", "imagen": "Black Olives" },
+      { "nombre": "Arroz", "medida": "para acompañar", "imagen": "Rice" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hervir las pechugas en agua con sal 20 minutos. Deshilacharlas y reservar el caldo.",
+      "Remojar el pan en la leche y licuarlo con las nueces.",
+      "Rehogar la cebolla y el ajo picados en el aceite, sumar el ají amarillo y cocinar 3 minutos.",
+      "Agregar el pan licuado y cocinar revolviendo hasta que espese. Aligerar con un poco del caldo.",
+      "Sumar el pollo y el queso rallado y cocinar 5 minutos más. Ajustar la sal.",
+      "Servir sobre papas en rodajas, con arroz, medio huevo duro y aceitunas."
+    ]
+  },
+  {
+    "slug": "causa-limena",
+    "nombre": "Causa limeña",
+    "categoria": "Seafood",
+    "origen": "Perú",
+    "porciones": 6,
+    "minutos": 50,
+    "descripcion": "Capas de puré de papa con limón y ají, rellenas de atún con mayonesa y palta.",
+    "etiquetas": ["Sin horno", "Fría"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "1 kg", "imagen": "Potatoes" },
+      { "nombre": "Limones", "medida": "3 (jugo)", "imagen": "lemons" },
+      { "nombre": "Ají amarillo en pasta", "medida": "2 cdas (opcional)", "imagen": "Red Chilli" },
+      { "nombre": "Aceite vegetal", "medida": "4 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Atún", "medida": "2 latas", "imagen": "tuna" },
+      { "nombre": "Mayonesa", "medida": "5 cdas", "imagen": "Mayonnaise" },
+      { "nombre": "Cebolla morada", "medida": "½", "imagen": "red onions" },
+      { "nombre": "Palta", "medida": "2", "imagen": "avocado" },
+      { "nombre": "Huevos", "medida": "2 (duros)", "imagen": "Eggs" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hervir las papas con cáscara hasta que estén tiernas, pelarlas y hacer un puré bien liso.",
+      "Mezclar el puré frío con el jugo de limón, el aceite, el ají y sal hasta que quede una masa suave.",
+      "Mezclar el atún escurrido con la mayonesa y la cebolla picada fina.",
+      "En un molde armar una capa de papa, una de atún, una de palta en láminas y terminar con papa.",
+      "Enfriar 30 minutos en la heladera, desmoldar y decorar con huevo duro."
+    ]
+  },
+  {
+    "slug": "papa-a-la-huancaina",
+    "nombre": "Papa a la huancaína",
+    "categoria": "Vegetarian",
+    "origen": "Perú",
+    "porciones": 4,
+    "minutos": 30,
+    "descripcion": "Papas hervidas bañadas en una salsa cremosa de queso y ají amarillo.",
+    "etiquetas": ["Entrada", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "6", "imagen": "Potatoes" },
+      { "nombre": "Queso fresco", "medida": "200 g", "imagen": "Queso Fresco" },
+      { "nombre": "Leche evaporada", "medida": "150 ml", "imagen": "Evaporated Milk" },
+      { "nombre": "Ají amarillo en pasta", "medida": "3 cdas (o 1 morrón amarillo asado y una pizca de ají)", "imagen": "Red Chilli" },
+      { "nombre": "Galletitas de agua", "medida": "4", "imagen": "Graham Cracker Crumbs" },
+      { "nombre": "Ajo", "medida": "1 diente", "imagen": "garlic" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Huevos", "medida": "2 (duros)", "imagen": "Eggs" },
+      { "nombre": "Aceitunas negras", "medida": "6", "imagen": "Black Olives" },
+      { "nombre": "Lechuga", "medida": "unas hojas", "imagen": "Lettuce" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hervir las papas con cáscara, pelarlas y cortarlas en rodajas gruesas.",
+      "Licuar el queso, la leche, el ají, las galletitas, el ajo y el aceite hasta lograr una salsa lisa y espesa. Salar.",
+      "Acomodar hojas de lechuga en una fuente, poner las papas y bañarlas con la salsa.",
+      "Decorar con huevo duro y aceitunas. Servir fría o a temperatura ambiente."
+    ]
+  },
+  {
+    "slug": "suspiro-a-la-limena",
+    "nombre": "Suspiro a la limeña",
+    "categoria": "Dessert",
+    "origen": "Perú",
+    "porciones": 6,
+    "minutos": 60,
+    "descripcion": "Manjar blanco cremoso cubierto con merengue perfumado con oporto y canela.",
+    "etiquetas": ["Postre", "Clásico"],
+    "ingredientes": [
+      { "nombre": "Leche condensada", "medida": "1 lata", "imagen": "Condensed Milk" },
+      { "nombre": "Leche evaporada", "medida": "1 lata", "imagen": "Evaporated Milk" },
+      { "nombre": "Yemas", "medida": "4", "imagen": "Egg Yolks" },
+      { "nombre": "Esencia de vainilla", "medida": "1 cdta", "imagen": "Vanilla Extract" },
+      { "nombre": "Azúcar", "medida": "150 g", "imagen": "sugar" },
+      { "nombre": "Claras", "medida": "2", "imagen": "Egg White" },
+      { "nombre": "Vino oporto", "medida": "60 ml (o vino dulce)", "imagen": "red wine" },
+      { "nombre": "Canela", "medida": "para espolvorear", "imagen": "cinnamon" }
+    ],
+    "pasos": [
+      "Cocinar las dos leches a fuego medio, revolviendo sin parar, unos 25 minutos hasta que espesen y se vea el fondo de la olla.",
+      "Retirar, sumar las yemas batidas y la vainilla y volver al fuego 2 minutos más. Repartir en copas y enfriar.",
+      "Hervir el oporto con el azúcar hasta formar un almíbar a punto hilo (unos 5 minutos).",
+      "Batir las claras a punto nieve y volcar el almíbar caliente en hilo sin dejar de batir, hasta obtener un merengue brillante.",
+      "Cubrir el manjar con el merengue y espolvorear con canela."
+    ]
+  },
+  {
+    "slug": "locro-de-papa",
+    "nombre": "Locro de papa",
+    "categoria": "Vegetarian",
+    "origen": "Ecuador",
+    "porciones": 4,
+    "minutos": 45,
+    "descripcion": "Sopa cremosa de papa y queso de la sierra ecuatoriana, con palta por encima.",
+    "etiquetas": ["Sopas", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Papas", "medida": "1 kg", "imagen": "Potatoes" },
+      { "nombre": "Cebolla de verdeo", "medida": "3", "imagen": "Spring onions" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Achiote molido", "medida": "1 cdta (o pimentón)", "imagen": "Ground Annatto" },
+      { "nombre": "Leche", "medida": "500 ml", "imagen": "Milk" },
+      { "nombre": "Queso fresco", "medida": "200 g", "imagen": "Queso Fresco" },
+      { "nombre": "Palta", "medida": "1", "imagen": "avocado" },
+      { "nombre": "Cilantro", "medida": "a gusto", "imagen": "coriander" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Rehogar en el aceite la cebolla de verdeo y el ajo picados con el comino y el achiote.",
+      "Sumar las papas en cubos, cubrir con 1 litro de agua y cocinar 25 minutos, hasta que se deshagan un poco.",
+      "Aplastar parte de las papas para espesar, agregar la leche y cocinar 5 minutos sin que hierva fuerte.",
+      "Apagar el fuego, sumar el queso en cubos y el cilantro. Servir con palta en rodajas."
+    ]
+  },
+  {
+    "slug": "bolones-de-verde",
+    "nombre": "Bolones de verde",
+    "categoria": "Breakfast",
+    "origen": "Ecuador",
+    "porciones": 4,
+    "minutos": 40,
+    "descripcion": "Bolitas de plátano verde con queso, doradas en la sartén. Desayuno típico de la costa ecuatoriana.",
+    "etiquetas": ["Desayuno"],
+    "ingredientes": [
+      { "nombre": "Plátano macho", "medida": "4 verdes", "imagen": "Plantain" },
+      { "nombre": "Queso fresco", "medida": "200 g", "imagen": "Queso Fresco" },
+      { "nombre": "Manteca", "medida": "40 g", "imagen": "butter" },
+      { "nombre": "Aceite vegetal", "medida": "para dorar", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Pelar los plátanos, cortarlos en trozos y hervirlos en agua con sal 20 minutos, hasta que estén tiernos.",
+      "Pisarlos en caliente con la manteca hasta formar una masa, y sumar la mitad del queso rallado.",
+      "Formar bolas del tamaño de una naranja, poniendo un trozo de queso en el centro de cada una.",
+      "Dorarlas en una sartén con aceite, girándolas, hasta que estén crocantes por fuera."
+    ]
+  },
+  {
+    "slug": "ajiaco-santafereno",
+    "nombre": "Ajiaco santafereño",
+    "categoria": "Chicken",
+    "origen": "Colombia",
+    "porciones": 6,
+    "minutos": 90,
+    "descripcion": "Sopa bogotana de pollo con tres tipos de papa y choclo, servida con crema y alcaparras.",
+    "etiquetas": ["Sopas", "Clásico"],
+    "ingredientes": [
+      { "nombre": "Pechugas de pollo", "medida": "2", "imagen": "chicken breasts" },
+      { "nombre": "Papas", "medida": "1 kg (mezclá variedades)", "imagen": "Potatoes" },
+      { "nombre": "Papines", "medida": "300 g", "imagen": "Jersey Royal Potatoes" },
+      { "nombre": "Choclo", "medida": "3 en trozos", "imagen": "Corn On The Cob" },
+      { "nombre": "Cebolla de verdeo", "medida": "2", "imagen": "Spring onions" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Caldo de pollo", "medida": "2 litros", "imagen": "Chicken Stock" },
+      { "nombre": "Crema de leche", "medida": "para servir", "imagen": "Heavy Cream" },
+      { "nombre": "Alcaparras", "medida": "para servir", "imagen": "Capers" },
+      { "nombre": "Palta", "medida": "1", "imagen": "avocado" },
+      { "nombre": "Cilantro", "medida": "a gusto", "imagen": "coriander" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cocinar el pollo en el caldo con la cebolla de verdeo y el ajo durante 25 minutos. Retirar el pollo y desmenuzarlo.",
+      "Agregar al caldo las papas en rodajas finas y los choclos. Cocinar 40 minutos: las papas finas se deshacen y espesan la sopa.",
+      "Sumar los papines enteros y cocinar 15 minutos más.",
+      "Volver a poner el pollo, ajustar la sal y servir con crema, alcaparras, palta y cilantro."
+    ]
+  },
+  {
+    "slug": "arepas-de-choclo",
+    "nombre": "Arepas de choclo",
+    "categoria": "Breakfast",
+    "origen": "Colombia",
+    "porciones": 6,
+    "minutos": 30,
+    "descripcion": "Arepas dulces de choclo con queso, doradas en la plancha.",
+    "etiquetas": ["Desayuno", "Merienda"],
+    "ingredientes": [
+      { "nombre": "Choclo en granos", "medida": "2 tazas", "imagen": "Sweetcorn" },
+      { "nombre": "Harina de maíz precocida amarilla", "medida": "½ taza", "imagen": "Yellow Masarepa" },
+      { "nombre": "Manteca", "medida": "40 g", "imagen": "butter" },
+      { "nombre": "Azúcar", "medida": "2 cdas", "imagen": "sugar" },
+      { "nombre": "Leche", "medida": "3 cdas", "imagen": "Milk" },
+      { "nombre": "Queso fresco", "medida": "200 g", "imagen": "Queso Fresco" },
+      { "nombre": "Sal", "medida": "una pizca", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Procesar el choclo con la leche hasta lograr una pasta.",
+      "Agregar la harina de maíz, la manteca derretida, el azúcar y la sal. Dejar reposar 10 minutos para que la harina absorba.",
+      "Cocinar cucharadas de la mezcla en una sartén enmantecada, formando arepas finas, 3 minutos de cada lado.",
+      "Poner una feta de queso sobre una arepa, tapar con otra y dorar un minuto más para que el queso se derrita."
+    ]
+  },
+  {
+    "slug": "frijoles-antioquenos",
+    "nombre": "Frijoles antioqueños",
+    "categoria": "Pork",
+    "origen": "Colombia",
+    "porciones": 6,
+    "minutos": 150,
+    "descripcion": "Porotos colorados cocidos con plátano y panceta, como en Antioquia.",
+    "etiquetas": ["Legumbres", "Olla única"],
+    "ingredientes": [
+      { "nombre": "Porotos colorados", "medida": "500 g", "imagen": "Kidney Beans" },
+      { "nombre": "Panceta", "medida": "200 g", "imagen": "Bacon" },
+      { "nombre": "Plátano macho", "medida": "1 verde", "imagen": "Plantain" },
+      { "nombre": "Zanahorias", "medida": "1", "imagen": "Carrots" },
+      { "nombre": "Cebolla de verdeo", "medida": "2", "imagen": "Spring onions" },
+      { "nombre": "Tomates", "medida": "2", "imagen": "tomatoes" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Dejar los porotos en remojo toda la noche. Hervirlos con agua nueva, la zanahoria y el plátano en trozos 1 hora y media.",
+      "Hacer un hogao: rehogar la cebolla de verdeo, el ajo y el tomate picados con el comino hasta que se forme una salsa.",
+      "Dorar la panceta en cubos en una sartén.",
+      "Agregar el hogao y la panceta a los porotos y cocinar 20 minutos más, aplastando el plátano para espesar. Salar y servir con arroz."
+    ]
+  },
+  {
+    "slug": "cachapas",
+    "nombre": "Cachapas",
+    "categoria": "Breakfast",
+    "origen": "Venezuela",
+    "porciones": 4,
+    "minutos": 30,
+    "descripcion": "Panqueques gruesos de choclo, dulces y salados a la vez, rellenos de queso.",
+    "etiquetas": ["Desayuno", "Rápida"],
+    "ingredientes": [
+      { "nombre": "Choclo en granos", "medida": "3 tazas", "imagen": "Sweetcorn" },
+      { "nombre": "Harina de maíz precocida amarilla", "medida": "3 cdas", "imagen": "Yellow Masarepa" },
+      { "nombre": "Leche", "medida": "½ taza", "imagen": "Milk" },
+      { "nombre": "Azúcar", "medida": "2 cdas", "imagen": "sugar" },
+      { "nombre": "Huevo", "medida": "1", "imagen": "Egg" },
+      { "nombre": "Manteca", "medida": "para la sartén", "imagen": "butter" },
+      { "nombre": "Queso fresco", "medida": "300 g", "imagen": "Queso Fresco" },
+      { "nombre": "Sal", "medida": "una pizca", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Licuar el choclo con la leche, el huevo, el azúcar y la sal. Tiene que quedar una mezcla espesa con algo de textura.",
+      "Agregar la harina de maíz y mezclar.",
+      "En una sartén enmantecada volcar un cucharón y cocinar a fuego medio 3 minutos de cada lado.",
+      "Servir calientes, dobladas con queso fresco adentro."
+    ]
+  },
+  {
+    "slug": "tequenos",
+    "nombre": "Tequeños",
+    "categoria": "Starter",
+    "origen": "Venezuela",
+    "porciones": 20,
+    "minutos": 50,
+    "descripcion": "Bastones de queso envueltos en masa y fritos: el bocado de todas las fiestas venezolanas.",
+    "etiquetas": ["Para compartir", "Fritos"],
+    "ingredientes": [
+      { "nombre": "Harina 0000", "medida": "300 g", "imagen": "plain flour" },
+      { "nombre": "Manteca", "medida": "50 g", "imagen": "butter" },
+      { "nombre": "Huevo", "medida": "1", "imagen": "Egg" },
+      { "nombre": "Agua", "medida": "100 ml", "imagen": "water" },
+      { "nombre": "Azúcar", "medida": "1 cdta", "imagen": "sugar" },
+      { "nombre": "Sal", "medida": "½ cdta", "imagen": "salt" },
+      { "nombre": "Queso fresco", "medida": "400 g (firme, tipo cuartirolo o de freír)", "imagen": "Queso Fresco" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" }
+    ],
+    "pasos": [
+      "Mezclar la harina con la sal y el azúcar, agregar la manteca, el huevo y el agua y amasar hasta que esté lisa. Descansar 20 minutos.",
+      "Cortar el queso en bastones de 1 x 1 x 7 cm.",
+      "Estirar la masa bien fina y cortarla en tiras de 2 cm de ancho.",
+      "Envolver cada bastón de queso con una tira en espiral, superponiendo un poco, y sellar bien las puntas.",
+      "Freír en abundante aceite caliente hasta dorar. Escurrir y servir enseguida."
+    ]
+  },
+  {
+    "slug": "guacamole",
+    "nombre": "Guacamole",
+    "categoria": "Starter",
+    "origen": "México",
+    "porciones": 4,
+    "minutos": 15,
+    "descripcion": "La salsa de palta mexicana, con tomate, cebolla, cilantro y lima.",
+    "etiquetas": ["Sin cocción", "Rápida"],
+    "ingredientes": [
+      { "nombre": "Palta", "medida": "3 maduras", "imagen": "avocado" },
+      { "nombre": "Tomate", "medida": "1", "imagen": "Tomato" },
+      { "nombre": "Cebolla morada", "medida": "¼", "imagen": "red onions" },
+      { "nombre": "Cilantro", "medida": "un puñado", "imagen": "coriander" },
+      { "nombre": "Lima", "medida": "1 (o limón)", "imagen": "lime" },
+      { "nombre": "Jalapeño", "medida": "1 (o ají picante, opcional)", "imagen": "Jalapeno" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Pisar la pulpa de las paltas con un tenedor, dejando algunos trozos.",
+      "Agregar el tomate sin semillas, la cebolla, el jalapeño y el cilantro, todo picado fino.",
+      "Condimentar con el jugo de lima y sal. Servir enseguida con totopos o tortillas."
+    ]
+  },
+  {
+    "slug": "tinga-de-pollo",
+    "nombre": "Tinga de pollo",
+    "categoria": "Chicken",
+    "origen": "México",
+    "porciones": 6,
+    "minutos": 50,
+    "descripcion": "Pollo desmenuzado en salsa de tomate y cebolla con un toque ahumado, para tacos y tostadas.",
+    "etiquetas": ["Tacos", "Para compartir"],
+    "ingredientes": [
+      { "nombre": "Pechugas de pollo", "medida": "3", "imagen": "chicken breasts" },
+      { "nombre": "Cebollas", "medida": "2", "imagen": "onions" },
+      { "nombre": "Tomates", "medida": "4", "imagen": "tomatoes" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Pimentón ahumado", "medida": "1 cda (o chipotle en lata)", "imagen": "smoky paprika" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Tortillas de maíz", "medida": "12", "imagen": "corn tortillas" },
+      { "nombre": "Crema ácida", "medida": "para servir", "imagen": "sour cream" },
+      { "nombre": "Queso fresco", "medida": "para servir", "imagen": "Queso Fresco" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hervir las pechugas en agua con sal 20 minutos y desmenuzarlas.",
+      "Licuar los tomates con el ajo, el pimentón y el orégano.",
+      "Rehogar las cebollas en pluma fina hasta que estén doradas, sumar la salsa y cocinar 10 minutos.",
+      "Agregar el pollo y cocinar 5 minutos para que tome sabor.",
+      "Servir sobre tortillas calientes con crema y queso desmenuzado."
+    ]
+  },
+  {
+    "slug": "chilaquiles-rojos",
+    "nombre": "Chilaquiles rojos",
+    "categoria": "Breakfast",
+    "origen": "México",
+    "porciones": 4,
+    "minutos": 30,
+    "descripcion": "Totopos de tortilla bañados en salsa roja, con crema, queso y huevo.",
+    "etiquetas": ["Desayuno", "Rápida"],
+    "ingredientes": [
+      { "nombre": "Tortillas de maíz", "medida": "12 (del día anterior)", "imagen": "corn tortillas" },
+      { "nombre": "Tomates", "medida": "4", "imagen": "tomatoes" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Ajo", "medida": "1 diente", "imagen": "garlic" },
+      { "nombre": "Ají picante", "medida": "1 (o ají molido a gusto)", "imagen": "chilli" },
+      { "nombre": "Crema ácida", "medida": "4 cdas", "imagen": "sour cream" },
+      { "nombre": "Queso fresco", "medida": "100 g", "imagen": "Queso Fresco" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cortar las tortillas en triángulos y freírlas en aceite hasta que estén crocantes (totopos). Escurrir.",
+      "Licuar los tomates con media cebolla, el ajo y el ají, y cocinar la salsa en una sartén 10 minutos. Salar.",
+      "Agregar los totopos a la salsa y mezclar apenas, para que se mojen pero sigan algo crocantes.",
+      "Servir con crema, queso desmenuzado, aros de cebolla y un huevo frito encima."
+    ]
+  },
+  {
+    "slug": "sopa-de-tortilla",
+    "nombre": "Sopa de tortilla",
+    "categoria": "Vegetarian",
+    "origen": "México",
+    "porciones": 4,
+    "minutos": 40,
+    "descripcion": "Caldo de tomate con tiras de tortilla crocantes, palta, queso y crema.",
+    "etiquetas": ["Sopas"],
+    "ingredientes": [
+      { "nombre": "Tortillas de maíz", "medida": "8", "imagen": "corn tortillas" },
+      { "nombre": "Tomates", "medida": "4", "imagen": "tomatoes" },
+      { "nombre": "Cebolla", "medida": "½", "imagen": "onion" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Caldo de verduras", "medida": "1 litro", "imagen": "vegetable stock" },
+      { "nombre": "Pimentón ahumado", "medida": "1 cdta", "imagen": "smoky paprika" },
+      { "nombre": "Palta", "medida": "1", "imagen": "avocado" },
+      { "nombre": "Queso fresco", "medida": "100 g", "imagen": "Queso Fresco" },
+      { "nombre": "Crema ácida", "medida": "4 cdas", "imagen": "sour cream" },
+      { "nombre": "Cilantro", "medida": "a gusto", "imagen": "coriander" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Cortar las tortillas en tiras y freírlas hasta que estén doradas. Escurrir.",
+      "Licuar los tomates con la cebolla, el ajo y el pimentón. Cocinar la mezcla en una olla con un poco de aceite 5 minutos.",
+      "Agregar el caldo y cocinar 15 minutos. Salar.",
+      "Servir el caldo caliente sobre las tiras de tortilla, con palta, queso, crema y cilantro."
+    ]
+  },
+  {
+    "slug": "frijoles-charros",
+    "nombre": "Frijoles charros",
+    "categoria": "Pork",
+    "origen": "México",
+    "porciones": 6,
+    "minutos": 150,
+    "descripcion": "Porotos con panceta, chorizo, tomate y ají, en un caldo sabroso.",
+    "etiquetas": ["Legumbres", "Para compartir"],
+    "ingredientes": [
+      { "nombre": "Porotos pintos", "medida": "500 g (o porotos colorados)", "imagen": "Pinto Beans" },
+      { "nombre": "Panceta", "medida": "150 g", "imagen": "Bacon" },
+      { "nombre": "Chorizo colorado", "medida": "2", "imagen": "Chorizo" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Tomates", "medida": "3", "imagen": "tomatoes" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Jalapeño", "medida": "2 (o ají picante)", "imagen": "Jalapeno" },
+      { "nombre": "Cilantro", "medida": "un puñado", "imagen": "coriander" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Remojar los porotos toda la noche y hervirlos con agua nueva y media cebolla 1 hora y media, hasta que estén tiernos.",
+      "Dorar la panceta y el chorizo en cubos. Sumar la cebolla, el ajo, el tomate y el jalapeño picados y cocinar 10 minutos.",
+      "Agregar el sofrito a los porotos con su caldo y cocinar 20 minutos más.",
+      "Salar y terminar con cilantro picado."
+    ]
+  },
+  {
+    "slug": "quesadillas",
+    "nombre": "Quesadillas",
+    "categoria": "Vegetarian",
+    "origen": "México",
+    "porciones": 4,
+    "minutos": 20,
+    "descripcion": "Tortillas dobladas con queso derretido, rápidas y rendidoras.",
+    "etiquetas": ["Rápida", "Vegetariano"],
+    "ingredientes": [
+      { "nombre": "Tortillas de maíz", "medida": "8 (o de harina)", "imagen": "corn tortillas" },
+      { "nombre": "Queso", "medida": "300 g (que se derrita bien)", "imagen": "Cheese" },
+      { "nombre": "Champiñones", "medida": "150 g (opcional)", "imagen": "mushrooms" },
+      { "nombre": "Cebolla", "medida": "½", "imagen": "onion" },
+      { "nombre": "Cilantro", "medida": "a gusto", "imagen": "coriander" },
+      { "nombre": "Salsa picante", "medida": "a gusto", "imagen": "Hotsauce" }
+    ],
+    "pasos": [
+      "Si se usan, saltear los champiñones fileteados con la cebolla picada hasta dorar.",
+      "Calentar una tortilla en una sartén seca, poner queso rallado en una mitad y los champiñones.",
+      "Doblar y cocinar a fuego medio hasta que el queso se derrita y la tortilla esté crocante, dando vuelta una vez.",
+      "Servir con cilantro y salsa picante."
+    ]
+  },
+  {
+    "slug": "arroz-rojo-mexicano",
+    "nombre": "Arroz rojo mexicano",
+    "categoria": "Side",
+    "origen": "México",
+    "porciones": 4,
+    "minutos": 35,
+    "descripcion": "El arroz que acompaña casi todo en México, cocido en caldo con tomate.",
+    "etiquetas": ["Para acompañar"],
+    "ingredientes": [
+      { "nombre": "Arroz", "medida": "300 g", "imagen": "Rice" },
+      { "nombre": "Tomates", "medida": "2", "imagen": "tomatoes" },
+      { "nombre": "Cebolla", "medida": "½", "imagen": "onion" },
+      { "nombre": "Ajo", "medida": "1 diente", "imagen": "garlic" },
+      { "nombre": "Caldo de pollo", "medida": "600 ml", "imagen": "Chicken Stock" },
+      { "nombre": "Zanahorias", "medida": "1 (en cubitos)", "imagen": "Carrots" },
+      { "nombre": "Arvejas", "medida": "½ taza", "imagen": "Peas" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Lavar el arroz y dejarlo escurrir bien.",
+      "Dorar el arroz en el aceite, revolviendo, hasta que esté apenas tostado.",
+      "Licuar el tomate con la cebolla y el ajo, agregarlo al arroz y cocinar 2 minutos.",
+      "Sumar el caldo caliente, la zanahoria y las arvejas. Tapar y cocinar a fuego bajo 18 minutos sin revolver.",
+      "Apagar y dejar reposar tapado 5 minutos. Esponjar con un tenedor."
+    ]
+  },
+  {
+    "slug": "moros-y-cristianos",
+    "nombre": "Moros y cristianos",
+    "categoria": "Side",
+    "origen": "Cuba",
+    "porciones": 6,
+    "minutos": 60,
+    "descripcion": "Arroz cocido junto con porotos negros y sofrito: el acompañamiento cubano por excelencia.",
+    "etiquetas": ["Legumbres", "Para acompañar"],
+    "ingredientes": [
+      { "nombre": "Porotos negros", "medida": "2 tazas cocidos (o 1 lata)", "imagen": "Black Beans" },
+      { "nombre": "Arroz", "medida": "300 g", "imagen": "Rice" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón verde", "medida": "1", "imagen": "Green Pepper" },
+      { "nombre": "Ajo", "medida": "3 dientes", "imagen": "garlic" },
+      { "nombre": "Panceta", "medida": "100 g (opcional)", "imagen": "Bacon" },
+      { "nombre": "Comino", "medida": "1 cdta", "imagen": "Cumin" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Laurel", "medida": "1 hoja", "imagen": "Bay Leaf" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Dorar la panceta en cubos en el aceite. Sumar la cebolla, el morrón y el ajo picados y rehogar 5 minutos.",
+      "Agregar el comino, el orégano y el laurel, luego el arroz, y mezclar 1 minuto.",
+      "Sumar los porotos con su caldo y agua hasta completar 700 ml de líquido. Salar.",
+      "Tapar y cocinar a fuego bajo 20 minutos. Dejar reposar 5 minutos y servir."
+    ]
+  },
+  {
+    "slug": "picadillo-a-la-habanera",
+    "nombre": "Picadillo a la habanera",
+    "categoria": "Beef",
+    "origen": "Cuba",
+    "porciones": 4,
+    "minutos": 35,
+    "descripcion": "Carne picada guisada con tomate, aceitunas y pasas, servida con arroz blanco.",
+    "etiquetas": ["Rápida", "Casero"],
+    "ingredientes": [
+      { "nombre": "Carne picada", "medida": "600 g", "imagen": "Minced Beef" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón verde", "medida": "1", "imagen": "Green Pepper" },
+      { "nombre": "Ajo", "medida": "2 dientes", "imagen": "garlic" },
+      { "nombre": "Salsa de tomate", "medida": "200 ml", "imagen": "Tomato Sauce" },
+      { "nombre": "Aceitunas verdes", "medida": "12", "imagen": "Green Olives" },
+      { "nombre": "Pasas de uva", "medida": "2 cdas", "imagen": "Raisins" },
+      { "nombre": "Comino", "medida": "1 cdta", "imagen": "Cumin" },
+      { "nombre": "Vino blanco", "medida": "½ taza (opcional)", "imagen": "White wine" },
+      { "nombre": "Papas", "medida": "2 (en cubos fritos, opcional)", "imagen": "Potatoes" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Rehogar la cebolla, el morrón y el ajo picados en el aceite.",
+      "Agregar la carne y dorarla bien. Condimentar con comino y sal.",
+      "Sumar el vino y dejar evaporar, luego la salsa de tomate, las aceitunas y las pasas. Cocinar 15 minutos.",
+      "Agregar las papas fritas en cubos al final y servir con arroz blanco."
+    ]
+  },
+  {
+    "slug": "mofongo",
+    "nombre": "Mofongo",
+    "categoria": "Pork",
+    "origen": "Puerto Rico",
+    "porciones": 4,
+    "minutos": 40,
+    "descripcion": "Plátano verde frito y pisado con ajo y chicharrón: el sabor de Puerto Rico.",
+    "etiquetas": ["Fritos", "Contundente"],
+    "ingredientes": [
+      { "nombre": "Plátano macho", "medida": "4 verdes", "imagen": "Plantain" },
+      { "nombre": "Ajo", "medida": "4 dientes", "imagen": "garlic" },
+      { "nombre": "Panceta", "medida": "150 g (bien dorada, como chicharrón)", "imagen": "Bacon" },
+      { "nombre": "Aceite de oliva", "medida": "3 cdas", "imagen": "Olive oil" },
+      { "nombre": "Caldo de pollo", "medida": "½ taza", "imagen": "Chicken Stock" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Pelar los plátanos, cortarlos en rodajas de 2 cm y remojarlos 10 minutos en agua con sal. Secarlos.",
+      "Freírlos a fuego medio unos 8 minutos, hasta que estén cocidos pero no muy dorados.",
+      "Dorar la panceta en cubos hasta que esté crocante.",
+      "En un mortero o bol pisar el ajo con sal y el aceite de oliva, agregar los plátanos calientes, la panceta y un chorrito de caldo, y pisar todo.",
+      "Formar domos con un bol chico y servir calientes con el caldo alrededor."
+    ]
+  },
+  {
+    "slug": "arroz-con-gandules",
+    "nombre": "Arroz con gandules",
+    "categoria": "Pork",
+    "origen": "Puerto Rico",
+    "porciones": 6,
+    "minutos": 50,
+    "descripcion": "El arroz de las fiestas boricuas, con sofrito, jamón y gandules (se pueden usar arvejas).",
+    "etiquetas": ["Fiestas", "Olla única"],
+    "ingredientes": [
+      { "nombre": "Arroz", "medida": "400 g", "imagen": "Rice" },
+      { "nombre": "Arvejas", "medida": "1 lata (en lugar de gandules)", "imagen": "Peas" },
+      { "nombre": "Jamón cocido", "medida": "150 g", "imagen": "Deli Ham" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón rojo", "medida": "1", "imagen": "Red Pepper" },
+      { "nombre": "Ajo", "medida": "3 dientes", "imagen": "garlic" },
+      { "nombre": "Cilantro", "medida": "un puñado", "imagen": "coriander" },
+      { "nombre": "Salsa de tomate", "medida": "100 ml", "imagen": "Tomato Sauce" },
+      { "nombre": "Achiote molido", "medida": "1 cdta (o pimentón)", "imagen": "Ground Annatto" },
+      { "nombre": "Aceitunas verdes", "medida": "10", "imagen": "Green Olives" },
+      { "nombre": "Comino", "medida": "½ cdta", "imagen": "Cumin" },
+      { "nombre": "Aceite vegetal", "medida": "3 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Hacer el sofrito: procesar o picar muy fino la cebolla, el morrón, el ajo y el cilantro.",
+      "Dorar el jamón en cubos en el aceite con el achiote, sumar el sofrito y cocinar 5 minutos.",
+      "Agregar la salsa de tomate, las aceitunas, el comino y el arroz. Mezclar bien.",
+      "Sumar 800 ml de agua caliente y sal. Cocinar destapado hasta que el agua baje al nivel del arroz.",
+      "Agregar las arvejas, tapar y cocinar a fuego bajo 20 minutos sin revolver."
+    ]
+  },
+  {
+    "slug": "mangu",
+    "nombre": "Mangú con los tres golpes",
+    "categoria": "Breakfast",
+    "origen": "República Dominicana",
+    "porciones": 4,
+    "minutos": 40,
+    "descripcion": "Puré de plátano verde con cebollas en vinagre, salame frito, queso frito y huevo.",
+    "etiquetas": ["Desayuno", "Contundente"],
+    "ingredientes": [
+      { "nombre": "Plátano macho", "medida": "4 verdes", "imagen": "Plantain" },
+      { "nombre": "Manteca", "medida": "40 g", "imagen": "butter" },
+      { "nombre": "Cebolla morada", "medida": "2", "imagen": "red onions" },
+      { "nombre": "Vinagre", "medida": "4 cdas", "imagen": "vinegar" },
+      { "nombre": "Salame", "medida": "200 g", "imagen": "Chorizo" },
+      { "nombre": "Queso de freír", "medida": "200 g (o queso cremoso)", "imagen": "Cheese" },
+      { "nombre": "Huevos", "medida": "4", "imagen": "Eggs" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Pelar y hervir los plátanos en agua con sal 20 minutos, hasta que estén muy tiernos.",
+      "Cortar la cebolla en aros y saltearla con el vinagre y sal 3 minutos. Reservar.",
+      "Pisar los plátanos con la manteca y un poco del agua de cocción hasta lograr un puré liso.",
+      "Freír en rodajas el salame y el queso hasta dorar, y freír los huevos.",
+      "Servir el mangú con las cebollas por encima y los 'tres golpes' al costado."
+    ]
+  },
+  {
+    "slug": "pollo-guisado-dominicano",
+    "nombre": "Pollo guisado dominicano",
+    "categoria": "Chicken",
+    "origen": "República Dominicana",
+    "porciones": 4,
+    "minutos": 60,
+    "descripcion": "Pollo sazonado y guisado con tomate, morrón y aceitunas, que se sirve con arroz y habichuelas.",
+    "etiquetas": ["Casero", "Olla única"],
+    "ingredientes": [
+      { "nombre": "Pata muslo", "medida": "4", "imagen": "Chicken Legs" },
+      { "nombre": "Lima", "medida": "1 (jugo)", "imagen": "lime" },
+      { "nombre": "Ajo", "medida": "3 dientes", "imagen": "garlic" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Azúcar", "medida": "1 cda", "imagen": "sugar" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Morrón verde", "medida": "1", "imagen": "Green Pepper" },
+      { "nombre": "Tomates", "medida": "2", "imagen": "tomatoes" },
+      { "nombre": "Salsa de tomate", "medida": "3 cdas", "imagen": "Tomato Sauce" },
+      { "nombre": "Aceitunas verdes", "medida": "10", "imagen": "Green Olives" },
+      { "nombre": "Cilantro", "medida": "a gusto", "imagen": "coriander" },
+      { "nombre": "Aceite vegetal", "medida": "2 cdas", "imagen": "Vegetable oil" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Adobar el pollo con el jugo de lima, el ajo pisado, el orégano y sal. Dejar marinar 30 minutos.",
+      "Calentar el aceite con el azúcar hasta que se ponga color caramelo y dorar el pollo en esa mezcla, dándolo vuelta.",
+      "Agregar la cebolla, el morrón y el tomate picados, la salsa de tomate y las aceitunas.",
+      "Sumar 1 taza de agua, tapar y cocinar 30 minutos a fuego bajo. Terminar con cilantro."
+    ]
+  },
+  {
+    "slug": "pupusas-de-queso",
+    "nombre": "Pupusas de queso",
+    "categoria": "Vegetarian",
+    "origen": "El Salvador",
+    "porciones": 8,
+    "minutos": 45,
+    "descripcion": "Tortillas gruesas de maíz rellenas de queso, con curtido de repollo al costado.",
+    "etiquetas": ["Vegetariano", "Para compartir"],
+    "ingredientes": [
+      { "nombre": "Harina de maíz precocida amarilla", "medida": "400 g (o harina de maíz blanca)", "imagen": "Yellow Masarepa" },
+      { "nombre": "Agua tibia", "medida": "500 ml", "imagen": "Warm Water" },
+      { "nombre": "Queso fresco", "medida": "300 g", "imagen": "Queso Fresco" },
+      { "nombre": "Repollo", "medida": "¼", "imagen": "Cabbage" },
+      { "nombre": "Zanahorias", "medida": "1", "imagen": "Carrots" },
+      { "nombre": "Cebolla", "medida": "½", "imagen": "onion" },
+      { "nombre": "Vinagre", "medida": "100 ml", "imagen": "vinegar" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Curtido: rallar el repollo y la zanahoria, cortar la cebolla fina, escaldar todo 1 minuto y mezclar con el vinagre, el orégano y sal. Reservar.",
+      "Mezclar la harina con el agua y una pizca de sal hasta lograr una masa suave que no se pegue.",
+      "Formar bolas, hacerles un hueco con el pulgar, poner queso rallado y cerrar.",
+      "Aplastar con las manos húmedas hasta formar discos de 1 cm de espesor.",
+      "Cocinar en una plancha caliente 4 minutos de cada lado. Servir con el curtido."
+    ]
+  },
+  {
+    "slug": "baleadas",
+    "nombre": "Baleadas",
+    "categoria": "Breakfast",
+    "origen": "Honduras",
+    "porciones": 6,
+    "minutos": 45,
+    "descripcion": "Tortillas de harina rellenas de porotos refritos, queso y crema: el desayuno hondureño.",
+    "etiquetas": ["Desayuno"],
+    "ingredientes": [
+      { "nombre": "Harina 0000", "medida": "400 g", "imagen": "plain flour" },
+      { "nombre": "Polvo de hornear", "medida": "1 cdta", "imagen": "baking powder" },
+      { "nombre": "Manteca", "medida": "60 g", "imagen": "butter" },
+      { "nombre": "Agua tibia", "medida": "200 ml", "imagen": "Warm Water" },
+      { "nombre": "Sal", "medida": "1 cdta", "imagen": "salt" },
+      { "nombre": "Porotos colorados", "medida": "2 tazas cocidos", "imagen": "Kidney Beans" },
+      { "nombre": "Queso fresco", "medida": "150 g", "imagen": "Queso Fresco" },
+      { "nombre": "Crema ácida", "medida": "6 cdas", "imagen": "sour cream" },
+      { "nombre": "Palta", "medida": "1 (opcional)", "imagen": "avocado" },
+      { "nombre": "Huevos", "medida": "6 (revueltos, opcional)", "imagen": "Eggs" }
+    ],
+    "pasos": [
+      "Mezclar la harina con el polvo de hornear y la sal, agregar la manteca y el agua y amasar hasta que esté lisa. Descansar 20 minutos.",
+      "Pisar los porotos con un poco de su caldo y cocinarlos en una sartén con aceite hasta que espesen (refritos).",
+      "Estirar bollos de masa en tortillas finas y cocinarlas en una sartén seca 1 minuto de cada lado.",
+      "Untar cada tortilla con porotos, sumar queso desmenuzado, crema y, si se quiere, huevo y palta. Doblar al medio."
+    ]
+  },
+  {
+    "slug": "rellenitos-de-platano",
+    "nombre": "Rellenitos de plátano",
+    "categoria": "Dessert",
+    "origen": "Guatemala",
+    "porciones": 12,
+    "minutos": 60,
+    "descripcion": "Masa de plátano maduro rellena de porotos negros dulces con chocolate y canela.",
+    "etiquetas": ["Postre", "Fritos"],
+    "ingredientes": [
+      { "nombre": "Plátano macho", "medida": "3 maduros", "imagen": "Plantain" },
+      { "nombre": "Porotos negros", "medida": "1 taza cocidos", "imagen": "Black Beans" },
+      { "nombre": "Azúcar", "medida": "4 cdas", "imagen": "sugar" },
+      { "nombre": "Cacao en polvo", "medida": "1 cda", "imagen": "Cocoa Powder" },
+      { "nombre": "Canela", "medida": "½ cdta", "imagen": "cinnamon" },
+      { "nombre": "Aceite vegetal", "medida": "para freír", "imagen": "Vegetable oil" },
+      { "nombre": "Azúcar", "medida": "para espolvorear", "imagen": "sugar" }
+    ],
+    "pasos": [
+      "Hervir los plátanos con cáscara 15 minutos, pelarlos y pisarlos hasta formar una masa. Dejar enfriar.",
+      "Licuar los porotos y cocinarlos en una sartén con el azúcar, el cacao y la canela hasta que espesen como un dulce.",
+      "Tomar porciones de masa, aplanarlas en la mano, poner una cucharadita de relleno y cerrar en forma de óvalo.",
+      "Freír en abundante aceite hasta dorar y espolvorear con azúcar."
+    ]
+  },
+  {
+    "slug": "sancocho-panameno",
+    "nombre": "Sancocho panameño",
+    "categoria": "Chicken",
+    "origen": "Panamá",
+    "porciones": 6,
+    "minutos": 70,
+    "descripcion": "Sopa de pollo con mandioca, cilantro y orégano: el plato nacional de Panamá.",
+    "etiquetas": ["Sopas", "Olla única"],
+    "ingredientes": [
+      { "nombre": "Pata muslo", "medida": "6", "imagen": "Chicken Legs" },
+      { "nombre": "Mandioca", "medida": "600 g", "imagen": "Cassaba" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Ajo", "medida": "3 dientes", "imagen": "garlic" },
+      { "nombre": "Cilantro", "medida": "un buen puñado", "imagen": "coriander" },
+      { "nombre": "Orégano", "medida": "1 cdta", "imagen": "oregano" },
+      { "nombre": "Choclo", "medida": "2 en trozos", "imagen": "Corn On The Cob" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Salar el pollo, frotarlo con el ajo pisado y el orégano y dejarlo 15 minutos.",
+      "Poner el pollo en una olla con 2,5 litros de agua, la cebolla picada y la mitad del cilantro. Cocinar 30 minutos.",
+      "Agregar la mandioca pelada en trozos y el choclo y cocinar 25 minutos, hasta que la mandioca esté tierna y empiece a espesar el caldo.",
+      "Ajustar la sal, sumar el resto del cilantro picado y servir con arroz blanco."
+    ]
+  },
+  {
+    "slug": "farofa",
+    "nombre": "Farofa",
+    "categoria": "Side",
+    "origen": "Brasil",
+    "porciones": 6,
+    "minutos": 20,
+    "descripcion": "Harina de mandioca tostada con manteca, cebolla y panceta. El acompañamiento de la feijoada y el asado brasileño.",
+    "etiquetas": ["Para acompañar", "Rápida"],
+    "ingredientes": [
+      { "nombre": "Harina de mandioca tostada", "medida": "300 g", "imagen": "Farine" },
+      { "nombre": "Manteca", "medida": "60 g", "imagen": "butter" },
+      { "nombre": "Cebolla", "medida": "1", "imagen": "onion" },
+      { "nombre": "Panceta", "medida": "100 g", "imagen": "Bacon" },
+      { "nombre": "Huevos", "medida": "2 (opcional)", "imagen": "Eggs" },
+      { "nombre": "Perejil", "medida": "a gusto", "imagen": "Parsley" },
+      { "nombre": "Sal", "medida": "a gusto", "imagen": "salt" }
+    ],
+    "pasos": [
+      "Dorar la panceta en cubos en una sartén grande. Sumar la manteca y la cebolla picada y rehogar hasta que esté dorada.",
+      "Si se usan, agregar los huevos y revolver hasta que cuajen.",
+      "Sumar la harina de mandioca de a poco, revolviendo a fuego bajo unos 5 minutos hasta que esté tostada y suelta.",
+      "Salar y terminar con perejil picado."
+    ]
+  },
+  {
+    "slug": "bolo-de-fuba",
+    "nombre": "Bolo de fubá",
+    "categoria": "Dessert",
+    "origen": "Brasil",
+    "porciones": 10,
+    "minutos": 55,
+    "descripcion": "Bizcochuelo de harina de maíz, húmedo y perfumado, para el café de la tarde.",
+    "etiquetas": ["Merienda", "Horno"],
+    "ingredientes": [
+      { "nombre": "Harina de maíz (polenta)", "medida": "1 taza fina", "imagen": "Cornmeal" },
+      { "nombre": "Harina 0000", "medida": "1 taza", "imagen": "plain flour" },
+      { "nombre": "Azúcar", "medida": "1 taza", "imagen": "sugar" },
+      { "nombre": "Huevos", "medida": "3", "imagen": "Eggs" },
+      { "nombre": "Leche", "medida": "1 taza", "imagen": "Milk" },
+      { "nombre": "Aceite vegetal", "medida": "½ taza", "imagen": "Vegetable oil" },
+      { "nombre": "Polvo de hornear", "medida": "1 cda", "imagen": "baking powder" },
+      { "nombre": "Semillas de anís", "medida": "1 cdta (opcional)", "imagen": "Star Anise" },
+      { "nombre": "Queso rallado", "medida": "2 cdas (opcional)" }
+    ],
+    "pasos": [
+      "Precalentar el horno a 180 °C y enmantecar y enharinar un molde con agujero.",
+      "Licuar los huevos, la leche, el aceite y el azúcar.",
+      "En un bol mezclar las dos harinas, agregar lo licuado y mezclar hasta integrar. Sumar el anís y el queso.",
+      "Agregar el polvo de hornear con movimientos suaves y volcar en el molde.",
+      "Hornear 40 minutos, hasta que un palillo salga seco."
+    ]
   }
 ]
