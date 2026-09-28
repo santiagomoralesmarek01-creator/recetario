@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const SITIO = (process.env.SITIO_URL || 'https://amanorecetas.com.ar').replace(/\/$/, '');
+export const SITIO = (process.env.SITIO_URL || 'https://www.amanorecetas.com.ar').replace(/\/$/, '');
 
 // Los mismos datos públicos que js/config.js (la anon key es pública por diseño).
 const SUPABASE_URL = 'https://hvkytxfkiylbyaleihyw.supabase.co';

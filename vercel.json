@@ -9,7 +9,7 @@
           "value": "recetario-virid.vercel.app"
         }
       ],
-      "destination": "https://amanorecetas.com.ar/:ruta*",
+      "destination": "https://www.amanorecetas.com.ar/:ruta*",
       "permanent": true
     }
   ],

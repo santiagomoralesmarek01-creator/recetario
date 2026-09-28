@@ -167,7 +167,7 @@ se enlaza desde el crédito). Una foto cargada desde `#/fotos` las reemplaza.
 - `/sitemap.xml` (`api/sitemap.js`) lista secciones, categorías, países y todas
   las recetas públicas. `robots.txt` deja afuera las páginas privadas.
 - El dominio sale de `SITIO_URL` (variable de entorno en Vercel) o, si no está,
-  `https://amanorecetas.com.ar`.
+  `https://www.amanorecetas.com.ar`.
 
 Para que Google las encuentre: en [Google Search Console](https://search.google.com/search-console)
 agregá la propiedad de dominio `amanorecetas.com.ar` (se verifica con un
