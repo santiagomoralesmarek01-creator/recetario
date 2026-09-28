@@ -197,6 +197,13 @@ alCambiarSesion((u) => {
 
 iniciarRutas();
 
+// Alto real de la cabecera (cambia cuando se acomoda en dos filas): lo usan
+// la portada del inicio y el panel lateral.
+const cabecera = document.querySelector('.cabecera');
+if (cabecera && 'ResizeObserver' in window) {
+  new ResizeObserver(() => document.documentElement.style.setProperty('--alto-cabecera', `${cabecera.offsetHeight}px`)).observe(cabecera);
+}
+
 (async () => {
   dibujarMenu(null);
   iniciarPanel();

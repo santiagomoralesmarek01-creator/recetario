@@ -73,11 +73,16 @@ export async function vistaInicio() {
         el('p', { class: 'eyebrow' }, 'Receta del momento'),
         el('h2', {}, destacada.nombre),
         el('p', { class: 'meta' }, `${destacada.ingredientes.length} ingredientes · ${metaReceta(destacada)}`),
-        el('span', { class: 'portada-destacada-ir' }, 'Ver receta →'))));
+        el('span', { class: 'portada-destacada-ir' }, 'Ver receta →'))),
+    // La portada ocupa la pantalla: las recetas aparecen al bajar.
+    el('button', {
+      type: 'button', class: 'bajar-recetas',
+      onclick: () => document.getElementById('recetas')?.scrollIntoView({ behavior: 'smooth' }),
+    }, 'Ver recetas', icono('flecha')));
 
   mostrar(
     portadaInicio,
-    deCasa.length > 0 && el('section', { class: 'seccion' },
+    deCasa.length > 0 && el('section', { class: 'seccion', id: 'recetas' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Clásicos latinoamericanos'),
         deCasa.length > 8 && el('a', { href: '/casa' }, `Ver las ${deCasa.length} →`)),

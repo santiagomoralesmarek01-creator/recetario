@@ -2109,3 +2109,29 @@ ul.cifras { list-style: none; padding: 0; }
 .verificada[hidden] { display: none; }
 .verificada .icono { width: 0.72em; height: 0.72em; stroke-width: 3; }
 .solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Inicio: la portada llena la primera pantalla y las recetas quedan abajo */
+.portada-inicio {
+  position: relative;
+  min-height: calc(100svh - var(--alto-cabecera) - 20px);
+  padding-bottom: 84px;
+}
+.bajar-recetas {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px;
+  background: none;
+  border: 0;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.bajar-recetas:hover { background: none; color: var(--aji-texto); }
+.bajar-recetas:active:not(:disabled) { transform: translateX(-50%); }
+.bajar-recetas .icono { rotate: 90deg; animation: bajar-recetas 1.8s ease-in-out infinite; }
+@keyframes bajar-recetas { 50% { translate: 0 4px; } }
+@media (prefers-reduced-motion: reduce) { .bajar-recetas .icono { animation: none; } }
