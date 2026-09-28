@@ -1,5 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:ruta*",
+      "has": [
+        {
+          "type": "host",
+          "value": "recetario-virid.vercel.app"
+        }
+      ],
+      "destination": "https://amanorecetas.com.ar/:ruta*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
