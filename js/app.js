@@ -11,6 +11,7 @@ import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
 import { iniciarTema } from './tema.js';
 import { iniciarAyudante, contextoReceta } from './ayudante.js';
+import { iniciarTemporizadores } from './temporizador.js';
 
 iniciarTema();
 const menu = document.getElementById('menu');
@@ -135,6 +136,7 @@ alCambiarSesion((u) => {
   dibujarMenu(null);
   iniciarPanel();
   iniciarAyudante();
+  iniciarTemporizadores();
   try {
     await iniciarAuth();
   } catch (err) {

@@ -1238,3 +1238,125 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
   body.con-ayudante .panel-flotante { bottom: 16px; right: 80px; max-width: calc(100vw - 96px); }
   .ayudante-panel { inset: 0; width: auto; height: 100dvh; border-radius: 0; border: 0; }
 }
+
+/* =====================================================================
+   Temporizadores
+   ===================================================================== */
+
+.paso-tiempos { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 0 84px; padding-bottom: 10px; }
+.boton-tiempo {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--acento-suave);
+  color: var(--acento);
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.boton-tiempo:hover { background: var(--acento); color: #fff; }
+
+.temporizadores {
+  position: fixed;
+  z-index: 45;
+  top: calc(var(--alto-cabecera) + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+.temporizadores[hidden] { display: none; }
+.temporizador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 999px;
+  background: var(--texto);
+  color: var(--fondo);
+  box-shadow: var(--sombra-alta);
+}
+.temporizador-tiempo { font-weight: 700; font-size: 1.1rem; font-variant-numeric: tabular-nums; min-width: 3.2em; }
+.temporizador-etiqueta { font-size: 0.85rem; opacity: 0.8; max-width: 38vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.temporizador-boton {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  font-size: 0.85rem;
+}
+.temporizador-boton:hover { background: rgba(255, 255, 255, 0.28); }
+.temporizador.pausado .temporizador-tiempo { opacity: 0.6; }
+.temporizador.terminado { background: var(--acento); color: #fff; animation: temporizador-latido 1s infinite; }
+@keyframes temporizador-latido { 50% { transform: scale(1.04); } }
+
+.alarma-fondo {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(20, 12, 8, 0.55);
+  backdrop-filter: blur(3px);
+}
+.alarma {
+  width: min(380px, 100%);
+  padding: 26px 24px 22px;
+  border-radius: 24px;
+  background: var(--superficie);
+  box-shadow: var(--sombra-alta);
+  text-align: center;
+}
+.alarma h2 { margin: 4px 0 6px; font-size: 1.9rem; }
+.alarma p { margin: 0 0 6px; }
+.alarma .acciones { justify-content: center; margin-top: 16px; }
+.alarma-icono { font-size: 3.2rem; line-height: 1; animation: alarma-sacudir 0.6s infinite; }
+@keyframes alarma-sacudir { 25% { transform: rotate(-12deg); } 75% { transform: rotate(12deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .alarma-icono, .temporizador.terminado { animation: none; }
+}
+
+.elegir-tiempo h2 { font-size: 1.5rem; }
+.tiempos-rapidos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+.tiempos-rapidos .boton-secundario { padding: 9px 6px; }
+.tiempo-a-mano { display: flex; justify-content: center; gap: 14px; }
+.tiempo-a-mano label { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.tiempo-a-mano input {
+  width: 76px;
+  padding: 8px 10px;
+  border-radius: var(--radio-chico);
+  border: 1px solid var(--borde);
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .paso-tiempos { margin-left: 40px; }
+  .temporizador-etiqueta { max-width: 42vw; }
+}
+.alarma-lista { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.alarma-lista li { display: flex; flex-direction: column; padding: 8px 12px; border-radius: var(--radio-chico); background: var(--fondo); }
+.alarma-lista small { color: var(--texto-suave); }
+
+/* Celular: las acciones de la barra de cocina en una sola fila deslizable */
+@media (max-width: 700px) {
+  .barra-cocina .acciones {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 -16px;
+    padding: 0 16px 2px;
+  }
+  .barra-cocina .acciones::-webkit-scrollbar { display: none; }
+  .barra-cocina .acciones > * { flex: none; }
+  .barra-cocina-progreso { flex: 1 1 100%; }
+}

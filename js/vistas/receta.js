@@ -12,6 +12,7 @@ import { portada } from './componentes.js';
 import { bandera, rutaPais } from '../paises.js';
 import { rutaAutor } from './comunidad.js';
 import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
+import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -88,11 +89,17 @@ export async function vistaReceta(id) {
   });
 
   r.pasos.forEach((paso, i) => {
+    // Si el paso menciona un tiempo ("hornear 20 minutos"), un toque arranca el temporizador.
+    const tiempos = tiemposEnTexto(paso);
     itemsPasos.push(el('li', { class: 'paso' },
       el('label', {},
         casilla('pasos', i, `Paso ${i + 1}`),
         el('span', { class: 'paso-numero' }, i + 1),
-        el('span', {}, paso))));
+        el('span', {}, paso)),
+      tiempos.length > 0 && el('div', { class: 'paso-tiempos' }, tiempos.map((seg) => el('button', {
+        type: 'button', class: 'boton-tiempo', title: `Empezar un temporizador de ${textoDuracion(seg)}`,
+        onclick: () => iniciarTemporizador(seg, `Paso ${i + 1} · ${r.nombre}`),
+      }, `⏱ ${textoDuracion(seg)}`)))));
   });
 
   const botonPantalla = pantallaSoportada() && el('button', {
@@ -138,6 +145,10 @@ export async function vistaReceta(id) {
   const barraCocina = el('div', { class: 'barra-cocina', role: 'region', 'aria-label': 'Progreso de la receta' },
     el('div', { class: 'barra-cocina-progreso' }, textoProgreso, barra),
     el('div', { class: 'acciones' }, botonSeguir, botonPantalla, botonReiniciar,
+      el('button', {
+        type: 'button', class: 'boton-secundario', title: 'Poner un temporizador',
+        onclick: () => elegirTiempo(r.nombre),
+      }, '⏱ Temporizador'),
       ayudanteDisponible() && el('button', {
         type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
         onclick: abrirAyudante,
