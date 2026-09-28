@@ -91,6 +91,13 @@ export function dePais(pais) {
   return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('origen', pais).limit(50));
 }
 
+// Varias recetas por id (las públicas o propias; las demás no vienen).
+export function porIds(uuids) {
+  const validos = uuids.filter((u) => /^[0-9a-f-]{36}$/i.test(u)).slice(0, 100);
+  if (!validos.length) return Promise.resolve([]);
+  return consultar((q) => q.select(COLUMNAS_RESUMEN).in('id', validos));
+}
+
 export async function obtener(uuid) {
   const filas = await consultar((q) => q.select('*').eq('id', uuid).limit(1));
   return filas[0] || null;

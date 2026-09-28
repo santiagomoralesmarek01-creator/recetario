@@ -28,6 +28,17 @@ Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
   receta queda fija en una columna a la derecha con sus ingredientes y pasos,
   aunque sigas navegando. En pantallas angostas es un botón flotante que abre un
   cajón lateral. Todo se sincroniza con la ficha de la receta.
+- **Temporizadores**: los pasos que mencionan un tiempo ("hornear 20 minutos")
+  tienen un botón ⏱ para arrancarlo; también se puede poner uno a mano desde la
+  barra de cocina. Siguen andando al cambiar de página y al terminar avisan con
+  un cartel, sonido y vibración.
+- **Me gusta** ❤️ en cualquier receta; las favoritas aparecen en "Mis recetas".
+- **Juegos** (`#/juegos`): *Plato del día* (desafío diario igual para todos,
+  con racha y resultado para compartir), *Adiviná el país*, *¿Qué le falta?*
+  y *Armá el plato*, con ranking semanal.
+- **Medallas** (`#/medallas`): 21 medallas por subir recetas, dar y recibir
+  me gusta, completar recetas y jugar. Se calculan a partir de la actividad
+  guardada en Supabase.
 - **Imágenes sin huecos**: si una receta no tiene foto se muestra un collage de
   sus ingredientes; si una imagen no carga aparece un ícono de reemplazo.
 
@@ -54,7 +65,9 @@ Cada push posterior vuelve a publicar solo.
 
 1. Creá un proyecto gratis en <https://supabase.com> (o usá uno existente).
 2. **SQL Editor → New query**: pegá todo `supabase/esquema.sql` y ejecutalo.
-   Crea la tabla `recetas`, las reglas de seguridad y el bucket de fotos.
+   Crea las tablas (recetas, me gusta, actividad para juegos y medallas), las
+   reglas de seguridad y el bucket de fotos. Se puede volver a ejecutar entero
+   cada vez que el archivo cambia: no borra nada.
 3. **Settings → API**: copiá *Project URL* y *anon public key* en `js/config.js`.
    La anon key es pública por diseño; la seguridad la dan las reglas RLS.
    Nunca uses la *service_role key* en la web.
@@ -120,6 +133,12 @@ Google puede usar las conversaciones para mejorar sus productos: no hace falta
     ├── ingredientes.js       lista de ingredientes y unidades para el formulario
     ├── cocina.js             progreso del modo cocina, receta actual y pantalla encendida
     ├── panelCocina.js        panel lateral "Cocinando ahora"
+    ├── temporizador.js       temporizadores de cocina y detección de tiempos en los pasos
+    ├── actividad.js          me gusta, actividad y ranking (Supabase)
+    ├── medallas.js           definición y cálculo de medallas
+    ├── ayudante.js           chat del ayudante de cocina
+    ├── recomendaciones.js    recetas candidatas que el ayudante puede recomendar
+    ├── juegos/               Plato del día, Adiviná el país, ¿Qué le falta?, Armá el plato
     ├── imagenes.js           URLs de imágenes y reemplazos
     ├── traducciones.js       diccionario español ↔ inglés
     ├── dom.js                helpers de interfaz

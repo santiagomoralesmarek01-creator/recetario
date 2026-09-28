@@ -6,6 +6,7 @@ import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO, IMG_PLATO_GENERI
 import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
 import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedida, cargarIngredientes } from '../ingredientes.js';
+import { revisarMedallas } from '../medallas.js';
 import { NOMBRES_PAISES } from '../paises.js';
 
 const MAX_LADO = 1600;
@@ -245,6 +246,7 @@ export async function vistaFormulario(uuid = null) {
         if (!uuid) datos.user_id = u.id;
 
         const guardada = await misRecetas.guardar(datos, uuid);
+        revisarMedallas();
         aviso(uuid ? 'Cambios guardados' : '¡Receta guardada!');
         location.hash = `#/receta/${guardada.id}`;
       } catch (err) {

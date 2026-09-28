@@ -3,7 +3,9 @@ import * as repo from '../repositorio.js';
 import * as misRecetas from '../misRecetas.js';
 import { crearImagen, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { traducirCategoria, traducirOrigen } from '../traducciones.js';
-import { usuario } from '../auth.js';
+import { usuario, pedirLogin } from '../auth.js';
+import { hayBackend } from '../supabase.js';
+import { contarMeGusta, misMeGusta, alternarMeGusta, registrarActividad } from '../actividad.js';
 import {
   leerProgreso, guardarProgreso, pantallaSoportada, mantenerPantalla, pantallaActiva,
   recetaActual, fijarActual, soltarActual, alCambiarCocina,
@@ -63,6 +65,17 @@ export async function vistaReceta(id) {
     pintar();
     guardarProgreso(r.id, progreso, ORIGEN);
     if (recetaActual()?.id !== r.id && (progreso.ingredientes.size || progreso.pasos.size)) fijarActual(r);
+    avisarSiTermino();
+  }
+
+  // Con todos los pasos tildados la receta cuenta como cocinada (para las medallas).
+  let terminadaAvisada = false;
+  function avisarSiTermino() {
+    if (terminadaAvisada || !r.pasos.length || progreso.pasos.size < r.pasos.length) return;
+    terminadaAvisada = true;
+    registrarActividad('receta-cocinada', { detalle: r.id })
+      .then((nueva) => { if (nueva) aviso('¡Receta completada! 🎉 Suma para tus medallas.'); })
+      .catch((err) => console.warn(err));
   }
 
   function casilla(conjunto, indice, texto) {
@@ -182,6 +195,8 @@ export async function vistaReceta(id) {
       },
     }, 'Borrar'));
 
+  const botonMeGusta = hayBackend && botonDeMeGusta(r.id);
+
   const volver = r.categoria
     ? el('a', { class: 'volver', href: `#/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
     : el('a', { class: 'volver', href: '#/' }, '← Inicio');
@@ -197,7 +212,7 @@ export async function vistaReceta(id) {
     volver,
     el('article', { class: 'receta' },
       el('header', { class: 'receta-titulo' },
-        el('h1', {}, r.nombre),
+        el('div', { class: 'receta-titulo-fila' }, el('h1', {}, r.nombre), botonMeGusta),
         r.origen && el('a', { class: 'enlace-pais', href: rutaPais(traducirOrigen(r.origen)) },
           bandera(traducirOrigen(r.origen)), traducirOrigen(r.origen)),
         el('p', { class: 'meta' }, [
@@ -234,4 +249,44 @@ export async function vistaReceta(id) {
       barraCocina)
   );
   pintar();
+}
+
+// Corazón con la cantidad de me gusta. Sin sesión, invita a entrar.
+function botonDeMeGusta(recetaId) {
+  let mio = false;
+  let cantidad = 0;
+  const icono = el('span', { class: 'me-gusta-icono', 'aria-hidden': 'true' }, '🤍');
+  const numero = el('span', { class: 'me-gusta-numero' }, '');
+  const boton = el('button', {
+    type: 'button', class: 'boton-me-gusta', 'aria-pressed': 'false', 'aria-label': 'Me gusta',
+    onclick: async () => {
+      if (!usuario()) { pedirLogin(); return; }
+      // Se muestra al instante y se corrige si falla.
+      mio = !mio;
+      cantidad += mio ? 1 : -1;
+      pintar(true);
+      try {
+        const quedo = await alternarMeGusta(recetaId);
+        if (quedo !== mio) { cantidad += quedo ? 1 : -1; mio = quedo; pintar(); }
+      } catch (err) {
+        mio = !mio;
+        cantidad += mio ? 1 : -1;
+        pintar();
+        aviso(`No se pudo guardar el me gusta: ${err.message}`, 'error');
+      }
+    },
+  }, icono, numero);
+  function pintar(animar = false) {
+    icono.textContent = mio ? '❤️' : '🤍';
+    numero.textContent = cantidad > 0 ? String(cantidad) : '';
+    boton.classList.toggle('activo', mio);
+    boton.setAttribute('aria-pressed', String(mio));
+    boton.title = mio ? 'Quitar me gusta' : 'Me gusta';
+    if (animar && mio) { boton.classList.remove('latido'); void boton.offsetWidth; boton.classList.add('latido'); }
+  }
+  Promise.all([contarMeGusta([recetaId]), misMeGusta()])
+    .then(([conteo, mios]) => { cantidad = conteo.get(recetaId) || 0; mio = mios.has(recetaId); pintar(); })
+    .catch((err) => console.warn('Me gusta:', err.message));
+  pintar();
+  return boton;
 }

@@ -3,6 +3,8 @@ import { entrar, registrarse, recuperarClave, usuario, nombreVisible, pedirLogin
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
 import { grillaRecetas } from './componentes.js';
+import * as repo from '../repositorio.js';
+import { misMeGusta } from '../actividad.js';
 
 export function sinBackend() {
   mostrar(el('div', { class: 'estado' },
@@ -116,17 +118,27 @@ export async function vistaMisRecetas() {
   if (!u) { pedirLogin(); return; }
   const vigente = vigencia();
   cargando();
-  const recetas = await misRecetas.listarMias(u.id);
+  const [recetas, favoritas] = await Promise.all([
+    misRecetas.listarMias(u.id),
+    misMeGusta().then((ids) => repo.resumenes([...ids])).catch(() => []),
+  ]);
   if (!vigente()) return;
   mostrar(
     el('div', { class: 'seccion-titulo' },
       el('h1', {}, `Mis recetas`),
-      el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva receta')),
+      el('div', { class: 'acciones' },
+        el('a', { class: 'boton-secundario boton', href: '#/medallas' }, '🏅 Mis medallas'),
+        el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva receta'))),
     el('p', { class: 'meta' }, `Hola, ${nombreVisible(u)}. Tenés ${recetas.length} receta${recetas.length === 1 ? '' : 's'} guardada${recetas.length === 1 ? '' : 's'}.`),
     recetas.length
       ? grillaRecetas(recetas)
       : el('div', { class: 'estado' },
         el('p', {}, 'Todavía no cargaste ninguna receta.'),
-        el('a', { class: 'boton', href: '#/nueva' }, 'Crear la primera'))
+        el('a', { class: 'boton', href: '#/nueva' }, 'Crear la primera')),
+    el('section', { class: 'seccion' },
+      el('h2', {}, '❤️ Tus favoritas'),
+      favoritas.length
+        ? grillaRecetas(favoritas)
+        : el('p', { class: 'meta' }, 'Tocá el corazón en las recetas que te gusten y las vas a encontrar acá.'))
   );
 }

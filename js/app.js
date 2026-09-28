@@ -12,6 +12,9 @@ import { iniciarPanel } from './panelCocina.js';
 import { iniciarTema } from './tema.js';
 import { iniciarAyudante, contextoReceta } from './ayudante.js';
 import { iniciarTemporizadores } from './temporizador.js';
+import { vistaJuegos, vistaJuego } from './vistas/juegos.js';
+import { vistaMedallas } from './vistas/medallas.js';
+import { iniciarMedallas } from './medallas.js';
 
 iniciarTema();
 const menu = document.getElementById('menu');
@@ -34,23 +37,53 @@ function dibujarMenu(u) {
   if (!hayBackend) { menu.replaceChildren(); return; }
   menu.replaceChildren(...(u
     ? [
-      el('a', { class: 'boton boton-secundario', href: '#/mis-recetas' }, 'Mis recetas'),
       el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva'),
-      el('button', {
-        type: 'button',
-        class: 'boton-texto',
-        title: `Sesión de ${nombreVisible(u)}`,
-        onclick: async () => {
-          await salir();
-          aviso('Sesión cerrada');
-          location.hash = '#/';
-        },
-      }, 'Salir'),
+      menuUsuario(u),
     ]
     : [
       el('a', { class: 'boton boton-secundario', href: '#/nueva' }, 'Crear receta'),
       el('a', { class: 'boton', href: '#/entrar' }, 'Entrar'),
     ]));
+}
+
+// Botón con la inicial que despliega las opciones de la cuenta.
+function menuUsuario(u) {
+  const nombre = nombreVisible(u);
+  const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
+    el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
+    el('a', { href: '#/mis-recetas', role: 'menuitem' }, '📖 Mis recetas y favoritas'),
+    el('a', { href: '#/medallas', role: 'menuitem' }, '🏅 Mis medallas'),
+    el('a', { href: '#/juegos', role: 'menuitem' }, '🎮 Juegos'),
+    el('button', {
+      type: 'button', role: 'menuitem',
+      onclick: async () => {
+        cerrar();
+        await salir();
+        aviso('Sesión cerrada');
+        location.hash = '#/';
+      },
+    }, '↩ Salir'));
+  const boton = el('button', {
+    type: 'button', class: 'usuario-boton', 'aria-haspopup': 'menu', 'aria-expanded': 'false',
+    'aria-label': `Cuenta de ${nombre}`, title: nombre,
+    onclick: () => (opciones.hidden ? abrir() : cerrar()),
+  }, el('span', { class: 'usuario-inicial' }, (nombre[0] || '?').toUpperCase()), el('span', { 'aria-hidden': 'true' }, '▾'));
+  const contenedor = el('div', { class: 'usuario-menu' }, boton, opciones);
+
+  function abrir() {
+    opciones.hidden = false;
+    boton.setAttribute('aria-expanded', 'true');
+    setTimeout(() => document.addEventListener('click', fuera));
+  }
+  function cerrar() {
+    opciones.hidden = true;
+    boton.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', fuera);
+  }
+  function fuera(e) { if (!contenedor.contains(e.target) || e.target.closest('a')) cerrar(); }
+  contenedor.addEventListener('keydown', (e) => { if (e.key === 'Escape') { cerrar(); boton.focus(); } });
+  window.addEventListener('hashchange', cerrar);
+  return contenedor;
 }
 
 // ---------- ruteo por hash ----------
@@ -83,6 +116,8 @@ async function router() {
       case 'buscar': return param ? await vistaBusqueda(param) : await vistaInicio();
       case 'paises': return await vistaPaises();
       case 'que-tengo': return await vistaDespensa();
+      case 'juegos': return param ? await vistaJuego(param) : vistaJuegos();
+      case 'medallas': return await vistaMedallas();
       case 'comunidad': return await vistaComunidad(param);
       case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();
@@ -137,6 +172,7 @@ alCambiarSesion((u) => {
   iniciarPanel();
   iniciarAyudante();
   iniciarTemporizadores();
+  iniciarMedallas();
   try {
     await iniciarAuth();
   } catch (err) {

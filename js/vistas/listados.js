@@ -47,6 +47,7 @@ export async function vistaInicio() {
       }, buscar, el('button', { type: 'submit' }, 'Buscar')),
       el('div', { class: 'accesos' },
         el('a', { class: 'acceso', href: '#/que-tengo' }, '🧺 Con lo que tengo'),
+        el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, '🍳 Plato del día'),
         el('a', { class: 'acceso', href: '#/pais/Argentina' }, '🧉 Argentinas'),
         el('a', { class: 'acceso', href: '#/categoria/Dessert' }, '🍰 Postres'),
         el('a', { class: 'acceso', href: '#/categoria/Pasta' }, '🍝 Pastas'),

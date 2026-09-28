@@ -79,6 +79,15 @@ export async function dePais(pais) {
 }
 
 export const recetasDeLaCasa = () => casa.todas();
+
+// Resúmenes de varias recetas por id, en el mismo orden (las que no existen se omiten).
+export async function resumenes(ids) {
+  const [delCatalogo, deCasa] = await Promise.all([seguro(catalogo.todas()), casa.todas()]);
+  const uuids = ids.filter((id) => id.startsWith('u-')).map((id) => id.slice(2));
+  const deUsuarios = uuids.length && hayBackend ? await seguro(comunidad.porIds(uuids)) : [];
+  const porId = new Map([...delCatalogo, ...deCasa, ...deUsuarios].map((r) => [r.id, r]));
+  return ids.map((id) => porId.get(id)).filter(Boolean);
+}
 export const recetasDeLaComunidad = () => (hayBackend ? seguro(comunidad.listarPublicas()) : Promise.resolve([]));
 export const explorarComunidad = (opciones) => comunidad.explorarComunidad(opciones);
 
