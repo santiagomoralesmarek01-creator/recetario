@@ -62,6 +62,9 @@ Sin configurar Supabase ya funciona todo menos las cuentas y las recetas propias
 
 Cada push posterior vuelve a publicar solo.
 
+Dominio: **amanorecetas.com.ar** (NIC Argentina), delegado a los servidores DNS
+de Vercel (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`).
+
 
 ## Activar cuentas y recetas propias (Supabase)
 
