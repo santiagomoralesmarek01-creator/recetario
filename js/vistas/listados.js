@@ -148,8 +148,8 @@ export async function vistaFaciles() {
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, '⚡ Fáciles y con ingredientes de todos los días'),
-    el('p', { class: 'meta' }, `${faciles.length} recetas con pocos pasos, sin técnicas complicadas y con ingredientes que se consiguen en cualquier supermercado de Latinoamérica.`),
-    grillaRecetas(faciles, { tanda: 24 })
+    el('p', { class: 'meta' }, 'Recetas con pocos pasos, sin técnicas complicadas y con ingredientes que se consiguen en cualquier supermercado de Latinoamérica.'),
+    listadoFiltrable([{ recetas: faciles, tanda: 24 }], { dificultad: false })
   );
 }
 

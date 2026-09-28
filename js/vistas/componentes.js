@@ -2,6 +2,7 @@ import { el } from '../dom.js';
 import { crearImagen, urlPlato, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 import { NIVELES } from '../dificultad.js';
+import { MOMENTOS, SABORES, momentoDe, saborDe } from '../tipoPlato.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -57,15 +58,32 @@ export function tarjetaReceta(r) {
 
 const CLAVE_FILTRO = 'recetario:filtro';
 
+const FILTRO_VACIO = { nivel: 0, conseguibles: false, momento: '', sabor: '' };
+
 function leerFiltro() {
-  try { return { nivel: 0, conseguibles: false, ...JSON.parse(sessionStorage.getItem(CLAVE_FILTRO) || '{}') }; } catch { return { nivel: 0, conseguibles: false }; }
+  try { return { ...FILTRO_VACIO, ...JSON.parse(sessionStorage.getItem(CLAVE_FILTRO) || '{}') }; } catch { return { ...FILTRO_VACIO }; }
+}
+
+// Momento y sabor se calculan una sola vez por receta.
+const tipos = new WeakMap();
+function tipoDe(r) {
+  if (!tipos.has(r)) tipos.set(r, { momento: momentoDe(r), sabor: saborDe(r) });
+  return tipos.get(r);
+}
+
+function selector(etiqueta, opciones, valor, alCambiar) {
+  const select = el('select', { onchange: () => alCambiar(select.value) },
+    el('option', { value: '' }, `Todos`),
+    Object.entries(opciones).map(([clave, o]) => el('option', { value: clave, selected: clave === valor }, `${o.icono} ${o.nombre}`)));
+  return el('label', { class: 'filtro-selector' }, el('span', {}, etiqueta), select);
 }
 
 // Grupos de recetas ([{ titulo, recetas, tanda }]) con una barra para filtrar
-// por dificultad y por ingredientes fáciles de conseguir. El filtro elegido
-// se recuerda mientras dure la visita.
-export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.' } = {}) {
+// por momento del día, sabor, dificultad y ingredientes fáciles de conseguir.
+// El filtro elegido se recuerda mientras dure la visita.
+export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.', dificultad = true } = {}) {
   const estado = leerFiltro();
+  if (!dificultad) estado.nivel = 0;
   const contador = el('p', { class: 'meta filtro-contador', 'aria-live': 'polite' });
   const cuerpo = el('div', { class: 'filtro-resultados' });
   const opciones = [[0, 'Todas'], ...Object.entries(NIVELES).map(([n, d]) => [Number(n), d.nombre])];
@@ -78,7 +96,10 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
     onchange: () => { estado.conseguibles = conseguibles.checked; actualizar(); },
   });
 
-  const pasa = (r) => (!estado.nivel || r.dificultad === estado.nivel) && (!estado.conseguibles || !r.dificiles);
+  const pasa = (r) => (!estado.nivel || r.dificultad === estado.nivel)
+    && (!estado.conseguibles || !r.dificiles)
+    && (!estado.momento || tipoDe(r).momento === estado.momento)
+    && (!estado.sabor || tipoDe(r).sabor === estado.sabor);
 
   function actualizar() {
     try { sessionStorage.setItem(CLAVE_FILTRO, JSON.stringify(estado)); } catch { /* sin almacenamiento */ }
@@ -89,7 +110,7 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
     });
     const filtrados = grupos.map((g) => ({ ...g, recetas: g.recetas.filter(pasa) }));
     const total = filtrados.reduce((s, g) => s + g.recetas.length, 0);
-    const hayFiltro = estado.nivel || estado.conseguibles;
+    const hayFiltro = estado.nivel || estado.conseguibles || estado.momento || estado.sabor;
     contador.textContent = `${total} receta${total === 1 ? '' : 's'}${hayFiltro ? ' con este filtro' : ''}`;
     cuerpo.replaceChildren(
       ...filtrados.filter((g) => g.recetas.length).map((g) => (g.titulo
@@ -101,9 +122,11 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
   actualizar();
   return el('div', { class: 'listado-filtrable' },
     el('div', { class: 'filtro-dificultad' },
-      el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
+      selector('Momento', MOMENTOS, estado.momento, (v) => { estado.momento = v; actualizar(); }),
+      selector('Sabor', SABORES, estado.sabor, (v) => { estado.sabor = v; actualizar(); }),
+      dificultad && el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
       el('label', { class: 'filtro-conseguir' }, conseguibles, ' 🛒 Sólo ingredientes fáciles de conseguir'),
-      leyendaDificultad()),
+      dificultad && leyendaDificultad()),
     contador, cuerpo);
 }
 

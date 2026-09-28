@@ -1905,3 +1905,18 @@ ul.cifras { list-style: none; padding: 0; }
   .armar-alacena.armar-8, .armar-alacena.armar-14 { grid-template-columns: repeat(3, 1fr); }
 }
 .juego-marcador[hidden] { display: none; }
+.filtro-selector { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 600; }
+.filtro-selector select {
+  padding: 6px 30px 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 500;
+}
+@media (max-width: 700px) {
+  .filtro-selector { flex: 1 1 40%; flex-direction: column; align-items: stretch; gap: 4px; min-width: 0; }
+  .filtro-selector span { font-size: 0.78rem; color: var(--texto-suave); }
+  .filtro-selector select { width: 100%; min-width: 0; }
+}
