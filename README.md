@@ -79,10 +79,14 @@ Cada push posterior vuelve a publicar solo.
 5. Opcional: en **Authentication → Providers → Email** podés desactivar
    *Confirm email* si no querés que se confirme el correo al registrarse.
 
-## Ayudante de cocina (chat con IA gratuita)
+## Manitas, el asistente de cocina (IA gratuita)
 
-El botón 🍳 abre un chat que responde dudas de cocina y, en una receta, conoce
-sus ingredientes y pasos. Usa el plan gratuito de Google Gemini a través de la
+El botón **Manitas** abre un chat que responde dudas de cocina y, en una receta,
+conoce sus ingredientes y pasos. Dentro de cada receta hay botones rápidos
+("No tengo…", "Somos 2", "Sin horno", "Algo más liviano") y los reemplazos
+llegan como tarjetas. Conoce el país de quien pregunta (por el idioma del
+navegador) y usa sus nombres de ingredientes. La guía de voz y las
+instrucciones fijas están en `api/_manitas.js`. Usa el plan gratuito de Google Gemini a través de la
 función `api/ayudante.js` (Vercel), así la clave nunca llega al navegador.
 Sólo lo pueden usar personas con sesión iniciada, con un máximo de 40 mensajes
 por día cada una.
@@ -102,6 +106,12 @@ saturado). Cada pedido tiene un máximo de 25 segundos.
 
 Para comprobar la configuración abrí `/api/ayudante` en el navegador: tiene que
 decir `"listo":true`.
+
+Para probar el tono con 20 preguntas reales: cargá `GROQ_API_KEY` también como
+secreto del repositorio (GitHub → Settings → Secrets and variables → Actions) y
+corré **Actions → Probar Manitas**. Las respuestas quedan en el resumen de la
+ejecución, marcando las que se salen de la guía (largo, muletillas, trato).
+También se puede correr local: `GROQ_API_KEY=... node scripts/probar-manitas.mjs neutro México`.
 
 Opcional: `GEMINI_MODELO` / `GROQ_MODELO` fuerzan un modelo en particular.
 El plan gratuito tiene un tope diario por proyecto; si se alcanza, el chat avisa

@@ -1146,8 +1146,8 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--aji-suave);
-  font-size: 1.25rem;
+  background: var(--maiz);
+  color: #1F4D3A;
   flex: none;
 }
 
@@ -2055,3 +2055,16 @@ ul.cifras { list-style: none; padding: 0; }
 .medallas-cifras li { display: flex; flex-direction: column; }
 .medallas-cifras strong { display: inline-flex; align-items: center; gap: 6px; }
 .medallas-cifras .icono { color: var(--hierba); }
+
+/* Manitas: avatar (isotipo sobre Maíz), bloque dentro de la receta y tarjetas de reemplazo */
+.ayudante-avatar .icono { width: 22px; height: 22px; }
+.manitas-receta { display: flex; gap: 12px; align-items: flex-start; margin-top: 14px; padding: 14px 16px; border-radius: var(--radio-chico); border: 1px solid var(--borde); background: var(--superficie); }
+.manitas-receta > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.manitas-receta .meta { font-size: 0.88rem; }
+.manitas-rapidos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.manitas-rapidos .boton-chico { padding: 5px 12px; border-radius: 999px; }
+.manitas-reemplazo { display: flex; gap: 10px; align-items: flex-start; margin: 6px 0; padding: 9px 12px; border-radius: 12px; background: var(--hierba-suave); color: var(--hierba); }
+.manitas-reemplazo > .icono { margin-top: 2px; }
+.manitas-reemplazo > span { display: flex; flex-direction: column; gap: 2px; }
+.manitas-reemplazo s { opacity: 0.75; }
+.manitas-reemplazo small { color: var(--texto); font-size: 0.85rem; }

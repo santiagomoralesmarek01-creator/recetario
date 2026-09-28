@@ -114,6 +114,32 @@ const TEXTOS = {
   'juego.entrar-texto': ' para sumar puntos al ranking semanal y ganar medallas.',
   'juego.copiado': { neutro: 'Resultado copiado: listo para pegar.', vos: 'Resultado copiado: pegalo donde quieras.', tu: 'Resultado copiado: pégalo donde quieras.' },
 
+  // Manitas
+  'manitas.nombre': 'Manitas',
+  'manitas.subtitulo': 'Asistente con IA · puede equivocarse',
+  'manitas.adaptar': { neutro: '¿Falta algo? Adaptar esta receta', vos: '¿No tenés algo? Adaptá esta receta', tu: '¿No tienes algo? Adapta esta receta' },
+  'manitas.adaptar-ayuda': 'Manitas propone cambios con lo que hay.',
+  'manitas.no-tengo': 'No tengo…',
+  'manitas.somos-2': 'Somos 2',
+  'manitas.sin-horno': 'Sin horno',
+  'manitas.liviano': 'Algo más liviano',
+  'manitas.hola': {
+    neutro: 'Reemplazos, medidas, técnicas o qué cocinar con lo que hay.',
+    vos: '¿En qué te doy una mano? Reemplazos, medidas, técnicas o qué cocinar con lo que tenés.',
+    tu: '¿En qué te echo una mano? Reemplazos, medidas, técnicas o qué cocinar con lo que tienes.',
+  },
+  'manitas.hola-receta': { neutro: '¿Qué cambiamos de “{nombre}”?', vos: '¿Qué querés cambiar de “{nombre}”?', tu: '¿Qué quieres cambiar de “{nombre}”?' },
+  'manitas.invitado': {
+    neutro: 'Manitas ayuda con reemplazos, medidas y técnicas mientras se cocina. Hace falta una cuenta (es gratis).',
+    vos: 'Te ayudo con reemplazos, medidas y técnicas mientras cocinás. Para usarme necesitás una cuenta (es gratis).',
+    tu: 'Te ayudo con reemplazos, medidas y técnicas mientras cocinas. Para usarme necesitas una cuenta (es gratis).',
+  },
+  'manitas.entrar': 'Entrar o crear cuenta',
+  'manitas.pregunta': { neutro: 'Escribir una pregunta de cocina…', vos: 'Preguntá lo que quieras de cocina…', tu: 'Pregunta lo que quieras de cocina…' },
+  'manitas.nota': 'Responde una IA gratuita (Groq o Google Gemini). Mejor no compartir datos personales.',
+  'manitas.sobre': 'Receta: ',
+  'manitas.nueva': 'Nueva charla',
+
   // Medallas y cuenta
   'medalla.nueva': 'Nueva medalla: {nombre}',
   'medalla.nuevas': '{n} medallas nuevas',

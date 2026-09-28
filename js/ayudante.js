@@ -1,5 +1,6 @@
-// Ayudante de cocina: botón flotante que abre una charla con la IA
-// (api/ayudante.js). Hace falta tener la sesión iniciada.
+// Manitas, el asistente de cocina: botón flotante que abre una charla con la IA
+// (api/ayudante.js) y botones rápidos dentro de cada receta. Hace falta tener
+// la sesión iniciada.
 import { el } from './dom.js';
 import { hayBackend } from './supabase.js';
 import { usuario, alCambiarSesion, tokenAcceso, pedirLogin } from './auth.js';
@@ -7,20 +8,24 @@ import { traducirCategoria, traducirOrigen } from './traducciones.js';
 import { crearImagen, IMG_PLATO_GENERICO } from './imagenes.js';
 import { buscarCandidatas, recetasCitadas } from './recomendaciones.js';
 import { icono } from './iconos.js';
+import { t, trato } from './textos.js';
+import { paisDelUsuario } from './paises.js';
 
 const CLAVE = 'recetario:ayudante';
 const MAX_HISTORIAL = 20;
 
 const SUGERENCIAS = [
-  '¿Con qué reemplazo la manteca en una torta?',
+  '¿Con qué se reemplaza la manteca en una torta?',
   '¿Cuántos gramos es una taza de harina?',
-  'Tengo pollo, papas y cebolla: ¿qué preparo?',
-  '¿Cómo hago para que no se me pegue el arroz?',
+  'Hay pollo, papas y cebolla: ¿qué se puede hacer?',
+  '¿Cómo hacer que no se pegue el arroz?',
 ];
-const SUGERENCIAS_RECETA = [
-  '¿Cómo la adapto para 2 personas?',
-  '¿Qué ingrediente puedo reemplazar si no lo tengo?',
-  '¿Con qué la acompaño?',
+// Botones rápidos dentro de una receta. "No tengo…" deja el texto para completar.
+export const RAPIDOS = [
+  { clave: 'manitas.no-tengo', completar: 'No tengo ' },
+  { clave: 'manitas.somos-2' },
+  { clave: 'manitas.sin-horno' },
+  { clave: 'manitas.liviano' },
 ];
 
 let mensajes = leer();
@@ -29,8 +34,12 @@ let esperando = false;
 let dibujar = () => {};
 let abrirPanel = null;
 
+let usarRapido = null;
+
 export const ayudanteDisponible = () => Boolean(abrirPanel);
 export function abrirAyudante() { abrirPanel?.(true); }
+// Abre Manitas con un botón rápido: lo envía o deja el texto para completar.
+export function preguntarRapido(rapido) { usarRapido?.(rapido); }
 
 function leer() {
   try {
@@ -94,20 +103,36 @@ function tarjetasRecetas(recetas) {
   el('span', { class: 'ayudante-receta-ir', 'aria-hidden': 'true' }, icono('flecha')))));
 }
 
+// [[reemplazo: crema de leche → yogur natural | nota]] → tarjeta de reemplazo.
+const REEMPLAZO = /\[\[\s*reemplazo:\s*([^\]]+?)\s*(?:→|->)\s*([^\]|]+?)\s*(?:\|\s*([^\]]*?)\s*)?\]\]/gi;
+
+function tarjetaReemplazo(original, nuevo, nota) {
+  return el('div', { class: 'manitas-reemplazo' },
+    icono('reemplazo'),
+    el('span', {},
+      el('span', { class: 'manitas-reemplazo-cambio' }, el('s', {}, original), ' → ', el('strong', {}, nuevo)),
+      nota && el('small', {}, nota)));
+}
+
 function formatear(texto, recetas = []) {
   const bloques = [];
   let lista = null;
-  for (const linea of texto.split('\n')) {
-    const t = linea.trim();
-    const item = t.match(/^(?:[-*•]|(\d+)[.)])\s+(.*)$/);
+  for (const lineaOriginal of texto.split('\n')) {
+    // Las tarjetas de reemplazo salen de la línea y van como bloque aparte.
+    const tarjetas = [];
+    const linea = lineaOriginal.replace(REEMPLAZO, (_, a, b, nota) => { tarjetas.push(tarjetaReemplazo(a.trim(), b.trim(), nota?.trim())); return ''; });
+    const limpia = linea.trim();
+    if (tarjetas.length && !limpia.replace(/^[-*•]\s*/, '')) { lista = null; bloques.push(...tarjetas); continue; }
+    const item = limpia.match(/^(?:[-*•]|(\d+)[.)])\s+(.*)$/);
     if (item) {
       const tipo = item[1] ? 'ol' : 'ul';
       if (!lista || lista.tagName.toLowerCase() !== tipo) bloques.push(lista = el(tipo));
       lista.append(el('li', {}, enLinea(item[2], recetas)));
     } else {
       lista = null;
-      if (t) bloques.push(el('p', {}, enLinea(t.replace(/^#+\s*/, ''), recetas)));
+      if (limpia) bloques.push(el('p', {}, enLinea(limpia.replace(/^#+\s*/, ''), recetas)));
     }
+    bloques.push(...tarjetas);
   }
   if (recetas.length) bloques.push(tarjetasRecetas(recetas));
   return bloques;
@@ -123,15 +148,22 @@ async function preguntar(historial, recetaVista, candidatas) {
       mensajes: historial.slice(-MAX_HISTORIAL),
       receta: recetaVista ? textoReceta(recetaVista) : undefined,
       candidatas: candidatas.map(({ id, nombre, detalle }) => ({ id, nombre, detalle })),
+      pais: paisDelUsuario() || undefined,
+      trato: trato(),
     }),
   });
   const datos = await r.json().catch(() => ({}));
   if (!r.ok || !datos.texto) {
-    const error = new Error(datos.error || `El ayudante no pudo responder (error ${r.status}). Probá de nuevo.`);
+    const error = new Error(datos.error || `Manitas no pudo responder (error ${r.status}). Probá de nuevo.`);
     error.detalle = datos.detalle;
     throw error;
   }
   return datos;
+}
+
+// Avatar de Manitas: el isotipo sobre un círculo Maíz (sin cara ni mascota).
+export function avatarManitas() {
+  return el('span', { class: 'ayudante-avatar', 'aria-hidden': 'true' }, icono('manitas'));
 }
 
 export function iniciarAyudante() {
@@ -139,7 +171,7 @@ export function iniciarAyudante() {
 
   const lista = el('div', { class: 'ayudante-mensajes', 'aria-live': 'polite' });
   const entrada = el('textarea', {
-    rows: 1, maxlength: 1500, placeholder: 'Preguntá lo que quieras de cocina…', 'aria-label': 'Tu pregunta',
+    rows: 1, maxlength: 1500, placeholder: t('manitas.pregunta'), 'aria-label': 'Pregunta para Manitas',
   });
   const enviarBtn = el('button', { type: 'submit', class: 'ayudante-enviar', 'aria-label': 'Enviar' }, icono('enviar'));
   const formulario = el('form', { class: 'ayudante-form' }, entrada, enviarBtn);
@@ -147,27 +179,33 @@ export function iniciarAyudante() {
   const nueva = el('button', {
     type: 'button', class: 'boton-icono', title: 'Empezar una charla nueva',
     onclick: () => { mensajes = []; guardar(); dibujar(); entrada.focus(); },
-  }, 'Nueva');
+  }, t('manitas.nueva'));
 
-  const panel = el('section', { class: 'ayudante-panel', role: 'dialog', 'aria-label': 'Ayudante de cocina', hidden: true },
+  const panel = el('section', { class: 'ayudante-panel', role: 'dialog', 'aria-label': 'Manitas, asistente de cocina', hidden: true },
     el('header', { class: 'ayudante-cabecera' },
-      el('span', { class: 'ayudante-avatar', 'aria-hidden': 'true' }, '🍳'),
+      avatarManitas(),
       el('div', {},
-        el('strong', {}, 'Ayudante de cocina'),
-        el('small', {}, 'Con IA · puede equivocarse')),
+        el('strong', {}, t('manitas.nombre')),
+        el('small', {}, t('manitas.subtitulo'))),
       nueva,
       el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Cerrar', onclick: () => abrir(false) }, icono('cerrar'))),
     lista, contexto, formulario);
 
   const boton = el('button', {
-    type: 'button', class: 'ayudante-boton', 'aria-label': 'Abrir el ayudante de cocina', title: 'Ayudante de cocina',
+    type: 'button', class: 'ayudante-boton', 'aria-label': 'Abrir Manitas, el asistente de cocina', title: 'Manitas, asistente de cocina',
     onclick: () => abrir(panel.hidden),
-  }, icono('manitas'), el('span', { class: 'ayudante-boton-texto' }, 'Ayudante'));
+  }, icono('manitas'), el('span', { class: 'ayudante-boton-texto' }, t('manitas.nombre')));
 
   document.body.append(boton, panel);
   document.body.classList.add('con-ayudante');
   abrirPanel = abrir;
   alElegirReceta = () => { if (pantallaChica()) abrir(false); };
+  usarRapido = (rapido) => {
+    abrir(true);
+    if (!usuario()) return;
+    if (rapido.completar) { entrada.value = rapido.completar; ajustarAlto(); entrada.focus(); entrada.setSelectionRange(entrada.value.length, entrada.value.length); return; }
+    enviar(t(rapido.clave));
+  };
 
   function abrir(si) {
     panel.hidden = !si;
@@ -186,7 +224,12 @@ export function iniciarAyudante() {
 
   function chips(textos) {
     return el('div', { class: 'ayudante-sugerencias' },
-      textos.map((t) => el('button', { type: 'button', onclick: () => enviar(t) }, t)));
+      textos.map((texto) => el('button', { type: 'button', onclick: () => enviar(texto) }, texto)));
+  }
+
+  function chipsRapidos() {
+    return el('div', { class: 'ayudante-sugerencias' },
+      RAPIDOS.map((rapido) => el('button', { type: 'button', onclick: () => usarRapido(rapido) }, t(rapido.clave))));
   }
 
   dibujar = function () {
@@ -195,23 +238,20 @@ export function iniciarAyudante() {
     formulario.hidden = !logueado;
     nueva.hidden = !logueado || !mensajes.length;
     contexto.hidden = !logueado || !receta;
-    if (receta) contexto.replaceChildren(icono('libro'), ' Te ayudo con ', el('strong', {}, receta.nombre));
+    if (receta) contexto.replaceChildren(icono('libro'), ` ${t('manitas.sobre')}`, el('strong', {}, receta.nombre));
 
     if (!logueado) {
       lista.replaceChildren(el('div', { class: 'ayudante-bienvenida' },
-        el('p', {}, '¡Hola! Soy tu ayudante de cocina. Te ayudo con reemplazos, medidas, técnicas y dudas mientras cocinás.'),
-        el('p', {}, 'Para charlar conmigo necesitás una cuenta (es gratis).'),
-        el('button', { type: 'button', class: 'boton', onclick: () => { abrir(false); pedirLogin(); } }, 'Entrar o crear cuenta')));
+        el('p', {}, t('manitas.invitado')),
+        el('button', { type: 'button', class: 'boton', onclick: () => { abrir(false); pedirLogin(); } }, t('manitas.entrar'))));
       return;
     }
     const hijos = mensajes.length
       ? mensajes.map(burbuja)
       : [el('div', { class: 'ayudante-bienvenida' },
-        el('p', {}, receta
-          ? `¡Hola! ¿Qué duda tenés sobre "${receta.nombre}"?`
-          : '¡Hola! ¿En qué te ayudo? Preguntame por reemplazos, medidas, técnicas o qué cocinar con lo que tenés.'),
-        chips(receta ? SUGERENCIAS_RECETA : SUGERENCIAS),
-        el('p', { class: 'ayudante-nota' }, 'Responde una IA gratuita (Google Gemini o Groq). No compartas datos personales.'))];
+        el('p', {}, receta ? t('manitas.hola-receta', { nombre: receta.nombre }) : t('manitas.hola')),
+        receta ? chipsRapidos() : chips(SUGERENCIAS),
+        el('p', { class: 'ayudante-nota' }, t('manitas.nota')))];
     if (esperando) {
       hijos.push(el('div', { class: 'ayudante-msj ayudante-msj-ayudante ayudante-escribiendo', 'aria-label': 'Escribiendo' },
         el('span'), el('span'), el('span')));

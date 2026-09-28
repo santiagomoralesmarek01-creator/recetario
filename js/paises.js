@@ -66,6 +66,22 @@ export function bandera(pais, clase = 'bandera') {
   return img;
 }
 
+// País de quien usa la web: el que eligió (se guarda en amano:pais) o, si no,
+// el de la configuración de idioma del navegador (es-MX → México).
+export const CLAVE_PAIS = 'amano:pais';
+export function paisDelUsuario() {
+  try {
+    const elegido = localStorage.getItem(CLAVE_PAIS);
+    if (elegido && PAISES[elegido]) return elegido;
+  } catch { /* sin almacenamiento */ }
+  for (const idioma of navigator.languages || [navigator.language]) {
+    const codigo = String(idioma).split('-')[1]?.toLowerCase();
+    const pais = codigo && Object.keys(PAISES).find((p) => PAISES[p][0] === codigo);
+    if (pais) return pais;
+  }
+  return '';
+}
+
 export const rutaPais = (pais) => `#/pais/${encodeURIComponent(pais)}`;
 
 export function chipPais({ nombre, cantidad }) {

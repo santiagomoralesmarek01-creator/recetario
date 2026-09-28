@@ -13,7 +13,7 @@ import {
 import { portada } from './componentes.js';
 import { bandera, rutaPais } from '../paises.js';
 import { rutaAutor } from './comunidad.js';
-import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
+import { contextoReceta, ayudanteDisponible, abrirAyudante, preguntarRapido, RAPIDOS, avatarManitas } from '../ayudante.js';
 import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
 import { clasificar, explicar, NIVELES } from '../dificultad.js';
 import { soyAdmin } from '../fotos.js';
@@ -176,9 +176,9 @@ export async function vistaReceta(id) {
         onclick: () => elegirTiempo(r.nombre),
       }, icono('temporizador'), t('receta.temporizador')),
       ayudanteDisponible() && el('button', {
-        type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
+        type: 'button', class: 'boton-secundario', title: 'Preguntarle a Manitas sobre esta receta',
         onclick: abrirAyudante,
-      }, icono('manitas'), 'Ayudante')));
+      }, icono('manitas'), t('manitas.nombre'))));
 
   // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
   const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {
@@ -256,7 +256,8 @@ export async function vistaReceta(id) {
           el('ul', { class: 'ingredientes' }, itemsIngredientes),
           el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, icono('canasta'), dificiles.size
             ? (dificiles.size === 1 ? t('reemplazo.aviso-uno') : t('reemplazo.aviso-varios', { n: dificiles.size }))
-            : t('reemplazo.todo-facil')))),
+            : t('reemplazo.todo-facil')),
+          ayudanteDisponible() && bloqueManitas())),
       el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length
@@ -307,6 +308,17 @@ function botonDeMeGusta(recetaId) {
     .catch((err) => console.warn('Me gusta:', err.message));
   pintar();
   return boton;
+}
+
+// "¿Falta algo? Adaptar esta receta": botones rápidos que abren Manitas.
+function bloqueManitas() {
+  return el('div', { class: 'manitas-receta' },
+    avatarManitas(),
+    el('div', {},
+      el('strong', {}, t('manitas.adaptar')),
+      el('span', { class: 'meta' }, t('manitas.adaptar-ayuda')),
+      el('div', { class: 'manitas-rapidos' },
+        RAPIDOS.map((rapido) => el('button', { type: 'button', class: 'boton-secundario boton-chico', onclick: () => preguntarRapido(rapido) }, t(rapido.clave))))));
 }
 
 // Foto de la receta, con su crédito y (para administradores) un botón para cambiarla.
