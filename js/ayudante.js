@@ -75,7 +75,8 @@ let alElegirReceta = () => {};
 // recomendadas ([[id]] → link con el nombre), sin innerHTML.
 function enLinea(texto, recetas = []) {
   return texto.split(/(\*\*[^*]+\*\*|\[\[\s*[\w-]+\s*\]\])/).map((parte) => {
-    if (/^\*\*[^*]+\*\*$/.test(parte)) return el('strong', {}, parte.slice(2, -2));
+    // La negrita puede envolver una cita (**[[52835]]**): se procesa también adentro.
+    if (/^\*\*[^*]+\*\*$/.test(parte)) return el('strong', {}, enLinea(parte.slice(2, -2), recetas));
     const cita = parte.match(/^\[\[\s*([\w-]+)\s*\]\]$/);
     if (!cita) return parte;
     const r = recetas.find((x) => x.id === cita[1]);
