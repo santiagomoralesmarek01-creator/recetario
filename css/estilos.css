@@ -1130,6 +1130,35 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
   border-bottom-left-radius: 4px;
 }
 
+.ayudante-msj a { color: var(--acento); font-weight: 600; }
+.ayudante-recetas { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.ayudante-msj .ayudante-receta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--fondo);
+  color: var(--texto);
+  font-weight: 400;
+  text-decoration: none;
+}
+.ayudante-msj .ayudante-receta:hover { border-color: var(--acento); }
+.ayudante-receta img, .ayudante-receta-sin-foto {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 9px;
+  object-fit: cover;
+  background: var(--crema);
+}
+.ayudante-receta-sin-foto { display: grid; place-items: center; font-size: 1.4rem; }
+.ayudante-receta > span:nth-child(2) { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.ayudante-receta strong { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.ayudante-receta small { color: var(--texto-suave); font-size: 0.76rem; }
+.ayudante-receta-ir { color: var(--acento); font-weight: 700; }
+
 .ayudante-escribiendo { display: flex; gap: 4px; padding: 13px 14px; }
 .ayudante-escribiendo span {
   width: 7px;

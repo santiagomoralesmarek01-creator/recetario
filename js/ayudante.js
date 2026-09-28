@@ -4,6 +4,8 @@ import { el } from './dom.js';
 import { hayBackend } from './supabase.js';
 import { usuario, alCambiarSesion, tokenAcceso, pedirLogin } from './auth.js';
 import { traducirCategoria, traducirOrigen } from './traducciones.js';
+import { crearImagen, IMG_PLATO_GENERICO } from './imagenes.js';
+import { buscarCandidatas, recetasCitadas } from './recomendaciones.js';
 
 const CLAVE = 'recetario:ayudante';
 const MAX_HISTORIAL = 20;
@@ -65,14 +67,32 @@ function textoReceta(r) {
   ].filter(Boolean).join('\n');
 }
 
-// Markdown mínimo y seguro: párrafos, listas y **negrita**, sin innerHTML.
-function enLinea(texto) {
-  return texto.split(/(\*\*[^*]+\*\*)/).map((parte) => (
-    /^\*\*[^*]+\*\*$/.test(parte) ? el('strong', {}, parte.slice(2, -2)) : parte
-  ));
+// En pantallas chicas el chat tapa todo: al ir a una receta se cierra.
+const pantallaChica = () => window.matchMedia('(max-width: 700px)').matches;
+let alElegirReceta = () => {};
+
+// Markdown mínimo y seguro: párrafos, listas, **negrita** y recetas
+// recomendadas ([[id]] → link con el nombre), sin innerHTML.
+function enLinea(texto, recetas = []) {
+  return texto.split(/(\*\*[^*]+\*\*|\[\[\s*[\w-]+\s*\]\])/).map((parte) => {
+    if (/^\*\*[^*]+\*\*$/.test(parte)) return el('strong', {}, parte.slice(2, -2));
+    const cita = parte.match(/^\[\[\s*([\w-]+)\s*\]\]$/);
+    if (!cita) return parte;
+    const r = recetas.find((x) => x.id === cita[1]);
+    return r ? el('a', { href: `#/receta/${r.id}`, onclick: () => alElegirReceta() }, r.nombre) : '';
+  });
 }
 
-function formatear(texto) {
+function tarjetasRecetas(recetas) {
+  return el('div', { class: 'ayudante-recetas' }, recetas.map((r) => el('a', {
+    class: 'ayudante-receta', href: `#/receta/${r.id}`, onclick: () => alElegirReceta(),
+  },
+  r.imagen ? crearImagen(r.imagen, '', IMG_PLATO_GENERICO) : el('span', { class: 'ayudante-receta-sin-foto', 'aria-hidden': 'true' }, '🍽️'),
+  el('span', {}, el('strong', {}, r.nombre), r.detalle && el('small', {}, r.detalle)),
+  el('span', { class: 'ayudante-receta-ir', 'aria-hidden': 'true' }, '→'))));
+}
+
+function formatear(texto, recetas = []) {
   const bloques = [];
   let lista = null;
   for (const linea of texto.split('\n')) {
@@ -81,16 +101,17 @@ function formatear(texto) {
     if (item) {
       const tipo = item[1] ? 'ol' : 'ul';
       if (!lista || lista.tagName.toLowerCase() !== tipo) bloques.push(lista = el(tipo));
-      lista.append(el('li', {}, enLinea(item[2])));
+      lista.append(el('li', {}, enLinea(item[2], recetas)));
     } else {
       lista = null;
-      if (t) bloques.push(el('p', {}, enLinea(t.replace(/^#+\s*/, ''))));
+      if (t) bloques.push(el('p', {}, enLinea(t.replace(/^#+\s*/, ''), recetas)));
     }
   }
+  if (recetas.length) bloques.push(tarjetasRecetas(recetas));
   return bloques;
 }
 
-async function preguntar(historial, recetaVista) {
+async function preguntar(historial, recetaVista, candidatas) {
   const token = await tokenAcceso();
   if (!token) throw new Error('Tu sesión venció. Volvé a entrar.');
   const r = await fetch('/api/ayudante', {
@@ -99,6 +120,7 @@ async function preguntar(historial, recetaVista) {
     body: JSON.stringify({
       mensajes: historial.slice(-MAX_HISTORIAL),
       receta: recetaVista ? textoReceta(recetaVista) : undefined,
+      candidatas: candidatas.map(({ id, nombre, detalle }) => ({ id, nombre, detalle })),
     }),
   });
   const datos = await r.json().catch(() => ({}));
@@ -143,6 +165,7 @@ export function iniciarAyudante() {
   document.body.append(boton, panel);
   document.body.classList.add('con-ayudante');
   abrirPanel = abrir;
+  alElegirReceta = () => { if (pantallaChica()) abrir(false); };
 
   function abrir(si) {
     panel.hidden = !si;
@@ -156,7 +179,7 @@ export function iniciarAyudante() {
 
   function burbuja(m) {
     return el('div', { class: `ayudante-msj ayudante-msj-${m.rol}` },
-      m.rol === 'ayudante' ? formatear(m.texto) : m.texto);
+      m.rol === 'ayudante' ? formatear(m.texto, m.recetas) : m.texto);
   }
 
   function chips(textos) {
@@ -208,11 +231,13 @@ export function iniciarAyudante() {
     enviarBtn.disabled = true;
     entrada.value = '';
     ajustarAlto();
+    const previo = mensajes.findLast((m) => m.rol === 'usuario')?.texto;
     mensajes.push({ rol: 'usuario', texto });
     dibujar();
     try {
-      const { texto: respuesta } = await preguntar([...mensajes], receta);
-      mensajes.push({ rol: 'ayudante', texto: respuesta });
+      const candidatas = await recetasParaRecomendar(texto, previo);
+      const { texto: respuesta } = await preguntar([...mensajes], receta, candidatas);
+      mensajes.push({ rol: 'ayudante', texto: respuesta, recetas: recetasCitadas(respuesta, candidatas) });
       guardar();
       esperando = false;
       dibujar();
@@ -227,6 +252,19 @@ export function iniciarAyudante() {
     } finally {
       enviarBtn.disabled = false;
       entrada.focus();
+    }
+  }
+
+  // Recetas relacionadas con la pregunta; si hay pocas, también con la anterior
+  // ("¿y algo con pollo?" después de "quiero algo mexicano").
+  async function recetasParaRecomendar(texto, previo) {
+    try {
+      const encontradas = await buscarCandidatas(texto);
+      if (encontradas.length >= 3 || !previo) return encontradas;
+      const mas = await buscarCandidatas(`${previo} ${texto}`);
+      return [...encontradas, ...mas.filter((m) => !encontradas.some((e) => e.id === m.id))].slice(0, 12);
+    } catch {
+      return [];
     }
   }
 
