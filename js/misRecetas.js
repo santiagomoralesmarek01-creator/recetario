@@ -4,6 +4,7 @@
 import { cliente } from './supabase.js';
 import { normalizarIngredientesPropios } from './recetasCasa.js';
 import { clasificar, ingredientesDificiles } from './dificultad.js';
+import { aplicarFotos } from './fotos.js';
 
 const TABLA = 'recetas';
 const BUCKET = 'fotos-recetas';
@@ -55,7 +56,8 @@ async function consultar(armar) {
   if (!sb) return [];
   const { data, error } = await armar(sb.from(TABLA));
   if (error) throw errorLegible(error);
-  return (data || []).map(normalizarFila);
+  // Fotos cargadas desde "Fotos de recetas" (reemplazan la original).
+  return aplicarFotos((data || []).map(normalizarFila));
 }
 
 export function listarMias(userId) {

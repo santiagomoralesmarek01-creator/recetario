@@ -47,7 +47,14 @@ export async function aplicarFotos(recetas) {
   if (!fotos.size) return recetas;
   for (const r of recetas) {
     const f = fotos.get(r.id);
-    if (f) { r.imagen = f.url; r.creditoFoto = f.credito; r.fuenteFoto = ''; }
+    if (f) {
+      // Un crédito que termina en un enlace ("Wikimedia Commons (…) https://…")
+      // se muestra como texto con ese enlace.
+      const [, texto, enlace] = f.credito.match(/^(.*?)\s*(https:\/\/\S+)$/) || [null, f.credito, ''];
+      r.imagen = f.url;
+      r.creditoFoto = texto || (enlace ? 'Fuente' : '');
+      r.fuenteFoto = enlace;
+    }
   }
   return recetas;
 }
