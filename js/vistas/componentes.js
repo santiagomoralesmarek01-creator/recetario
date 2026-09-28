@@ -21,7 +21,10 @@ const ESTILO_CATEGORIA = {
 export function portada(receta, { miniatura = false, clase = '' } = {}) {
   if (receta.imagen) {
     const achicar = miniatura && /themealdb\.com\/images\/media/.test(receta.imagen);
-    const img = crearImagen(urlPlato(receta.imagen, { miniatura: achicar }), receta.nombre, IMG_PLATO_GENERICO, clase);
+    // Las fotos de "Del mundo" (TheMealDB) no se retocan: llevan un marco igual
+    // para todas, así conviven con las de la casa aunque tengan otro estilo.
+    const mundo = /themealdb\.com/.test(receta.imagen);
+    const img = crearImagen(urlPlato(receta.imagen, { miniatura: achicar }), receta.nombre, IMG_PLATO_GENERICO, [clase, mundo && 'foto-mundo'].filter(Boolean).join(' '));
     // Fotos externas (Wikimedia): si no cargan, mejor el fondo de la categoría que el ícono genérico.
     if (/wikimedia\.org/.test(receta.imagen)) {
       img.addEventListener('error', () => img.replaceWith(portadaSinFoto(receta, clase)), { once: true });

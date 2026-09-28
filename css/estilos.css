@@ -2086,3 +2086,8 @@ ul.cifras { list-style: none; padding: 0; }
 .ranking-salto { justify-content: center; color: var(--texto-suave); }
 .ranking-nombre small { color: var(--texto-suave); font-weight: 400; }
 .pie-enlaces a { color: inherit; }
+
+/* Marco uniforme para las fotos "Del mundo": misma proporción, mismas
+   esquinas y un borde crema por dentro (la foto no se retoca). */
+.foto-mundo { outline: 5px solid color-mix(in srgb, var(--superficie) 88%, transparent); outline-offset: -5px; }
+.receta-foto.foto-mundo { outline-width: 8px; outline-offset: -8px; }
