@@ -19,6 +19,7 @@ import { clasificar, explicar, NIVELES } from '../dificultad.js';
 import { soyAdmin } from '../fotos.js';
 import { dialogoFoto } from './fotosRecetas.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -51,7 +52,7 @@ export async function vistaReceta(id) {
     const hechos = ing + pas;
     barra.firstChild.style.width = total ? `${(hechos / total) * 100}%` : '0';
     textoProgreso.textContent = hechos === total && total > 0
-      ? 'Listo. Buen provecho.'
+      ? t('receta.listo')
       : `Ingredientes ${ing}/${r.ingredientes.length} · Pasos ${pas}/${r.pasos.length}`;
 
     itemsIngredientes.forEach((li, i) => li.classList.toggle('hecho', progreso.ingredientes.has(i)));
@@ -78,7 +79,7 @@ export async function vistaReceta(id) {
     if (terminadaAvisada || !r.pasos.length || progreso.pasos.size < r.pasos.length) return;
     terminadaAvisada = true;
     registrarActividad('receta-cocinada', { detalle: r.id })
-      .then((nueva) => { if (nueva) aviso('Receta completada. Suma para tus medallas.'); })
+      .then((nueva) => { if (nueva) aviso(t('receta.completada')); })
       .catch((err) => console.warn(err));
   }
 
@@ -109,8 +110,8 @@ export async function vistaReceta(id) {
           el('strong', {}, ing.nombre),
           ing.medida && el('span', { class: 'medida' }, ing.medida),
           dificil && (dificil.reemplazo
-            ? el('span', { class: 'reemplazo' }, iconoIntercambio(), `Si no conseguís: ${dificil.reemplazo}`)
-            : el('span', { class: 'reemplazo sin-reemplazo' }, 'Difícil de conseguir'))))));
+            ? el('span', { class: 'reemplazo' }, icono('reemplazo', { clase: 'reemplazo-icono' }), `${t('reemplazo.si-no-hay')}${dificil.reemplazo}`)
+            : el('span', { class: 'reemplazo sin-reemplazo' }, t('reemplazo.dificil')))))));
   });
 
   r.pasos.forEach((paso, i) => {
@@ -130,7 +131,7 @@ export async function vistaReceta(id) {
   const botonPantalla = pantallaSoportada() && el('button', {
     type: 'button',
     class: `boton-secundario${pantallaActiva() ? ' activo' : ''}`,
-    title: 'Evita que la pantalla se apague mientras cocinás',
+    title: t('receta.pantalla-ayuda'),
     'aria-pressed': String(pantallaActiva()),
     onclick: async (e) => {
       const activa = await mantenerPantalla(!pantallaActiva());
@@ -138,7 +139,7 @@ export async function vistaReceta(id) {
       e.currentTarget.classList.toggle('activo', activa);
       e.currentTarget.setAttribute('aria-pressed', String(activa));
     },
-  }, icono('pantalla'), 'No apagar pantalla');
+  }, icono('pantalla'), t('receta.pantalla'));
 
   const botonReiniciar = el('button', {
     type: 'button',
@@ -149,7 +150,7 @@ export async function vistaReceta(id) {
       progreso.pasos.clear();
       refrescar();
     },
-  }, icono('reiniciar'), 'Reiniciar');
+  }, icono('reiniciar'), t('receta.reiniciar'));
 
   // Seguir la receta en el panel lateral "Cocinando ahora".
   const botonSeguir = el('button', {
@@ -159,8 +160,8 @@ export async function vistaReceta(id) {
   });
   function pintarSeguir() {
     const siguiendo = recetaActual()?.id === r.id;
-    botonSeguir.replaceChildren(icono('fijar'), siguiendo ? 'Siguiendo' : 'Seguir al costado');
-    botonSeguir.title = siguiendo ? 'Dejar de mostrarla en el panel lateral' : 'Mostrarla en el panel lateral mientras navegás';
+    botonSeguir.replaceChildren(icono('fijar'), siguiendo ? t('receta.siguiendo') : t('receta.seguir'));
+    botonSeguir.title = siguiendo ? 'Dejar de mostrarla en el panel lateral' : t('receta.seguir-ayuda');
     botonSeguir.classList.toggle('activo', siguiendo);
     botonSeguir.setAttribute('aria-pressed', String(siguiendo));
   }
@@ -173,7 +174,7 @@ export async function vistaReceta(id) {
       el('button', {
         type: 'button', class: 'boton-secundario', title: 'Poner un temporizador',
         onclick: () => elegirTiempo(r.nombre),
-      }, icono('temporizador'), 'Temporizador'),
+      }, icono('temporizador'), t('receta.temporizador')),
       ayudanteDisponible() && el('button', {
         type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
         onclick: abrirAyudante,
@@ -251,11 +252,11 @@ export async function vistaReceta(id) {
         columnaFoto(r),
         el('section', { class: 'receta-ingredientes' },
           el('h2', {}, 'Ingredientes'),
-          el('p', { class: 'meta' }, 'Tildalos a medida que los vas usando.'),
+          el('p', { class: 'meta' }, t('receta.tildar')),
           el('ul', { class: 'ingredientes' }, itemsIngredientes),
           el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, icono('canasta'), dificiles.size
-            ? `${dificiles.size === 1 ? 'Un ingrediente puede' : `${dificiles.size} ingredientes pueden`} ser difícil${dificiles.size === 1 ? '' : 'es'} de conseguir en Latinoamérica: te dejamos con qué reemplazarlo${dificiles.size === 1 ? '' : 's'}.`
-            : 'Todos los ingredientes se consiguen fácil en cualquier supermercado.'))),
+            ? (dificiles.size === 1 ? t('reemplazo.aviso-uno') : t('reemplazo.aviso-varios', { n: dificiles.size }))
+            : t('reemplazo.todo-facil')))),
       el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length
@@ -306,17 +307,6 @@ function botonDeMeGusta(recetaId) {
     .catch((err) => console.warn('Me gusta:', err.message));
   pintar();
   return boton;
-}
-
-// Ícono de intercambio (dos flechas) para la insignia de reemplazo.
-function iconoIntercambio() {
-  const ns = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(ns, 'svg');
-  for (const [k, v] of Object.entries({ viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'reemplazo-icono', 'aria-hidden': 'true' })) svg.setAttribute(k, v);
-  const trazo = document.createElementNS(ns, 'path');
-  trazo.setAttribute('d', 'M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4');
-  svg.append(trazo);
-  return svg;
 }
 
 // Foto de la receta, con su crédito y (para administradores) un botón para cambiarla.

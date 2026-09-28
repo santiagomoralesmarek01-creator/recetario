@@ -11,6 +11,8 @@ import { juegoPais } from '../juegos/pais.js';
 import { juegoFalta } from '../juegos/falta.js';
 import { juegoArmar } from '../juegos/armar.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
+import { conPalabraDestacada } from './listados.js';
 
 const JUEGOS = {
   'plato-del-dia': juegoPlatoDelDia,
@@ -24,7 +26,7 @@ export function vistaJuego(nombre) {
 }
 
 // "Elegís la dificultad: ● Fácil · ● Normal · ● Difícil", con el punto de color de cada nivel.
-const ELEGIS = () => ['Elegís la dificultad: ', ...[[1, 'Fácil'], [2, 'Normal'], [3, 'Difícil']].flatMap(([n, nombre], i) => [
+const ELEGIS = () => [t('juegos.elegir-dificultad'), ...[[1, 'Fácil'], [2, 'Normal'], [3, 'Difícil']].flatMap(([n, nombre], i) => [
   i ? ' · ' : '', el('span', { class: `nivel-${n}` }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), nombre)])];
 
 function tarjetaJuego({ ruta, icono: simbolo, titulo, texto, dificultad, extra, clase = '' }) {
@@ -61,13 +63,13 @@ export function vistaJuegos() {
   document.title = 'Juegos · A Mano';
   const records = leerRecords();
   const { hoy, racha } = estadoDeHoy();
-  const record = (juego) => (records[juego]?.partidas ? `Tu récord: ${records[juego].mejor} puntos` : 'Todavía no jugaste');
+  const record = (juego) => (records[juego]?.partidas ? t('juegos.record', { n: records[juego].mejor }) : t('juegos.sin-partidas'));
 
   mostrar(
     el('section', { class: 'juegos-portada' },
       el('p', { class: 'portada-antetitulo' }, 'Juegos de cocina'),
-      el('h1', {}, '¿Cuánto sabés de ', el('em', {}, 'comida'), '?'),
-      el('p', { class: 'meta' }, 'Adiviná platos, países e ingredientes con las recetas de la página, con prioridad para la cocina latinoamericana. Sumá puntos, subí en el ranking y ganá medallas: en difícil, cada acierto vale más.')),
+      el('h1', {}, ...conPalabraDestacada(t('juegos.titulo'), 'comida')),
+      el('p', { class: 'meta' }, t('juegos.bajada'))),
     el('div', { class: 'juegos-lista' },
       tarjetaJuego({
         ruta: 'plato-del-dia', icono: icono('plato'), titulo: `Plato del día #${numeroDelDia()}`, clase: 'destacado',
@@ -75,7 +77,7 @@ export function vistaJuegos() {
         dificultad: el('span', { class: 'nivel-2' }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), 'Dificultad media · 6 intentos con pistas'),
         extra: hoy?.terminado
           ? `${hoy.gano ? `Lo adivinaste en ${hoy.intentos.length}` : 'Hoy no salió'} · racha de ${racha} · volvé mañana`
-          : racha ? `Racha de ${racha} día${racha === 1 ? '' : 's'}: ¡no la cortes!` : '¡Jugá el de hoy!',
+          : racha ? t('juegos.racha', { n: racha, dias: racha === 1 ? 'día' : 'días' }) : t('juegos.jugar-hoy'),
       }),
       tarjetaJuego({ ruta: 'pais', icono: icono('pais'), titulo: 'Adiviná el país', texto: 'Mirá el plato y elegí de qué país es. Contra reloj.', dificultad: ELEGIS, extra: record('pais') }),
       tarjetaJuego({ ruta: 'falta', icono: icono('rompecabezas'), titulo: '¿Qué le falta?', texto: 'Descubrí el ingrediente que le tapamos a cada receta.', dificultad: ELEGIS, extra: record('falta') }),

@@ -7,6 +7,7 @@ import { traducirCategoria } from '../traducciones.js';
 import { NOMBRES_PAISES, LATINOAMERICA } from '../paises.js';
 import { aviso } from '../dom.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 // Ingredientes que están en casi todo: no sirven como pista ni como pregunta.
 const TRIVIAL = /^(sal|pimienta|agua|aceite|hielo)( |$)/;
@@ -172,7 +173,7 @@ export async function compartir(texto) {
   }
   try {
     await navigator.clipboard.writeText(completo);
-    aviso('Resultado copiado: pegalo donde quieras');
+    aviso(t('juego.copiado'));
   } catch {
     window.open(`https://wa.me/?text=${encodeURIComponent(completo)}`, '_blank', 'noopener');
   }

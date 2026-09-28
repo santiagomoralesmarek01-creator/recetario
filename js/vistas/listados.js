@@ -8,6 +8,13 @@ import { portada, metaReceta, grillaRecetas, listadoFiltrable } from './componen
 import { bandera, chipPais, continenteDe, CONTINENTES, LATINOAMERICA } from '../paises.js';
 import { rutaComunidad } from './comunidad.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
+
+// "¿Qué hay a mano hoy?" → ['¿Qué hay a mano ', <em>hoy</em>, '?'] (la palabra va en cursiva).
+export function conPalabraDestacada(texto, palabra) {
+  const i = texto.lastIndexOf(palabra);
+  return i < 0 ? [texto] : [texto.slice(0, i), el('em', {}, palabra), texto.slice(i + palabra.length)];
+}
 
 export async function vistaInicio() {
   const vigente = vigencia();
@@ -23,24 +30,22 @@ export async function vistaInicio() {
 
   const invitacion = hayBackend && el('section', { class: 'invitacion' },
     el('div', {},
-      el('h2', {}, usuario() ? '¿Qué cocinamos hoy?' : 'Guardá tus propias recetas'),
-      el('p', {}, usuario()
-        ? 'Cargá tus recetas con fotos y compartilas con la comunidad.'
-        : 'Creá una cuenta gratis para guardar tus recetas y compartirlas.')),
+      el('h2', {}, usuario() ? t('invitacion.titulo-usuario') : t('invitacion.titulo')),
+      el('p', {}, usuario() ? t('invitacion.texto-usuario') : t('invitacion.texto'))),
     el('a', { class: 'boton', href: usuario() ? '#/nueva' : '#/entrar' },
-      usuario() ? '+ Nueva receta' : 'Crear cuenta'));
+      usuario() ? t('invitacion.cta-usuario') : t('invitacion.cta')));
 
   const totalRecetas = paises.reduce((suma, p) => suma + p.cantidad, 0);
-  const buscar = el('input', { type: 'search', placeholder: 'Buscar “empanadas”, “pollo” o “flan”…', 'aria-label': 'Buscar recetas' });
+  const buscar = el('input', { type: 'search', placeholder: t('inicio.buscar-ejemplo'), 'aria-label': 'Buscar recetas' });
   const portadaInicio = el('section', { class: 'portada-inicio' },
     el('div', { class: 'portada-texto' },
       el('p', { class: 'eyebrow' }, 'Cocina latinoamericana a tu medida'),
-      el('h1', {}, '¿Qué hay a mano ', el('em', {}, 'hoy'), '?'),
+      el('h1', {}, ...conPalabraDestacada(t('buscar.titulo'), 'hoy')),
       el('p', { class: 'portada-bajada' },
-        'Recetas que se adaptan a lo que hay en la cocina, al país y al nivel de cada uno. Con lo que hay, alcanza.'),
+        t('inicio.bajada')),
       el('div', { class: 'portada-acciones' },
-        el('a', { class: 'boton boton-grande', href: '#/que-tengo' }, 'Ver qué puedo cocinar'),
-        el('span', { class: 'meta' }, 'o buscar una receta:')),
+        el('a', { class: 'boton boton-grande', href: '#/que-tengo' }, t('inicio.cta')),
+        el('span', { class: 'meta' }, t('inicio.o-buscar'))),
       el('form', {
         class: 'buscador-grande', role: 'search',
         onsubmit: (e) => {
@@ -56,7 +61,7 @@ export async function vistaInicio() {
         el('a', { class: 'acceso', href: '#/categoria/Dessert' }, icono('postre'), 'Postres'),
         el('a', { class: 'acceso', href: '#/categoria/Pasta' }, icono('pasta'), 'Pastas'),
         el('a', { class: 'acceso', href: '#/categoria/Vegetarian' }, icono('hoja'), 'Vegetarianas'),
-        el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, icono('sorpresa'), 'Sorprendeme')),
+        el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, icono('sorpresa'), t('inicio.azar'))),
       totalRecetas > 0 && el('div', { class: 'cifras' },
         el('div', {}, el('strong', {}, `${Math.floor(totalRecetas / 50) * 50}+`), el('span', {}, 'recetas')),
         el('div', {}, el('strong', {}, String(paises.length)), el('span', {}, 'países')),

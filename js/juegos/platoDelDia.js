@@ -11,6 +11,7 @@ import { diaArgentina, sumarDias } from '../medallas.js';
 import { cargarDatos, azarConSemilla, mezclar, esTrivial, compartir } from './datos.js';
 import { portada } from '../vistas/componentes.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const INTENTOS = 6;
 const PUNTOS = [600, 500, 400, 300, 200, 100];
@@ -170,7 +171,7 @@ export async function juegoPlatoDelDia() {
     const puntos = partida.gano ? PUNTOS[errores()] : 0;
     const invitado = hayBackend && !usuario();
     zonaJuego.replaceChildren(el('div', { class: `plato-resultado ${partida.gano ? 'gano' : 'perdio'}` },
-      el('p', { class: 'plato-resultado-titulo' }, partida.gano ? '¡Lo adivinaste! 🎉' : 'Esta vez no… 😅'),
+      el('p', { class: 'plato-resultado-titulo' }, partida.gano ? t('juego.ganaste') : t('juego.casi')),
       el('a', { class: 'plato-respuesta', href: `#/receta/${plato.id}` },
         plato.imagen ? crearImagen(plato.imagen, '', IMG_PLATO_GENERICO)
           : portada({ nombre: plato.nombre, categoria: plato.codigoCategoria }, { clase: 'plato-respuesta-sin' }),

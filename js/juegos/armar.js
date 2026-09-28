@@ -7,6 +7,7 @@ import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, raiz, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const RONDAS = 5;
 
@@ -135,7 +136,7 @@ export async function juegoArmar() {
         });
         tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
         aviso.textContent = bien === necesarios
-          ? `¡Plato perfecto! +${ganados} 🎉`
+          ? t('juego.perfecto', { n: ganados })
           : `Acertaste ${bien} de ${necesarios}${mal ? ` y pusiste ${mal} que no iba${mal > 1 ? 'n' : ''}` : ''}: +${ganados}. Los que faltaron están marcados.`;
         aviso.className = `juego-aviso ${bien === necesarios ? 'bien' : bien >= necesarios - 2 ? '' : 'mal'}`;
         servir.hidden = true;

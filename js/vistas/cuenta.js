@@ -6,6 +6,7 @@ import { grillaRecetas } from './componentes.js';
 import * as repo from '../repositorio.js';
 import { misMeGusta } from '../actividad.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 export function sinBackend() {
   mostrar(el('div', { class: 'estado' },
@@ -140,6 +141,6 @@ export async function vistaMisRecetas() {
       el('h2', {}, 'Tus favoritas'),
       favoritas.length
         ? grillaRecetas(favoritas)
-        : el('p', { class: 'meta' }, 'Tocá el corazón en las recetas que te gusten y las vas a encontrar acá.'))
+        : el('p', { class: 'meta' }, t('cuenta.favoritas-vacio')))
   );
 }

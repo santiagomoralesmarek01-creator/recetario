@@ -6,6 +6,7 @@ import { hayBackend } from '../supabase.js';
 import { registrarActividad } from '../actividad.js';
 import { guardarRecord, leerRecords, compartir, MODOS, modoGuardado, guardarModo } from './datos.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -17,7 +18,7 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
   },
   el('span', { class: `modo-titulo nivel-${m.nivel}` }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), m.nombre),
   el('span', { class: 'modo-detalle' }, detalles[clave]),
-  records[`${juego}:${clave}`]?.mejor != null && el('small', {}, `Tu récord: ${records[`${juego}:${clave}`].mejor} puntos`)));
+  records[`${juego}:${clave}`]?.mejor != null && el('small', {}, t('juegos.record', { n: records[`${juego}:${clave}`].mejor }))));
   function pintar() {
     botones.forEach((b, i) => {
       const activo = Object.keys(MODOS)[i] === modo;
@@ -31,7 +32,7 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
     el('div', { class: 'modo-opciones' }, botones),
     el('p', { class: 'meta modo-nota' }, icono('pais'), ' Priorizamos platos latinoamericanos: en Fácil son todos de la región y en Difícil se suma más cocina del mundo.'),
     el('div', { class: 'juego-siguiente' },
-      el('button', { type: 'button', class: 'boton', onclick: () => { guardarModo(juego, modo); alEmpezar(modo); } }, '¡A jugar!')));
+      el('button', { type: 'button', class: 'boton', onclick: () => { guardarModo(juego, modo); alEmpezar(modo); } }, t('juego.empezar'))));
 }
 
 export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alReintentar, alCambiarModo, textoCompartir }) {
@@ -48,16 +49,16 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
     el('p', { class: 'juego-fin-puntos' }, el('strong', {}, puntos), ` / ${maximo} puntos`),
     detalle && el('p', { class: 'meta' }, detalle),
     esRecord
-      ? el('p', { class: 'juego-record' }, icono('trofeo'), ' Nuevo récord personal')
+      ? el('p', { class: 'juego-record' }, icono('trofeo'), ` ${t('juego.nuevo-record')}`)
       : recordAnterior > 0 && el('p', { class: 'meta' }, `Tu récord${modo ? ` en ${MODOS[modo].nombre.toLowerCase()}` : ''}: ${Math.max(recordAnterior, puntos)} puntos`),
     invitado && el('p', { class: 'juego-invitacion' },
-      el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, 'Entrá'),
-      ' para sumar tus puntos al ranking semanal y ganar medallas.'),
+      el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, t('juego.entrar')),
+      t('juego.entrar-texto')),
     el('div', { class: 'acciones' },
-      el('button', { type: 'button', class: 'boton', onclick: alReintentar }, 'Jugar otra vez'),
-      alCambiarModo && el('button', { type: 'button', class: 'boton-secundario', onclick: alCambiarModo }, 'Cambiar dificultad'),
-      el('button', { type: 'button', class: 'boton-secundario', onclick: () => compartir(textoCompartir) }, 'Compartir'),
-      el('a', { class: 'boton-secundario boton', href: '#/juegos' }, 'Otros juegos')));
+      el('button', { type: 'button', class: 'boton', onclick: alReintentar }, t('juego.otra-vez')),
+      alCambiarModo && el('button', { type: 'button', class: 'boton-secundario', onclick: alCambiarModo }, t('juego.cambiar-dificultad')),
+      el('button', { type: 'button', class: 'boton-secundario', onclick: () => compartir(textoCompartir) }, t('juego.compartir')),
+      el('a', { class: 'boton-secundario boton', href: '#/juegos' }, t('juego.otros'))));
 }
 
 // Marcador de la parte de arriba: ronda, puntos y (opcional) tiempo.

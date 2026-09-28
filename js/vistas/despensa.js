@@ -7,6 +7,7 @@ import { sugerir, normalizar } from '../ingredientes.js';
 import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { tarjetaReceta } from './componentes.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const CLAVE_GUARDADO = 'recetario:despensa';
 const TANDA = 24;
@@ -77,7 +78,7 @@ export async function vistaDespensa() {
   let opciones = [];
   let activa = -1;
   const entrada = el('input', {
-    type: 'search', placeholder: 'Escribí un ingrediente: huevo, papa, pollo…', autocomplete: 'off',
+    type: 'search', placeholder: t('despensa.ingrediente'), autocomplete: 'off',
     'aria-label': 'Agregar ingrediente', role: 'combobox', 'aria-autocomplete': 'list',
   });
   const cerrar = () => { lista.hidden = true; activa = -1; };
@@ -125,14 +126,14 @@ export async function vistaDespensa() {
 
   // ---------- resultados ----------
   function tarjeta(r) {
-    const t = tarjetaReceta(r);
-    const cuerpo = t.querySelector('.tarjeta-cuerpo');
+    const nodo = tarjetaReceta(r);
+    const cuerpo = nodo.querySelector('.tarjeta-cuerpo');
     cuerpo.append(r.faltan.length
       ? el('p', { class: 'despensa-faltan' },
-        `Te ${r.faltan.length === 1 ? 'falta' : 'faltan'} ${r.faltan.length}: `,
+        `${r.faltan.length === 1 ? 'Falta' : 'Faltan'} ${r.faltan.length}: `,
         el('span', {}, r.faltan.slice(0, 4).join(', ') + (r.faltan.length > 4 ? '…' : '')))
-      : el('p', { class: 'despensa-completa' }, icono('tilde'), ' Tenés todo'));
-    return t;
+      : el('p', { class: 'despensa-completa' }, icono('tilde'), ` ${t('despensa.todo')}`));
+    return nodo;
   }
 
   function dibujarResultados() {
@@ -172,7 +173,7 @@ export async function vistaDespensa() {
     resultados.replaceChildren(
       el('p', { class: 'meta' },
         `${encontradas.length} recetas usan tus ingredientes`,
-        listas ? ` · ${listas} ${listas === 1 ? 'se puede' : 'se pueden'} hacer con lo que tenés` : ''),
+        listas ? ` · ${listas} ${listas === 1 ? 'se puede' : 'se pueden'} hacer ${t('despensa.con-lo-que-hay')}` : ''),
       grilla, pie);
   }
 
@@ -194,10 +195,10 @@ export async function vistaDespensa() {
   mostrar(
     el('section', { class: 'despensa' },
       el('h1', {}, '¿Qué hay a mano?'),
-      el('p', { class: 'meta' }, 'Elegí los ingredientes que tenés y te muestro las recetas que los usan, primero las que te piden menos cosas extra.'),
+      el('p', { class: 'meta' }, t('despensa.bajada')),
       el('div', { class: 'combo despensa-buscador' }, entrada, lista),
       chips,
-      el('label', { class: 'despensa-basicos' }, basicos, ' Doy por hecho que tengo sal, pimienta, agua y aceite')),
+      el('label', { class: 'despensa-basicos' }, basicos, ` ${t('despensa.basicos')}`)),
     resultados);
   actualizar();
 }

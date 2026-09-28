@@ -6,6 +6,7 @@ import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const RONDAS = 10;
 
@@ -96,7 +97,7 @@ export async function juegoFalta() {
         hueco.replaceChildren(crearImagen(oculto.imagen, '', IMG_INGREDIENTE_GENERICO), el('strong', {}, oculto.nombre));
         hueco.classList.add(bien ? 'bien' : 'mal');
         tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos: aciertos * reglas.puntos });
-        aviso.textContent = bien ? '¡Exacto! 🎉' : `Le faltaba: ${oculto.nombre}.`;
+        aviso.textContent = bien ? t('juego.exacto') : `Le faltaba: ${oculto.nombre}.`;
         aviso.className = `juego-aviso ${bien ? 'bien' : 'mal'}`;
         siguiente.hidden = false;
         siguiente.focus();

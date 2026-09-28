@@ -4,6 +4,7 @@ import { traducirCategoria, traducirOrigen } from '../traducciones.js';
 import { NIVELES } from '../dificultad.js';
 import { MOMENTOS, SABORES, momentoDe, saborDe } from '../tipoPlato.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -62,7 +63,7 @@ export function tarjetaReceta(r) {
       ].filter(Boolean).join(' · ')),
       r.dificultad && el('p', { class: `tarjeta-dificultad nivel-${r.dificultad}` },
         el('span', { class: 'pildora-dificultad' }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre),
-        r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · ', icono('canasta'), 'ingredientes especiales'))));
+        r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · ', icono('canasta'), t('tarjeta.especiales')))));
 }
 
 // ---------- filtro por dificultad ----------
@@ -136,7 +137,7 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
       selector('Momento', MOMENTOS, estado.momento, (v) => { estado.momento = v; actualizar(); }),
       selector('Sabor', SABORES, estado.sabor, (v) => { estado.sabor = v; actualizar(); }),
       dificultad && el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
-      el('label', { class: 'filtro-conseguir' }, conseguibles, icono('canasta'), 'Sólo ingredientes fáciles de conseguir'),
+      el('label', { class: 'filtro-conseguir' }, conseguibles, icono('canasta'), t('filtro.conseguir')),
       dificultad && leyendaDificultad()),
     contador, cuerpo);
 }
@@ -144,7 +145,7 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
 // "¿Qué significa cada nivel?", desplegable.
 export function leyendaDificultad() {
   return el('details', { class: 'leyenda-dificultad' },
-    el('summary', {}, '¿Qué significa cada nivel?'),
+    el('summary', {}, t('filtro.leyenda')),
     el('ul', {}, Object.entries(NIVELES).map(([n, d]) => el('li', { class: `nivel-${n}` },
       el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), el('strong', {}, d.nombre), `: ${d.descripcion}`))),
     el('p', {}, 'Se calcula con la cantidad de pasos e ingredientes, el tiempo y las técnicas de cada receta. La ', icono('canasta'), ' marca los ingredientes difíciles de conseguir en Latinoamérica.'));

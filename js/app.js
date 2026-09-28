@@ -18,8 +18,10 @@ import { iniciarMedallas } from './medallas.js';
 import { vistaFotos } from './vistas/fotosRecetas.js';
 import { soyAdmin } from './fotos.js';
 import { icono } from './iconos.js';
+import { t, aplicarTextos } from './textos.js';
 
 iniciarTema();
+aplicarTextos();
 const menu = document.getElementById('menu');
 const enlacesNav = [...document.querySelectorAll('.nav-principal a')];
 if (!hayBackend) enlacesNav.find((a) => a.dataset.ruta.startsWith('comunidad'))?.remove();
@@ -40,12 +42,12 @@ function dibujarMenu(u) {
   if (!hayBackend) { menu.replaceChildren(); return; }
   menu.replaceChildren(...(u
     ? [
-      el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva'),
+      el('a', { class: 'boton', href: '#/nueva' }, icono('mas'), t('cabecera.nueva')),
       menuUsuario(u),
     ]
     : [
-      el('a', { class: 'boton boton-secundario', href: '#/nueva' }, 'Crear receta'),
-      el('a', { class: 'boton', href: '#/entrar' }, 'Entrar'),
+      el('a', { class: 'boton boton-secundario', href: '#/nueva' }, t('cabecera.crear')),
+      el('a', { class: 'boton', href: '#/entrar' }, t('cabecera.entrar')),
     ]));
 }
 

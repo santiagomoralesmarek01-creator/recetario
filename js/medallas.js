@@ -3,6 +3,7 @@
 import { el } from './dom.js';
 import { usuario, alCambiarSesion } from './auth.js';
 import { misLogros, alCambiarActividad } from './actividad.js';
+import { t } from './textos.js';
 
 const juego = (l, tipo) => l.juegos?.[tipo] || { partidas: 0, mejor: 0, total: 0 };
 const partidasTotales = (l) => Object.values(l.juegos || {}).reduce((s, j) => s + Number(j.partidas || 0), 0);
@@ -75,7 +76,7 @@ function mostrarAviso(medallas) {
   const nodo = el('a', { class: 'aviso-medalla', href: '#/medallas', role: 'status' },
     el('span', { class: 'aviso-medalla-icono', 'aria-hidden': 'true' }, m.icono),
     el('span', {},
-      el('small', {}, medallas.length > 1 ? `¡${medallas.length} medallas nuevas!` : '¡Medalla nueva!'),
+      el('small', {}, medallas.length > 1 ? t('medalla.nuevas', { n: medallas.length }) : 'Nueva medalla'),
       el('strong', {}, m.nombre),
       el('span', {}, m.descripcion)));
   document.body.append(nodo);

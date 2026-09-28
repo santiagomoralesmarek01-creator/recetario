@@ -9,6 +9,7 @@ import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo } from './partida.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 const RONDAS = 10;
 
@@ -117,7 +118,7 @@ export async function juegoPais() {
           else if (opciones[i] === pais) b.classList.add('incorrecta');
         });
         tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
-        aviso.textContent = pais == null ? `Se acabó el tiempo. Era ${receta.origen}.` : bien ? '¡Correcto! 🎉' : `Era ${receta.origen}.`;
+        aviso.textContent = pais == null ? `Se acabó el tiempo. Era ${receta.origen}.` : bien ? t('juego.correcto') : `Era ${receta.origen}.`;
         aviso.className = `juego-aviso ${bien ? 'bien' : 'mal'}`;
         setTimeout(() => { indice++; ronda(); }, bien ? 1000 : 1800);
       }

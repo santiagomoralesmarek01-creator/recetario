@@ -10,6 +10,7 @@ import { revisarMedallas } from '../medallas.js';
 import { reducirImagen } from '../fotos.js';
 import { NOMBRES_PAISES } from '../paises.js';
 import { icono } from '../iconos.js';
+import { t } from '../textos.js';
 
 // Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
 // Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
@@ -229,7 +230,7 @@ export async function vistaFormulario(uuid = null) {
 
         const guardada = await misRecetas.guardar(datos, uuid);
         revisarMedallas();
-        aviso(uuid ? 'Cambios guardados' : '¡Receta guardada!');
+        aviso(uuid ? t('receta.guardada') : t('receta.publicada'));
         location.hash = `#/receta/${guardada.id}`;
       } catch (err) {
         console.error(err);
