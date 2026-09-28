@@ -73,3 +73,6 @@ export function icono(nombre, { clase = '', titulo = '' } = {}) {
 }
 
 export const ICONOS = Object.keys(TRAZOS);
+
+// Trazos sueltos de un ícono, para dibujarlo dentro de otro SVG (p. ej. el sello).
+export const trazos = (nombre) => TRAZOS[nombre] || TRAZOS.plato;

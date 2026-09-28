@@ -1449,7 +1449,7 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
 .medallas-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .medallas-cabecera h1 { margin: 2px 0 4px; }
 .medallas-total { position: relative; display: grid; place-items: center; width: 96px; height: 96px; flex: none; }
-.medallas-total span { font-size: 4.4rem; line-height: 1; }
+.medallas-total .sello { width: 92px; height: 92px; }
 .medallas-total strong {
   position: absolute;
   right: 0;
@@ -1481,25 +1481,7 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
   background: var(--superficie);
   text-align: center;
 }
-.medalla-icono {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  margin-bottom: 6px;
-  border-radius: 50%;
-  background: var(--fondo-2);
-  font-size: 2rem;
-  filter: grayscale(1);
-  opacity: 0.45;
-}
 .medalla.ganada { border-color: var(--aji); box-shadow: var(--sombra); }
-.medalla.ganada .medalla-icono {
-  filter: none;
-  opacity: 1;
-  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--maiz) 40%, #fff), var(--maiz) 70%);
-  box-shadow: 0 4px 14px rgba(200, 130, 30, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
-}
 .medalla strong { font-size: 0.98rem; line-height: 1.25; }
 .medalla-descripcion { font-size: 0.82rem; color: var(--texto-suave); line-height: 1.35; }
 .medalla-estado { margin-top: 6px; font-size: 0.8125rem; font-weight: 700; color: var(--aji-texto); }
@@ -1509,7 +1491,8 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
 .medalla-progreso small { font-size: 0.8125rem; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
 .medallas-ayuda { margin-top: 32px; }
 .medallas-invitacion { max-width: 520px; margin: 40px auto; }
-.medallas-invitacion-iconos { font-size: 2rem; letter-spacing: 6px; margin-bottom: 8px; }
+.medallas-invitacion-iconos { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.medallas-invitacion-iconos .sello { width: 48px; height: 48px; }
 
 .aviso-medalla {
   position: fixed;
@@ -1531,17 +1514,7 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
   transition: transform 0.4s cubic-bezier(0.2, 1.2, 0.4, 1);
 }
 .aviso-medalla.visible { transform: translate(-50%, 0); }
-.aviso-medalla-icono {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  flex: none;
-  border-radius: 50%;
-  font-size: 1.8rem;
-  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--maiz) 40%, #fff), var(--maiz) 70%);
-}
-.aviso-medalla > span:last-child { display: flex; flex-direction: column; line-height: 1.3; }
+.aviso-medalla > span:not(.confeti) { display: flex; flex-direction: column; line-height: 1.3; }
 .aviso-medalla small { color: var(--aji-texto); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.8125rem; }
 .aviso-medalla span span { font-size: 0.85rem; color: var(--texto-suave); }
 
@@ -2036,3 +2009,49 @@ ul.cifras { list-style: none; padding: 0; }
 .juegos-medallas > span:last-child .icono { width: 1.3rem; height: 1.3rem; }
 .temporizador-boton .icono { width: 14px; height: 14px; }
 .tiempos-rapidos + * { margin-top: 0; }
+
+/* Sello de medallas (js/sello.js): bloqueada, lograda (Maíz) y especial (Ají) */
+.sello { display: block; flex: none; overflow: visible; }
+.sello-borde { stroke-width: 2; stroke-linejoin: round; }
+.sello-aro { fill: none; stroke-width: 1.5; stroke-dasharray: 2 3.2; }
+.sello-icono { stroke: currentColor; }
+.sello-bloqueada .sello-borde { fill: none; stroke: #D9CAB2; }
+.sello-bloqueada .sello-aro { stroke: #D9CAB2; }
+.sello-bloqueada .sello-icono { color: var(--texto-suave); opacity: 0.55; }
+.sello-lograda .sello-borde { fill: var(--maiz); stroke: var(--maiz); }
+.sello-lograda .sello-aro { stroke: rgba(31, 77, 58, 0.45); }
+.sello-lograda .sello-icono { color: #1F4D3A; }
+.sello-especial .sello-borde { fill: #C8401F; stroke: #C8401F; }
+.sello-especial .sello-aro { stroke: rgba(251, 246, 236, 0.55); }
+.sello-especial .sello-icono { color: #FBF6EC; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .sello-bloqueada .sello-borde, :root:not([data-tema="claro"]) .sello-bloqueada .sello-aro { stroke: var(--borde); }
+}
+:root[data-tema="oscuro"] .sello-bloqueada .sello-borde, :root[data-tema="oscuro"] .sello-bloqueada .sello-aro { stroke: var(--borde); }
+.medalla-sello { width: 72px; height: 72px; margin-bottom: 6px; }
+.medalla.ganada { border-color: var(--borde); box-shadow: var(--sombra); }
+.medalla-estado { color: var(--hierba); }
+.aviso-medalla { border-color: var(--borde); }
+.aviso-medalla .sello { width: 58px; height: 58px; }
+
+/* La única animación de marca: el sello que se estampa (~400 ms con rebote) */
+.aviso-medalla.visible .sello-estampa { animation: estampar 0.42s cubic-bezier(0.3, 1.4, 0.5, 1) 0.25s both; }
+@keyframes estampar {
+  0% { transform: scale(1.7) rotate(-14deg); opacity: 0; }
+  60% { transform: scale(0.9) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.confeti { position: absolute; left: 41px; top: 50%; width: 0; height: 0; pointer-events: none; }
+.confeti i { position: absolute; width: 7px; height: 7px; opacity: 0; animation: confeti 0.9s ease-out 0.45s forwards; }
+@keyframes confeti {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aviso-medalla.visible .sello-estampa, .confeti i { animation: none; }
+  .confeti { display: none; }
+  .aviso-medalla { transition: none; }
+}
+.medallas-cifras li { display: flex; flex-direction: column; }
+.medallas-cifras strong { display: inline-flex; align-items: center; gap: 6px; }
+.medallas-cifras .icono { color: var(--hierba); }
