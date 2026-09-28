@@ -6,6 +6,7 @@ import { MOMENTOS, SABORES, momentoDe, saborDe } from '../tipoPlato.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { rutaReceta } from '../rutas.js';
+import { marcaVerificada } from '../verificadas.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -61,10 +62,10 @@ export function tarjetaReceta(r) {
       r.origen && el('span', { class: 'insignia insignia-pais' }, traducirOrigen(r.origen))),
     el('div', { class: 'tarjeta-cuerpo' },
       el('h3', {}, r.nombre),
-      el('p', { class: 'meta' }, [
+      el('p', { class: 'meta' },
         r.categoria && traducirCategoria(r.categoria),
-        r.autor && `por ${r.autor}`,
-      ].filter(Boolean).join(' · ')),
+        r.categoria && r.autor && ' · ',
+        r.autor && [`por ${r.autor}`, marcaVerificada(r.userId)]),
       r.dificultad && el('p', { class: `tarjeta-dificultad nivel-${r.dificultad}` },
         el('span', { class: 'pildora-dificultad' }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre),
         r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · ', icono('canasta'), t('tarjeta.especiales')))));

@@ -3,6 +3,7 @@ import * as repo from '../repositorio.js';
 import { hayBackend } from '../supabase.js';
 import { CATEGORIAS } from '../traducciones.js';
 import { tarjetaReceta } from './componentes.js';
+import { marcaVerificada } from '../verificadas.js';
 
 const POR_PAGINA = 24;
 
@@ -103,7 +104,7 @@ export async function vistaAutor(userId) {
   document.title = `Recetas de ${nombre} · A Mano`;
   mostrar(
     el('a', { class: 'volver', href: rutaComunidad() }, '← Comunidad'),
-    el('h1', {}, `Recetas de ${nombre}`),
+    el('h1', {}, `Recetas de ${nombre}`, marcaVerificada(userId)),
     contenido,
   );
 }

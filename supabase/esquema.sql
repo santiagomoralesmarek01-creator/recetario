@@ -346,3 +346,19 @@ as $$
   limit 12;
 $$;
 grant execute on function public.ranking_semanal_puestos(text) to anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- Cuentas oficiales (tilde de verificada junto al nombre). Las ve todo el
+-- mundo; sólo se agregan desde el SQL Editor, por ejemplo:
+--   insert into public.cuentas_verificadas (user_id)
+--   select id from auth.users where email = 'cuenta@ejemplo.com'
+--   on conflict do nothing;
+-- ---------------------------------------------------------------------
+create table if not exists public.cuentas_verificadas (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.cuentas_verificadas enable row level security;
+drop policy if exists "Ver cuentas verificadas" on public.cuentas_verificadas;
+create policy "Ver cuentas verificadas" on public.cuentas_verificadas
+  for select to anon, authenticated using (true);

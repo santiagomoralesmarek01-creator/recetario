@@ -22,6 +22,7 @@ import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
 import { ir } from '../rutas.js';
+import { marcaVerificada } from '../verificadas.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -237,7 +238,7 @@ export async function vistaReceta(id) {
           r.nombreOriginal && r.nombreOriginal !== r.nombre && `En su idioma: ${r.nombreOriginal}`,
         ].filter(Boolean).join(' · ')),
         r.autor && el('p', { class: 'meta' }, 'Receta de ',
-          r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor),
+          r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor), marcaVerificada(r.userId),
           r.publica === false && [' · ', icono('candado'), 'privada']),
         r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
         el('ul', { class: 'datos-rapidos' },
