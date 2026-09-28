@@ -48,11 +48,11 @@ function seccionRanking() {
   const pais = paisDelUsuario();
   const lista = el('ol', { class: 'ranking' });
   let pestana = 'general';
-  const botones = pais && el('div', { class: 'ranking-pestanas', role: 'tablist' },
+  const botones = pais ? el('div', { class: 'ranking-pestanas', role: 'tablist' },
     [['general', 'General'], ['pais', pais]].map(([clave, texto]) => el('button', {
       type: 'button', role: 'tab', class: 'filtro-chip', 'data-clave': clave,
       onclick: () => { pestana = clave; cargar(); },
-    }, texto)));
+    }, texto))) : null;
 
   function fila(f) {
     return el('li', { class: f.soyYo ? 'soy-yo' : '' },
