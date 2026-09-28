@@ -101,6 +101,8 @@ const TEXTOS = {
   'juegos.racha': '{n} {dias} de racha',
   'juegos.sin-partidas': { neutro: 'Sin partidas todavía', vos: 'Todavía no jugaste', tu: 'Todavía no has jugado' },
   'juegos.record': 'Récord: {n} puntos',
+  'ranking.yo': { neutro: 'yo', vos: 'vos', tu: 'tú' },
+  'ranking.vacio': 'Todavía nadie sumó puntos esta semana.',
   'juego.empezar': 'Empezar',
   'juego.correcto': 'Correcto.',
   'juego.exacto': 'Exacto.',

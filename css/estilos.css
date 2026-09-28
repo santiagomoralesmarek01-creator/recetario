@@ -2068,3 +2068,21 @@ ul.cifras { list-style: none; padding: 0; }
 .manitas-reemplazo > span { display: flex; flex-direction: column; gap: 2px; }
 .manitas-reemplazo s { opacity: 0.75; }
 .manitas-reemplazo small { color: var(--texto); font-size: 0.85rem; }
+
+/* Preferencias y ranking por país */
+.preferencias { max-width: 620px; display: flex; flex-direction: column; gap: 18px; }
+.preferencias fieldset { margin: 0; padding: 16px 18px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--superficie); }
+.preferencias legend { padding: 0 6px; font-family: var(--fuente-titulos); font-weight: 700; font-size: 1.1rem; }
+.preferencias .meta { margin: 0 0 10px; }
+.preferencias select { width: 100%; padding: 10px 12px; font: inherit; border: 1px solid var(--borde); border-radius: var(--radio-chico); background: var(--fondo); color: var(--texto); }
+.opciones-trato { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.opcion-trato { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 2px solid var(--borde); border-radius: var(--radio-chico); cursor: pointer; }
+.opcion-trato.elegida { border-color: var(--hierba); background: var(--hierba-suave); }
+.opcion-trato input { width: auto; flex: none; margin-top: 4px; accent-color: var(--hierba); }
+.opcion-trato span { display: flex; flex-direction: column; }
+.opcion-trato small { color: var(--texto-suave); }
+.ranking-pestanas { display: flex; gap: 6px; margin-bottom: 10px; }
+.filtro-chip.activo { background: var(--hierba); border-color: var(--hierba); color: var(--texto-sobre-hierba); }
+.ranking-salto { justify-content: center; color: var(--texto-suave); }
+.ranking-nombre small { color: var(--texto-suave); font-weight: 400; }
+.pie-enlaces a { color: inherit; }

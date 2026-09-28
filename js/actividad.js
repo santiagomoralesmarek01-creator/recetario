@@ -90,10 +90,18 @@ export async function misLogros() {
   return data;
 }
 
-export async function rankingSemanal() {
+// Ranking de la semana, general o de un país: los 5 primeros y el puesto
+// propio con dos arriba y dos abajo. Si falta la función nueva en Supabase,
+// usa la anterior (top 10, sin países).
+export async function rankingSemanal(pais = null) {
   if (!hayBackend) return [];
   const sb = await cliente();
-  const { data, error } = await sb.rpc('ranking_semanal');
-  if (error) throw errorLegible(error);
-  return (data || []).map((f) => ({ nombre: f.nombre, puntos: Number(f.puntos), soyYo: Boolean(f.soy_yo) }));
+  const { data, error } = await sb.rpc('ranking_semanal_puestos', { p_pais: pais });
+  if (!error) {
+    return (data || []).map((f) => ({ puesto: Number(f.puesto), nombre: f.nombre, pais: f.pais, puntos: Number(f.puntos), soyYo: Boolean(f.soy_yo) }));
+  }
+  if (pais) throw errorLegible(error);
+  const viejo = await sb.rpc('ranking_semanal');
+  if (viejo.error) throw errorLegible(viejo.error);
+  return (viejo.data || []).map((f, i) => ({ puesto: i + 1, nombre: f.nombre, puntos: Number(f.puntos), soyYo: Boolean(f.soy_yo) }));
 }

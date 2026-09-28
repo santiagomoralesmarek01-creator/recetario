@@ -286,3 +286,63 @@ create policy "Administradores borran fotos" on public.fotos_recetas
 --   insert into public.administradores (user_id)
 --   select id from auth.users where email = 'tu-email@ejemplo.com'
 --   on conflict do nothing;
+
+-- ---------------------------------------------------------------------
+-- Preferencias de cada persona: trato (neutro, vos o tú) y país. El país
+-- se usa en Manitas y en el ranking por país. Cada uno ve y cambia sólo
+-- las suyas.
+-- ---------------------------------------------------------------------
+create table if not exists public.perfiles (
+  user_id    uuid primary key default auth.uid() references auth.users (id) on delete cascade,
+  trato      text not null default 'neutro' check (trato in ('neutro', 'vos', 'tu')),
+  pais       text check (char_length(pais) <= 40),
+  updated_at timestamptz not null default now()
+);
+alter table public.perfiles enable row level security;
+
+drop policy if exists "Ver mi perfil" on public.perfiles;
+create policy "Ver mi perfil" on public.perfiles
+  for select to authenticated using (auth.uid() = user_id);
+drop policy if exists "Crear mi perfil" on public.perfiles;
+create policy "Crear mi perfil" on public.perfiles
+  for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists "Cambiar mi perfil" on public.perfiles;
+create policy "Cambiar mi perfil" on public.perfiles
+  for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Ranking de la semana (se reinicia el lunes a las 00:00 de Argentina), en
+-- general o de un país. Devuelve los 5 primeros y, si la persona está más
+-- abajo, su puesto con dos arriba y dos abajo.
+create or replace function public.ranking_semanal_puestos(p_pais text default null)
+returns table (puesto bigint, nombre text, pais text, puntos bigint, soy_yo boolean)
+language sql stable security definer set search_path = public
+as $$
+  with semana as (
+    select (date_trunc('week', now() at time zone 'America/Argentina/Buenos_Aires')
+            at time zone 'America/Argentina/Buenos_Aires') as desde
+  ),
+  totales as (
+    select a.user_id, sum(a.puntos) as puntos
+    from public.actividad a, semana s
+    where a.tipo like 'juego-%' and a.created_at >= s.desde
+    group by a.user_id
+  ),
+  tabla as (
+    select rank() over (order by t.puntos desc) as puesto,
+           coalesce(nullif(trim(u.raw_user_meta_data ->> 'nombre'), ''), 'Cocinero/a') as nombre,
+           p.pais,
+           t.puntos,
+           t.user_id = auth.uid() as soy_yo
+    from totales t
+    join auth.users u on u.id = t.user_id
+    left join public.perfiles p on p.user_id = t.user_id
+    where p_pais is null or p.pais = p_pais
+  ),
+  yo as (select min(puesto) as puesto from tabla where soy_yo)
+  select t.puesto, t.nombre, t.pais, t.puntos, t.soy_yo
+  from tabla t, yo
+  where t.puesto <= 5 or (yo.puesto is not null and abs(t.puesto - yo.puesto) <= 2)
+  order by t.puesto, t.nombre
+  limit 12;
+$$;
+grant execute on function public.ranking_semanal_puestos(text) to anon, authenticated;

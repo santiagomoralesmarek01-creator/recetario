@@ -19,6 +19,8 @@ import { vistaFotos } from './vistas/fotosRecetas.js';
 import { soyAdmin } from './fotos.js';
 import { icono } from './iconos.js';
 import { t, aplicarTextos } from './textos.js';
+import { iniciarPreferencias, EVENTO as CAMBIO_PREFERENCIAS } from './preferencias.js';
+import { vistaPreferencias } from './vistas/preferencias.js';
 
 iniciarTema();
 aplicarTextos();
@@ -62,6 +64,7 @@ function menuUsuario(u) {
     el('a', { href: '#/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
     el('a', { href: '#/medallas', role: 'menuitem' }, icono('medalla'), 'Mis medallas'),
     el('a', { href: '#/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
+    el('a', { href: '#/preferencias', role: 'menuitem' }, icono('ajustes'), 'Preferencias'),
     enlaceAdmin,
     el('button', {
       type: 'button', role: 'menuitem',
@@ -130,6 +133,7 @@ async function router() {
       case 'juegos': return param ? await vistaJuego(param) : vistaJuegos();
       case 'medallas': return await vistaMedallas();
       case 'fotos': return await vistaFotos();
+      case 'preferencias': return vistaPreferencias();
       case 'comunidad': return await vistaComunidad(param);
       case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();
@@ -167,6 +171,13 @@ document.addEventListener('click', async (e) => {
 
 window.addEventListener('hashchange', router);
 
+// Cambió el trato o el país: se redibujan los textos, el menú y la página.
+window.addEventListener(CAMBIO_PREFERENCIAS, () => {
+  aplicarTextos();
+  dibujarMenu(usuario());
+  if (!location.hash.startsWith('#/preferencias')) router();
+});
+
 // Al cambiar la sesión: redibujar el menú y, si estabas en una página privada, refrescarla.
 let primeraVez = true;
 let ultimoUsuario = null;
@@ -185,6 +196,7 @@ alCambiarSesion((u) => {
   iniciarAyudante();
   iniciarTemporizadores();
   iniciarMedallas();
+  iniciarPreferencias();
   try {
     await iniciarAuth();
   } catch (err) {

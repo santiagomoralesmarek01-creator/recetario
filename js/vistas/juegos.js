@@ -13,6 +13,7 @@ import { juegoArmar } from '../juegos/armar.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { conPalabraDestacada } from './listados.js';
+import { paisDelUsuario } from '../paises.js';
 
 const JUEGOS = {
   'plato-del-dia': juegoPlatoDelDia,
@@ -40,23 +41,54 @@ function tarjetaJuego({ ruta, icono: simbolo, titulo, texto, dificultad, extra, 
     el('span', { class: 'tarjeta-juego-ir', 'aria-hidden': 'true' }, icono('flecha')));
 }
 
+// Ranking semanal con pestañas "General" y el país de la persona.
+// Se reinicia cada lunes. Muestra los 5 primeros y el puesto propio con
+// dos arriba y dos abajo (con "…" en el salto).
 function seccionRanking() {
-  const lista = el('ol', { class: 'ranking' }, el('li', { class: 'meta' }, 'Cargando…'));
-  rankingSemanal()
-    .then((filas) => {
-      lista.replaceChildren(...(filas.length
-        ? filas.map((f, i) => el('li', { class: f.soyYo ? 'soy-yo' : '' },
-          el('span', { class: 'ranking-puesto' }, `${i + 1}.`),
-          el('span', { class: 'ranking-nombre' }, f.soyYo ? `${f.nombre} (vos)` : f.nombre),
-          el('span', { class: 'ranking-puntos' }, `${f.puntos.toLocaleString('es-AR')} pts`)))
-        : [el('li', { class: 'meta' }, 'Todavía nadie sumó puntos esta semana. ¡Podés ser el primero!')]));
-    })
-    .catch(() => lista.replaceChildren(el('li', { class: 'meta' }, 'El ranking no está disponible por ahora.')));
+  const pais = paisDelUsuario();
+  const lista = el('ol', { class: 'ranking' });
+  let pestana = 'general';
+  const botones = pais && el('div', { class: 'ranking-pestanas', role: 'tablist' },
+    [['general', 'General'], ['pais', pais]].map(([clave, texto]) => el('button', {
+      type: 'button', role: 'tab', class: 'filtro-chip', 'data-clave': clave,
+      onclick: () => { pestana = clave; cargar(); },
+    }, texto)));
+
+  function fila(f) {
+    return el('li', { class: f.soyYo ? 'soy-yo' : '' },
+      el('span', { class: 'ranking-puesto' }, `${f.puesto}.`),
+      el('span', { class: 'ranking-nombre' }, f.soyYo ? `${f.nombre} (${t('ranking.yo')})` : f.nombre,
+        pestana === 'general' && f.pais && el('small', {}, ` · ${f.pais}`)),
+      el('span', { class: 'ranking-puntos' }, `${f.puntos.toLocaleString('es-AR')} pts`));
+  }
+
+  function cargar() {
+    botones?.querySelectorAll('button').forEach((b) => {
+      const activo = b.dataset.clave === pestana;
+      b.classList.toggle('activo', activo);
+      b.setAttribute('aria-selected', String(activo));
+    });
+    lista.replaceChildren(el('li', { class: 'meta' }, 'Cargando…'));
+    rankingSemanal(pestana === 'pais' ? pais : null)
+      .then((filas) => {
+        const items = [];
+        filas.forEach((f, i) => {
+          if (i > 0 && f.puesto > filas[i - 1].puesto + 1) items.push(el('li', { class: 'ranking-salto', 'aria-hidden': 'true' }, '…'));
+          items.push(fila(f));
+        });
+        lista.replaceChildren(...(items.length ? items : [el('li', { class: 'meta' }, t('ranking.vacio'))]));
+      })
+      .catch(() => lista.replaceChildren(el('li', { class: 'meta' }, 'El ranking no está disponible por ahora.')));
+  }
+  cargar();
+
   return el('section', { class: 'seccion juegos-ranking' },
     el('h2', {}, 'Ranking de la semana'),
-    el('p', { class: 'seccion-bajada' }, 'Suma los puntos de todos los juegos de los últimos 7 días.'),
+    el('p', { class: 'seccion-bajada' }, 'Suma los puntos de todos los juegos desde el lunes. Cada semana arranca de cero.'),
+    botones,
     lista,
-    !usuario() && el('p', { class: 'meta' }, el('a', { href: '#/entrar' }, 'Entrá'), ' para aparecer en el ranking y ganar medallas.'));
+    !pais && el('p', { class: 'meta' }, el('a', { href: '#/preferencias' }, 'Elegir un país'), ' para ver también el ranking de ese país.'),
+    !usuario() && el('p', { class: 'meta' }, el('a', { href: '#/entrar' }, t('juego.entrar')), ' para aparecer en el ranking y ganar medallas.'));
 }
 
 export function vistaJuegos() {
