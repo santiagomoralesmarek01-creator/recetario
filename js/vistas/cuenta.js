@@ -7,12 +7,13 @@ import * as repo from '../repositorio.js';
 import { misMeGusta } from '../actividad.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { ir } from '../rutas.js';
 
 export function sinBackend() {
   mostrar(el('div', { class: 'estado' },
     el('h1', {}, 'Cuentas no disponibles todavía'),
     el('p', {}, 'Falta configurar Supabase en js/config.js (ver README).'),
-    el('a', { href: '#/' }, 'Volver al inicio')));
+    el('a', { href: '/' }, 'Volver al inicio')));
 }
 
 function campo(etiqueta, props) {
@@ -21,7 +22,7 @@ function campo(etiqueta, props) {
 
 export function vistaEntrar(modo = 'entrar') {
   if (!hayBackend) return sinBackend();
-  if (usuario()) { location.hash = tomarDestino(); return; }
+  if (usuario()) { ir(tomarDestino()); return; }
 
   const titulos = { entrar: 'Entrar', registro: 'Crear cuenta', recuperar: 'Recuperar contraseña' };
   const error = el('p', { class: 'error', role: 'alert' });
@@ -49,12 +50,12 @@ export function vistaEntrar(modo = 'entrar') {
         if (modo === 'entrar') {
           await entrar(email, datos.get('clave'));
           aviso(`¡Hola, ${nombreVisible()}!`);
-          location.hash = tomarDestino();
+          ir(tomarDestino());
         } else if (modo === 'registro') {
           const activa = await registrarse(datos.get('nombre').trim(), email, datos.get('clave'));
           if (activa) {
             aviso('¡Cuenta creada!');
-            location.hash = tomarDestino();
+            ir(tomarDestino());
           } else {
             form.replaceChildren(el('p', { class: 'exito' },
               `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`));
@@ -79,7 +80,7 @@ export function vistaEntrar(modo = 'entrar') {
 
   const pestanas = el('nav', { class: 'pestanas' },
     ['entrar', 'registro'].map((m) =>
-      el('a', { href: m === 'entrar' ? '#/entrar' : '#/registro', class: m === modo ? 'activa' : '' }, titulos[m])));
+      el('a', { href: m === 'entrar' ? '/entrar' : '/registro', class: m === modo ? 'activa' : '' }, titulos[m])));
 
   mostrar(el('div', { class: 'tarjeta-cuenta' },
     modo !== 'recuperar' && el('p', { class: 'explicacion-cuenta' }, hayDestinoPendiente()
@@ -87,8 +88,8 @@ export function vistaEntrar(modo = 'entrar') {
       : 'Con una cuenta podés crear tus propias recetas y tenerlas guardadas. Para ver y cocinar recetas no hace falta.'),
     modo !== 'recuperar' ? pestanas : el('h1', {}, titulos[modo]),
     form,
-    modo === 'entrar' && el('p', { class: 'meta' }, el('a', { href: '#/recuperar' }, '¿Olvidaste tu contraseña?')),
-    modo === 'recuperar' && el('p', { class: 'meta' }, el('a', { href: '#/entrar' }, '← Volver'))));
+    modo === 'entrar' && el('p', { class: 'meta' }, el('a', { href: '/recuperar' }, '¿Olvidaste tu contraseña?')),
+    modo === 'recuperar' && el('p', { class: 'meta' }, el('a', { href: '/entrar' }, '← Volver'))));
   form.querySelector('input')?.focus();
 }
 
@@ -102,7 +103,7 @@ export function vistaNuevaClave(cambiarClave) {
       try {
         await cambiarClave(new FormData(form).get('clave'));
         aviso('Contraseña actualizada');
-        location.hash = '#/mis-recetas';
+        ir('/mis-recetas');
       } catch (err) {
         error.textContent = err.message;
       }
@@ -129,14 +130,14 @@ export async function vistaMisRecetas() {
     el('div', { class: 'seccion-titulo' },
       el('h1', {}, `Mis recetas`),
       el('div', { class: 'acciones' },
-        el('a', { class: 'boton-secundario boton', href: '#/medallas' }, icono('medalla'), 'Mis medallas'),
-        el('a', { class: 'boton', href: '#/nueva' }, icono('mas'), 'Nueva receta'))),
+        el('a', { class: 'boton-secundario boton', href: '/medallas' }, icono('medalla'), 'Mis medallas'),
+        el('a', { class: 'boton', href: '/nueva' }, icono('mas'), 'Nueva receta'))),
     el('p', { class: 'meta' }, `Hola, ${nombreVisible(u)}. Tenés ${recetas.length} receta${recetas.length === 1 ? '' : 's'} guardada${recetas.length === 1 ? '' : 's'}.`),
     recetas.length
       ? grillaRecetas(recetas)
       : el('div', { class: 'estado' },
         el('p', {}, 'Todavía no cargaste ninguna receta.'),
-        el('a', { class: 'boton', href: '#/nueva' }, 'Crear la primera')),
+        el('a', { class: 'boton', href: '/nueva' }, 'Crear la primera')),
     el('section', { class: 'seccion' },
       el('h2', {}, 'Tus favoritas'),
       favoritas.length

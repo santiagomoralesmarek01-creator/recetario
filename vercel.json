@@ -27,5 +27,23 @@
         }
       ]
     }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/((?!api/|data/|img/|css/|js/|docs/)(?!.*\\.[A-Za-z0-9]{2,12}$).*)",
+      "destination": "/api/pagina?ruta=$1"
+    }
+  ],
+  "functions": {
+    "api/pagina.js": {
+      "includeFiles": "{index.html,data/recetas-casa.json,data/mealdb/*.json}"
+    },
+    "api/sitemap.js": {
+      "includeFiles": "{data/recetas-casa.json,data/mealdb/indice.json}"
+    }
+  }
 }

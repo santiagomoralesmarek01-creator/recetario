@@ -7,6 +7,7 @@ import {
   recetaActual, soltarActual, leerProgreso, guardarProgreso, alCambiarCocina,
 } from './cocina.js';
 import { icono } from './iconos.js';
+import { alCambiarRuta, ruta, idDeRuta, rutaReceta } from './rutas.js';
 
 const ORIGEN = 'panel';
 let panel;
@@ -30,7 +31,7 @@ export function iniciarPanel() {
   medir();
 
   alCambiarCocina(({ origen }) => { if (origen !== ORIGEN) dibujar(); });
-  window.addEventListener('hashchange', () => { alternar(false); actualizarFlotante(); });
+  alCambiarRuta(() => { alternar(false); actualizarFlotante(); });
   dibujar();
 }
 
@@ -42,7 +43,7 @@ function alternar(abrir) {
 // En la ficha de la misma receta ya está la barra de progreso: el botón flotante sobra.
 function actualizarFlotante() {
   const actual = recetaActual();
-  const enSuFicha = actual && location.hash === `#/receta/${actual.id}`;
+  const enSuFicha = actual && idDeRuta(ruta().replace(/^receta\//, '')) === String(actual.id) && ruta().startsWith('receta/');
   botonFlotante.hidden = !actual || enSuFicha;
 }
 
@@ -93,7 +94,7 @@ function dibujar() {
           type: 'button', class: 'boton-icono', title: 'Dejar de seguir esta receta', 'aria-label': 'Dejar de seguir esta receta',
           onclick: () => soltarActual(),
         }, icono('cerrar')))),
-    el('a', { class: 'panel-actual-receta', href: `#/receta/${r.id}` },
+    el('a', { class: 'panel-actual-receta', href: rutaReceta(r.id, r.nombre) },
       crearImagen(r.imagen ? urlPlato(r.imagen, { miniatura: /^\d+$/.test(r.id) }) : IMG_PLATO_GENERICO, '', IMG_PLATO_GENERICO),
       el('strong', {}, r.nombre)),
     el('div', { class: 'progreso-barra' }, el('span', { style: `width:${total ? (hechos / total) * 100 : 0}%` })),

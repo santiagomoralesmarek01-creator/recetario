@@ -11,6 +11,7 @@ import { icono } from './iconos.js';
 import { t, trato } from './textos.js';
 import { paisDelUsuario } from './paises.js';
 import { evento } from './analitica.js';
+import { rutaReceta } from './rutas.js';
 
 const CLAVE = 'recetario:ayudante';
 const MAX_HISTORIAL = 20;
@@ -91,13 +92,13 @@ function enLinea(texto, recetas = []) {
     const cita = parte.match(/^\[\[\s*([\w-]+)\s*\]\]$/);
     if (!cita) return parte;
     const r = recetas.find((x) => x.id === cita[1]);
-    return r ? el('a', { href: `#/receta/${r.id}`, onclick: () => alElegirReceta() }, r.nombre) : '';
+    return r ? el('a', { href: rutaReceta(r.id, r.nombre), onclick: () => alElegirReceta() }, r.nombre) : '';
   });
 }
 
 function tarjetasRecetas(recetas) {
   return el('div', { class: 'ayudante-recetas' }, recetas.map((r) => el('a', {
-    class: 'ayudante-receta', href: `#/receta/${r.id}`, onclick: () => alElegirReceta(),
+    class: 'ayudante-receta', href: rutaReceta(r.id, r.nombre), onclick: () => alElegirReceta(),
   },
   r.imagen ? crearImagen(r.imagen, '', IMG_PLATO_GENERICO) : el('span', { class: 'ayudante-receta-sin-foto', 'aria-hidden': 'true' }, icono('plato')),
   el('span', {}, el('strong', {}, r.nombre), r.detalle && el('small', {}, r.detalle)),

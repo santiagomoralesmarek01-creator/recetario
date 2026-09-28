@@ -166,7 +166,7 @@ export function guardarRecord(juego, puntos, modo = null) {
 // ---------- compartir ----------
 
 export async function compartir(texto) {
-  const url = `${location.origin}${location.pathname}#/juegos`;
+  const url = `${location.origin}/juegos`;
   const completo = `${texto}\n${url}`;
   if (navigator.share) {
     try { await navigator.share({ text: completo }); return; } catch (err) { if (err?.name === 'AbortError') return; }

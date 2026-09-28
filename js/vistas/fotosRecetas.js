@@ -7,6 +7,7 @@ import { soyAdmin, guardarFoto } from '../fotos.js';
 import { portada } from './componentes.js';
 import { traducirCategoria } from '../traducciones.js';
 import { icono } from '../iconos.js';
+import { rutaReceta } from '../rutas.js';
 
 // Ventana para elegir la foto, ver cómo queda y guardarla.
 export function dialogoFoto(receta, alGuardar) {
@@ -70,10 +71,10 @@ export function dialogoFoto(receta, alGuardar) {
   entrada.focus();
 }
 
-// #/fotos: recetas sin foto (primero las latinoamericanas de la casa) para ir completándolas.
+// /fotos: recetas sin foto (primero las latinoamericanas de la casa) para ir completándolas.
 export async function vistaFotos() {
   document.title = 'Fotos de recetas · A Mano';
-  if (!usuario()) { pedirLogin('#/fotos'); return; }
+  if (!usuario()) { pedirLogin('/fotos'); return; }
   const vigente = vigencia();
   cargando();
   const [admin, todas] = await Promise.all([soyAdmin(), repo.todasLasRecetas()]);
@@ -95,7 +96,7 @@ export async function vistaFotos() {
     return el('li', {},
       img,
       el('span', { class: 'fotos-lista-texto' },
-        el('a', { href: `#/receta/${r.id}` }, r.nombre),
+        el('a', { href: rutaReceta(r.id, r.nombre) }, r.nombre),
         el('small', {}, [r.categoria && traducirCategoria(r.categoria), r.origen].filter(Boolean).join(' · ')),
         estado),
       el('button', {

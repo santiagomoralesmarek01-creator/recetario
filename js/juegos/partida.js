@@ -8,6 +8,7 @@ import { guardarRecord, leerRecords, compartir, MODOS, modoGuardado, guardarModo
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
+import { ruta } from '../rutas.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -54,13 +55,13 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
       ? el('p', { class: 'juego-record' }, icono('trofeo'), ` ${t('juego.nuevo-record')}`)
       : recordAnterior > 0 && el('p', { class: 'meta' }, `Tu récord${modo ? ` en ${MODOS[modo].nombre.toLowerCase()}` : ''}: ${Math.max(recordAnterior, puntos)} puntos`),
     invitado && el('p', { class: 'juego-invitacion' },
-      el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, t('juego.entrar')),
+      el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(ruta()) }, t('juego.entrar')),
       t('juego.entrar-texto')),
     el('div', { class: 'acciones' },
       el('button', { type: 'button', class: 'boton', onclick: alReintentar }, t('juego.otra-vez')),
       alCambiarModo && el('button', { type: 'button', class: 'boton-secundario', onclick: alCambiarModo }, t('juego.cambiar-dificultad')),
       el('button', { type: 'button', class: 'boton-secundario', onclick: () => compartir(textoCompartir) }, t('juego.compartir')),
-      el('a', { class: 'boton-secundario boton', href: '#/juegos' }, t('juego.otros'))));
+      el('a', { class: 'boton-secundario boton', href: '/juegos' }, t('juego.otros'))));
 }
 
 // Marcador de la parte de arriba: ronda, puntos y (opcional) tiempo.

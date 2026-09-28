@@ -6,14 +6,14 @@ import { tarjetaReceta } from './componentes.js';
 
 const POR_PAGINA = 24;
 
-export const rutaComunidad = (categoria = '') => `#/comunidad${categoria ? `/${encodeURIComponent(categoria)}` : ''}`;
-export const rutaAutor = (userId) => `#/autor/${encodeURIComponent(userId)}`;
+export const rutaComunidad = (categoria = '') => `/comunidad${categoria ? `/${encodeURIComponent(categoria)}` : ''}`;
+export const rutaAutor = (userId) => `/autor/${encodeURIComponent(userId)}`;
 
 function invitacionVacia(texto) {
   return el('div', { class: 'comunidad-vacia' },
     el('img', { src: 'img/comunidad.svg', alt: '', width: '120', height: '75' }),
     el('p', {}, texto),
-    el('a', { class: 'boton', href: '#/nueva' }, 'Subir una receta'));
+    el('a', { class: 'boton', href: '/nueva' }, 'Subir una receta'));
 }
 
 // Grilla que va pidiendo más recetas al servidor con "Ver más".
@@ -80,12 +80,12 @@ export async function vistaComunidad(categoria = '') {
   await actualizar();
   if (!vigente()) return;
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('header', { class: 'comunidad-cabecera' },
       el('div', {},
         el('h1', {}, 'Recetas de la comunidad'),
         el('p', { class: 'meta' }, 'Recetas caseras que compartió la gente de A Mano.')),
-      el('a', { class: 'boton', href: '#/nueva' }, 'Subir mi receta')),
+      el('a', { class: 'boton', href: '/nueva' }, 'Subir mi receta')),
     el('div', { class: 'comunidad-filtros' }, buscador, chips),
     resultados,
   );

@@ -82,7 +82,7 @@ export function paisDelUsuario() {
   return '';
 }
 
-export const rutaPais = (pais) => `#/pais/${encodeURIComponent(pais)}`;
+export const rutaPais = (pais) => `/pais/${encodeURIComponent(pais)}`;
 
 export function chipPais({ nombre, cantidad }) {
   return el('a', { class: 'chip-pais', href: rutaPais(nombre) },

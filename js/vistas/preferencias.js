@@ -1,4 +1,4 @@
-// #/preferencias: trato (neutro, vos o tú) y país. Sirve con o sin cuenta.
+// /preferencias: trato (neutro, vos o tú) y país. Sirve con o sin cuenta.
 import { el, mostrar, aviso } from '../dom.js';
 import { usuario } from '../auth.js';
 import { t, TRATOS } from '../textos.js';
@@ -51,7 +51,7 @@ export function vistaPreferencias() {
   el('div', { class: 'acciones' }, el('button', { type: 'submit', class: 'boton' }, 'Guardar')));
 
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, `← ${t('nav.inicio')}`),
+    el('a', { class: 'volver', href: '/' }, `← ${t('nav.inicio')}`),
     el('h1', {}, 'Preferencias'),
     form);
 }

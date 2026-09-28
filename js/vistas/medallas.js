@@ -29,7 +29,7 @@ export async function vistaMedallas() {
       el('div', { class: 'medallas-invitacion-iconos', 'aria-hidden': 'true' }, MEDALLAS.slice(0, 6).map((m) => sello({ ...m, ganada: true }))),
       el('h1', {}, 'Ganá medallas cocinando'),
       el('p', {}, `Hay ${MEDALLAS.length} medallas para conseguir: subiendo recetas, dándoles me gusta a otras, completando recetas en la cocina y jugando.`),
-      el('button', { type: 'button', class: 'boton', onclick: () => pedirLogin('#/medallas') }, 'Entrar o crear cuenta')));
+      el('button', { type: 'button', class: 'boton', onclick: () => pedirLogin('/medallas') }, 'Entrar o crear cuenta')));
     return;
   }
   const vigente = vigencia();
@@ -70,5 +70,5 @@ export async function vistaMedallas() {
       el('ul', { class: 'grilla-medallas' }, medallas.filter((m) => m.grupo === g).map(tarjeta)))),
     el('p', { class: 'meta medallas-ayuda' },
       '¿Cómo se consiguen? Subiendo recetas desde "Nueva", marcando con el corazón las recetas que gustan, tildando todos los pasos al cocinar una receta y jugando en ',
-      el('a', { href: '#/juegos' }, 'Juegos'), '.'));
+      el('a', { href: '/juegos' }, 'Juegos'), '.'));
 }

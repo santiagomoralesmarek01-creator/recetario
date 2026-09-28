@@ -17,8 +17,8 @@ export function iniciarAnalitica() {
   if (plausible) {
     // Cola para los eventos que pasen antes de que cargue el script.
     window.plausible = window.plausible || function (...args) { (window.plausible.q = window.plausible.q || []).push(args); };
-    // La versión "hash" cuenta cada sección (#/receta/…, #/que-tengo…).
-    cargarScript('https://plausible.io/js/script.hash.js', { 'data-domain': plausible });
+    // Cuenta cada sección (/receta/…, /que-tengo…): el script sigue los cambios de dirección.
+    cargarScript('https://plausible.io/js/script.js', { 'data-domain': plausible });
   }
   if (cloudflare) {
     cargarScript('https://static.cloudflareinsights.com/beacon.min.js', { 'data-cf-beacon': JSON.stringify({ token: cloudflare }) });

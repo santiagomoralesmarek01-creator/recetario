@@ -5,6 +5,7 @@ import { NIVELES } from '../dificultad.js';
 import { MOMENTOS, SABORES, momentoDe, saborDe } from '../tipoPlato.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { rutaReceta } from '../rutas.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -52,7 +53,7 @@ export function metaReceta(r) {
 }
 
 export function tarjetaReceta(r) {
-  return el('a', { class: 'tarjeta', href: `#/receta/${r.id}` },
+  return el('a', { class: 'tarjeta', href: rutaReceta(r.id, r.nombre) },
     el('div', { class: 'tarjeta-portada' },
       portada(r, { miniatura: true, clase: 'tarjeta-img' }),
       INSIGNIAS[r.origenDatos] && el('span', { class: `insignia insignia-${r.origenDatos}` }, INSIGNIAS[r.origenDatos]),

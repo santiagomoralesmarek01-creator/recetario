@@ -21,6 +21,7 @@ import { dialogoFoto } from './fotosRecetas.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
+import { ir } from '../rutas.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -30,7 +31,7 @@ export async function vistaReceta(id) {
   if (!r) {
     mostrar(
       el('p', { class: 'estado' }, 'La receta no existe o es privada.'),
-      el('p', { class: 'estado' }, el('a', { href: '#/' }, 'Volver al inicio')));
+      el('p', { class: 'estado' }, el('a', { href: '/' }, 'Volver al inicio')));
     return;
   }
   document.title = `${r.nombre} · A Mano`;
@@ -194,7 +195,7 @@ export async function vistaReceta(id) {
 
   // ---------- acciones del dueño ----------
   const accionesDueno = esMia && el('p', { class: 'acciones' },
-    el('a', { class: 'boton', href: `#/editar/${r.uuid}` }, icono('editar'), 'Editar'),
+    el('a', { class: 'boton', href: `/editar/${r.uuid}` }, icono('editar'), 'Editar'),
     el('button', {
       type: 'button',
       class: 'boton-peligro',
@@ -203,7 +204,7 @@ export async function vistaReceta(id) {
         try {
           await misRecetas.borrar(r.uuid);
           aviso('Receta borrada');
-          location.hash = '#/mis-recetas';
+          ir('/mis-recetas');
         } catch (err) {
           aviso(`No se pudo borrar: ${err.message}`, 'error');
         }
@@ -213,8 +214,8 @@ export async function vistaReceta(id) {
   const botonMeGusta = hayBackend && botonDeMeGusta(r.id);
 
   const volver = r.categoria
-    ? el('a', { class: 'volver', href: `#/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
-    : el('a', { class: 'volver', href: '#/' }, '← Inicio');
+    ? el('a', { class: 'volver', href: `/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
+    : el('a', { class: 'volver', href: '/' }, '← Inicio');
 
   const datos = [
     [icono('ingrediente'), r.ingredientes.length, 'ingredientes'],

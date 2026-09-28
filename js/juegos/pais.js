@@ -64,7 +64,7 @@ export async function juegoPais() {
   const tablero = marcador();
   tablero.nodo.hidden = true;
   mostrar(
-    el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
+    el('a', { class: 'volver', href: '/juegos' }, '← Juegos'),
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
         el('h1', {}, icono('pais', { clase: 'icono-titulo' }), 'Adiviná el país'),

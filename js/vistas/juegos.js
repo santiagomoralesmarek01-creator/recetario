@@ -31,7 +31,7 @@ const ELEGIS = () => [t('juegos.elegir-dificultad'), ...[[1, 'Fácil'], [2, 'Nor
   i ? ' · ' : '', el('span', { class: `nivel-${n}` }, el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), nombre)])];
 
 function tarjetaJuego({ ruta, icono: simbolo, titulo, texto, dificultad, extra, clase = '' }) {
-  return el('a', { class: `tarjeta-juego ${clase}`, href: `#/juegos/${ruta}` },
+  return el('a', { class: `tarjeta-juego ${clase}`, href: `/juegos/${ruta}` },
     el('span', { class: 'tarjeta-juego-icono', 'aria-hidden': 'true' }, simbolo),
     el('span', { class: 'tarjeta-juego-texto' },
       el('strong', {}, titulo),
@@ -87,8 +87,8 @@ function seccionRanking() {
     el('p', { class: 'seccion-bajada' }, 'Suma los puntos de todos los juegos desde el lunes. Cada semana arranca de cero.'),
     botones,
     lista,
-    !pais && el('p', { class: 'meta' }, el('a', { href: '#/preferencias' }, 'Elegir un país'), ' para ver también el ranking de ese país.'),
-    !usuario() && el('p', { class: 'meta' }, el('a', { href: '#/entrar' }, t('juego.entrar')), ' para aparecer en el ranking y ganar medallas.'));
+    !pais && el('p', { class: 'meta' }, el('a', { href: '/preferencias' }, 'Elegir un país'), ' para ver también el ranking de ese país.'),
+    !usuario() && el('p', { class: 'meta' }, el('a', { href: '/entrar' }, t('juego.entrar')), ' para aparecer en el ranking y ganar medallas.'));
 }
 
 export function vistaJuegos() {
@@ -115,7 +115,7 @@ export function vistaJuegos() {
       tarjetaJuego({ ruta: 'falta', icono: icono('rompecabezas'), titulo: '¿Qué le falta?', texto: 'Descubrí el ingrediente que le tapamos a cada receta.', dificultad: ELEGIS, extra: record('falta') }),
       tarjetaJuego({ ruta: 'armar', icono: icono('olla'), titulo: 'Armá el plato', texto: 'Elegí de la alacena los ingredientes justos y serví.', dificultad: ELEGIS, extra: record('armar') })),
     hayBackend && seccionRanking(),
-    hayBackend && el('a', { class: 'juegos-medallas', href: '#/medallas' },
+    hayBackend && el('a', { class: 'juegos-medallas', href: '/medallas' },
       el('span', { 'aria-hidden': 'true' }, icono('medalla')),
       el('span', {}, el('strong', {}, 'Medallas'), el('span', {}, 'Jugando, cocinando y compartiendo recetas ganás medallas. Mirá cuáles te faltan.')),
       el('span', { 'aria-hidden': 'true' }, icono('flecha'))));

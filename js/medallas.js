@@ -75,7 +75,7 @@ function guardarGanadas(id, ids) {
 
 function mostrarAviso(medallas) {
   const m = medallas[0];
-  const nodo = el('a', { class: 'aviso-medalla', href: '#/medallas', role: 'status' },
+  const nodo = el('a', { class: 'aviso-medalla', href: '/medallas', role: 'status' },
     sello(m, { clase: 'sello-estampa' }),
     el('span', {},
       el('small', {}, medallas.length > 1 ? t('medalla.nuevas', { n: medallas.length }) : 'Nueva medalla'),

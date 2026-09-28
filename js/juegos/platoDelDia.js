@@ -13,6 +13,7 @@ import { portada } from '../vistas/componentes.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
+import { ruta, rutaReceta } from '../rutas.js';
 
 const INTENTOS = 6;
 const PUNTOS = [600, 500, 400, 300, 200, 100];
@@ -173,7 +174,7 @@ export async function juegoPlatoDelDia() {
     const invitado = hayBackend && !usuario();
     zonaJuego.replaceChildren(el('div', { class: `plato-resultado ${partida.gano ? 'gano' : 'perdio'}` },
       el('p', { class: 'plato-resultado-titulo' }, partida.gano ? t('juego.ganaste') : t('juego.casi')),
-      el('a', { class: 'plato-respuesta', href: `#/receta/${plato.id}` },
+      el('a', { class: 'plato-respuesta', href: rutaReceta(plato.id, plato.nombre) },
         plato.imagen ? crearImagen(plato.imagen, '', IMG_PLATO_GENERICO)
           : portada({ nombre: plato.nombre, categoria: plato.codigoCategoria }, { clase: 'plato-respuesta-sin' }),
         el('span', {}, el('small', {}, 'El plato de hoy era'), el('strong', {}, plato.nombre), el('span', {}, 'Ver la receta →'))),
@@ -182,14 +183,14 @@ export async function juegoPlatoDelDia() {
         el('li', {}, el('strong', {}, puntos), el('span', {}, 'puntos')),
         el('li', {}, el('strong', {}, icono('fuego'), ` ${racha}`), el('span', {}, `día${racha === 1 ? '' : 's'} de racha`))),
       invitado && el('p', { class: 'juego-invitacion' },
-        el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(location.hash) }, 'Entrá'),
+        el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(ruta()) }, 'Entrá'),
         ' para sumar los puntos al ranking y ganar medallas.'),
       el('div', { class: 'acciones' },
         el('button', {
           type: 'button', class: 'boton',
           onclick: () => compartir(`🍳 A Mano · Plato del día #${numero}\n${cuadritos()} ${partida.gano ? `${partida.intentos.length}/${INTENTOS}` : `X/${INTENTOS}`}${racha > 1 ? `  🔥${racha}` : ''}`),
         }, 'Compartir resultado'),
-        el('a', { class: 'boton-secundario boton', href: '#/juegos' }, 'Otros juegos')),
+        el('a', { class: 'boton-secundario boton', href: '/juegos' }, 'Otros juegos')),
       el('p', { class: 'meta' }, `Nuevo plato en ${tiempoHastaMañana()}.`)));
   }
 
@@ -269,7 +270,7 @@ export async function juegoPlatoDelDia() {
 
   document.title = `Plato del día #${numero} · A Mano`;
   mostrar(
-    el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
+    el('a', { class: 'volver', href: '/juegos' }, '← Juegos'),
     el('section', { class: 'juego plato-del-dia' },
       el('header', { class: 'juego-cabecera' },
         el('p', { class: 'portada-antetitulo' }, `Desafío diario #${numero}`),

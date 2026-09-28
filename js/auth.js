@@ -1,4 +1,5 @@
 import { cliente, hayBackend } from './supabase.js';
+import { ir, ruta } from './rutas.js';
 
 let usuarioActual = null;
 const oyentes = new Set();
@@ -28,7 +29,7 @@ export async function iniciarAuth() {
   sb.auth.onAuthStateChange((evento, sesion) => {
     actualizar(sesion?.user);
     // El enlace de "recuperar contraseña" abre la web con una sesión temporal.
-    if (evento === 'PASSWORD_RECOVERY') location.hash = '#/nueva-clave';
+    if (evento === 'PASSWORD_RECOVERY') ir('/nueva-clave');
   });
 }
 
@@ -55,7 +56,7 @@ export async function registrarse(nombre, email, password) {
   const { data, error } = await sb.auth.signUp({
     email,
     password,
-    options: { data: { nombre }, emailRedirectTo: location.origin + location.pathname },
+    options: { data: { nombre }, emailRedirectTo: `${location.origin}/` },
   });
   if (error) throw new Error(mensajeError(error));
   if (data.session) actualizar(data.user);
@@ -65,7 +66,7 @@ export async function registrarse(nombre, email, password) {
 export async function recuperarClave(email) {
   const sb = await cliente();
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: location.origin + location.pathname,
+    redirectTo: `${location.origin}/`,
   });
   if (error) throw new Error(mensajeError(error));
 }
@@ -92,16 +93,16 @@ export async function salir() {
 // Página a la que volver después de entrar (por ejemplo, "Crear receta").
 const CLAVE_VOLVER = 'recetario:volverA';
 
-export function pedirLogin(volverA = location.hash) {
+export function pedirLogin(volverA = ruta()) {
   try { sessionStorage.setItem(CLAVE_VOLVER, volverA); } catch { /* sin almacenamiento */ }
-  location.hash = '#/entrar';
+  ir('/entrar');
 }
 
 export function hayDestinoPendiente() {
   try { return Boolean(sessionStorage.getItem(CLAVE_VOLVER)); } catch { return false; }
 }
 
-export function tomarDestino(porDefecto = '#/mis-recetas') {
+export function tomarDestino(porDefecto = '/mis-recetas') {
   try {
     const destino = sessionStorage.getItem(CLAVE_VOLVER);
     sessionStorage.removeItem(CLAVE_VOLVER);

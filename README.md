@@ -51,6 +51,11 @@ python3 -m http.server 8000
 # abrir http://localhost:8000
 ```
 
+Las direcciones son reales (`/receta/…`), así que con este servidor simple
+funciona navegar desde el inicio, pero recargar una receta da 404. Para probar
+todo igual que en Vercel (también las páginas para buscadores y el sitemap):
+`npx vercel dev`.
+
 Sin configurar Supabase ya funciona todo menos las cuentas y las recetas propias.
 
 ## Publicar en Vercel
@@ -149,6 +154,24 @@ Varias recetas de la casa usan fotos de Wikimedia Commons: en
 `data/recetas-casa.json` tienen `imagen` (enlace `Special:FilePath`),
 `creditoFoto` y `fuenteFoto` (la página del archivo, con autor y licencia, que
 se enlaza desde el crédito). Una foto cargada desde `#/fotos` las reemplaza.
+
+## Buscadores (Google)
+
+- Las direcciones son reales: `/receta/52772-pollo-teriyaki-al-horno`,
+  `/pais/México`, `/categoria/Chicken` (los enlaces viejos con `#/` se
+  convierten solos). La navegación está en `js/rutas.js`.
+- `api/pagina.js` (Vercel manda ahí toda dirección de la web, ver
+  `vercel.json`) devuelve el mismo `index.html` con título, descripción, foto
+  para compartir y, en cada receta, los datos estructurados de schema.org/Recipe
+  y la receta en texto. Así Google la ve completa aunque no ejecute JavaScript.
+- `/sitemap.xml` (`api/sitemap.js`) lista secciones, categorías, países y todas
+  las recetas públicas. `robots.txt` deja afuera las páginas privadas.
+- El dominio sale de `SITIO_URL` (variable de entorno en Vercel) o, si no está,
+  `https://amanorecetas.com.ar`.
+
+Para que Google las encuentre: en [Google Search Console](https://search.google.com/search-console)
+agregá la propiedad de dominio `amanorecetas.com.ar` (se verifica con un
+registro TXT en Vercel → Domains) y en **Sitemaps** cargá `sitemap.xml`.
 
 ## Preferencias: trato y país
 

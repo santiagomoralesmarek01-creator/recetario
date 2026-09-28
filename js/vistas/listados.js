@@ -9,6 +9,7 @@ import { bandera, chipPais, continenteDe, CONTINENTES, LATINOAMERICA } from '../
 import { rutaComunidad } from './comunidad.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { ir, rutaReceta } from '../rutas.js';
 
 // "¿Qué hay a mano hoy?" → ['¿Qué hay a mano ', <em>hoy</em>, '?'] (la palabra va en cursiva).
 export function conPalabraDestacada(texto, palabra) {
@@ -32,7 +33,7 @@ export async function vistaInicio() {
     el('div', {},
       el('h2', {}, usuario() ? t('invitacion.titulo-usuario') : t('invitacion.titulo')),
       el('p', {}, usuario() ? t('invitacion.texto-usuario') : t('invitacion.texto'))),
-    el('a', { class: 'boton', href: usuario() ? '#/nueva' : '#/entrar' },
+    el('a', { class: 'boton', href: usuario() ? '/nueva' : '/entrar' },
       usuario() ? t('invitacion.cta-usuario') : t('invitacion.cta')));
 
   const totalRecetas = paises.reduce((suma, p) => suma + p.cantidad, 0);
@@ -44,29 +45,29 @@ export async function vistaInicio() {
       el('p', { class: 'portada-bajada' },
         t('inicio.bajada')),
       el('div', { class: 'portada-acciones' },
-        el('a', { class: 'boton boton-grande', href: '#/que-tengo' }, t('inicio.cta')),
+        el('a', { class: 'boton boton-grande', href: '/que-tengo' }, t('inicio.cta')),
         el('span', { class: 'meta' }, t('inicio.o-buscar'))),
       el('form', {
         class: 'buscador-grande', role: 'search',
         onsubmit: (e) => {
           e.preventDefault();
           const texto = buscar.value.trim();
-          if (texto) location.hash = `#/buscar/${encodeURIComponent(texto)}`;
+          if (texto) ir(`/buscar/${encodeURIComponent(texto)}`);
         },
       }, buscar, el('button', { type: 'submit' }, 'Buscar')),
       el('div', { class: 'accesos' },
-        el('a', { class: 'acceso', href: '#/faciles' }, icono('faciles'), 'Fáciles'),
-        el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, icono('plato'), 'Plato del día'),
-        el('a', { class: 'acceso', href: '#/pais/Argentina' }, icono('ubicacion'), 'Argentinas'),
-        el('a', { class: 'acceso', href: '#/categoria/Dessert' }, icono('postre'), 'Postres'),
-        el('a', { class: 'acceso', href: '#/categoria/Pasta' }, icono('pasta'), 'Pastas'),
-        el('a', { class: 'acceso', href: '#/categoria/Vegetarian' }, icono('hoja'), 'Vegetarianas'),
+        el('a', { class: 'acceso', href: '/faciles' }, icono('faciles'), 'Fáciles'),
+        el('a', { class: 'acceso acceso-destacado', href: '/juegos/plato-del-dia' }, icono('plato'), 'Plato del día'),
+        el('a', { class: 'acceso', href: '/pais/Argentina' }, icono('ubicacion'), 'Argentinas'),
+        el('a', { class: 'acceso', href: '/categoria/Dessert' }, icono('postre'), 'Postres'),
+        el('a', { class: 'acceso', href: '/categoria/Pasta' }, icono('pasta'), 'Pastas'),
+        el('a', { class: 'acceso', href: '/categoria/Vegetarian' }, icono('hoja'), 'Vegetarianas'),
         el('button', { type: 'button', class: 'acceso', 'data-sorpresa': '' }, icono('sorpresa'), t('inicio.azar'))),
       totalRecetas > 0 && el('div', { class: 'cifras' },
         el('div', {}, el('strong', {}, `${Math.floor(totalRecetas / 50) * 50}+`), el('span', {}, 'recetas')),
         el('div', {}, el('strong', {}, String(paises.length)), el('span', {}, 'países')),
         el('div', {}, el('strong', {}, '100%'), el('span', {}, 'en español')))),
-    destacada && el('a', { class: 'portada-destacada', href: `#/receta/${destacada.id}` },
+    destacada && el('a', { class: 'portada-destacada', href: rutaReceta(destacada.id, destacada.nombre) },
       portada(destacada),
       el('div', { class: 'portada-destacada-texto' },
         el('p', { class: 'eyebrow' }, 'Receta del momento'),
@@ -79,13 +80,13 @@ export async function vistaInicio() {
     deCasa.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Clásicos latinoamericanos'),
-        deCasa.length > 8 && el('a', { href: '#/casa' }, `Ver las ${deCasa.length} →`)),
+        deCasa.length > 8 && el('a', { href: '/casa' }, `Ver las ${deCasa.length} →`)),
       el('p', { class: 'seccion-bajada' }, 'Las recetas de siempre de nuestra región, probadas y explicadas a nuestra manera.'),
       grillaRecetas(elegirDelDia(deCasa, 8))),
     paises.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Viajá por la cocina de Latinoamérica y el mundo'),
-        el('a', { href: '#/paises' }, `Ver los ${paises.length} países →`)),
+        el('a', { href: '/paises' }, `Ver los ${paises.length} países →`)),
       el('div', { class: 'chips-paises' },
         // Primero Latinoamérica (Argentina adelante) y después el resto del mundo.
         [...paises].sort((a, b) => (b.nombre === 'Argentina') - (a.nombre === 'Argentina')
@@ -106,7 +107,7 @@ export async function vistaInicio() {
           el('img', { src: 'img/comunidad.svg', alt: '' }),
           el('h3', {}, 'Comunidad')),
         categorias.map((c) =>
-          el('a', { class: 'tarjeta categoria', href: `#/categoria/${encodeURIComponent(c.nombre)}` },
+          el('a', { class: 'tarjeta categoria', href: `/categoria/${encodeURIComponent(c.nombre)}` },
             crearImagen(c.imagen, c.nombre, IMG_PLATO_GENERICO),
             el('h3', {}, traducirCategoria(c.nombre))))))
   );
@@ -126,7 +127,7 @@ export async function vistaCategoria(nombre) {
   const recetas = await repo.deCategoria(nombre);
   if (!vigente()) return;
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('h1', {}, traducirCategoria(nombre)),
     listadoFiltrable([{ recetas, tanda: 24 }], { vacio: 'Todavía no hay recetas en esta categoría.' })
   );
@@ -139,7 +140,7 @@ export async function vistaCasa() {
   if (!vigente()) return;
   document.title = 'Clásicos latinoamericanos · A Mano';
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('h1', {}, 'Clásicos latinoamericanos'),
     el('p', { class: 'meta' }, 'Recetas de toda la región, escritas y probadas para cocinar con lo que se consigue acá.'),
     listadoFiltrable([{ recetas, tanda: 24 }])
@@ -154,7 +155,7 @@ export async function vistaFaciles() {
   document.title = 'Recetas fáciles · A Mano';
   const faciles = todas.filter((r) => r.dificultad === 1 && !r.dificiles);
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('h1', {}, 'Fáciles y con ingredientes de todos los días'),
     el('p', { class: 'meta' }, 'Recetas con pocos pasos, sin técnicas complicadas y con ingredientes que se consiguen en cualquier supermercado de Latinoamérica.'),
     listadoFiltrable([{ recetas: faciles, tanda: 24 }], { dificultad: false })
@@ -170,7 +171,7 @@ export async function vistaBusqueda(texto) {
   const total = deCasa.length + deComunidad.length + internacionales.length;
 
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('h1', {}, `Resultados para “${texto}”`),
     tambien.length > 0 && el('p', { class: 'meta busqueda-tambien' }, t('buscar.tambien'), tambien.slice(0, 5).join(', '), '.'),
     total === 0
@@ -194,7 +195,7 @@ export async function vistaPaises() {
   const total = paises.reduce((suma, p) => suma + p.cantidad, 0);
 
   mostrar(
-    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('a', { class: 'volver', href: '/' }, '← Inicio'),
     el('h1', {}, 'Recetas por país'),
     el('p', { class: 'meta' }, `${total} recetas de ${paises.length} países`),
     [...porContinente].filter(([, lista]) => lista.length).map(([continente, lista]) =>
@@ -214,7 +215,7 @@ export async function vistaPais(pais) {
   const total = deCasa.length + deComunidad.length + internacionales.length;
   const soloDelMundo = !deCasa.length && !deComunidad.length;
   mostrar(
-    el('a', { class: 'volver', href: '#/paises' }, '← Todos los países'),
+    el('a', { class: 'volver', href: '/paises' }, '← Todos los países'),
     el('h1', { class: 'titulo-pais' }, bandera(pais, 'bandera-grande'), pais),
     total === 0
       ? el('p', { class: 'estado' }, 'Todavía no hay recetas de este país.')

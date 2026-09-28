@@ -54,7 +54,7 @@ export async function juegoArmar() {
   const tablero = marcador();
   tablero.tiempo(null);
   mostrar(
-    el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
+    el('a', { class: 'volver', href: '/juegos' }, '← Juegos'),
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
         el('h1', {}, icono('olla', { clase: 'icono-titulo' }), 'Armá el plato'),

@@ -22,6 +22,7 @@ import { t, aplicarTextos } from './textos.js';
 import { iniciarPreferencias, EVENTO as CAMBIO_PREFERENCIAS } from './preferencias.js';
 import { vistaPreferencias } from './vistas/preferencias.js';
 import { iniciarAnalitica } from './analitica.js';
+import { ir, ruta as rutaActual, alCambiarRuta, iniciarRutas, idDeRuta, rutaReceta } from './rutas.js';
 
 iniciarTema();
 aplicarTextos();
@@ -45,12 +46,12 @@ function dibujarMenu(u) {
   if (!hayBackend) { menu.replaceChildren(); return; }
   menu.replaceChildren(...(u
     ? [
-      el('a', { class: 'boton', href: '#/nueva' }, icono('mas'), t('cabecera.nueva')),
+      el('a', { class: 'boton', href: '/nueva' }, icono('mas'), t('cabecera.nueva')),
       menuUsuario(u),
     ]
     : [
-      el('a', { class: 'boton boton-secundario', href: '#/nueva' }, t('cabecera.crear')),
-      el('a', { class: 'boton', href: '#/entrar' }, t('cabecera.entrar')),
+      el('a', { class: 'boton boton-secundario', href: '/nueva' }, t('cabecera.crear')),
+      el('a', { class: 'boton', href: '/entrar' }, t('cabecera.entrar')),
     ]));
 }
 
@@ -58,14 +59,14 @@ function dibujarMenu(u) {
 function menuUsuario(u) {
   const nombre = nombreVisible(u);
   // Sólo para administradores: se agrega cuando se confirma.
-  const enlaceAdmin = el('a', { href: '#/fotos', role: 'menuitem', hidden: true }, icono('foto'), 'Fotos de recetas');
+  const enlaceAdmin = el('a', { href: '/fotos', role: 'menuitem', hidden: true }, icono('foto'), 'Fotos de recetas');
   soyAdmin().then((si) => { enlaceAdmin.hidden = !si; });
   const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
     el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
-    el('a', { href: '#/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
-    el('a', { href: '#/medallas', role: 'menuitem' }, icono('medalla'), 'Mis medallas'),
-    el('a', { href: '#/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
-    el('a', { href: '#/preferencias', role: 'menuitem' }, icono('ajustes'), 'Preferencias'),
+    el('a', { href: '/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
+    el('a', { href: '/medallas', role: 'menuitem' }, icono('medalla'), 'Mis medallas'),
+    el('a', { href: '/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
+    el('a', { href: '/preferencias', role: 'menuitem' }, icono('ajustes'), 'Preferencias'),
     enlaceAdmin,
     el('button', {
       type: 'button', role: 'menuitem',
@@ -73,7 +74,7 @@ function menuUsuario(u) {
         cerrar();
         await salir();
         aviso('Sesión cerrada');
-        location.hash = '#/';
+        ir('/');
       },
     }, icono('salir'), 'Salir'));
   const boton = el('button', {
@@ -95,11 +96,11 @@ function menuUsuario(u) {
   }
   function fuera(e) { if (!contenedor.contains(e.target) || e.target.closest('a')) cerrar(); }
   contenedor.addEventListener('keydown', (e) => { if (e.key === 'Escape') { cerrar(); boton.focus(); } });
-  window.addEventListener('hashchange', cerrar);
+  alCambiarRuta(cerrar);
   return contenedor;
 }
 
-// ---------- ruteo por hash ----------
+// ---------- ruteo (direcciones reales: /receta/…, ver js/rutas.js) ----------
 
 const RUTAS_PRIVADAS = new Set(['mis-recetas', 'nueva', 'editar']);
 
@@ -108,23 +109,23 @@ async function router() {
   contextoReceta(null);
   const hash = location.hash;
 
-  // Supabase vuelve de los emails (confirmación, recuperación) con datos en el hash.
+  // Supabase vuelve de los emails (confirmación, recuperación) con datos en el #.
   if (/access_token=|type=recovery/.test(hash)) return;
   if (/error_description=/.test(hash)) {
     const params = new URLSearchParams(hash.slice(1));
     mostrar(el('div', { class: 'estado' },
       el('p', {}, `El enlace no es válido o ya venció (${params.get('error_description')}).`),
-      el('a', { href: '#/entrar' }, 'Volver a intentar')));
+      el('a', { href: '/entrar' }, 'Volver a intentar')));
     return;
   }
 
-  const [ruta, ...resto] = hash.replace(/^#\/?/, '').split('/');
+  const [seccion, ...resto] = rutaActual().split('/');
   const param = decodeURIComponent(resto.join('/'));
   document.title = 'A Mano · Cocina latinoamericana a tu medida';
-  for (const a of enlacesNav) a.classList.toggle('activo', a.dataset.ruta.split(' ').includes(ruta));
+  for (const a of enlacesNav) a.classList.toggle('activo', a.dataset.ruta.split(' ').includes(seccion));
   try {
-    switch (ruta) {
-      case 'receta': return param ? await vistaReceta(param) : await vistaInicio();
+    switch (seccion) {
+      case 'receta': return param ? await vistaReceta(idDeRuta(param)) : await vistaInicio();
       case 'categoria': return param ? await vistaCategoria(param) : await vistaInicio();
       case 'buscar': return param ? await vistaBusqueda(param) : await vistaInicio();
       case 'paises': return await vistaPaises();
@@ -155,7 +156,7 @@ async function router() {
 document.getElementById('buscador').addEventListener('submit', (e) => {
   e.preventDefault();
   const texto = document.getElementById('busqueda').value.trim();
-  if (texto) location.hash = `#/buscar/${encodeURIComponent(texto)}`;
+  if (texto) ir(`/buscar/${encodeURIComponent(texto)}`);
 });
 
 // Cualquier botón con data-sorpresa lleva a una receta al azar.
@@ -164,19 +165,19 @@ document.addEventListener('click', async (e) => {
   e.preventDefault();
   try {
     const r = await repo.aleatoria();
-    location.hash = `#/receta/${r.id}`;
+    ir(rutaReceta(r.id, r.nombre));
   } catch (err) {
     error(err);
   }
 });
 
-window.addEventListener('hashchange', router);
+alCambiarRuta(router);
 
 // Cambió el trato o el país: se redibujan los textos, el menú y la página.
 window.addEventListener(CAMBIO_PREFERENCIAS, () => {
   aplicarTextos();
   dibujarMenu(usuario());
-  if (!location.hash.startsWith('#/preferencias')) router();
+  if (rutaActual() !== 'preferencias') router();
 });
 
 // Al cambiar la sesión: redibujar el menú y, si estabas en una página privada, refrescarla.
@@ -187,9 +188,11 @@ alCambiarSesion((u) => {
   ultimoUsuario = u?.id ?? null;
   dibujarMenu(u);
   if (primeraVez || !cambio) return;
-  const ruta = location.hash.replace(/^#\/?/, '').split('/')[0];
-  if (RUTAS_PRIVADAS.has(ruta) || ruta === 'receta') router();
+  const seccion = rutaActual().split('/')[0];
+  if (RUTAS_PRIVADAS.has(seccion) || seccion === 'receta') router();
 });
+
+iniciarRutas();
 
 (async () => {
   dibujarMenu(null);

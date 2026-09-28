@@ -2091,3 +2091,8 @@ ul.cifras { list-style: none; padding: 0; }
    esquinas y un borde crema por dentro (la foto no se retoca). */
 .foto-mundo { outline: 5px solid color-mix(in srgb, var(--superficie) 88%, transparent); outline-offset: -5px; }
 .receta-foto.foto-mundo { outline-width: 8px; outline-offset: -8px; }
+
+/* Contenido en texto que llega del servidor (para buscadores) hasta que arranca la web */
+.pagina-estatica { max-width: 760px; }
+.pagina-estatica ul, .pagina-estatica ol { padding-left: 22px; }
+.pagina-estatica li { margin: 4px 0; }
