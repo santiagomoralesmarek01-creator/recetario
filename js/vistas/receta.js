@@ -11,6 +11,7 @@ import {
 import { portada } from './componentes.js';
 import { bandera, rutaPais } from '../paises.js';
 import { rutaAutor } from './comunidad.js';
+import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -24,6 +25,7 @@ export async function vistaReceta(id) {
     return;
   }
   document.title = `${r.nombre} · Recetario`;
+  contextoReceta(r);
 
   let progreso = leerProgreso(r.id);
   const ORIGEN = 'ficha';
@@ -135,7 +137,11 @@ export async function vistaReceta(id) {
   // Barra fija abajo: siempre a mano mientras se cocina.
   const barraCocina = el('div', { class: 'barra-cocina', role: 'region', 'aria-label': 'Progreso de la receta' },
     el('div', { class: 'barra-cocina-progreso' }, textoProgreso, barra),
-    el('div', { class: 'acciones' }, botonSeguir, botonPantalla, botonReiniciar));
+    el('div', { class: 'acciones' }, botonSeguir, botonPantalla, botonReiniciar,
+      ayudanteDisponible() && el('button', {
+        type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
+        onclick: abrirAyudante,
+      }, '🧑‍🍳 Ayudante')));
 
   // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
   const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {

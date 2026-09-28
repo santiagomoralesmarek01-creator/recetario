@@ -64,6 +64,28 @@ Cada push posterior vuelve a publicar solo.
 5. Opcional: en **Authentication → Providers → Email** podés desactivar
    *Confirm email* si no querés que se confirme el correo al registrarse.
 
+## Ayudante de cocina (chat con IA gratuita)
+
+El botón 🧑‍🍳 abre un chat que responde dudas de cocina y, en una receta, conoce
+sus ingredientes y pasos. Usa el plan gratuito de Google Gemini a través de la
+función `api/ayudante.js` (Vercel), así la clave nunca llega al navegador.
+Sólo lo pueden usar personas con sesión iniciada, con un máximo de 40 mensajes
+por día cada una.
+
+1. Entrá a <https://aistudio.google.com/apikey> con una cuenta de Google y creá
+   una clave (*Create API key*). Es gratis y no pide tarjeta.
+2. En Vercel: **Settings → Environment Variables** → agregá `GEMINI_API_KEY`
+   con esa clave (entornos *Production* y *Preview*) y volvé a desplegar.
+   No la pegues en el código ni la compartas.
+3. En Supabase, volvé a ejecutar `supabase/esquema.sql` completo (se puede
+   repetir sin problema): suma la tabla que cuenta los mensajes de cada día.
+
+Opcional: `GEMINI_MODELO` cambia el modelo (por defecto `gemini-flash-latest`).
+El plan gratuito tiene un tope diario por proyecto; si se alcanza, el chat avisa
+que tiene mucha demanda y vuelve a andar al día siguiente. En el plan gratuito,
+Google puede usar las conversaciones para mejorar sus productos: no hace falta
+(ni conviene) contarle datos personales al ayudante.
+
 ## Estructura
 
 ```

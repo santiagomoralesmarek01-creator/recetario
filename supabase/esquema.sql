@@ -86,3 +86,40 @@ drop policy if exists "Borrar fotos propias" on storage.objects;
 create policy "Borrar fotos propias" on storage.objects
   for delete to authenticated
   using (bucket_id = 'fotos-recetas' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ---------------------------------------------------------------------
+-- Ayudante de cocina: cuántos mensajes mandó cada usuario por día.
+-- Nadie lee ni escribe la tabla directamente (RLS sin políticas); sólo
+-- la función usar_ayudante(), que suma uno para el usuario de la sesión.
+-- ---------------------------------------------------------------------
+create table if not exists public.uso_ayudante (
+  user_id   uuid not null references auth.users (id) on delete cascade,
+  dia       date not null default current_date,
+  mensajes  int not null default 0,
+  primary key (user_id, dia)
+);
+
+alter table public.uso_ayudante enable row level security;
+
+create or replace function public.usar_ayudante()
+returns int
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  usados int;
+begin
+  if auth.uid() is null then
+    raise exception 'Hay que iniciar sesión' using errcode = '42501';
+  end if;
+  insert into public.uso_ayudante as u (user_id, dia, mensajes)
+  values (auth.uid(), current_date, 1)
+  on conflict (user_id, dia) do update set mensajes = u.mensajes + 1
+  returning u.mensajes into usados;
+  return usados;
+end;
+$$;
+
+revoke all on function public.usar_ayudante() from public, anon;
+grant execute on function public.usar_ayudante() to authenticated;

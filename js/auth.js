@@ -76,6 +76,13 @@ export async function cambiarClave(password) {
   if (error) throw new Error(mensajeError(error));
 }
 
+// Token de la sesión, para las funciones del servidor (el ayudante de cocina).
+export async function tokenAcceso() {
+  const sb = await cliente();
+  const { data } = await sb.auth.getSession();
+  return data.session?.access_token ?? null;
+}
+
 export async function salir() {
   const sb = await cliente();
   await sb.auth.signOut();

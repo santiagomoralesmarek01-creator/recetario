@@ -10,6 +10,7 @@ import { vistaComunidad, vistaAutor } from './vistas/comunidad.js';
 import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
 import { iniciarTema } from './tema.js';
+import { iniciarAyudante, contextoReceta } from './ayudante.js';
 
 iniciarTema();
 const menu = document.getElementById('menu');
@@ -57,6 +58,7 @@ const RUTAS_PRIVADAS = new Set(['mis-recetas', 'nueva', 'editar']);
 
 async function router() {
   nuevaNavegacion();
+  contextoReceta(null);
   const hash = location.hash;
 
   // Supabase vuelve de los emails (confirmación, recuperación) con datos en el hash.
@@ -132,6 +134,7 @@ alCambiarSesion((u) => {
 (async () => {
   dibujarMenu(null);
   iniciarPanel();
+  iniciarAyudante();
   try {
     await iniciarAuth();
   } catch (err) {
