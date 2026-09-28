@@ -34,6 +34,8 @@ function normalizar(r) {
     porciones: r.porciones,
     minutos: r.minutos,
     imagen: r.imagen || '',
+    creditoFoto: r.creditoFoto || '',
+    fuenteFoto: r.fuenteFoto || '',
     etiquetas: r.etiquetas || [],
     ingredientes: normalizarIngredientesPropios(r.ingredientes || []),
     pasos: r.pasos || [],

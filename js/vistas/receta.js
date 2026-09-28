@@ -310,7 +310,10 @@ function botonDeMeGusta(recetaId) {
 function columnaFoto(r) {
   const credito = el('p', { class: 'foto-credito' });
   const foto = el('div', { class: 'receta-foto-marco' }, portada(r, { clase: 'receta-foto' }));
-  const pintarCredito = () => { credito.textContent = r.creditoFoto ? `📷 ${r.creditoFoto}` : ''; };
+  // Con fuente (fotos de Wikimedia Commons), el crédito enlaza a la página con autor y licencia.
+  const pintarCredito = () => credito.replaceChildren(...(!r.creditoFoto ? [] : r.fuenteFoto
+    ? ['📷 ', el('a', { href: r.fuenteFoto, target: '_blank', rel: 'noopener' }, r.creditoFoto)]
+    : [`📷 ${r.creditoFoto}`]));
   pintarCredito();
   const columna = el('div', { class: 'receta-foto-columna' }, foto, credito);
   soyAdmin().then((admin) => {

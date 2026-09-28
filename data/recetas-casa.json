@@ -232,6 +232,9 @@
   },
   {
     "slug": "noquis-de-papa",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Volcan_de_%C3%B1oquis.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Volcan_de_%C3%B1oquis.jpg",
     "nombre": "Ñoquis de papa",
     "categoria": "Pasta",
     "origen": "Argentina",
@@ -284,6 +287,9 @@
   },
   {
     "slug": "pastel-de-papa",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Pastel_de_Papas.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Pastel_de_Papas.jpg",
     "nombre": "Pastel de papa",
     "categoria": "Beef",
     "origen": "Argentina",
@@ -350,6 +356,9 @@
   },
   {
     "slug": "pastafrola-de-membrillo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Pastafrola.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Pastafrola.jpg",
     "nombre": "Pastafrola de membrillo",
     "categoria": "Dessert",
     "origen": "Argentina",
@@ -409,6 +418,9 @@
   },
   {
     "slug": "guiso-de-arroz-con-pollo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Arroz_con_pollo.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Arroz_con_pollo.jpg",
     "nombre": "Guiso de arroz con pollo",
     "categoria": "Chicken",
     "origen": "Argentina",
@@ -441,6 +453,9 @@
   },
   {
     "slug": "pizza-casera-de-molde",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Pizza_argentina_de_muzzarella_bien_derretida%2C_huevo_duro%2C_jam%C3%B3n%2C_aceitunas_y_un_toque_de_or%C3%A9gano.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Pizza_argentina_de_muzzarella_bien_derretida%2C_huevo_duro%2C_jam%C3%B3n%2C_aceitunas_y_un_toque_de_or%C3%A9gano.jpg",
     "nombre": "Pizza casera de molde",
     "categoria": "Vegetarian",
     "origen": "Argentina",
@@ -471,6 +486,9 @@
   },
   {
     "slug": "tortas-fritas",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/TortaFrita.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:TortaFrita.jpg",
     "nombre": "Tortas fritas",
     "categoria": "Breakfast",
     "origen": "Argentina",
@@ -496,6 +514,9 @@
   },
   {
     "slug": "revuelto-gramajo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Revuelto_gramajo.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Revuelto_gramajo.jpg",
     "nombre": "Revuelto gramajo",
     "categoria": "Pork",
     "origen": "Argentina",
@@ -523,6 +544,9 @@
   },
   {
     "slug": "pascualina",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Pascualina_%28Uruguay%29.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Pascualina_%28Uruguay%29.jpg",
     "nombre": "Pascualina",
     "categoria": "Vegetarian",
     "origen": "Uruguay",
@@ -552,6 +576,9 @@
   },
   {
     "slug": "capeletis-a-la-caruso",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Capelettis_a_la_Caruso.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Capelettis_a_la_Caruso.jpg",
     "nombre": "Capeletis a la Caruso",
     "categoria": "Pasta",
     "origen": "Uruguay",
@@ -579,6 +606,9 @@
   },
   {
     "slug": "charquican",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Charquican.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Charquican.jpg",
     "nombre": "Charquicán",
     "categoria": "Beef",
     "origen": "Chile",
@@ -612,6 +642,9 @@
   },
   {
     "slug": "porotos-con-riendas",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Porotos_con_riendas.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Porotos_con_riendas.jpg",
     "nombre": "Porotos con riendas",
     "categoria": "Vegetarian",
     "origen": "Chile",
@@ -642,6 +675,9 @@
   },
   {
     "slug": "sopa-paraguaya",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Sopa_Paraguaya.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Sopa_Paraguaya.jpg",
     "nombre": "Sopa paraguaya",
     "categoria": "Side",
     "origen": "Paraguay",
@@ -669,6 +705,9 @@
   },
   {
     "slug": "mbeju",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Mbej%C3%BA_Paraguay.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Mbej%C3%BA_Paraguay.JPG",
     "nombre": "Mbejú",
     "categoria": "Breakfast",
     "origen": "Paraguay",
@@ -692,6 +731,9 @@
   },
   {
     "slug": "sopa-de-mani",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Sopa_de_Man%C3%AD_de_Bolivia.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Sopa_de_Man%C3%AD_de_Bolivia.jpg",
     "nombre": "Sopa de maní",
     "categoria": "Beef",
     "origen": "Bolivia",
@@ -724,6 +766,9 @@
   },
   {
     "slug": "silpancho",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Silpancho_Cochabambino.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Silpancho_Cochabambino.jpg",
     "nombre": "Silpancho",
     "categoria": "Beef",
     "origen": "Bolivia",
@@ -754,6 +799,9 @@
   },
   {
     "slug": "ceviche-peruano",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Ceviche_peruano.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Ceviche_peruano.jpg",
     "nombre": "Ceviche peruano",
     "categoria": "Seafood",
     "origen": "Perú",
@@ -782,6 +830,9 @@
   },
   {
     "slug": "lomo-saltado",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Lomo_saltado.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Lomo_saltado.JPG",
     "nombre": "Lomo saltado",
     "categoria": "Beef",
     "origen": "Perú",
@@ -814,6 +865,9 @@
   },
   {
     "slug": "aji-de-gallina",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Aj%C3%AD_de_gallina_-_Tradicional.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Aj%C3%AD_de_gallina_-_Tradicional.jpg",
     "nombre": "Ají de gallina",
     "categoria": "Chicken",
     "origen": "Perú",
@@ -848,6 +902,9 @@
   },
   {
     "slug": "causa-limena",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Causa_lime%C3%B1a.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Causa_lime%C3%B1a.JPG",
     "nombre": "Causa limeña",
     "categoria": "Seafood",
     "origen": "Perú",
@@ -877,6 +934,9 @@
   },
   {
     "slug": "papa-a-la-huancaina",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Papa_a_la_huancaina.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Papa_a_la_huancaina.jpg",
     "nombre": "Papa a la huancaína",
     "categoria": "Vegetarian",
     "origen": "Perú",
@@ -906,6 +966,9 @@
   },
   {
     "slug": "suspiro-a-la-limena",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Suspiro_de_lime%C3%B1a.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Suspiro_de_lime%C3%B1a.JPG",
     "nombre": "Suspiro a la limeña",
     "categoria": "Dessert",
     "origen": "Perú",
@@ -933,6 +996,9 @@
   },
   {
     "slug": "locro-de-papa",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Locro_de_papa.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Locro_de_papa.jpg",
     "nombre": "Locro de papa",
     "categoria": "Vegetarian",
     "origen": "Ecuador",
@@ -985,6 +1051,9 @@
   },
   {
     "slug": "ajiaco-santafereno",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Ajiaco_santafere%C3%B1o_01.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Ajiaco_santafere%C3%B1o_01.jpg",
     "nombre": "Ajiaco santafereño",
     "categoria": "Chicken",
     "origen": "Colombia",
@@ -1015,6 +1084,9 @@
   },
   {
     "slug": "arepas-de-choclo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Arepa_de_chocolo.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Arepa_de_chocolo.jpg",
     "nombre": "Arepas de choclo",
     "categoria": "Breakfast",
     "origen": "Colombia",
@@ -1068,6 +1140,9 @@
   },
   {
     "slug": "cachapas",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Cachapa_Venezolana.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Cachapa_Venezolana.JPG",
     "nombre": "Cachapas",
     "categoria": "Breakfast",
     "origen": "Venezuela",
@@ -1094,6 +1169,9 @@
   },
   {
     "slug": "tequenos",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Teque%C3%B1on%2C_a_big_teque%C3%B1o.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Teque%C3%B1on%2C_a_big_teque%C3%B1o.jpg",
     "nombre": "Tequeños",
     "categoria": "Starter",
     "origen": "Venezuela",
@@ -1121,6 +1199,9 @@
   },
   {
     "slug": "guacamole",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Guacamole.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Guacamole.jpg",
     "nombre": "Guacamole",
     "categoria": "Starter",
     "origen": "México",
@@ -1145,6 +1226,9 @@
   },
   {
     "slug": "tinga-de-pollo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Tinga_de_pollo.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Tinga_de_pollo.JPG",
     "nombre": "Tinga de pollo",
     "categoria": "Chicken",
     "origen": "México",
@@ -1175,6 +1259,9 @@
   },
   {
     "slug": "chilaquiles-rojos",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Chilaquiles_Rojos.JPG?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Chilaquiles_Rojos.JPG",
     "nombre": "Chilaquiles rojos",
     "categoria": "Breakfast",
     "origen": "México",
@@ -1203,6 +1290,9 @@
   },
   {
     "slug": "sopa-de-tortilla",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Sopa_de_tortilla_estilo_Quer%C3%A9taro.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Sopa_de_tortilla_estilo_Quer%C3%A9taro.jpg",
     "nombre": "Sopa de tortilla",
     "categoria": "Vegetarian",
     "origen": "México",
@@ -1233,6 +1323,9 @@
   },
   {
     "slug": "frijoles-charros",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Frijolescharros.png?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Frijolescharros.png",
     "nombre": "Frijoles charros",
     "categoria": "Pork",
     "origen": "México",
@@ -1260,6 +1353,9 @@
   },
   {
     "slug": "quesadillas",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Cut-up_quesadilla.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Cut-up_quesadilla.jpg",
     "nombre": "Quesadillas",
     "categoria": "Vegetarian",
     "origen": "México",
@@ -1312,6 +1408,9 @@
   },
   {
     "slug": "moros-y-cristianos",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Moros_y_cristianos_Cuba.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Moros_y_cristianos_Cuba.jpg",
     "nombre": "Moros y cristianos",
     "categoria": "Side",
     "origen": "Cuba",
@@ -1341,6 +1440,9 @@
   },
   {
     "slug": "picadillo-a-la-habanera",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Picadillo_a_la_habanera_%28edit%29.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Picadillo_a_la_habanera_%28edit%29.jpg",
     "nombre": "Picadillo a la habanera",
     "categoria": "Beef",
     "origen": "Cuba",
@@ -1371,6 +1473,9 @@
   },
   {
     "slug": "mofongo",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Mofongo.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Mofongo.jpg",
     "nombre": "Mofongo",
     "categoria": "Pork",
     "origen": "Puerto Rico",
@@ -1397,6 +1502,9 @@
   },
   {
     "slug": "arroz-con-gandules",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Arroz_con_gandules.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Arroz_con_gandules.jpg",
     "nombre": "Arroz con gandules",
     "categoria": "Pork",
     "origen": "Puerto Rico",
@@ -1429,6 +1537,9 @@
   },
   {
     "slug": "mangu",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Mangu_dominicano_--Contenido-_-Lonjas_de_salami_fritas_-Lonjas_de_queso_blanco_-Mangu_o_pur%C3%A9_de_pl%C3%A1tano_verde_-Mantequilla_--Este_es_un_plato_t%C3%ADpico_en_el_desayuno_dominicano_--Rep%C3%BAblica_Dominicana_-_2013-10-08_14-28.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Mangu_dominicano_--Contenido-_-Lonjas_de_salami_fritas_-Lonjas_de_queso_blanco_-Mangu_o_pur%C3%A9_de_pl%C3%A1tano_verde_-Mantequilla_--Este_es_un_plato_t%C3%ADpico_en_el_desayuno_dominicano_--Rep%C3%BAblica_Dominicana_-_2013-10-08_14-28.jpg",
     "nombre": "Mangú con los tres golpes",
     "categoria": "Breakfast",
     "origen": "República Dominicana",
@@ -1488,6 +1599,9 @@
   },
   {
     "slug": "pupusas-de-queso",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Pupusas.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Pupusas.jpg",
     "nombre": "Pupusas de queso",
     "categoria": "Vegetarian",
     "origen": "El Salvador",
@@ -1516,6 +1630,9 @@
   },
   {
     "slug": "baleadas",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Baleada.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Baleada.jpg",
     "nombre": "Baleadas",
     "categoria": "Breakfast",
     "origen": "Honduras",
@@ -1544,6 +1661,9 @@
   },
   {
     "slug": "rellenitos-de-platano",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Rellenitos-de-platano-01.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Rellenitos-de-platano-01.jpg",
     "nombre": "Rellenitos de plátano",
     "categoria": "Dessert",
     "origen": "Guatemala",
@@ -1595,6 +1715,9 @@
   },
   {
     "slug": "farofa",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Farofa_brazil.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Farofa_brazil.jpg",
     "nombre": "Farofa",
     "categoria": "Side",
     "origen": "Brasil",
@@ -1620,6 +1743,9 @@
   },
   {
     "slug": "bolo-de-fuba",
+    "imagen": "https://commons.wikimedia.org/wiki/Special:FilePath/Bolo_de_milho_caseiro.jpg?width=800",
+    "creditoFoto": "Wikimedia Commons (ver autor y licencia)",
+    "fuenteFoto": "https://commons.wikimedia.org/wiki/File:Bolo_de_milho_caseiro.jpg",
     "nombre": "Bolo de fubá",
     "categoria": "Dessert",
     "origen": "Brasil",

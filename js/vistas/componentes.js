@@ -19,8 +19,17 @@ const ESTILO_CATEGORIA = {
 export function portada(receta, { miniatura = false, clase = '' } = {}) {
   if (receta.imagen) {
     const achicar = miniatura && /themealdb\.com\/images\/media/.test(receta.imagen);
-    return crearImagen(urlPlato(receta.imagen, { miniatura: achicar }), receta.nombre, IMG_PLATO_GENERICO, clase);
+    const img = crearImagen(urlPlato(receta.imagen, { miniatura: achicar }), receta.nombre, IMG_PLATO_GENERICO, clase);
+    // Fotos externas (Wikimedia): si no cargan, mejor el fondo de la categoría que el ícono genérico.
+    if (/wikimedia\.org/.test(receta.imagen)) {
+      img.addEventListener('error', () => img.replaceWith(portadaSinFoto(receta, clase)), { once: true });
+    }
+    return img;
   }
+  return portadaSinFoto(receta, clase);
+}
+
+function portadaSinFoto(receta, clase) {
   const [emoji, tono, claro] = ESTILO_CATEGORIA[receta.categoria] || ESTILO_CATEGORIA.Miscellaneous;
   return el('div', {
     class: `portada-sin-foto ${clase}`, role: 'img', 'aria-label': receta.nombre,

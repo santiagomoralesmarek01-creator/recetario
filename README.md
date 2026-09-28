@@ -130,6 +130,11 @@ usarlas sin pagar: Unsplash, Pexels o Pixabay. Wikimedia Commons también sirve,
 pero ahí casi siempre hay que poner el crédito del autor. No uses fotos de
 otros sitios de recetas ni de Google Imágenes: tienen dueño.
 
+Varias recetas de la casa usan fotos de Wikimedia Commons: en
+`data/recetas-casa.json` tienen `imagen` (enlace `Special:FilePath`),
+`creditoFoto` y `fuenteFoto` (la página del archivo, con autor y licencia, que
+se enlaza desde el crédito). Una foto cargada desde `#/fotos` las reemplaza.
+
 ## Estructura
 
 ```

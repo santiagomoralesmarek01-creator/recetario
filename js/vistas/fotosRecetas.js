@@ -44,6 +44,7 @@ export function dialogoFoto(receta, alGuardar) {
           const url = await guardarFoto(receta.id, archivo, credito.value);
           receta.imagen = url;
           receta.creditoFoto = credito.value.trim();
+          receta.fuenteFoto = '';
           cerrar();
           aviso('¡Foto guardada! 📷');
           alGuardar?.(url);

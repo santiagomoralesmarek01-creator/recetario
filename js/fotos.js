@@ -47,7 +47,7 @@ export async function aplicarFotos(recetas) {
   if (!fotos.size) return recetas;
   for (const r of recetas) {
     const f = fotos.get(r.id);
-    if (f) { r.imagen = f.url; r.creditoFoto = f.credito; }
+    if (f) { r.imagen = f.url; r.creditoFoto = f.credito; r.fuenteFoto = ''; }
   }
   return recetas;
 }
