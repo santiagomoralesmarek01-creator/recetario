@@ -12,7 +12,11 @@
 const SUPABASE_URL = 'https://hvkytxfkiylbyaleihyw.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2a3l0eGZraXlsYnlhbGVpaHl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNTA0MDAsImV4cCI6MjEwNTgyNjQwMH0.iJapf5vlTjG_K8QsjWWmP8qQcybD1Y7FXIwavP7d4_g';
 
-const MODELOS = [process.env.GEMINI_MODELO, 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'].filter(Boolean);
+// Cada modelo tiene su propio cupo gratis y su propia demanda: si uno está
+// saturado o agotado, se prueba el siguiente.
+const MODELOS = [...new Set([
+  process.env.GEMINI_MODELO, 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash',
+].filter(Boolean))];
 const API_GEMINI = 'https://generativelanguage.googleapis.com/v1beta/models';
 const LIMITE_DIARIO = 40;
 const MAX_MENSAJES = 20;
@@ -74,7 +78,7 @@ async function errorDeGemini(r) {
   let mensaje = '';
   try { mensaje = (await r.json()).error?.message || ''; } catch { /* sin cuerpo */ }
   const detalle = `Gemini ${r.status}: ${mensaje.slice(0, 200)}`;
-  if (r.status === 429) return { error: 'ocupado', detalle };
+  if (r.status === 429 || r.status >= 500) return { error: 'ocupado', detalle };
   if (/api key|api_key|permission|unauthori[sz]ed/i.test(mensaje) || r.status === 401 || r.status === 403) {
     return { error: 'clave', detalle };
   }
@@ -113,17 +117,20 @@ async function preguntarAGemini(contenidos, receta) {
     contents: contenidos,
     generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
   };
-  // Si un modelo no existe (Google los renombra seguido), se prueba el siguiente.
+  // Si un modelo no existe (Google los renombra seguido), está saturado o se
+  // quedó sin cupo, se prueba el siguiente.
   const candidatos = modeloQueAnda ? [modeloQueAnda, ...MODELOS.filter((m) => m !== modeloQueAnda)] : MODELOS;
-  let ultimo = null;
+  let peor = null;
   for (const modelo of candidatos) {
-    ultimo = await llamarModelo(modelo, cuerpo);
-    if (ultimo.error !== 'modelo') {
-      if (!ultimo.error || ultimo.error === 'bloqueado') modeloQueAnda = modelo;
-      return ultimo;
+    const resultado = await llamarModelo(modelo, cuerpo);
+    if (resultado.error !== 'modelo' && resultado.error !== 'ocupado') {
+      if (!resultado.error || resultado.error === 'bloqueado') modeloQueAnda = modelo;
+      return resultado;
     }
+    // Si alguno existía pero estaba saturado, ese es el motivo a informar.
+    if (!peor || resultado.error === 'ocupado') peor = resultado;
   }
-  return ultimo;
+  return peor;
 }
 
 // GET /api/ayudante: diagnóstico sin gastar mensajes (no muestra la clave).
