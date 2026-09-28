@@ -167,15 +167,11 @@ button:active:not(:disabled), .boton:active { transform: translateY(2px); }
 .marca {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--fuente-titulos);
-  font-weight: 700;
-  font-size: 1.35rem;
-  color: var(--texto);
+  color: var(--aji);
   text-decoration: none;
   flex: none;
 }
-.marca img { width: 34px; height: 34px; }
+.marca-logo { display: block; height: 30px; width: auto; }
 
 .nav-principal { display: flex; gap: 2px; }
 .nav-principal a {
@@ -253,6 +249,8 @@ main {
 .portada-texto h1 em { font-family: var(--fuente-detalle); font-style: italic; color: var(--aji); font-weight: 500; }
 .portada-bajada { font-size: 1.1rem; color: var(--texto-suave); max-width: 46ch; margin: 0 0 24px; }
 
+.portada-acciones { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 22px 0 12px; }
+.boton-grande { padding: 14px 26px; font-size: 1.05rem; }
 .buscador-grande {
   display: flex;
   gap: 6px;
@@ -440,6 +438,8 @@ main {
   border-top: 1px solid var(--borde);
 }
 .pie p { margin: 4px 0; }
+.pie-marca { font-size: 1.05rem; }
+.pie-marca strong { font-family: var(--fuente-titulos); color: var(--aji-texto); }
 .firma { font-size: 0.95rem; letter-spacing: 0.02em; }
 .firma strong { font-family: var(--fuente-titulos); color: var(--aji-texto); font-weight: 700; font-size: 1.1rem; }
 
@@ -454,8 +454,7 @@ main {
   .portada-destacada { aspect-ratio: 4 / 3.4; border-radius: 22px; }
   .cifras { gap: 20px; }
   .cabecera-interior { gap: 10px; }
-  .marca { font-size: 1.2rem; gap: 6px; }
-  .marca img { width: 28px; height: 28px; }
+  .marca-logo { height: 25px; }
 }
 
 /* =====================================================================

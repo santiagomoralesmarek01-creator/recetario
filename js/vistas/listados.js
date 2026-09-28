@@ -30,13 +30,16 @@ export async function vistaInicio() {
       usuario() ? '+ Nueva receta' : 'Crear cuenta'));
 
   const totalRecetas = paises.reduce((suma, p) => suma + p.cantidad, 0);
-  const buscar = el('input', { type: 'search', placeholder: 'Probá con “empanadas”, “pollo” o “flan”…', 'aria-label': 'Buscar recetas' });
+  const buscar = el('input', { type: 'search', placeholder: 'Buscar “empanadas”, “pollo” o “flan”…', 'aria-label': 'Buscar recetas' });
   const portadaInicio = el('section', { class: 'portada-inicio' },
     el('div', { class: 'portada-texto' },
-      el('p', { class: 'eyebrow' }, 'Recetario · Cocina casera y del mundo'),
-      el('h1', {}, '¿Qué cocinamos ', el('em', {}, 'hoy'), '?'),
+      el('p', { class: 'eyebrow' }, 'Cocina latinoamericana a tu medida'),
+      el('h1', {}, '¿Qué hay a mano ', el('em', {}, 'hoy'), '?'),
       el('p', { class: 'portada-bajada' },
-        'Recetas explicadas paso a paso, en español, con modo cocina para ir tildando ingredientes y pasos mientras cocinás.'),
+        'Recetas que se adaptan a lo que hay en la cocina, al país y al nivel de cada uno. Con lo que hay, alcanza.'),
+      el('div', { class: 'portada-acciones' },
+        el('a', { class: 'boton boton-grande', href: '#/que-tengo' }, 'Ver qué puedo cocinar'),
+        el('span', { class: 'meta' }, 'o buscar una receta:')),
       el('form', {
         class: 'buscador-grande', role: 'search',
         onsubmit: (e) => {
@@ -46,7 +49,6 @@ export async function vistaInicio() {
         },
       }, buscar, el('button', { type: 'submit' }, 'Buscar')),
       el('div', { class: 'accesos' },
-        el('a', { class: 'acceso', href: '#/que-tengo' }, '🧺 Con lo que tengo'),
         el('a', { class: 'acceso', href: '#/faciles' }, '⚡ Fáciles'),
         el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, '🍳 Plato del día'),
         el('a', { class: 'acceso', href: '#/pais/Argentina' }, '🧉 Argentinas'),
@@ -129,7 +131,7 @@ export async function vistaCasa() {
   cargando();
   const recetas = await repo.recetasDeLaCasa();
   if (!vigente()) return;
-  document.title = 'Clásicos latinoamericanos · Recetario';
+  document.title = 'Clásicos latinoamericanos · A Mano';
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, 'Clásicos latinoamericanos'),
@@ -143,7 +145,7 @@ export async function vistaFaciles() {
   cargando();
   const todas = await repo.todasLasRecetas();
   if (!vigente()) return;
-  document.title = 'Recetas fáciles · Recetario';
+  document.title = 'Recetas fáciles · A Mano';
   const faciles = todas.filter((r) => r.dificultad === 1 && !r.dificiles);
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
@@ -179,7 +181,7 @@ export async function vistaPaises() {
   cargando();
   const paises = await repo.paises();
   if (!vigente()) return;
-  document.title = 'Países · Recetario';
+  document.title = 'Países · A Mano';
   const porContinente = new Map(CONTINENTES.map((c) => [c, []]));
   for (const p of paises) porContinente.get(continenteDe(p.nombre)).push(p);
   const total = paises.reduce((suma, p) => suma + p.cantidad, 0);
@@ -201,7 +203,7 @@ export async function vistaPais(pais) {
   cargando();
   const { deCasa, deComunidad, internacionales } = await repo.dePais(pais);
   if (!vigente()) return;
-  document.title = `${pais} · Recetario`;
+  document.title = `${pais} · A Mano`;
   const total = deCasa.length + deComunidad.length + internacionales.length;
   const soloDelMundo = !deCasa.length && !deComunidad.length;
   mostrar(

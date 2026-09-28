@@ -1,4 +1,4 @@
-// "¿Qué tengo en casa?": elegís los ingredientes que tenés y te muestra las
+// "¿Qué hay a mano?": elegís los ingredientes que tenés y te muestra las
 // recetas que los usan, ordenadas por cuántos te faltan.
 import { el, mostrar, cargando, vigencia } from '../dom.js';
 import * as catalogo from '../catalogo.js';
@@ -65,7 +65,7 @@ export async function vistaDespensa() {
   cargando();
   const recetas = await recetasConIngredientes();
   if (!vigente()) return;
-  document.title = '¿Qué tengo en casa? · Recetario';
+  document.title = '¿Qué hay a mano? · A Mano';
 
   const estado = leerGuardado();
   const chips = el('div', { class: 'chips-despensa' });
@@ -192,7 +192,7 @@ export async function vistaDespensa() {
 
   mostrar(
     el('section', { class: 'despensa' },
-      el('h1', {}, '¿Qué tengo en casa?'),
+      el('h1', {}, '¿Qué hay a mano?'),
       el('p', { class: 'meta' }, 'Elegí los ingredientes que tenés y te muestro las recetas que los usan, primero las que te piden menos cosas extra.'),
       el('div', { class: 'combo despensa-buscador' }, entrada, lista),
       chips,

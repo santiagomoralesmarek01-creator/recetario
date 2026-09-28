@@ -55,7 +55,7 @@ function seccionRanking() {
 }
 
 export function vistaJuegos() {
-  document.title = 'Juegos · Recetario';
+  document.title = 'Juegos · A Mano';
   const records = leerRecords();
   const { hoy, racha } = estadoDeHoy();
   const record = (juego) => (records[juego]?.partidas ? `Tu récord: ${records[juego].mejor} puntos` : 'Todavía no jugaste');

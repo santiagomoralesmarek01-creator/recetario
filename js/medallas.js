@@ -28,7 +28,7 @@ export function sumarDias(dia, n) {
 
 // valor(l) → número actual; meta → número a alcanzar.
 export const MEDALLAS = [
-  { id: 'bienvenida', icono: '👋', nombre: 'Bienvenida', descripcion: 'Crear tu cuenta en Recetario', grupo: 'Comunidad', valor: () => 1, meta: 1 },
+  { id: 'bienvenida', icono: '👋', nombre: 'Bienvenida', descripcion: 'Crear tu cuenta en A Mano', grupo: 'Comunidad', valor: () => 1, meta: 1 },
   { id: 'receta-1', icono: '📝', nombre: 'Primera receta', descripcion: 'Subir tu primera receta', grupo: 'Comunidad', valor: (l) => l.recetas_subidas, meta: 1 },
   { id: 'receta-5', icono: '👨‍🍳', nombre: 'Chef de la casa', descripcion: 'Subir 5 recetas', grupo: 'Comunidad', valor: (l) => l.recetas_subidas, meta: 5 },
   { id: 'receta-15', icono: '📚', nombre: 'Gran recetario', descripcion: 'Subir 15 recetas', grupo: 'Comunidad', valor: (l) => l.recetas_subidas, meta: 15 },

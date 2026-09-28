@@ -184,7 +184,7 @@ export async function juegoPlatoDelDia() {
       el('div', { class: 'acciones' },
         el('button', {
           type: 'button', class: 'boton',
-          onclick: () => compartir(`🍳 Recetario · Plato del día #${numero}\n${cuadritos()} ${partida.gano ? `${partida.intentos.length}/${INTENTOS}` : `X/${INTENTOS}`}${racha > 1 ? `  🔥${racha}` : ''}`),
+          onclick: () => compartir(`🍳 A Mano · Plato del día #${numero}\n${cuadritos()} ${partida.gano ? `${partida.intentos.length}/${INTENTOS}` : `X/${INTENTOS}`}${racha > 1 ? `  🔥${racha}` : ''}`),
         }, 'Compartir resultado'),
         el('a', { class: 'boton-secundario boton', href: '#/juegos' }, 'Otros juegos')),
       el('p', { class: 'meta' }, `Nuevo plato en ${tiempoHastaMañana()}.`)));
@@ -263,7 +263,7 @@ export async function juegoPlatoDelDia() {
     if (partida.terminado) pintarFin(); else pintarJuego();
   }
 
-  document.title = `Plato del día #${numero} · Recetario`;
+  document.title = `Plato del día #${numero} · A Mano`;
   mostrar(
     el('a', { class: 'volver', href: '#/juegos' }, '← Juegos'),
     el('section', { class: 'juego plato-del-dia' },

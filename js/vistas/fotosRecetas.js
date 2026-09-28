@@ -71,7 +71,7 @@ export function dialogoFoto(receta, alGuardar) {
 
 // #/fotos: recetas sin foto (primero las latinoamericanas de la casa) para ir completándolas.
 export async function vistaFotos() {
-  document.title = 'Fotos de recetas · Recetario';
+  document.title = 'Fotos de recetas · A Mano';
   if (!usuario()) { pedirLogin('#/fotos'); return; }
   const vigente = vigencia();
   cargando();

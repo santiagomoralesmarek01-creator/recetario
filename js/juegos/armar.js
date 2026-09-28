@@ -46,7 +46,7 @@ export async function juegoArmar() {
   cargando();
   const datos = await cargarDatos();
   if (!vigente()) return;
-  document.title = 'Armá el plato · Recetario';
+  document.title = 'Armá el plato · A Mano';
 
   const zona = el('div', { class: 'juego-zona' });
   const tablero = marcador();
@@ -171,7 +171,7 @@ export async function juegoArmar() {
         detalle: `Platos perfectos: ${perfectos} de ${rondas.length}.`,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
-        textoCompartir: `🥘 Recetario · Armá el plato (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos`,
+        textoCompartir: `🥘 A Mano · Armá el plato (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos`,
       }));
     }
 

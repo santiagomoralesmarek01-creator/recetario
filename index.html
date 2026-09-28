@@ -5,11 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#C8401F" />
   <meta name="author" content="MrK" />
-  <meta name="description" content="Recetas caseras y del mundo, con modo cocina para ir tildando ingredientes y pasos." />
-  <title>Recetario</title>
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
-  <link rel="icon" href="img/logo.png" type="image/png" sizes="512x512" />
-  <link rel="apple-touch-icon" href="img/logo-180.png" />
+  <meta name="description" content="Recetas latinoamericanas que se adaptan a tu país, a tu heladera y a tu nivel. Con lo que hay, alcanza." />
+  <title>A Mano · Cocina latinoamericana a tu medida</title>
+  <meta property="og:site_name" content="A Mano" />
+  <meta property="og:title" content="A Mano · Cocina latinoamericana a tu medida" />
+  <meta property="og:description" content="Con lo que hay, alcanza. Recetas latinoamericanas que se adaptan a tu país, a tu heladera y a tu nivel." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://recetario-virid.vercel.app/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="img/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" />
@@ -22,13 +31,12 @@
 <body>
   <header class="cabecera">
     <div class="cabecera-interior">
-      <a class="marca" href="#/">
-        <img src="img/logo.svg" alt="" width="34" height="34" />
-        <span>Recetario</span>
+      <a class="marca" href="#/" aria-label="A Mano, inicio">
+        <svg class="marca-logo" viewBox="-1 44 324 60" aria-hidden="true"><path fill="currentColor" d="M17.6 101.4L17.6 101.4Q13.5 101.4 10.0 100.0Q6.4 98.5 4.2 95.4Q1.9 92.3 1.9 87.1L1.9 87.1Q1.9 82.3 3.8 79.3Q5.6 76.2 8.8 74.4Q12 72.6 15.8 71.6Q19.6 70.6 23.5 69.9L23.5 69.9Q28.8 68.9 31.5 68.3Q34.1 67.8 35 66.9Q35.9 66.1 35.9 64.6L35.9 64.6Q35.9 61.2 33.5 59.4Q31.1 57.7 27.2 57.7L27.2 57.7Q24.9 57.7 22.5 58.5Q20.1 59.4 18.6 61.6Q17 63.8 17 67.7L17 67.7L4.1 66.6Q4.1 60.6 6.2 56.6Q8.2 52.7 11.7 50.4Q15.2 48.1 19.4 47.1Q23.6 46.1 27.7 46.1L27.7 46.1Q35.1 46.1 40.1 48.8Q45 51.6 47.5 56.9Q50 62.2 50 69.9L50 69.9L50 79.4Q50 82.8 50 86.3Q50 89.7 50.1 93.2Q50.1 96.6 50.1 100L50.1 100L37.4 100Q37.5 96.2 37.6 92.3Q37.7 88.4 37.7 84.2L37.7 84.2L37.1 84.2Q36.6 88.9 34 92.8Q31.4 96.7 27.2 99.0Q23 101.4 17.6 101.4ZM23.2 90.7L23.2 90.7Q25.2 90.7 27.5 89.8Q29.7 89 31.6 87.3Q33.5 85.5 34.7 82.7Q35.9 79.8 35.9 75.7L35.9 75.7L36 73.4L38.6 72.9Q37.8 74.3 35.8 75.1Q33.7 75.9 31.2 76.3Q28.7 76.8 26.1 77.3Q23.5 77.8 21.3 78.6Q19.1 79.4 17.8 80.8Q16.4 82.3 16.4 84.8L16.4 84.8Q16.4 87.6 18.3 89.2Q20.2 90.7 23.2 90.7ZM92.2 100L77.8 100L77.8 72.3L77.7 47.5L90.1 47.5L89.8 69.7L90.6 69.7Q91.3 61.2 93.4 56Q95.4 50.8 98.9 48.4Q102.4 46.1 107.3 46.1L107.3 46.1Q112.3 46.1 115.5 48.6Q118.6 51.2 120.1 56.4Q121.5 61.6 121.2 69.7L121.2 69.7L122.1 69.7Q122.7 61.3 124.9 56.1Q127.1 50.9 130.7 48.5Q134.3 46.1 139.4 46.1L139.4 46.1Q143.5 46.1 146.5 47.6Q149.5 49.1 151.5 52.1Q153.5 55.1 154.5 59.6Q155.5 64.2 155.5 70.4L155.5 70.4L155.5 100L141.1 100L141.1 71.7Q141.1 67.4 140.4 64.5Q139.7 61.6 138.2 60.3Q136.7 58.9 134.4 58.9L134.4 58.9Q131.3 58.9 128.9 61.5Q126.5 64.1 125.1 69.2Q123.7 74.3 123.7 81.9L123.7 81.9L123.7 100L109.6 100L109.6 71.3Q109.6 67 108.9 64.3Q108.1 61.6 106.6 60.3Q105.1 58.9 102.8 58.9L102.8 58.9Q99.9 58.9 97.5 61.3Q95.1 63.6 93.7 68.7Q92.2 73.8 92.2 81.9L92.2 81.9L92.2 100ZM176.5 101.4L176.5 101.4Q172.4 101.4 168.8 100.0Q165.3 98.5 163.1 95.4Q160.8 92.3 160.8 87.1L160.8 87.1Q160.8 82.3 162.7 79.3Q164.5 76.2 167.7 74.4Q170.9 72.6 174.7 71.6Q178.5 70.6 182.4 69.9L182.4 69.9Q187.7 68.9 190.4 68.3Q193 67.8 193.9 66.9Q194.8 66.1 194.8 64.6L194.8 64.6Q194.8 61.2 192.4 59.4Q190 57.7 186.1 57.7L186.1 57.7Q183.8 57.7 181.4 58.5Q179 59.4 177.5 61.6Q175.9 63.8 175.9 67.7L175.9 67.7L163 66.6Q163 60.6 165.1 56.6Q167.1 52.7 170.6 50.4Q174.1 48.1 178.3 47.1Q182.5 46.1 186.6 46.1L186.6 46.1Q194 46.1 199.0 48.8Q203.9 51.6 206.4 56.9Q208.9 62.2 208.9 69.9L208.9 69.9L208.9 79.4Q208.9 82.8 208.9 86.3Q208.9 89.7 209.0 93.2Q209 96.6 209 100L209 100L196.3 100Q196.4 96.2 196.5 92.3Q196.6 88.4 196.6 84.2L196.6 84.2L196 84.2Q195.5 88.9 192.9 92.8Q190.3 96.7 186.1 99.0Q181.9 101.4 176.5 101.4ZM182.1 90.7L182.1 90.7Q184.1 90.7 186.4 89.8Q188.6 89 190.5 87.3Q192.4 85.5 193.6 82.7Q194.8 79.8 194.8 75.7L194.8 75.7L194.9 73.4L197.5 72.9Q196.7 74.3 194.7 75.1Q192.6 75.9 190.1 76.3Q187.6 76.8 185 77.3Q182.4 77.8 180.2 78.6Q178 79.4 176.7 80.8Q175.3 82.3 175.3 84.8L175.3 84.8Q175.3 87.6 177.2 89.2Q179.1 90.7 182.1 90.7ZM230.5 100L216.1 100L216.1 71.5L216.0 47.5L228.4 47.5L228.0 69.7L228.9 69.7Q229.5 61.7 231.6 56.5Q233.6 51.3 237.4 48.7Q241.1 46.1 246.9 46.1L246.9 46.1Q255.5 46.1 259.8 51.9Q264.1 57.8 264.1 69.6L264.1 69.6L264.1 100L249.7 100L249.7 71.2Q249.7 64.9 247.9 61.8Q246.0 58.7 241.9 58.7L241.9 58.7Q238.4 58.7 235.9 61.1Q233.3 63.5 231.9 68.7Q230.5 73.9 230.5 82.4L230.5 82.4L230.5 100ZM295.7 101.4L295.7 101.4Q288.2 101.4 282.4 98.3Q276.5 95.3 273.3 89.2Q270 83.1 270 73.8L270 73.8Q270 64.3 273.4 58.2Q276.8 52.1 282.6 49.1Q288.5 46.1 295.8 46.1L295.8 46.1Q303.4 46.1 309.2 49.1Q315 52.2 318.3 58.3Q321.5 64.5 321.5 73.8L321.5 73.8Q321.5 83.4 318.1 89.5Q314.7 95.6 308.9 98.5Q303 101.4 295.7 101.4ZM296 90.6L296 90.6Q299.5 90.6 301.9 88.7Q304.3 86.8 305.6 83.2Q306.9 79.6 306.9 74.6L306.9 74.6Q306.9 69.1 305.5 65.3Q304.1 61.6 301.6 59.5Q299 57.5 295.4 57.5L295.4 57.5Q292 57.5 289.6 59.4Q287.1 61.3 285.9 64.9Q284.6 68.6 284.6 73.7L284.6 73.7Q284.6 81.6 287.6 86.1Q290.6 90.6 296 90.6Z"/></svg>
       </a>
       <nav class="nav-principal" aria-label="Secciones">
         <a href="#/" data-ruta="">Inicio</a>
-        <a href="#/que-tengo" data-ruta="que-tengo">¿Qué tengo en casa?</a>
+        <a href="#/que-tengo" data-ruta="que-tengo">¿Qué hay a mano?</a>
         <a href="#/paises" data-ruta="paises pais">Países</a>
         <a href="#/juegos" data-ruta="juegos medallas">Juegos</a>
         <a href="#/comunidad" data-ruta="comunidad autor">Comunidad</a>
@@ -50,6 +58,7 @@
   <main id="contenido" aria-live="polite"><p class="estado">Cargando…</p></main>
 
   <footer class="pie">
+    <p class="pie-marca"><strong>A Mano</strong> · Con lo que hay, alcanza.</p>
     <p class="firma">Hecho por <strong>MrK</strong></p>
     <p>Recetas del mundo e imágenes de ingredientes: <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a>.</p>
   </footer>

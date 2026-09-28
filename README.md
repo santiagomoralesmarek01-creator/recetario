@@ -1,6 +1,8 @@
-# Recetario
+# A Mano
 
-Web de recetas con cuentas de usuario, recetas propias y modo cocina.
+*Con lo que hay, alcanza.* Cocina latinoamericana a tu medida: recetas con
+cuentas de usuario, recetas propias y modo cocina. La identidad de marca está en
+[`docs/marca-a-mano.md`](docs/marca-a-mano.md).
 Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 
 ## Qué hace
@@ -146,7 +148,8 @@ se enlaza desde el crédito). Una foto cargada desde `#/fotos` las reemplaza.
 ├── data/fuente/              catálogo original y traducciones a mano
 ├── scripts/                  descarga y traducción del catálogo
 ├── .github/workflows/        Actions que corren esos scripts
-├── img/                      íconos de reemplazo (SVG)
+├── img/                      logo, isotipo, favicons, íconos de la app, og-image y reemplazos (SVG)
+├── manifest.webmanifest      nombre e íconos para instalar la web en el celular
 ├── supabase/esquema.sql      tabla, seguridad y bucket de fotos
 └── js/
     ├── app.js                ruteo y menú de sesión

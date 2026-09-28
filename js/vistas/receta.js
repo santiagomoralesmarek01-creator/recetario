@@ -30,7 +30,7 @@ export async function vistaReceta(id) {
       el('p', { class: 'estado' }, el('a', { href: '#/' }, 'Volver al inicio')));
     return;
   }
-  document.title = `${r.nombre} · Recetario`;
+  document.title = `${r.nombre} · A Mano`;
   contextoReceta(r);
 
   let progreso = leerProgreso(r.id);

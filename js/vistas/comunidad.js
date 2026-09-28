@@ -40,7 +40,7 @@ async function grillaPaginada(filtros, vacia) {
 
 export async function vistaComunidad(categoria = '') {
   const vigente = vigencia();
-  document.title = 'Comunidad · Recetario';
+  document.title = 'Comunidad · A Mano';
   if (!hayBackend) {
     mostrar(el('p', { class: 'estado' }, 'Las recetas de la comunidad todavía no están disponibles.'));
     return;
@@ -84,7 +84,7 @@ export async function vistaComunidad(categoria = '') {
     el('header', { class: 'comunidad-cabecera' },
       el('div', {},
         el('h1', {}, 'Recetas de la comunidad'),
-        el('p', { class: 'meta' }, 'Recetas caseras que compartió la gente del Recetario.')),
+        el('p', { class: 'meta' }, 'Recetas caseras que compartió la gente de A Mano.')),
       el('a', { class: 'boton', href: '#/nueva' }, 'Subir mi receta')),
     el('div', { class: 'comunidad-filtros' }, buscador, chips),
     resultados,
@@ -100,7 +100,7 @@ export async function vistaAutor(userId) {
   const contenido = await grillaPaginada({ autor: userId },
     el('p', { class: 'estado' }, 'Esta persona todavía no compartió recetas públicas.'));
   if (!vigente()) return;
-  document.title = `Recetas de ${nombre} · Recetario`;
+  document.title = `Recetas de ${nombre} · A Mano`;
   mostrar(
     el('a', { class: 'volver', href: rutaComunidad() }, '← Comunidad'),
     el('h1', {}, `Recetas de ${nombre}`),

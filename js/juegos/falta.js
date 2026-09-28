@@ -43,7 +43,7 @@ export async function juegoFalta() {
   cargando();
   const datos = await cargarDatos();
   if (!vigente()) return;
-  document.title = '¿Qué le falta? · Recetario';
+  document.title = '¿Qué le falta? · A Mano';
 
   const zona = el('div', { class: 'juego-zona' });
   const tablero = marcador();
@@ -131,7 +131,7 @@ export async function juegoFalta() {
         detalle: `Adivinaste ${aciertos} de ${rondas.length} ingredientes.`,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
-        textoCompartir: `🧩 Recetario · ¿Qué le falta? (${MODOS[modo].nombre})\n${marcas.join('')}\n${aciertos}/${rondas.length} ingredientes`,
+        textoCompartir: `🧩 A Mano · ¿Qué le falta? (${MODOS[modo].nombre})\n${marcas.join('')}\n${aciertos}/${rondas.length} ingredientes`,
       }));
     }
 

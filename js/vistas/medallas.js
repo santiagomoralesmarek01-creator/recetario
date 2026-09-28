@@ -21,7 +21,7 @@ function tarjeta(m) {
 
 export async function vistaMedallas() {
   if (!hayBackend) return sinBackend();
-  document.title = 'Mis medallas · Recetario';
+  document.title = 'Mis medallas · A Mano';
   if (!usuario()) {
     mostrar(el('section', { class: 'medallas-invitacion estado' },
       el('div', { class: 'medallas-invitacion-iconos', 'aria-hidden': 'true' }, MEDALLAS.slice(0, 8).map((m) => m.icono).join(' ')),

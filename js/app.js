@@ -113,7 +113,7 @@ async function router() {
 
   const [ruta, ...resto] = hash.replace(/^#\/?/, '').split('/');
   const param = decodeURIComponent(resto.join('/'));
-  document.title = 'Recetario';
+  document.title = 'A Mano · Cocina latinoamericana a tu medida';
   for (const a of enlacesNav) a.classList.toggle('activo', a.dataset.ruta.split(' ').includes(ruta));
   try {
     switch (ruta) {

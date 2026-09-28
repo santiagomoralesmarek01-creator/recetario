@@ -56,7 +56,7 @@ export async function juegoPais() {
   cargando();
   const datos = await cargarDatos();
   if (!vigente()) return;
-  document.title = 'Adiviná el país · Recetario';
+  document.title = 'Adiviná el país · A Mano';
 
   const zona = el('div', { class: 'juego-zona' });
   const tablero = marcador();
@@ -152,7 +152,7 @@ export async function juegoPais() {
         detalle: `Acertaste ${aciertos} de ${rondas.length} países.`,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
-        textoCompartir: `🌎 Recetario · Adiviná el país (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos (${aciertos}/${rondas.length})`,
+        textoCompartir: `🌎 A Mano · Adiviná el país (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos (${aciertos}/${rondas.length})`,
       }));
     }
 
