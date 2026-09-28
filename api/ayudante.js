@@ -121,16 +121,28 @@ async function preguntarAGemini(contenidos, receta) {
   // quedó sin cupo, se prueba el siguiente.
   const candidatos = modeloQueAnda ? [modeloQueAnda, ...MODELOS.filter((m) => m !== modeloQueAnda)] : MODELOS;
   let peor = null;
-  for (const modelo of candidatos) {
-    const resultado = await llamarModelo(modelo, cuerpo);
-    if (resultado.error !== 'modelo' && resultado.error !== 'ocupado') {
-      if (!resultado.error || resultado.error === 'bloqueado') modeloQueAnda = modelo;
-      return resultado;
+  const intentos = [];
+  // Dos vueltas: la saturación suele durar segundos, así que se espera un poco
+  // y se reintentan los modelos que existen.
+  for (let vuelta = 0; vuelta < 2; vuelta++) {
+    if (vuelta) await new Promise((listo) => setTimeout(listo, 2000));
+    for (const modelo of candidatos) {
+      if (vuelta && intentos.some((i) => i.modelo === modelo && i.error === 'modelo')) continue;
+      const resultado = await llamarModelo(modelo, cuerpo);
+      if (resultado.error !== 'modelo' && resultado.error !== 'ocupado') {
+        if (!resultado.error || resultado.error === 'bloqueado') modeloQueAnda = modelo;
+        return resultado;
+      }
+      intentos.push({ modelo, error: resultado.error, detalle: resultado.detalle });
+      // Si alguno existía pero estaba saturado, ese es el motivo a informar.
+      if (!peor || resultado.error === 'ocupado') peor = resultado;
     }
-    // Si alguno existía pero estaba saturado, ese es el motivo a informar.
-    if (!peor || resultado.error === 'ocupado') peor = resultado;
+    if (!intentos.some((i) => i.error === 'ocupado')) break;
   }
-  return peor;
+  // Resumen corto: el último código de cada modelo y el mensaje de Google una sola vez.
+  const porModelo = new Map(intentos.map((i) => [i.modelo, (i.detalle.match(/Gemini (\d+)/) || [])[1] || i.error]));
+  const resumen = [...porModelo].map(([m, codigo]) => `${m} ${codigo}`).join(' · ');
+  return { ...peor, detalle: `${resumen} — ${peor.detalle}` };
 }
 
 // GET /api/ayudante: diagnóstico sin gastar mensajes (no muestra la clave).
