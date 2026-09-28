@@ -80,9 +80,10 @@ por día cada una.
 3. En Supabase, volvé a ejecutar `supabase/esquema.sql` completo (se puede
    repetir sin problema): suma la tabla que cuenta los mensajes de cada día.
 
-Respaldo (recomendado): Gemini gratis a veces está saturado. Si además cargás
-`GROQ_API_KEY` (clave gratis, sin tarjeta, en <https://console.groq.com/keys>),
-cuando Gemini no responde contesta Groq automáticamente.
+Recomendado: cargá también `GROQ_API_KEY` (clave gratis, sin tarjeta, en
+<https://console.groq.com/keys>). Con las dos claves responde primero Groq, que
+suele tardar uno o dos segundos, y si no puede, Gemini (que a veces está
+saturado). Cada pedido tiene un máximo de 25 segundos.
 
 Para comprobar la configuración abrí `/api/ayudante` en el navegador: tiene que
 decir `"listo":true`.

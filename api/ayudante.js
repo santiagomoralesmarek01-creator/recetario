@@ -1,6 +1,6 @@
 // Ayudante de cocina: función de Vercel que recibe la charla desde la web,
-// comprueba la sesión de Supabase y el límite diario, y le pregunta a Gemini.
-// Si Gemini está saturado o falla, responde Groq (también gratis) como respaldo.
+// comprueba la sesión de Supabase y el límite diario, y le pregunta a la IA:
+// primero Groq (gratis y rápido) y, si no puede, Gemini (también gratis).
 //
 // Variables de entorno (Vercel → Settings → Environment Variables):
 //   GEMINI_API_KEY  clave gratuita de Google AI Studio
@@ -24,6 +24,9 @@ const MODELOS_GROQ = [...new Set([
   process.env.GROQ_MODELO, 'llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'llama-3.1-8b-instant',
 ].filter(Boolean))];
 const API_GROQ = 'https://api.groq.com/openai/v1';
+const TIEMPO_MAXIMO = 25000; // ms para todo el pedido
+const ESPERA_POR_INTENTO = 12000; // ms máximos por modelo de Gemini
+const ESPERA_GROQ = 9000; // Groq suele tardar 1-2 s; si pasa esto, está trabado
 const LIMITE_DIARIO = 40;
 const MAX_MENSAJES = 20;
 const MAX_LARGO_MENSAJE = 1500;
@@ -103,12 +106,26 @@ async function errorDeGemini(r) {
   return { error: 'falla', detalle };
 }
 
-async function llamarModelo(modelo, cuerpo) {
-  const r = await fetch(`${API_GEMINI}/${encodeURIComponent(modelo)}:generateContent`, {
+// fetch con tiempo máximo: no más de maxMs ni pasado el límite total del pedido.
+// Devuelve null si se cortó por tiempo.
+async function pedir(url, opciones, limite, maxMs) {
+  const ms = Math.min(maxMs, limite - Date.now());
+  if (ms < 1000) return null;
+  try {
+    return await fetch(url, { ...opciones, signal: AbortSignal.timeout(ms) });
+  } catch (err) {
+    if (err?.name === 'TimeoutError' || err?.name === 'AbortError') return null;
+    throw err;
+  }
+}
+
+async function llamarModelo(modelo, cuerpo, limite) {
+  const r = await pedir(`${API_GEMINI}/${encodeURIComponent(modelo)}:generateContent`, {
     method: 'POST',
     headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify(cuerpo),
-  });
+  }, limite, ESPERA_POR_INTENTO);
+  if (!r) return { error: 'ocupado', detalle: 'Gemini no respondió a tiempo' };
   if (!r.ok) return errorDeGemini(r);
   const datos = await r.json();
   const candidato = datos.candidates?.[0];
@@ -124,8 +141,8 @@ async function llamarModelo(modelo, cuerpo) {
   return { texto };
 }
 
-// Con respaldo disponible no vale la pena esperar para reintentar Gemini.
-async function preguntarAGemini(contenidos, receta, { reintentar = true } = {}) {
+// Si hay otro proveedor disponible no vale la pena esperar para reintentar Gemini.
+async function preguntarAGemini(contenidos, receta, limite, { reintentar = true } = {}) {
   const cuerpo = {
     systemInstruction: { parts: [{ text: instrucciones(receta) }] },
     contents: contenidos,
@@ -139,10 +156,14 @@ async function preguntarAGemini(contenidos, receta, { reintentar = true } = {}) 
   // Dos vueltas: la saturación suele durar segundos, así que se espera un poco
   // y se reintentan los modelos que existen.
   for (let vuelta = 0; vuelta < (reintentar ? 2 : 1); vuelta++) {
-    if (vuelta) await new Promise((listo) => setTimeout(listo, 2000));
+    if (vuelta) {
+      if (limite - Date.now() < 6000) break;
+      await new Promise((listo) => setTimeout(listo, 2000));
+    }
     for (const modelo of candidatos) {
       if (vuelta && intentos.some((i) => i.modelo === modelo && i.error === 'modelo')) continue;
-      const resultado = await llamarModelo(modelo, cuerpo);
+      if (limite - Date.now() < 1000) break;
+      const resultado = await llamarModelo(modelo, cuerpo, limite);
       if (resultado.error !== 'modelo' && resultado.error !== 'ocupado') {
         if (!resultado.error || resultado.error === 'bloqueado') modeloQueAnda = modelo;
         return resultado;
@@ -153,6 +174,7 @@ async function preguntarAGemini(contenidos, receta, { reintentar = true } = {}) 
     }
     if (!intentos.some((i) => i.error === 'ocupado')) break;
   }
+  if (!peor) return { error: 'ocupado', detalle: 'Gemini: sin tiempo para probar' };
   // Resumen corto: el último código de cada modelo y el mensaje de Google una sola vez.
   const porModelo = new Map(intentos.map((i) => [i.modelo, (i.detalle.match(/Gemini (\d+)/) || [])[1] || i.error]));
   const resumen = [...porModelo].map(([m, codigo]) => `${m} ${codigo}`).join(' · ');
@@ -174,18 +196,21 @@ async function errorDeGroq(r) {
   return { error: 'falla', detalle };
 }
 
-async function preguntarAGroq(contenidos, receta) {
+async function preguntarAGroq(contenidos, receta, limite) {
   const mensajes = [
     { role: 'system', content: instrucciones(receta) },
     ...contenidos.map((c) => ({ role: c.role === 'model' ? 'assistant' : 'user', content: c.parts[0].text })),
   ];
   let peor = null;
   for (const modelo of ordenar(MODELOS_GROQ, modeloGroqQueAnda)) {
-    const r = await fetch(`${API_GROQ}/chat/completions`, {
+    if (limite - Date.now() < 1000) break;
+    const r = await pedir(`${API_GROQ}/chat/completions`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: modelo, messages: mensajes, temperature: 0.7, max_tokens: 1500 }),
-    });
+    }, limite, ESPERA_GROQ);
+    // Si Groq no contesta a tiempo, se pasa directo a Gemini en vez de probar otro modelo.
+    if (!r) return { error: 'ocupado', detalle: `${modelo}: Groq no respondió a tiempo` };
     const resultado = r.ok ? await leerGroq(r) : await errorDeGroq(r);
     if (resultado.error === 'modelo' || resultado.error === 'ocupado') {
       if (!peor || resultado.error === 'ocupado') peor = { ...resultado, detalle: `${modelo}: ${resultado.detalle}` };
@@ -194,7 +219,7 @@ async function preguntarAGroq(contenidos, receta) {
     if (!resultado.error) modeloGroqQueAnda = modelo;
     return resultado;
   }
-  return peor;
+  return peor || { error: 'ocupado', detalle: 'Groq: sin tiempo para probar' };
 }
 
 async function leerGroq(r) {
@@ -203,18 +228,24 @@ async function leerGroq(r) {
   return texto ? { texto } : { error: 'falla', detalle: `Groq sin texto (${datos.choices?.[0]?.finish_reason || 'vacío'})` };
 }
 
-// Gemini primero; si no responde y hay clave de Groq, Groq.
+// Groq primero porque suele contestar en uno o dos segundos; si no puede,
+// Gemini. Todo el pedido tiene un tiempo máximo para no dejar esperando.
 async function preguntar(contenidos, receta) {
-  const hayGemini = Boolean(process.env.GEMINI_API_KEY);
+  const limite = Date.now() + TIEMPO_MAXIMO;
   const hayGroq = Boolean(process.env.GROQ_API_KEY);
-  let deGemini = null;
-  if (hayGemini) {
-    deGemini = await preguntarAGemini(contenidos, receta, { reintentar: !hayGroq });
-    if (!deGemini.error || deGemini.error === 'bloqueado' || !hayGroq) return deGemini;
+  const proveedores = [
+    hayGroq && (() => preguntarAGroq(contenidos, receta, limite)),
+    process.env.GEMINI_API_KEY && (() => preguntarAGemini(contenidos, receta, limite, { reintentar: !hayGroq })),
+  ].filter(Boolean);
+  const fallas = [];
+  for (const proveedor of proveedores) {
+    const resultado = await proveedor();
+    if (!resultado.error || resultado.error === 'bloqueado') return resultado;
+    fallas.push(resultado);
   }
-  const deGroq = await preguntarAGroq(contenidos, receta);
-  if (!deGroq.error || !deGemini) return deGroq;
-  return { error: deGroq.error, detalle: `Gemini: ${deGemini.detalle} | ${deGroq.detalle}` };
+  // Un problema de configuración (clave o modelo) se informa antes que la saturación.
+  const principal = fallas.find((f) => f.error === 'clave') || fallas.find((f) => f.error === 'modelo') || fallas[0];
+  return { error: principal.error, detalle: fallas.map((f) => f.detalle).join(' | ') };
 }
 
 // GET /api/ayudante: diagnóstico sin gastar mensajes (no muestra la clave).
