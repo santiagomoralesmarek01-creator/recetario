@@ -102,8 +102,18 @@ export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.
   return el('div', { class: 'listado-filtrable' },
     el('div', { class: 'filtro-dificultad' },
       el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
-      el('label', { class: 'filtro-conseguir' }, conseguibles, ' 🛒 Sólo ingredientes fáciles de conseguir')),
+      el('label', { class: 'filtro-conseguir' }, conseguibles, ' 🛒 Sólo ingredientes fáciles de conseguir'),
+      leyendaDificultad()),
     contador, cuerpo);
+}
+
+// "¿Qué significa cada nivel?", desplegable.
+export function leyendaDificultad() {
+  return el('details', { class: 'leyenda-dificultad' },
+    el('summary', {}, '¿Qué significa cada nivel?'),
+    el('ul', {}, Object.entries(NIVELES).map(([n, d]) => el('li', { class: `nivel-${n}` },
+      el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), el('strong', {}, d.nombre), `: ${d.descripcion}`))),
+    el('p', {}, 'Se calcula con la cantidad de pasos e ingredientes, el tiempo y las técnicas de cada receta. 🛒 marca los ingredientes difíciles de conseguir en Latinoamérica.'));
 }
 
 // Con "tanda" muestra de a N tarjetas y un botón para ver más (listas largas).

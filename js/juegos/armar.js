@@ -1,32 +1,42 @@
 // Armá el plato: de una alacena con ingredientes mezclados, hay que elegir
-// los que lleva el plato y "servir". 5 rondas de hasta 200 puntos.
+// los que lleva el plato y "servir". 5 rondas. Prioriza recetas
+// latinoamericanas y tiene tres dificultades.
 import { el, mostrar, cargando, vigencia } from '../dom.js';
 import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
-import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, raiz } from './datos.js';
-import { finDePartida, marcador } from './partida.js';
+import { portada } from '../vistas/componentes.js';
+import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, raiz, elegirRecetas, MODOS } from './datos.js';
+import { finDePartida, marcador, elegirModo } from './partida.js';
 
 const RONDAS = 5;
-const CORRECTOS = 5;
-const FALSOS = 5;
-const PUNTOS_ACIERTO = 40;
-const PUNTOS_ERROR = 20;
 
-function armarRondas({ recetas, comunes }) {
+// correctos: ingredientes a encontrar; falsos: de relleno en la alacena; puntos por acierto y por error.
+const REGLAS = {
+  facil: { correctos: 4, falsos: 4, acierto: 25, error: 10 },
+  normal: { correctos: 5, falsos: 5, acierto: 32, error: 16 },
+  dificil: { correctos: 6, falsos: 8, acierto: 33, error: 20 },
+};
+const DETALLES = {
+  facil: 'Platos latinoamericanos: encontrá 4 ingredientes entre 8.',
+  normal: 'Más platos del mundo: encontrá 5 ingredientes entre 10.',
+  dificil: 'Cocina de todo el mundo: encontrá 6 ingredientes entre 14 y los errores restan más.',
+};
+
+function armarRondas({ recetas, comunes }, modo) {
+  const reglas = REGLAS[modo];
   const conFoto = (i) => i.imagen !== IMG_INGREDIENTE_GENERICO;
   const posibles = recetas.filter((r) => {
-    if (!r.imagen) return false;
     const utiles = r.ingredientes.filter((i) => !esTrivial(i.nombre) && conFoto(i));
-    return new Set(utiles.map((i) => raiz(i.nombre))).size >= CORRECTOS;
+    return new Set(utiles.map((i) => raiz(i.nombre))).size >= reglas.correctos;
   });
-  return mezclar(posibles).slice(0, RONDAS).map((receta) => {
+  return elegirRecetas(posibles, RONDAS, MODOS[modo].latinas).map((receta) => {
     // Los más característicos del plato, sin repetidos ("huevo" y "huevos").
     const vistas = new Set();
     const correctos = receta.ingredientes
       .filter((i) => !esTrivial(i.nombre) && conFoto(i))
       .sort((a, b) => a.usos - b.usos)
       .filter((i) => { const r = raiz(i.nombre); if (vistas.has(r)) return false; vistas.add(r); return true; })
-      .slice(0, CORRECTOS);
-    const falsos = ingredientesFalsos(comunes, receta, FALSOS);
+      .slice(0, reglas.correctos);
+    const falsos = ingredientesFalsos(comunes, receta, reglas.falsos);
     return { receta, correctos, alacena: mezclar([...correctos, ...falsos]) };
   });
 }
@@ -46,20 +56,28 @@ export async function juegoArmar() {
     el('section', { class: 'juego' },
       el('header', { class: 'juego-cabecera' },
         el('h1', {}, '🥘 Armá el plato'),
-        el('p', { class: 'meta' }, `Elegí de la alacena los ${CORRECTOS} ingredientes de cada plato y serví. Cada acierto suma ${PUNTOS_ACIERTO} puntos y cada error resta ${PUNTOS_ERROR}.`)),
+        el('p', { class: 'meta' }, 'Elegí de la alacena los ingredientes de cada plato y serví. Los aciertos suman y los errores restan.')),
       tablero.nodo, zona));
 
-  function empezar() {
-    const rondas = armarRondas(datos);
+  function inicio() {
+    tablero.nodo.hidden = true;
+    zona.replaceChildren(elegirModo({ juego: 'armar', detalles: DETALLES, alEmpezar: empezar }));
+  }
+
+  function empezar(modo) {
+    const reglas = REGLAS[modo];
+    const rondas = armarRondas(datos, modo);
     let indice = 0;
     let puntos = 0;
     let perfectos = 0;
     const marcas = [];
+    tablero.nodo.hidden = false;
 
     function ronda() {
       if (!zona.isConnected) return;
       if (indice >= rondas.length) return terminar();
       const { receta, correctos, alacena } = rondas[indice];
+      const necesarios = correctos.length;
       tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
       const elegidos = new Set();
       let servido = false;
@@ -86,15 +104,15 @@ export async function juegoArmar() {
           ? [...elegidos].map((ing) => el('span', { class: 'armar-en-olla', title: ing.nombre },
             crearImagen(ing.imagen, ing.nombre, IMG_INGREDIENTE_GENERICO)))
           : [el('span', { class: 'armar-olla-vacia' }, 'Tocá los ingredientes para meterlos en la olla')]));
-        contador.textContent = `${elegidos.size}/${CORRECTOS}`;
+        contador.textContent = `${elegidos.size}/${necesarios}`;
         servir.disabled = !elegidos.size;
       }
 
       function alternar(ing) {
         if (servido) return;
         if (elegidos.has(ing)) elegidos.delete(ing);
-        else if (elegidos.size < CORRECTOS) elegidos.add(ing);
-        else { aviso.textContent = `Ya elegiste ${CORRECTOS}: sacá uno para cambiarlo.`; aviso.className = 'juego-aviso'; return; }
+        else if (elegidos.size < necesarios) elegidos.add(ing);
+        else { aviso.textContent = `Ya elegiste ${necesarios}: sacá uno para cambiarlo.`; aviso.className = 'juego-aviso'; return; }
         aviso.textContent = '';
         pintar();
       }
@@ -104,10 +122,10 @@ export async function juegoArmar() {
         servido = true;
         const bien = [...elegidos].filter((i) => correctos.includes(i)).length;
         const mal = elegidos.size - bien;
-        const ganados = Math.max(0, bien * PUNTOS_ACIERTO - mal * PUNTOS_ERROR);
+        const ganados = Math.max(0, bien * reglas.acierto - mal * reglas.error);
         puntos += ganados;
-        if (bien === CORRECTOS) perfectos++;
-        marcas.push(bien === CORRECTOS ? '🟩' : bien >= 3 ? '🟨' : '🟥');
+        if (bien === necesarios) perfectos++;
+        marcas.push(bien === necesarios ? '🟩' : bien >= necesarios - 2 ? '🟨' : '🟥');
         fichas.forEach((f, i) => {
           f.disabled = true;
           const ing = alacena[i];
@@ -115,10 +133,10 @@ export async function juegoArmar() {
           else if (elegidos.has(ing)) f.classList.add('incorrecta');
         });
         tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
-        aviso.textContent = bien === CORRECTOS
+        aviso.textContent = bien === necesarios
           ? `¡Plato perfecto! +${ganados} 🎉`
-          : `Acertaste ${bien} de ${CORRECTOS}${mal ? ` y pusiste ${mal} que no iba${mal > 1 ? 'n' : ''}` : ''}: +${ganados}. Los que faltaron están marcados.`;
-        aviso.className = `juego-aviso ${bien === CORRECTOS ? 'bien' : bien >= 3 ? '' : 'mal'}`;
+          : `Acertaste ${bien} de ${necesarios}${mal ? ` y pusiste ${mal} que no iba${mal > 1 ? 'n' : ''}` : ''}: +${ganados}. Los que faltaron están marcados.`;
+        aviso.className = `juego-aviso ${bien === necesarios ? 'bien' : bien >= necesarios - 2 ? '' : 'mal'}`;
         servir.hidden = true;
         siguiente.hidden = false;
         siguiente.focus();
@@ -127,7 +145,8 @@ export async function juegoArmar() {
       zona.replaceChildren(
         el('div', { class: 'armar-mesa' },
           el('div', { class: 'armar-pedido' },
-            crearImagen(receta.imagenGrande || receta.imagen, receta.nombre, IMG_PLATO_GENERICO),
+            receta.imagen ? crearImagen(receta.imagenGrande || receta.imagen, receta.nombre, IMG_PLATO_GENERICO)
+              : portada({ nombre: receta.nombre, categoria: receta.codigoCategoria }, { clase: 'armar-foto-sin' }),
             el('div', {},
               el('small', {}, 'Pedido de la mesa'),
               el('strong', {}, receta.nombre),
@@ -135,8 +154,8 @@ export async function juegoArmar() {
           el('div', { class: 'armar-olla' },
             el('div', { class: 'armar-olla-cabecera' }, el('span', {}, '🍲 La olla'), contador),
             olla)),
-        el('p', { class: 'falta-pregunta' }, 'La alacena'),
-        el('div', { class: 'armar-alacena' }, fichas),
+        el('p', { class: 'falta-pregunta' }, `La alacena: elegí ${necesarios} ingredientes`),
+        el('div', { class: `armar-alacena armar-${alacena.length}` }, fichas),
         aviso,
         el('div', { class: 'juego-siguiente' }, servir, siguiente));
       pintar();
@@ -145,17 +164,19 @@ export async function juegoArmar() {
     function terminar() {
       zona.replaceChildren(finDePartida({
         juego: 'armar',
+        modo,
         titulo: 'Armá el plato',
         puntos,
-        maximo: RONDAS * CORRECTOS * PUNTOS_ACIERTO,
+        maximo: RONDAS * reglas.correctos * reglas.acierto,
         detalle: `Platos perfectos: ${perfectos} de ${rondas.length}.`,
-        alReintentar: empezar,
-        textoCompartir: `🥘 Recetario · Armá el plato\n${marcas.join('')}\n${puntos} puntos`,
+        alReintentar: () => empezar(modo),
+        alCambiarModo: inicio,
+        textoCompartir: `🥘 Recetario · Armá el plato (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos`,
       }));
     }
 
     ronda();
   }
 
-  empezar();
+  inicio();
 }

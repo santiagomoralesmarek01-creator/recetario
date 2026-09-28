@@ -4,7 +4,7 @@ import * as casa from '../recetasCasa.js';
 import { cargarIngredientes, normalizar } from '../ingredientes.js';
 import { urlIngrediente, urlPlato, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { traducirCategoria } from '../traducciones.js';
-import { NOMBRES_PAISES } from '../paises.js';
+import { NOMBRES_PAISES, LATINOAMERICA } from '../paises.js';
 import { aviso } from '../dom.js';
 
 // Ingredientes que están en casi todo: no sirven como pista ni como pregunta.
@@ -33,10 +33,13 @@ export function cargarDatos() {
         return {
           id: r.id,
           nombre: r.nombre,
+          latina: LATINOAMERICA.has(r.origen),
+          codigoCategoria: r.categoria || '',
           categoria: r.categoria ? traducirCategoria(r.categoria) : '',
           origen: r.origen || '',
           imagen: r.imagen ? urlPlato(r.imagen, { miniatura: /themealdb\.com/.test(r.imagen) }) : '',
           imagenGrande: r.imagen || '',
+          pasos: r.pasos || [],
           ingredientes: lista,
         };
       });
@@ -60,6 +63,42 @@ export function cargarDatos() {
     })
     .catch((err) => { promesa = null; throw err; });
   return promesa;
+}
+
+// ---------- dificultad de las partidas ----------
+
+// Las partidas priorizan recetas latinoamericanas: en fácil son todas de
+// Latinoamérica y en difícil se suma más cocina del resto del mundo.
+export const MODOS = {
+  facil: { nombre: 'Fácil', icono: '🟢', latinas: 1 },
+  normal: { nombre: 'Normal', icono: '🟡', latinas: 0.7 },
+  dificil: { nombre: 'Difícil', icono: '🔴', latinas: 0.35 },
+};
+
+// Elige recetas al azar respetando la proporción de latinoamericanas.
+export function elegirRecetas(lista, cantidad, proporcionLatina) {
+  const latinas = mezclar(lista.filter((r) => r.latina));
+  const delMundo = mezclar(lista.filter((r) => !r.latina));
+  const cuantasLatinas = Math.min(latinas.length, Math.round(cantidad * proporcionLatina));
+  const elegidas = [...latinas.slice(0, cuantasLatinas), ...delMundo.slice(0, cantidad - cuantasLatinas)];
+  // Si faltan de un lado, se completa con el otro.
+  for (const r of [...latinas.slice(cuantasLatinas), ...delMundo]) {
+    if (elegidas.length >= cantidad) break;
+    if (!elegidas.includes(r)) elegidas.push(r);
+  }
+  return mezclar(elegidas);
+}
+
+const CLAVE_MODO = 'recetario:modo-juego';
+export function modoGuardado(juego) {
+  try { return JSON.parse(localStorage.getItem(CLAVE_MODO) || '{}')[juego] || 'normal'; } catch { return 'normal'; }
+}
+export function guardarModo(juego, modo) {
+  try {
+    const modos = JSON.parse(localStorage.getItem(CLAVE_MODO) || '{}');
+    modos[juego] = modo;
+    localStorage.setItem(CLAVE_MODO, JSON.stringify(modos));
+  } catch { /* sin almacenamiento */ }
 }
 
 // ---------- azar ----------
@@ -111,10 +150,13 @@ export function leerRecords() {
   try { return JSON.parse(localStorage.getItem(CLAVE) || '{}') || {}; } catch { return {}; }
 }
 
-export function guardarRecord(juego, puntos) {
+// Guarda el récord del juego y el de ese modo. Devuelve true si superó el récord del modo.
+export function guardarRecord(juego, puntos, modo = null) {
   const records = leerRecords();
-  const anterior = records[juego]?.mejor || 0;
-  records[juego] = { mejor: Math.max(anterior, puntos), partidas: (records[juego]?.partidas || 0) + 1 };
+  const clave = modo ? `${juego}:${modo}` : juego;
+  const anterior = records[clave]?.mejor || 0;
+  records[juego] = { mejor: Math.max(records[juego]?.mejor || 0, puntos), partidas: (records[juego]?.partidas || 0) + 1 };
+  if (modo) records[clave] = { mejor: Math.max(anterior, puntos), partidas: (records[clave]?.partidas || 0) + 1 };
   try { localStorage.setItem(CLAVE, JSON.stringify(records)); } catch { /* sin almacenamiento */ }
   return puntos > anterior;
 }

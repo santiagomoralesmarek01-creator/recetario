@@ -46,9 +46,9 @@ export const MEDALLAS = [
   { id: 'racha-3', icono: '🔥', nombre: 'En racha', descripcion: 'Adivinar el Plato del día 3 días seguidos', grupo: 'Juegos', valor: (l) => rachaPlatoDelDia(l.dias_plato), meta: 3 },
   { id: 'racha-7', icono: '☄️', nombre: 'Semana perfecta', descripcion: 'Adivinar el Plato del día 7 días seguidos', grupo: 'Juegos', valor: (l) => rachaPlatoDelDia(l.dias_plato), meta: 7 },
   { id: 'plato-30', icono: '🧠', nombre: 'Enciclopedia culinaria', descripcion: 'Adivinar 30 Platos del día', grupo: 'Juegos', valor: (l) => (l.dias_plato || []).length, meta: 30 },
-  { id: 'pais-800', icono: '🌎', nombre: 'Trotamundos', descripcion: 'Hacer 800 puntos en Adiviná el país', grupo: 'Juegos', valor: (l) => juego(l, 'juego-pais').mejor, meta: 800 },
-  { id: 'falta-1000', icono: '🧩', nombre: 'Ojo de chef', descripcion: 'Acertar las 10 de ¿Qué le falta?', grupo: 'Juegos', valor: (l) => juego(l, 'juego-falta').mejor, meta: 1000 },
-  { id: 'armar-800', icono: '🥘', nombre: 'Arquitecto del sabor', descripcion: 'Hacer 800 puntos en Armá el plato', grupo: 'Juegos', valor: (l) => juego(l, 'juego-armar').mejor, meta: 800 },
+  { id: 'pais-800', icono: '🌎', nombre: 'Trotamundos', descripcion: 'Hacer 800 puntos en Adiviná el país (en normal o difícil)', grupo: 'Juegos', valor: (l) => juego(l, 'juego-pais').mejor, meta: 800 },
+  { id: 'falta-1000', icono: '🧩', nombre: 'Ojo de chef', descripcion: 'Acertar las 10 de ¿Qué le falta? en difícil', grupo: 'Juegos', valor: (l) => juego(l, 'juego-falta').mejor, meta: 1000 },
+  { id: 'armar-800', icono: '🥘', nombre: 'Arquitecto del sabor', descripcion: 'Hacer 800 puntos en Armá el plato (en normal o difícil)', grupo: 'Juegos', valor: (l) => juego(l, 'juego-armar').mejor, meta: 800 },
 ];
 
 export function evaluar(logros) {

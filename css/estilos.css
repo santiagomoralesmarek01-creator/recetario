@@ -1861,3 +1861,47 @@ ul.cifras { list-style: none; padding: 0; }
 :root[data-tema="oscuro"] .ingrediente .reemplazo { color: #e8c066; }
 :root[data-tema="oscuro"] .nota-conseguir { background: #3a3016; color: #f0d58a; }
 :root[data-tema="oscuro"] .nota-conseguir.todos { background: #1b3322; color: #a9dfb5; }
+.explicacion-dificultad { margin: 10px 0 0; max-width: 70ch; font-size: 0.9rem; color: var(--texto-suave); }
+.leyenda-dificultad { flex-basis: 100%; font-size: 0.88rem; }
+.leyenda-dificultad summary { cursor: pointer; color: var(--acento); font-weight: 600; width: max-content; }
+.leyenda-dificultad ul { list-style: none; margin: 8px 0 4px; padding: 12px 14px; border-radius: var(--radio-chico); background: var(--superficie); border: 1px solid var(--borde); display: grid; gap: 6px; }
+.leyenda-dificultad p { margin: 4px 0 0; color: var(--texto-suave); }
+
+/* Dificultad de los juegos */
+.modo-opciones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.modo-opcion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--superficie);
+  color: var(--texto);
+  border: 2px solid var(--borde);
+  text-align: left;
+  font-weight: 400;
+}
+.modo-opcion:hover { border-color: var(--acento); background: var(--superficie); }
+.modo-opcion.activo { border-color: var(--acento); background: var(--acento-suave); }
+.modo-titulo { font-weight: 700; font-size: 1.05rem; }
+.modo-detalle { font-size: 0.86rem; color: var(--texto-suave); line-height: 1.35; }
+.modo-opcion small { margin-top: 4px; font-weight: 700; color: var(--acento); font-size: 0.78rem; }
+.modo-nota { text-align: center; margin: 12px 0 0; }
+.tarjeta-juego-dificultad { font-size: 0.8rem; font-weight: 600; }
+.destacado .tarjeta-juego-dificultad { color: #fff; }
+.pista-paso { grid-column: 1 / -1; }
+.pista-paso span:last-child { font-weight: 500 !important; font-style: italic; }
+.juego-foto .juego-foto-sin { width: 100%; aspect-ratio: 16 / 9; max-height: 42vh; }
+.juego-foto .juego-foto-sin span { font-size: 5rem; }
+.falta-foto-sin, .plato-respuesta-sin { width: 72px; height: 72px; border-radius: 14px; flex: none; }
+.falta-foto-sin span, .plato-respuesta-sin span { font-size: 2rem; }
+.plato-respuesta-sin { width: 84px; height: 84px; }
+.armar-pedido .armar-foto-sin { width: 100%; aspect-ratio: 16 / 10; border-radius: 0; }
+.armar-alacena.armar-8 { grid-template-columns: repeat(4, 1fr); }
+.armar-alacena.armar-14 { grid-template-columns: repeat(7, 1fr); }
+@media (max-width: 700px) {
+  .modo-opciones { grid-template-columns: 1fr; }
+  .armar-alacena.armar-8, .armar-alacena.armar-14 { grid-template-columns: repeat(3, 1fr); }
+}
+.juego-marcador[hidden] { display: none; }

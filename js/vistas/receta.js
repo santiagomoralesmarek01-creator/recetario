@@ -15,7 +15,7 @@ import { bandera, rutaPais } from '../paises.js';
 import { rutaAutor } from './comunidad.js';
 import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
 import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
-import { clasificar, NIVELES } from '../dificultad.js';
+import { clasificar, explicar, NIVELES } from '../dificultad.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -235,6 +235,8 @@ export async function vistaReceta(id) {
           datos.map(([icono, valor, texto]) =>
             el('li', {}, el('span', { class: 'dato-icono', 'aria-hidden': 'true' }, icono),
               el('strong', {}, valor), el('span', {}, texto)))),
+        el('p', { class: `explicacion-dificultad nivel-${clasificacion.nivel}` },
+          el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), explicar(clasificacion)),
         (r.etiquetas?.length > 0 || r.video || r.enlace) && el('div', { class: 'receta-extras' },
           r.etiquetas?.length > 0 && el('ul', { class: 'etiquetas' }, r.etiquetas.map((t) => el('li', {}, t))),
           r.video && el('a', { class: 'boton-secundario boton-chico', href: r.video, target: '_blank', rel: 'noopener' }, '▶ Ver video'),

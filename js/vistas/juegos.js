@@ -22,12 +22,15 @@ export function vistaJuego(nombre) {
   return (JUEGOS[nombre] || vistaJuegos)();
 }
 
-function tarjetaJuego({ ruta, icono, titulo, texto, extra, clase = '' }) {
+const ELEGIS = 'Elegís la dificultad: 🟢 Fácil · 🟡 Normal · 🔴 Difícil';
+
+function tarjetaJuego({ ruta, icono, titulo, texto, dificultad, extra, clase = '' }) {
   return el('a', { class: `tarjeta-juego ${clase}`, href: `#/juegos/${ruta}` },
     el('span', { class: 'tarjeta-juego-icono', 'aria-hidden': 'true' }, icono),
     el('span', { class: 'tarjeta-juego-texto' },
       el('strong', {}, titulo),
       el('span', {}, texto),
+      dificultad && el('span', { class: 'tarjeta-juego-dificultad' }, dificultad),
       extra && el('small', {}, extra)),
     el('span', { class: 'tarjeta-juego-ir', 'aria-hidden': 'true' }, '→'));
 }
@@ -61,18 +64,19 @@ export function vistaJuegos() {
     el('section', { class: 'juegos-portada' },
       el('p', { class: 'portada-antetitulo' }, 'Juegos de cocina'),
       el('h1', {}, '¿Cuánto sabés de ', el('em', {}, 'comida'), '?'),
-      el('p', { class: 'meta' }, 'Adiviná platos, países e ingredientes con las recetas de la página. Sumá puntos, subí en el ranking y ganá medallas.')),
+      el('p', { class: 'meta' }, 'Adiviná platos, países e ingredientes con las recetas de la página, con prioridad para la cocina latinoamericana. Sumá puntos, subí en el ranking y ganá medallas: en difícil, cada acierto vale más.')),
     el('div', { class: 'juegos-lista' },
       tarjetaJuego({
         ruta: 'plato-del-dia', icono: '🍳', titulo: `Plato del día #${numeroDelDia()}`, clase: 'destacado',
-        texto: 'El desafío diario: adiviná el plato con pistas. Es el mismo para todos.',
+        texto: 'El desafío diario: adiviná el plato con pistas. Es el mismo para todos y casi siempre es latinoamericano.',
+        dificultad: '🟡 Dificultad media · 6 intentos con pistas',
         extra: hoy?.terminado
           ? `${hoy.gano ? `✓ Lo adivinaste en ${hoy.intentos.length}` : '✗ Hoy no salió'} · 🔥 racha de ${racha} · volvé mañana`
           : racha ? `🔥 Racha de ${racha} día${racha === 1 ? '' : 's'}: ¡no la cortes!` : '¡Jugá el de hoy!',
       }),
-      tarjetaJuego({ ruta: 'pais', icono: '🌎', titulo: 'Adiviná el país', texto: 'Mirá el plato y elegí de qué país es. Contra reloj.', extra: record('pais') }),
-      tarjetaJuego({ ruta: 'falta', icono: '🧩', titulo: '¿Qué le falta?', texto: 'Descubrí el ingrediente que le tapamos a cada receta.', extra: record('falta') }),
-      tarjetaJuego({ ruta: 'armar', icono: '🥘', titulo: 'Armá el plato', texto: 'Elegí de la alacena los ingredientes justos y serví.', extra: record('armar') })),
+      tarjetaJuego({ ruta: 'pais', icono: '🌎', titulo: 'Adiviná el país', texto: 'Mirá el plato y elegí de qué país es. Contra reloj.', dificultad: ELEGIS, extra: record('pais') }),
+      tarjetaJuego({ ruta: 'falta', icono: '🧩', titulo: '¿Qué le falta?', texto: 'Descubrí el ingrediente que le tapamos a cada receta.', dificultad: ELEGIS, extra: record('falta') }),
+      tarjetaJuego({ ruta: 'armar', icono: '🥘', titulo: 'Armá el plato', texto: 'Elegí de la alacena los ingredientes justos y serví.', dificultad: ELEGIS, extra: record('armar') })),
     hayBackend && seccionRanking(),
     hayBackend && el('a', { class: 'juegos-medallas', href: '#/medallas' },
       el('span', { 'aria-hidden': 'true' }, '🏅'),

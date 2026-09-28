@@ -9,6 +9,7 @@ import { hayBackend } from '../supabase.js';
 import { registrarActividad } from '../actividad.js';
 import { diaArgentina, sumarDias } from '../medallas.js';
 import { cargarDatos, azarConSemilla, mezclar, esTrivial, compartir } from './datos.js';
+import { portada } from '../vistas/componentes.js';
 
 const INTENTOS = 6;
 const PUNTOS = [600, 500, 400, 300, 200, 100];
@@ -18,14 +19,40 @@ const CLAVE = 'recetario:plato-del-dia';
 export const numeroDelDia = (dia = diaArgentina()) =>
   Math.round((Date.parse(`${dia}T12:00:00Z`) - Date.parse(`${INICIO}T12:00:00Z`)) / 86400000) + 1;
 
-// El plato de un día: siempre el mismo, sin repetir hasta recorrer toda la lista.
+// Desde este día se priorizan los platos latinoamericanos (antes, el de cada
+// día salía de todo el catálogo; se mantiene así para no cambiar días ya jugados).
+const DESDE_LATINOAMERICA = '2026-09-29';
+
+// El plato de un día: siempre el mismo para todos. 7 de cada 10 días es
+// latinoamericano, y cada lista se recorre entera antes de repetir.
 export async function platoDe(dia) {
   const { recetas } = await cargarDatos();
-  const posibles = recetas
-    .filter((r) => r.imagen && r.origen && r.ingredientes.filter((i) => !esTrivial(i.nombre)).length >= 5)
+  const aptas = recetas
+    .filter((r) => r.origen && r.ingredientes.filter((i) => !esTrivial(i.nombre)).length >= 5)
     .sort((a, b) => (a.id < b.id ? -1 : 1));
-  const orden = mezclar(posibles, azarConSemilla(20260101));
-  return orden[(numeroDelDia(dia) - 1 + orden.length) % orden.length];
+  if (dia < DESDE_LATINOAMERICA) {
+    const orden = mezclar(aptas.filter((r) => r.imagen), azarConSemilla(20260101));
+    return orden[(numeroDelDia(dia) - 1 + orden.length) % orden.length];
+  }
+  // Las latinoamericanas sin foto (de la casa) usan un paso de la receta como última pista.
+  const latinas = mezclar(aptas.filter((r) => r.latina && (r.imagen || r.pasos.length >= 3)), azarConSemilla(29092026));
+  const delMundo = mezclar(aptas.filter((r) => !r.latina && r.imagen), azarConSemilla(20260929));
+  const n = numeroDelDia(dia) - numeroDelDia(DESDE_LATINOAMERICA);
+  const bloque = Math.floor(n / 10);
+  const resto = n % 10;
+  return resto < 7
+    ? latinas[(bloque * 7 + resto) % latinas.length]
+    : delMundo[(bloque * 3 + resto - 7) % delMundo.length];
+}
+
+// Un paso de la receta con el nombre del plato tapado (pista para las que no tienen foto).
+function pasoComoPista(r) {
+  const tapar = normalizar(r.nombre).split(/[^a-zñ]+/).filter((p) => p.length >= 4);
+  const paso = r.pasos[Math.floor(r.pasos.length / 2)] || '';
+  return paso.split(/(\s+)/).map((palabra) => {
+    const n = normalizar(palabra).replace(/[^a-zñ]/g, '');
+    return tapar.some((t) => n.startsWith(t.slice(0, 5))) ? '___' : palabra;
+  }).join('');
 }
 
 // Pistas: 4 ingredientes (de los más comunes a los más reveladores), país, categoría y foto.
@@ -36,7 +63,7 @@ function pistasDe(r) {
     ...elegidos.map((i) => ({ tipo: 'ingrediente', texto: i.nombre, imagen: i.imagen })),
     { tipo: 'pais', texto: r.origen },
     { tipo: 'categoria', texto: r.categoria || 'Sin categoría' },
-    { tipo: 'foto', texto: 'La foto del plato' },
+    r.imagen ? { tipo: 'foto', texto: 'La foto del plato' } : { tipo: 'paso', texto: pasoComoPista(r) },
   ];
 }
 
@@ -114,6 +141,11 @@ export async function juegoPlatoDelDia() {
       return el('li', { class: `plato-pista pista-foto${clase}` },
         crearImagen(plato.imagen, 'Foto del plato', IMG_PLATO_GENERICO, partida.terminado ? '' : 'desenfocada'));
     }
+    if (p.tipo === 'paso') {
+      return el('li', { class: `plato-pista pista-paso${clase}` },
+        el('span', { class: 'plato-pista-icono' }, '📝'),
+        el('span', {}, el('small', {}, 'Un paso de la receta'), p.texto));
+    }
     return el('li', { class: `plato-pista pista-${p.tipo}${clase}` },
       p.tipo === 'ingrediente' ? crearImagen(p.imagen, '', IMG_INGREDIENTE_GENERICO, 'plato-pista-img')
         : p.tipo === 'pais' ? bandera(p.texto, 'plato-pista-img bandera')
@@ -139,7 +171,8 @@ export async function juegoPlatoDelDia() {
     zonaJuego.replaceChildren(el('div', { class: `plato-resultado ${partida.gano ? 'gano' : 'perdio'}` },
       el('p', { class: 'plato-resultado-titulo' }, partida.gano ? '¡Lo adivinaste! 🎉' : 'Esta vez no… 😅'),
       el('a', { class: 'plato-respuesta', href: `#/receta/${plato.id}` },
-        crearImagen(plato.imagen, '', IMG_PLATO_GENERICO),
+        plato.imagen ? crearImagen(plato.imagen, '', IMG_PLATO_GENERICO)
+          : portada({ nombre: plato.nombre, categoria: plato.codigoCategoria }, { clase: 'plato-respuesta-sin' }),
         el('span', {}, el('small', {}, 'El plato de hoy era'), el('strong', {}, plato.nombre), el('span', {}, 'Ver la receta →'))),
       el('p', { class: 'plato-cuadritos', 'aria-label': `${partida.intentos.length} intentos` }, cuadritos()),
       el('ul', { class: 'cifras' },

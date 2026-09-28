@@ -6,9 +6,9 @@
 const normalizar = (t) => String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 
 export const NIVELES = {
-  1: { nombre: 'Fácil', icono: '🟢', descripcion: 'Pocos pasos y técnicas simples' },
-  2: { nombre: 'Intermedia', icono: '🟡', descripcion: 'Lleva algo más de tiempo o de práctica' },
-  3: { nombre: 'Difícil', icono: '🔴', descripcion: 'Muchos pasos, técnicas delicadas o varias horas' },
+  1: { nombre: 'Fácil', icono: '🟢', descripcion: 'Pocos pasos y técnicas simples. Ideal para empezar o para un día con poco tiempo.' },
+  2: { nombre: 'Intermedia', icono: '🟡', descripcion: 'Más larga o con alguna técnica que pide práctica: masas, frituras, caramelo, rellenar y cerrar.' },
+  3: { nombre: 'Difícil', icono: '🔴', descripcion: 'Muchos pasos, varias horas o técnicas delicadas. Para cuando hay tiempo y ganas.' },
 };
 
 // Ingredientes que suelen ser difíciles de conseguir en Latinoamérica, con un
@@ -61,21 +61,21 @@ const DIFICILES = [
   [/salsa lizano|especias speculaas|delicias turcas|stroop/, null],
 ];
 
-// Palabras que indican técnicas que requieren práctica.
+// Técnicas que requieren práctica: [patrón sobre los pasos normalizados, nombre para explicarlo].
 const TECNICAS = [
-  /\b(leud|lev(ar|e|en)|levadura|masa madre)/,
-  /\b(laminar|hojaldr|hojaldre)/,
-  /\btempl(ar|ado) (el )?chocolate/,
-  /\b(caramelo|punto (de )?(bolita|hilo|letra)|termometro)/,
-  /\bbano (de )?maria/,
-  /\b(merengue|punto nieve)/,
-  /\b(abundante aceite|freir en aceite caliente|fritura profunda|freidora)/,
-  /\b(flamb|flamear)/,
-  /\b(emulsi|mayonesa casera)/,
-  /\b(repulg|enrollar|arrollar|rellenar y cerrar)/,
-  /\b(gelatina|hidratar)/,
-  /\b(deshuesar|filetear|descamar|limpiar (el|los) (pescado|calamar|pulpo))/,
-  /\b(amasar)/,
+  [/\b(leud|lev(ar|e|en)|levadura|masa madre)/, 'masa con levadura'],
+  [/\b(laminar|hojaldr|hojaldre)/, 'masa hojaldrada'],
+  [/\btempl(ar|ado) (el )?chocolate/, 'templar chocolate'],
+  [/\b(caramelo|punto (de )?(bolita|hilo|letra)|termometro)/, 'caramelo o almíbar a punto'],
+  [/\bbano (de )?maria/, 'baño María'],
+  [/\b(merengue|punto nieve)/, 'claras a punto nieve'],
+  [/\b(abundante aceite|freir en aceite caliente|fritura profunda|freidora)/, 'fritura en mucho aceite'],
+  [/\b(flamb|flamear)/, 'flambear'],
+  [/\b(emulsi|mayonesa casera)/, 'emulsionar una salsa'],
+  [/\b(repulg|enrollar|arrollar|rellenar y cerrar)/, 'rellenar y cerrar o enrollar'],
+  [/\b(gelatina|hidratar)/, 'gelatina'],
+  [/\b(deshuesar|filetear|descamar|limpiar (el|los) (pescado|calamar|pulpo))/, 'limpiar o filetear pescado o carne'],
+  [/\b(amasar)/, 'amasar'],
 ];
 
 const TRIVIAL = /^(sal|pimienta|agua|aceite|hielo)( |$)/;
@@ -94,9 +94,11 @@ function minutosEnPasos(pasos) {
     let mayor = 0;
     for (const m of t.matchAll(/(\d+(?:[.,]\d+)?)\s*(?:(?:a|o|-)\s*\d+(?:[.,]\d+)?\s*)?(horas?|hs|minutos?|min)\b/g)) {
       const n = Number(m[1].replace(',', '.'));
-      mayor = Math.max(mayor, m[2].startsWith('h') ? n * 60 : n);
+      // Es una espera si la palabra ("reposar", "heladera"…) está justo antes del tiempo.
+      const espera = ESPERA.test(t.slice(Math.max(0, m.index - 45), m.index));
+      mayor = Math.max(mayor, Math.min(m[2].startsWith('h') ? n * 60 : n, 24 * 60) * (espera ? 0.25 : 1));
     }
-    total += Math.min(mayor, 24 * 60) * (ESPERA.test(t) ? 0.25 : 1);
+    total += mayor;
   }
   return total;
 }
@@ -115,31 +117,52 @@ export function ingredientesDificiles(ingredientes) {
   return encontrados;
 }
 
-// { nivel: 1..3, dificiles: [{ nombre, reemplazo }], motivos: [...] }
+// { nivel: 1..3, dificiles: [{ nombre, reemplazo }], datos: { ingredientes, pasos, minutos, tecnicas[] } }
 export function clasificar({ ingredientes = [], pasos = [], minutos = null }) {
   const nombres = ingredientes.map((i) => (typeof i === 'string' ? i : i.nombre)).filter(Boolean);
   const utiles = nombres.filter((n) => !TRIVIAL.test(normalizar(n)));
   const texto = normalizar(pasos.join(' '));
   let puntos = 0;
-  const motivos = [];
 
   // Umbrales calibrados con el catálogo (la mitad de las recetas tiene
   // 9 ingredientes o menos, 5 pasos o menos y unos 850 caracteres de preparación).
-  if (utiles.length >= 14) { puntos += 2; motivos.push('muchos ingredientes'); }
+  if (utiles.length >= 14) puntos += 2;
   else if (utiles.length >= 11) puntos += 1;
 
   const cantidadPasos = pasos.length;
-  if (cantidadPasos >= 9 || texto.length > 1800) { puntos += 2; motivos.push('preparación larga'); }
+  if (cantidadPasos >= 9 || texto.length > 1800) puntos += 2;
   else if (cantidadPasos >= 6 || texto.length > 1200) puntos += 1;
 
   // El tiempo total declarado suele incluir esperas: sólo se usa si los pasos no dicen tiempos.
-  const tiempo = minutosEnPasos(pasos) || Number(minutos) || 0;
-  if (tiempo >= 150) { puntos += 2; motivos.push('varias horas'); }
-  else if (tiempo >= 60) { puntos += 1; motivos.push('más de una hora'); }
+  const tiempo = Math.round(minutosEnPasos(pasos) || Number(minutos) || 0);
+  if (tiempo >= 150) puntos += 2;
+  else if (tiempo >= 60) puntos += 1;
 
-  const tecnicas = TECNICAS.filter((t) => t.test(texto)).length;
-  if (tecnicas) { puntos += Math.min(3, tecnicas); if (tecnicas >= 2) motivos.push('técnicas que piden práctica'); }
+  const tecnicas = TECNICAS.filter(([patron]) => patron.test(texto)).map(([, nombre]) => nombre);
+  puntos += Math.min(3, tecnicas.length);
 
   const nivel = puntos <= 1 ? 1 : puntos <= 4 ? 2 : 3;
-  return { nivel, dificiles: ingredientesDificiles(ingredientes), motivos };
+  return {
+    nivel,
+    dificiles: ingredientesDificiles(ingredientes),
+    // minutosTotales: el tiempo que declara la receta (si lo tiene), para mostrarlo.
+    datos: { ingredientes: utiles.length, pasos: cantidadPasos, minutos: tiempo, minutosTotales: Number(minutos) || null, tecnicas },
+  };
+}
+
+// Explicación en palabras de por qué la receta tiene su nivel.
+export function explicar({ nivel, datos }) {
+  const { ingredientes, pasos, tecnicas } = datos;
+  // Se prefiere el tiempo que declara la receta; si no, el que suman los pasos (si es significativo).
+  const minutos = datos.minutosTotales || (datos.minutos >= 15 ? datos.minutos : null);
+  const partes = [
+    `${pasos} paso${pasos === 1 ? '' : 's'}`,
+    `${ingredientes} ingrediente${ingredientes === 1 ? '' : 's'} principales`,
+    minutos ? `${minutos >= 90 ? `unas ${String(Math.round(minutos / 30) / 2).replace('.', ',')} horas` : `unos ${minutos} minutos`} en total` : null,
+  ].filter(Boolean);
+  const tecnica = tecnicas.length
+    ? `técnicas que piden práctica: ${tecnicas.join(', ')}`
+    : 'técnicas simples';
+  const inicio = { 1: 'Es fácil porque tiene', 2: 'Es intermedia porque tiene', 3: 'Es difícil porque tiene' }[nivel];
+  return `${inicio} ${partes.join(', ')} y ${tecnica}.`;
 }
