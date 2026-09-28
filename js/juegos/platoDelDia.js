@@ -12,6 +12,7 @@ import { cargarDatos, azarConSemilla, mezclar, esTrivial, compartir } from './da
 import { portada } from '../vistas/componentes.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { evento } from '../analitica.js';
 
 const INTENTOS = 6;
 const PUNTOS = [600, 500, 400, 300, 200, 100];
@@ -243,6 +244,7 @@ export async function juegoPlatoDelDia() {
     mensaje.textContent = partida.terminado ? '' : nombre ? `No es "${nombre}". ¡Nueva pista!` : 'Pasaste: ¡nueva pista!';
     pintar();
     if (partida.terminado) {
+      evento('Juego', { juego: 'plato-del-dia', gano: partida.gano ? 'sí' : 'no' });
       registrarActividad('juego-plato-del-dia', { detalle: plato.id, puntos: partida.gano ? PUNTOS[errores()] : 0, dia })
         .catch((err) => console.warn(err));
     } else {

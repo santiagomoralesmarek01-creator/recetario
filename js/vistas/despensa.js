@@ -9,6 +9,7 @@ import { tarjetaReceta } from './componentes.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { equivalentes } from '../sinonimos.js';
+import { evento } from '../analitica.js';
 
 const CLAVE_GUARDADO = 'recetario:despensa';
 const TANDA = 24;
@@ -89,9 +90,13 @@ export async function vistaDespensa() {
     activa = i;
     [...lista.children].forEach((li, j) => li.classList.toggle('activa', j === i));
   };
+  let contado = false; // un evento por visita a la página
   function agregar(nombre) {
     const n = nombre.trim();
-    if (n && !estado.lista.some((x) => normalizar(x) === normalizar(n))) estado.lista.push(n);
+    if (n && !estado.lista.some((x) => normalizar(x) === normalizar(n))) {
+      estado.lista.push(n);
+      if (!contado) { contado = true; evento('Qué hay a mano'); }
+    }
     entrada.value = '';
     cerrar();
     actualizar();

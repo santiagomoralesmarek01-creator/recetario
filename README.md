@@ -147,6 +147,29 @@ Varias recetas de la casa usan fotos de Wikimedia Commons: en
 `creditoFoto` y `fuenteFoto` (la página del archivo, con autor y licencia, que
 se enlaza desde el crédito). Una foto cargada desde `#/fotos` las reemplaza.
 
+## Preferencias: trato y país
+
+En **Preferencias** (menú de la cuenta o pie de página) cada persona elige el
+trato (Neutro, Vos o Tú) y su país. Sin cuenta se guardan en el dispositivo;
+con cuenta, en la tabla `perfiles` de Supabase (volvé a ejecutar
+`supabase/esquema.sql` completo). El país se usa en Manitas y en la pestaña por
+país del ranking semanal, que se reinicia cada lunes. Si no se elige país, se
+toma el del idioma del navegador.
+
+## Analítica (opcional, gratis y sin cookies)
+
+En `js/config.js`, `ANALITICA`:
+
+- `plausible`: el dominio cargado en [plausible.io](https://plausible.io) (tiene
+  prueba gratis). Cuenta cada sección y estos eventos: *Qué hay a mano* (alguien
+  cargó ingredientes), *Medalla*, *Manitas* (mensaje enviado), *Juego* y
+  *Receta cocinada*. En Plausible hay que crear esos nombres como *Goals*.
+- `cloudflare`: el token de [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)
+  (gratis). Sólo cuenta visitas totales: no ve secciones ni eventos.
+
+Vacío, no se carga nada. Para la retención (si vuelven), mirar en Plausible las
+visitas de *Juego* con `plato-del-dia`: es el desafío que trae gente todos los días.
+
 ## Estructura
 
 ```

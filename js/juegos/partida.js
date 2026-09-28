@@ -7,6 +7,7 @@ import { registrarActividad } from '../actividad.js';
 import { guardarRecord, leerRecords, compartir, MODOS, modoGuardado, guardarModo } from './datos.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { evento } from '../analitica.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -40,6 +41,7 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
   const recordAnterior = leerRecords()[clave]?.mejor || 0;
   const esRecord = guardarRecord(juego, puntos, modo) && recordAnterior > 0;
   registrarActividad(`juego-${juego}`, { puntos, detalle: modo }).catch((err) => console.warn(err));
+  evento('Juego', { juego, modo: modo || '' });
   const invitado = hayBackend && !usuario();
   const porcentaje = puntos / maximo;
 

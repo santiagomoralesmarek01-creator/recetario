@@ -10,6 +10,7 @@ import { buscarCandidatas, recetasCitadas } from './recomendaciones.js';
 import { icono } from './iconos.js';
 import { t, trato } from './textos.js';
 import { paisDelUsuario } from './paises.js';
+import { evento } from './analitica.js';
 
 const CLAVE = 'recetario:ayudante';
 const MAX_HISTORIAL = 20;
@@ -275,6 +276,7 @@ export function iniciarAyudante() {
     ajustarAlto();
     const previo = mensajes.findLast((m) => m.rol === 'usuario')?.texto;
     mensajes.push({ rol: 'usuario', texto });
+    evento('Manitas', { receta: receta ? 'sí' : 'no' });
     dibujar();
     try {
       const candidatas = await recetasParaRecomendar(texto, previo);

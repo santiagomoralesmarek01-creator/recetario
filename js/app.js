@@ -21,6 +21,7 @@ import { icono } from './iconos.js';
 import { t, aplicarTextos } from './textos.js';
 import { iniciarPreferencias, EVENTO as CAMBIO_PREFERENCIAS } from './preferencias.js';
 import { vistaPreferencias } from './vistas/preferencias.js';
+import { iniciarAnalitica } from './analitica.js';
 
 iniciarTema();
 aplicarTextos();
@@ -197,6 +198,7 @@ alCambiarSesion((u) => {
   iniciarTemporizadores();
   iniciarMedallas();
   iniciarPreferencias();
+  iniciarAnalitica();
   try {
     await iniciarAuth();
   } catch (err) {

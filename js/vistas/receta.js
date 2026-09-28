@@ -20,6 +20,7 @@ import { soyAdmin } from '../fotos.js';
 import { dialogoFoto } from './fotosRecetas.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
+import { evento } from '../analitica.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -78,6 +79,7 @@ export async function vistaReceta(id) {
   function avisarSiTermino() {
     if (terminadaAvisada || !r.pasos.length || progreso.pasos.size < r.pasos.length) return;
     terminadaAvisada = true;
+    evento('Receta cocinada');
     registrarActividad('receta-cocinada', { detalle: r.id })
       .then((nueva) => { if (nueva) aviso(t('receta.completada')); })
       .catch((err) => console.warn(err));

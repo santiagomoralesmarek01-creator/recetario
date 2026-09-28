@@ -5,6 +5,7 @@ import { usuario, alCambiarSesion } from './auth.js';
 import { misLogros, alCambiarActividad } from './actividad.js';
 import { t } from './textos.js';
 import { sello } from './sello.js';
+import { evento } from './analitica.js';
 
 const juego = (l, tipo) => l.juegos?.[tipo] || { partidas: 0, mejor: 0, total: 0 };
 const partidasTotales = (l) => Object.values(l.juegos || {}).reduce((s, j) => s + Number(j.partidas || 0), 0);
@@ -82,6 +83,7 @@ function mostrarAviso(medallas) {
       el('span', {}, m.descripcion)));
   // Confeti sólo en logros grandes (la racha de 7 días).
   if (medallas.some((x) => CON_CONFETI.has(x.id))) nodo.append(confeti());
+  for (const x of medallas) evento('Medalla', { medalla: x.id });
   document.body.append(nodo);
   requestAnimationFrame(() => nodo.classList.add('visible'));
   setTimeout(() => { nodo.classList.remove('visible'); setTimeout(() => nodo.remove(), 400); }, 5000);
