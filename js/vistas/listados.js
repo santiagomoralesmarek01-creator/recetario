@@ -20,13 +20,16 @@ export function conPalabraDestacada(texto, palabra) {
 export async function vistaInicio() {
   const vigente = vigencia();
   cargando();
-  const [deCasa, deComunidad, categorias, destacada, paises] = await Promise.all([
+  const [deCasa, deComunidad, categorias, paises] = await Promise.all([
     repo.recetasDeLaCasa(),
     repo.recetasDeLaComunidad(),
     repo.categorias(),
-    repo.aleatoria().catch(() => null),
     repo.paises(),
   ]);
+  if (!vigente()) return;
+  // Receta del momento: una latinoamericana de la casa con foto, distinta en cada visita.
+  const conFoto = deCasa.filter((r) => r.imagen);
+  const destacada = conFoto.length ? conFoto[Math.floor(Math.random() * conFoto.length)] : await repo.aleatoria().catch(() => null);
   if (!vigente()) return;
 
   const invitacion = hayBackend && el('section', { class: 'invitacion' },
