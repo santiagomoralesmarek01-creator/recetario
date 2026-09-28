@@ -80,6 +80,12 @@ export async function dePais(pais) {
 
 export const recetasDeLaCasa = () => casa.todas();
 
+// Las de la casa y las del catálogo, en ese orden.
+export async function todasLasRecetas() {
+  const [deCasa, delCatalogo] = await Promise.all([casa.todas(), seguro(catalogo.todas())]);
+  return [...deCasa, ...delCatalogo];
+}
+
 // Resúmenes de varias recetas por id, en el mismo orden (las que no existen se omiten).
 export async function resumenes(ids) {
   const [delCatalogo, deCasa] = await Promise.all([seguro(catalogo.todas()), casa.todas()]);

@@ -75,6 +75,8 @@ jobs:
           path: fragmentos-traduccion
           merge-multiple: true
       - run: python scripts/traducir-catalogo.py
+      - name: Calcular la dificultad de cada receta
+        run: node scripts/clasificar-dificultad.mjs
       - name: Guardar cambios
         run: |
           git config user.name "github-actions[bot]"

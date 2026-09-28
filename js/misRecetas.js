@@ -3,13 +3,18 @@
 // las marcadas como públicas las pueda ver cualquiera.
 import { cliente } from './supabase.js';
 import { normalizarIngredientesPropios } from './recetasCasa.js';
+import { clasificar, ingredientesDificiles } from './dificultad.js';
 
 const TABLA = 'recetas';
 const BUCKET = 'fotos-recetas';
 const COLUMNAS_RESUMEN = 'id, nombre, categoria, origen, imagen_url, ingredientes, publica, autor_nombre, user_id';
 
 export function normalizarFila(f) {
+  const nombres = (f.ingredientes || []).map((i) => i?.nombre).filter(Boolean);
+  const conPasos = Array.isArray(f.pasos) && f.pasos.length > 0;
   return {
+    dificultad: conPasos ? clasificar({ ingredientes: nombres, pasos: f.pasos, minutos: f.minutos }).nivel : undefined,
+    dificiles: ingredientesDificiles(f.ingredientes || []).length,
     id: `u-${f.id}`,
     uuid: f.id,
     origenDatos: 'usuario',

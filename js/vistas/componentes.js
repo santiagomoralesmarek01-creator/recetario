@@ -1,6 +1,7 @@
 import { el } from '../dom.js';
 import { crearImagen, urlPlato, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { traducirCategoria, traducirOrigen } from '../traducciones.js';
+import { NIVELES } from '../dificultad.js';
 
 const INSIGNIAS = { casa: 'De la casa', usuario: 'Comunidad' };
 
@@ -46,7 +47,63 @@ export function tarjetaReceta(r) {
       el('p', { class: 'meta' }, [
         r.categoria && traducirCategoria(r.categoria),
         r.autor && `por ${r.autor}`,
-      ].filter(Boolean).join(' · '))));
+      ].filter(Boolean).join(' · ')),
+      r.dificultad && el('p', { class: `tarjeta-dificultad nivel-${r.dificultad}` },
+        el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), NIVELES[r.dificultad].nombre,
+        r.dificiles > 0 && el('span', { class: 'tarjeta-especiales', title: 'Lleva ingredientes difíciles de conseguir en Latinoamérica' }, ' · 🛒 ingredientes especiales'))));
+}
+
+// ---------- filtro por dificultad ----------
+
+const CLAVE_FILTRO = 'recetario:filtro';
+
+function leerFiltro() {
+  try { return { nivel: 0, conseguibles: false, ...JSON.parse(sessionStorage.getItem(CLAVE_FILTRO) || '{}') }; } catch { return { nivel: 0, conseguibles: false }; }
+}
+
+// Grupos de recetas ([{ titulo, recetas, tanda }]) con una barra para filtrar
+// por dificultad y por ingredientes fáciles de conseguir. El filtro elegido
+// se recuerda mientras dure la visita.
+export function listadoFiltrable(grupos, { vacio = 'No hay recetas para mostrar.' } = {}) {
+  const estado = leerFiltro();
+  const contador = el('p', { class: 'meta filtro-contador', 'aria-live': 'polite' });
+  const cuerpo = el('div', { class: 'filtro-resultados' });
+  const opciones = [[0, 'Todas'], ...Object.entries(NIVELES).map(([n, d]) => [Number(n), d.nombre])];
+  const chips = opciones.map(([n, texto]) => el('button', {
+    type: 'button', class: `filtro-chip${n ? ` nivel-${n}` : ''}`,
+    onclick: () => { estado.nivel = n; actualizar(); },
+  }, n ? el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }) : '', texto));
+  const conseguibles = el('input', {
+    type: 'checkbox', checked: estado.conseguibles,
+    onchange: () => { estado.conseguibles = conseguibles.checked; actualizar(); },
+  });
+
+  const pasa = (r) => (!estado.nivel || r.dificultad === estado.nivel) && (!estado.conseguibles || !r.dificiles);
+
+  function actualizar() {
+    try { sessionStorage.setItem(CLAVE_FILTRO, JSON.stringify(estado)); } catch { /* sin almacenamiento */ }
+    chips.forEach((c, i) => {
+      const activo = opciones[i][0] === estado.nivel;
+      c.classList.toggle('activo', activo);
+      c.setAttribute('aria-pressed', String(activo));
+    });
+    const filtrados = grupos.map((g) => ({ ...g, recetas: g.recetas.filter(pasa) }));
+    const total = filtrados.reduce((s, g) => s + g.recetas.length, 0);
+    const hayFiltro = estado.nivel || estado.conseguibles;
+    contador.textContent = `${total} receta${total === 1 ? '' : 's'}${hayFiltro ? ' con este filtro' : ''}`;
+    cuerpo.replaceChildren(
+      ...filtrados.filter((g) => g.recetas.length).map((g) => (g.titulo
+        ? el('section', { class: 'seccion' }, el('h2', {}, g.titulo), grillaRecetas(g.recetas, { tanda: g.tanda || 0 }))
+        : grillaRecetas(g.recetas, { tanda: g.tanda || 0 }))),
+      total === 0 && el('p', { class: 'estado' }, hayFiltro ? 'Ninguna receta cumple con este filtro. Probá con otro.' : vacio));
+  }
+
+  actualizar();
+  return el('div', { class: 'listado-filtrable' },
+    el('div', { class: 'filtro-dificultad' },
+      el('div', { class: 'filtro-chips', role: 'group', 'aria-label': 'Dificultad' }, chips),
+      el('label', { class: 'filtro-conseguir' }, conseguibles, ' 🛒 Sólo ingredientes fáciles de conseguir')),
+    contador, cuerpo);
 }
 
 // Con "tanda" muestra de a N tarjetas y un botón para ver más (listas largas).
@@ -65,11 +122,4 @@ export function grillaRecetas(recetas, { tanda = 0 } = {}) {
   }
   mostrarMas();
   return el('div', {}, grilla, pie);
-}
-
-export function seccion(titulo, recetas, extra = null) {
-  if (!recetas.length) return null;
-  return el('section', { class: 'seccion' },
-    el('div', { class: 'seccion-titulo' }, el('h2', {}, titulo), extra),
-    grillaRecetas(recetas));
 }

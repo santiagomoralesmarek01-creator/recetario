@@ -5,13 +5,18 @@ import { urlIngrediente } from './imagenes.js';
 
 let indicePromesa = null;
 
+// Dificultad precalculada (scripts/clasificar-dificultad.mjs): { id: [nivel, difíciles de conseguir] }.
+const cargarDificultad = () => fetch('data/mealdb/dificultad.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+
 function cargarIndice() {
-  indicePromesa ??= fetch('data/mealdb/indice.json')
-    .then((r) => {
+  indicePromesa ??= Promise.all([
+    fetch('data/mealdb/indice.json').then((r) => {
       if (!r.ok) throw new Error(`Catálogo no disponible (${r.status})`);
       return r.json();
-    })
-    .then(({ categorias, recetas }) => ({
+    }),
+    cargarDificultad(),
+  ])
+    .then(([{ categorias, recetas }, dificultad]) => ({
       categorias,
       recetas: recetas.map(([id, nombre, categoria, origen, imagen, ingredientes]) => ({
         id,
@@ -21,6 +26,8 @@ function cargarIndice() {
         origen,
         imagen,
         nombresIngredientes: ingredientes ? ingredientes.split('|') : [],
+        dificultad: dificultad[id]?.[0],
+        dificiles: dificultad[id]?.[1],
       })),
     }))
     .catch((err) => {

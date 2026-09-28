@@ -1819,3 +1819,45 @@ ul.cifras { list-style: none; padding: 0; }
   font-weight: 500;
 }
 .usuario-opciones a:hover, .usuario-opciones button:hover { background: var(--crema); }
+
+/* =====================================================================
+   Dificultad
+   ===================================================================== */
+
+.punto-nivel { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; background: currentColor; }
+.nivel-1 .punto-nivel { background: #2e9e4f; }
+.nivel-2 .punto-nivel { background: #e0a100; }
+.nivel-3 .punto-nivel { background: #d93025; }
+.tarjeta-dificultad { margin: 4px 0 0; font-size: 0.8rem; font-weight: 600; color: var(--texto-suave); }
+.tarjeta-especiales { font-weight: 400; }
+
+.filtro-dificultad { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 6px 0 4px; }
+.filtro-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.filtro-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.filtro-chip:hover { background: var(--crema); }
+.filtro-chip.activo { background: var(--texto); color: var(--fondo); border-color: var(--texto); }
+.filtro-conseguir { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; cursor: pointer; }
+.filtro-conseguir input { width: 18px; height: 18px; accent-color: var(--acento); }
+.filtro-contador { margin: 6px 0 14px; }
+.filtro-resultados > .seccion:first-child { margin-top: 8px; }
+
+.ingrediente .reemplazo { display: block; margin-top: 3px; font-size: 0.78rem; line-height: 1.3; color: #9a6a00; font-weight: 500; }
+.ingrediente.dificil-de-conseguir { border-color: #f0d9a0; }
+.nota-conseguir { margin: 12px 0 0; padding: 10px 14px; border-radius: var(--radio-chico); background: #fff6dc; color: #6b4d00; font-size: 0.88rem; }
+.nota-conseguir.todos { background: #e7f5ea; color: #1f5a2d; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .ingrediente .reemplazo { color: #e8c066; }
+  :root:not([data-tema="claro"]) .nota-conseguir { background: #3a3016; color: #f0d58a; }
+  :root:not([data-tema="claro"]) .nota-conseguir.todos { background: #1b3322; color: #a9dfb5; }
+}
+:root[data-tema="oscuro"] .ingrediente .reemplazo { color: #e8c066; }
+:root[data-tema="oscuro"] .nota-conseguir { background: #3a3016; color: #f0d58a; }
+:root[data-tema="oscuro"] .nota-conseguir.todos { background: #1b3322; color: #a9dfb5; }

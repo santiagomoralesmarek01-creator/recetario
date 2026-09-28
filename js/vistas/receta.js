@@ -15,6 +15,7 @@ import { bandera, rutaPais } from '../paises.js';
 import { rutaAutor } from './comunidad.js';
 import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
 import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
+import { clasificar, NIVELES } from '../dificultad.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -91,14 +92,20 @@ export async function vistaReceta(id) {
     });
   }
 
+  // Dificultad e ingredientes difíciles de conseguir en Latinoamérica.
+  const clasificacion = clasificar(r);
+  const dificiles = new Map(clasificacion.dificiles.map((d) => [d.nombre, d]));
+
   r.ingredientes.forEach((ing, i) => {
-    itemsIngredientes.push(el('li', { class: 'ingrediente' },
+    const dificil = dificiles.get(ing.nombre);
+    itemsIngredientes.push(el('li', { class: `ingrediente${dificil ? ' dificil-de-conseguir' : ''}` },
       el('label', {},
         casilla('ingredientes', i, ing.nombre),
         crearImagen(ing.imagen, '', IMG_INGREDIENTE_GENERICO),
         el('span', { class: 'ingrediente-texto' },
           el('strong', {}, ing.nombre),
-          ing.medida && el('span', { class: 'medida' }, ing.medida)))));
+          ing.medida && el('span', { class: 'medida' }, ing.medida),
+          dificil && el('span', { class: 'reemplazo' }, dificil.reemplazo ? `🛒 Si no conseguís: ${dificil.reemplazo}` : '🛒 Difícil de conseguir')))));
   });
 
   r.pasos.forEach((paso, i) => {
@@ -204,6 +211,7 @@ export async function vistaReceta(id) {
   const datos = [
     ['🥕', r.ingredientes.length, 'ingredientes'],
     ['📝', r.pasos.length, 'pasos'],
+    [NIVELES[clasificacion.nivel].icono, NIVELES[clasificacion.nivel].nombre, ''],
     r.minutos && ['⏱', r.minutos, 'minutos'],
     r.porciones && ['🍽', r.porciones, 'porciones'],
   ].filter(Boolean);
@@ -237,7 +245,10 @@ export async function vistaReceta(id) {
         el('section', { class: 'receta-ingredientes' },
           el('h2', {}, 'Ingredientes'),
           el('p', { class: 'meta' }, 'Tildalos a medida que los vas usando.'),
-          el('ul', { class: 'ingredientes' }, itemsIngredientes))),
+          el('ul', { class: 'ingredientes' }, itemsIngredientes),
+          el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, dificiles.size
+            ? `🛒 ${dificiles.size === 1 ? 'Un ingrediente puede' : `${dificiles.size} ingredientes pueden`} ser difícil${dificiles.size === 1 ? '' : 'es'} de conseguir en Latinoamérica: te dejamos con qué reemplazarlo${dificiles.size === 1 ? '' : 's'}.`
+            : '🛒 Todos los ingredientes se consiguen fácil en cualquier supermercado.'))),
       el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length

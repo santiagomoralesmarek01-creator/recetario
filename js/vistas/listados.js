@@ -4,7 +4,7 @@ import { crearImagen, IMG_PLATO_GENERICO } from '../imagenes.js';
 import { traducirCategoria } from '../traducciones.js';
 import { usuario } from '../auth.js';
 import { hayBackend } from '../supabase.js';
-import { portada, metaReceta, seccion, grillaRecetas } from './componentes.js';
+import { portada, metaReceta, grillaRecetas, listadoFiltrable } from './componentes.js';
 import { bandera, chipPais, continenteDe, CONTINENTES } from '../paises.js';
 import { rutaComunidad } from './comunidad.js';
 
@@ -47,6 +47,7 @@ export async function vistaInicio() {
       }, buscar, el('button', { type: 'submit' }, 'Buscar')),
       el('div', { class: 'accesos' },
         el('a', { class: 'acceso', href: '#/que-tengo' }, '🧺 Con lo que tengo'),
+        el('a', { class: 'acceso', href: '#/faciles' }, '⚡ Fáciles'),
         el('a', { class: 'acceso acceso-destacado', href: '#/juegos/plato-del-dia' }, '🍳 Plato del día'),
         el('a', { class: 'acceso', href: '#/pais/Argentina' }, '🧉 Argentinas'),
         el('a', { class: 'acceso', href: '#/categoria/Dessert' }, '🍰 Postres'),
@@ -68,9 +69,11 @@ export async function vistaInicio() {
   mostrar(
     portadaInicio,
     deCasa.length > 0 && el('section', { class: 'seccion' },
-      el('div', { class: 'seccion-titulo' }, el('h2', {}, 'Clásicos de la casa')),
-      el('p', { class: 'seccion-bajada' }, 'Las recetas de siempre, probadas y explicadas a nuestra manera.'),
-      grillaRecetas(deCasa)),
+      el('div', { class: 'seccion-titulo' },
+        el('h2', {}, 'Clásicos latinoamericanos'),
+        deCasa.length > 8 && el('a', { href: '#/casa' }, `Ver las ${deCasa.length} →`)),
+      el('p', { class: 'seccion-bajada' }, 'Las recetas de siempre de nuestra región, probadas y explicadas a nuestra manera.'),
+      grillaRecetas(elegirDelDia(deCasa, 8))),
     paises.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Viajá por la cocina del mundo'),
@@ -98,6 +101,14 @@ export async function vistaInicio() {
   );
 }
 
+// Una selección que cambia cada día (así la portada no muestra siempre las mismas).
+function elegirDelDia(lista, cantidad) {
+  if (lista.length <= cantidad) return lista;
+  const dia = Math.floor(Date.now() / 86400000);
+  const inicio = (dia * cantidad) % lista.length;
+  return [...lista.slice(inicio), ...lista.slice(0, inicio)].slice(0, cantidad);
+}
+
 export async function vistaCategoria(nombre) {
   const vigente = vigencia();
   cargando();
@@ -106,8 +117,36 @@ export async function vistaCategoria(nombre) {
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, traducirCategoria(nombre)),
-    el('p', { class: 'meta' }, `${recetas.length} recetas`),
-    recetas.length ? grillaRecetas(recetas, { tanda: 24 }) : el('p', { class: 'estado' }, 'Todavía no hay recetas en esta categoría.')
+    listadoFiltrable([{ recetas, tanda: 24 }], { vacio: 'Todavía no hay recetas en esta categoría.' })
+  );
+}
+
+export async function vistaCasa() {
+  const vigente = vigencia();
+  cargando();
+  const recetas = await repo.recetasDeLaCasa();
+  if (!vigente()) return;
+  document.title = 'Clásicos latinoamericanos · Recetario';
+  mostrar(
+    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('h1', {}, 'Clásicos latinoamericanos'),
+    el('p', { class: 'meta' }, 'Recetas de toda la región, escritas y probadas para cocinar con lo que se consigue acá.'),
+    listadoFiltrable([{ recetas, tanda: 24 }])
+  );
+}
+
+export async function vistaFaciles() {
+  const vigente = vigencia();
+  cargando();
+  const todas = await repo.todasLasRecetas();
+  if (!vigente()) return;
+  document.title = 'Recetas fáciles · Recetario';
+  const faciles = todas.filter((r) => r.dificultad === 1 && !r.dificiles);
+  mostrar(
+    el('a', { class: 'volver', href: '#/' }, '← Inicio'),
+    el('h1', {}, '⚡ Fáciles y con ingredientes de todos los días'),
+    el('p', { class: 'meta' }, `${faciles.length} recetas con pocos pasos, sin técnicas complicadas y con ingredientes que se consiguen en cualquier supermercado de Latinoamérica.`),
+    grillaRecetas(faciles, { tanda: 24 })
   );
 }
 
@@ -122,13 +161,13 @@ export async function vistaBusqueda(texto) {
   mostrar(
     el('a', { class: 'volver', href: '#/' }, '← Inicio'),
     el('h1', {}, `Resultados para “${texto}”`),
-    el('p', { class: 'meta' }, `${total} recetas encontradas`),
-    seccion('De la casa', deCasa),
-    seccion('De la comunidad', deComunidad),
-    internacionales.length > 0 && el('section', { class: 'seccion' },
-      el('h2', {}, 'Del mundo'),
-      grillaRecetas(internacionales, { tanda: 24 })),
-    total === 0 && el('p', { class: 'estado' }, 'No encontramos recetas. Probá con otra palabra o con un ingrediente.')
+    total === 0
+      ? el('p', { class: 'estado' }, 'No encontramos recetas. Probá con otra palabra o con un ingrediente.')
+      : listadoFiltrable([
+        { titulo: 'De la casa', recetas: deCasa },
+        { titulo: 'De la comunidad', recetas: deComunidad },
+        { titulo: 'Del mundo', recetas: internacionales, tanda: 24 },
+      ])
   );
 }
 
@@ -161,15 +200,16 @@ export async function vistaPais(pais) {
   if (!vigente()) return;
   document.title = `${pais} · Recetario`;
   const total = deCasa.length + deComunidad.length + internacionales.length;
+  const soloDelMundo = !deCasa.length && !deComunidad.length;
   mostrar(
     el('a', { class: 'volver', href: '#/paises' }, '← Todos los países'),
     el('h1', { class: 'titulo-pais' }, bandera(pais, 'bandera-grande'), pais),
-    el('p', { class: 'meta' }, `${total} receta${total === 1 ? '' : 's'}`),
-    seccion('De la casa', deCasa),
-    seccion('De la comunidad', deComunidad),
-    internacionales.length > 0 && el('section', { class: 'seccion' },
-      (deCasa.length || deComunidad.length) ? el('h2', {}, 'Del mundo') : null,
-      grillaRecetas(internacionales, { tanda: 24 })),
-    total === 0 && el('p', { class: 'estado' }, 'Todavía no hay recetas de este país.')
+    total === 0
+      ? el('p', { class: 'estado' }, 'Todavía no hay recetas de este país.')
+      : listadoFiltrable([
+        { titulo: 'De la casa', recetas: deCasa },
+        { titulo: 'De la comunidad', recetas: deComunidad },
+        { titulo: soloDelMundo ? null : 'Del mundo', recetas: internacionales, tanda: 24 },
+      ])
   );
 }

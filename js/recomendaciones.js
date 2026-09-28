@@ -5,6 +5,7 @@ import * as catalogo from './catalogo.js';
 import * as casa from './recetasCasa.js';
 import { traducirCategoria } from './traducciones.js';
 import { urlPlato } from './imagenes.js';
+import { NIVELES } from './dificultad.js';
 
 const MAX_CANDIDATAS = 12;
 
@@ -46,7 +47,7 @@ function cargarIndice() {
       return {
         id: r.id,
         nombre: r.nombre,
-        detalle: [categoria, r.origen].filter(Boolean).join(' · '),
+        detalle: [categoria, r.origen, r.dificultad && NIVELES[r.dificultad].nombre.toLowerCase()].filter(Boolean).join(' · '),
         imagen: r.imagen || '',
         codigoCategoria: r.categoria,
         esDeCasa: r.id.startsWith('c-'),

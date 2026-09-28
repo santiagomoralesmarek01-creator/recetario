@@ -2,6 +2,7 @@
 // Para sumar recetas al repertorio alcanza con agregarlas a ese archivo.
 import { urlIngrediente, IMG_INGREDIENTE_GENERICO } from './imagenes.js';
 import { ingredienteEnIngles } from './traducciones.js';
+import { clasificar } from './dificultad.js';
 
 // Para ingredientes escritos en español: usa la clave "imagen" si viene,
 // si no intenta adivinarla con el diccionario.
@@ -19,7 +20,10 @@ export function normalizarIngredientesPropios(lista) {
 }
 
 function normalizar(r) {
+  const { nivel, dificiles } = clasificar({ ingredientes: r.ingredientes || [], pasos: r.pasos || [], minutos: r.minutos });
   return {
+    dificultad: nivel,
+    dificiles: dificiles.length,
     id: `c-${r.slug}`,
     origenDatos: 'casa',
     nombre: r.nombre,
