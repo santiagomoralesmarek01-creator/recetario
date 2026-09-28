@@ -311,7 +311,7 @@ create policy "Cambiar mi perfil" on public.perfiles
   for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- Ranking de la semana (se reinicia el lunes a las 00:00 de Argentina), en
--- general o de un país. Devuelve los 5 primeros y, si la persona está más
+-- general o de un país, con un tope de 1.500 puntos por día. Devuelve los 5 primeros y, si la persona está más
 -- abajo, su puesto con dos arriba y dos abajo.
 create or replace function public.ranking_semanal_puestos(p_pais text default null)
 returns table (puesto bigint, nombre text, pais text, puntos bigint, soy_yo boolean)
@@ -321,11 +321,20 @@ as $$
     select (date_trunc('week', now() at time zone 'America/Argentina/Buenos_Aires')
             at time zone 'America/Argentina/Buenos_Aires') as desde
   ),
-  totales as (
-    select a.user_id, sum(a.puntos) as puntos
+  -- Tope de 1.500 puntos por persona y por día (hora de Argentina), para que
+  -- el ranking premie jugar varios días y no una tarde entera.
+  por_dia as (
+    select a.user_id,
+           (a.created_at at time zone 'America/Argentina/Buenos_Aires')::date as dia,
+           sum(a.puntos) as puntos
     from public.actividad a, semana s
     where a.tipo like 'juego-%' and a.created_at >= s.desde
-    group by a.user_id
+    group by 1, 2
+  ),
+  totales as (
+    select user_id, sum(least(puntos, 1500))::bigint as puntos
+    from por_dia
+    group by user_id
   ),
   tabla as (
     select rank() over (order by t.puntos desc) as puesto,

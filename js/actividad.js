@@ -90,6 +90,10 @@ export async function misLogros() {
   return data;
 }
 
+// Tope de puntos por día que cuentan para el ranking (el mismo que en
+// ranking_semanal_puestos de supabase/esquema.sql). Los récords no tienen tope.
+export const PUNTOS_POR_DIA = 1500;
+
 // Ranking de la semana, general o de un país: los 5 primeros y el puesto
 // propio con dos arriba y dos abajo. Si falta la función nueva en Supabase,
 // usa la anterior (top 10, sin países).

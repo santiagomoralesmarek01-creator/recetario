@@ -74,10 +74,12 @@ export function paisDelUsuario() {
     const elegido = localStorage.getItem(CLAVE_PAIS);
     if (elegido && PAISES[elegido]) return elegido;
   } catch { /* sin almacenamiento */ }
+  // Sólo países de Latinoamérica: un navegador en inglés de Estados Unidos o
+  // en español de España no dice dónde cocina la persona.
   for (const idioma of navigator.languages || [navigator.language]) {
     const codigo = String(idioma).split('-')[1]?.toLowerCase();
     const pais = codigo && Object.keys(PAISES).find((p) => PAISES[p][0] === codigo);
-    if (pais) return pais;
+    if (pais && LATINOAMERICA.has(pais)) return pais;
   }
   return '';
 }

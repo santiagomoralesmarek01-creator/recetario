@@ -3,7 +3,7 @@
 import { el, mostrar } from '../dom.js';
 import { hayBackend } from '../supabase.js';
 import { usuario } from '../auth.js';
-import { rankingSemanal } from '../actividad.js';
+import { rankingSemanal, PUNTOS_POR_DIA } from '../actividad.js';
 import { leerRecords } from '../juegos/datos.js';
 import { estadoDeHoy, numeroDelDia } from '../juegos/platoDelDia.js';
 import { juegoPlatoDelDia } from '../juegos/platoDelDia.js';
@@ -57,8 +57,7 @@ function seccionRanking() {
   function fila(f) {
     return el('li', { class: f.soyYo ? 'soy-yo' : '' },
       el('span', { class: 'ranking-puesto' }, `${f.puesto}.`),
-      el('span', { class: 'ranking-nombre' }, f.soyYo ? `${f.nombre} (${t('ranking.yo')})` : f.nombre,
-        pestana === 'general' && f.pais && el('small', {}, ` · ${f.pais}`)),
+      el('span', { class: 'ranking-nombre' }, f.soyYo ? `${f.nombre} (${t('ranking.yo')})` : f.nombre),
       el('span', { class: 'ranking-puntos' }, `${f.puntos.toLocaleString('es-AR')} pts`));
   }
 
@@ -84,7 +83,7 @@ function seccionRanking() {
 
   return el('section', { class: 'seccion juegos-ranking' },
     el('h2', {}, 'Ranking de la semana'),
-    el('p', { class: 'seccion-bajada' }, 'Suma los puntos de todos los juegos desde el lunes. Cada semana arranca de cero.'),
+    el('p', { class: 'seccion-bajada' }, `Suma los puntos de todos los juegos desde el lunes, con un máximo de ${PUNTOS_POR_DIA.toLocaleString('es-AR')} por día. Cada semana arranca de cero.`),
     botones,
     lista,
     !pais && el('p', { class: 'meta' }, el('a', { href: '/preferencias' }, 'Elegir un país'), ' para ver también el ranking de ese país.'),
