@@ -15,13 +15,17 @@ import * as casa from './recetasCasa.js';
 import * as comunidad from './misRecetas.js';
 import { hayBackend } from './supabase.js';
 import { terminoDeBusqueda } from './traducciones.js';
+import { aplicarFotos } from './fotos.js';
 
 // Una fuente que falla no debe tirar abajo toda la página.
 const seguro = (promesa) => promesa.catch((err) => { console.warn(err); return []; });
 
 export async function obtenerReceta(id) {
   if (id.startsWith('c-')) return casa.obtener(id.slice(2));
-  if (id.startsWith('u-')) return comunidad.obtener(id.slice(2));
+  if (id.startsWith('u-')) {
+    const r = await comunidad.obtener(id.slice(2));
+    return r && (await aplicarFotos([r]))[0];
+  }
   if (await catalogo.disponible()) {
     const receta = await catalogo.obtener(id).catch(() => null);
     if (receta) return receta;

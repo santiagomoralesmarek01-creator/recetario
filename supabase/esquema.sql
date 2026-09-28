@@ -239,3 +239,50 @@ as $$
   limit 10;
 $$;
 grant execute on function public.ranking_semanal() to anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- Fotos de recetas cargadas desde la web por los administradores.
+-- Reemplazan la imagen de cualquier receta (de la casa, del catálogo o de
+-- la comunidad). Las ve todo el mundo; sólo los administradores las cambian.
+-- ---------------------------------------------------------------------
+create table if not exists public.administradores (
+  user_id uuid primary key references auth.users (id) on delete cascade
+);
+alter table public.administradores enable row level security;
+drop policy if exists "Ver si soy administrador" on public.administradores;
+create policy "Ver si soy administrador" on public.administradores
+  for select to authenticated using (auth.uid() = user_id);
+
+create table if not exists public.fotos_recetas (
+  receta_id  text primary key check (receta_id ~ '^[A-Za-z0-9_-]{1,80}$'),
+  url        text not null check (url ~ '^https://'),
+  credito    text check (char_length(credito) <= 200),
+  updated_at timestamptz not null default now(),
+  updated_by uuid default auth.uid() references auth.users (id) on delete set null
+);
+alter table public.fotos_recetas enable row level security;
+
+drop policy if exists "Ver fotos de recetas" on public.fotos_recetas;
+create policy "Ver fotos de recetas" on public.fotos_recetas
+  for select to anon, authenticated using (true);
+
+drop policy if exists "Administradores cargan fotos" on public.fotos_recetas;
+create policy "Administradores cargan fotos" on public.fotos_recetas
+  for insert to authenticated
+  with check (exists (select 1 from public.administradores a where a.user_id = auth.uid()));
+
+drop policy if exists "Administradores cambian fotos" on public.fotos_recetas;
+create policy "Administradores cambian fotos" on public.fotos_recetas
+  for update to authenticated
+  using (exists (select 1 from public.administradores a where a.user_id = auth.uid()))
+  with check (exists (select 1 from public.administradores a where a.user_id = auth.uid()));
+
+drop policy if exists "Administradores borran fotos" on public.fotos_recetas;
+create policy "Administradores borran fotos" on public.fotos_recetas
+  for delete to authenticated
+  using (exists (select 1 from public.administradores a where a.user_id = auth.uid()));
+
+-- Para hacerte administrador (una sola vez, con el email de tu cuenta):
+--   insert into public.administradores (user_id)
+--   select id from auth.users where email = 'tu-email@ejemplo.com'
+--   on conflict do nothing;

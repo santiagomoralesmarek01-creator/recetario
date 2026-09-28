@@ -3,6 +3,7 @@
 import { urlIngrediente, IMG_INGREDIENTE_GENERICO } from './imagenes.js';
 import { ingredienteEnIngles } from './traducciones.js';
 import { clasificar } from './dificultad.js';
+import { aplicarFotos } from './fotos.js';
 
 // Para ingredientes escritos en español: usa la clave "imagen" si viene,
 // si no intenta adivinarla con el diccionario.
@@ -47,7 +48,7 @@ export function todas() {
       if (!r.ok) throw new Error('No se pudieron cargar las recetas de la casa');
       return r.json();
     })
-    .then((lista) => lista.map(normalizar))
+    .then((lista) => aplicarFotos(lista.map(normalizar)))
     .catch((err) => {
       promesa = null;
       console.error(err);

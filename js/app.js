@@ -15,6 +15,8 @@ import { iniciarTemporizadores } from './temporizador.js';
 import { vistaJuegos, vistaJuego } from './vistas/juegos.js';
 import { vistaMedallas } from './vistas/medallas.js';
 import { iniciarMedallas } from './medallas.js';
+import { vistaFotos } from './vistas/fotosRecetas.js';
+import { soyAdmin } from './fotos.js';
 
 iniciarTema();
 const menu = document.getElementById('menu');
@@ -49,11 +51,15 @@ function dibujarMenu(u) {
 // Botón con la inicial que despliega las opciones de la cuenta.
 function menuUsuario(u) {
   const nombre = nombreVisible(u);
+  // Sólo para administradores: se agrega cuando se confirma.
+  const enlaceAdmin = el('a', { href: '#/fotos', role: 'menuitem', hidden: true }, '📷 Fotos de recetas');
+  soyAdmin().then((si) => { enlaceAdmin.hidden = !si; });
   const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
     el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
     el('a', { href: '#/mis-recetas', role: 'menuitem' }, '📖 Mis recetas y favoritas'),
     el('a', { href: '#/medallas', role: 'menuitem' }, '🏅 Mis medallas'),
     el('a', { href: '#/juegos', role: 'menuitem' }, '🎮 Juegos'),
+    enlaceAdmin,
     el('button', {
       type: 'button', role: 'menuitem',
       onclick: async () => {
@@ -120,6 +126,7 @@ async function router() {
       case 'faciles': return await vistaFaciles();
       case 'juegos': return param ? await vistaJuego(param) : vistaJuegos();
       case 'medallas': return await vistaMedallas();
+      case 'fotos': return await vistaFotos();
       case 'comunidad': return await vistaComunidad(param);
       case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();

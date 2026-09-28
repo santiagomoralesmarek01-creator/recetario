@@ -16,6 +16,8 @@ import { rutaAutor } from './comunidad.js';
 import { contextoReceta, ayudanteDisponible, abrirAyudante } from '../ayudante.js';
 import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
 import { clasificar, explicar, NIVELES } from '../dificultad.js';
+import { soyAdmin } from '../fotos.js';
+import { dialogoFoto } from './fotosRecetas.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -243,7 +245,7 @@ export async function vistaReceta(id) {
           r.enlace && el('a', { class: 'enlace-fuente', href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
         accionesDueno),
       el('div', { class: 'receta-cuerpo' },
-        el('div', { class: 'receta-foto-columna' }, portada(r, { clase: 'receta-foto' })),
+        columnaFoto(r),
         el('section', { class: 'receta-ingredientes' },
           el('h2', {}, 'Ingredientes'),
           el('p', { class: 'meta' }, 'Tildalos a medida que los vas usando.'),
@@ -302,4 +304,24 @@ function botonDeMeGusta(recetaId) {
     .catch((err) => console.warn('Me gusta:', err.message));
   pintar();
   return boton;
+}
+
+// Foto de la receta, con su crédito y (para administradores) un botón para cambiarla.
+function columnaFoto(r) {
+  const credito = el('p', { class: 'foto-credito' });
+  const foto = el('div', { class: 'receta-foto-marco' }, portada(r, { clase: 'receta-foto' }));
+  const pintarCredito = () => { credito.textContent = r.creditoFoto ? `📷 ${r.creditoFoto}` : ''; };
+  pintarCredito();
+  const columna = el('div', { class: 'receta-foto-columna' }, foto, credito);
+  soyAdmin().then((admin) => {
+    if (!admin || !columna.isConnected) return;
+    foto.append(el('button', {
+      type: 'button', class: 'boton-cambiar-foto',
+      onclick: () => dialogoFoto(r, () => {
+        foto.firstChild.replaceWith(portada(r, { clase: 'receta-foto' }));
+        pintarCredito();
+      }),
+    }, r.imagen ? '📷 Cambiar foto' : '📷 Subir foto'));
+  });
+  return columna;
 }

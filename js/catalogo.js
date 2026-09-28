@@ -2,6 +2,7 @@
 // scripts/traducir-catalogo.py). Si no está disponible, repositorio.js usa
 // la API original en inglés como respaldo.
 import { urlIngrediente } from './imagenes.js';
+import { aplicarFotos } from './fotos.js';
 
 let indicePromesa = null;
 
@@ -30,6 +31,7 @@ function cargarIndice() {
         dificiles: dificultad[id]?.[1],
       })),
     }))
+    .then(async (indice) => { await aplicarFotos(indice.recetas); return indice; })
     .catch((err) => {
       indicePromesa = null;
       throw err;
@@ -59,7 +61,7 @@ export async function obtener(id) {
   if (r.status === 404) return null;
   if (!r.ok) throw new Error(`No se pudo cargar la receta (${r.status})`);
   const d = await r.json();
-  return {
+  const [receta] = await aplicarFotos([{
     id: d.id,
     origenDatos: 'mealdb',
     nombre: d.nombre,
@@ -75,7 +77,8 @@ export async function obtener(id) {
     })),
     pasos: d.pasos,
     pasosEnIngles: Boolean(d.pasosEnIngles),
-  };
+  }]);
+  return receta;
 }
 
 const normalizar = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');

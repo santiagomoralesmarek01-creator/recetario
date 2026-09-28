@@ -107,6 +107,29 @@ que tiene mucha demanda y vuelve a andar al día siguiente. En el plan gratuito,
 Google puede usar las conversaciones para mejorar sus productos: no hace falta
 (ni conviene) contarle datos personales al ayudante.
 
+## Cargar fotos de recetas (administradores)
+
+Las recetas sin foto muestran un fondo con un emoji. Para cargarles foto sin
+tocar código:
+
+1. Hacete administrador (una sola vez): en Supabase, **SQL Editor**, ejecutá
+   `supabase/esquema.sql` completo y después, con el email de tu cuenta:
+   ```sql
+   insert into public.administradores (user_id)
+   select id from auth.users where email = 'tu-email@ejemplo.com'
+   on conflict do nothing;
+   ```
+2. Entrá a la web con esa cuenta: en el menú de tu cuenta aparece
+   **📷 Fotos de recetas** (`#/fotos`), con la lista de recetas sin foto.
+   También podés tocar **📷 Subir foto** sobre la foto de cualquier receta.
+3. Elegí la foto (desde el celular se puede sacar en el momento) y, si no es
+   tuya, completá el crédito. La foto se achica sola y aparece enseguida.
+
+De dónde sacar fotos: propias (lo mejor), o de bancos gratuitos que permiten
+usarlas sin pagar: Unsplash, Pexels o Pixabay. Wikimedia Commons también sirve,
+pero ahí casi siempre hay que poner el crédito del autor. No uses fotos de
+otros sitios de recetas ni de Google Imágenes: tienen dueño.
+
 ## Estructura
 
 ```

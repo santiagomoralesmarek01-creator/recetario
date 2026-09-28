@@ -7,27 +7,8 @@ import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
 import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedida, cargarIngredientes } from '../ingredientes.js';
 import { revisarMedallas } from '../medallas.js';
+import { reducirImagen } from '../fotos.js';
 import { NOMBRES_PAISES } from '../paises.js';
-
-const MAX_LADO = 1600;
-
-// Achica la foto en el navegador antes de subirla: menos espera y menos espacio usado.
-async function reducirImagen(archivo) {
-  if (!archivo.type.startsWith('image/') || archivo.type === 'image/gif') return archivo;
-  try {
-    const bitmap = await createImageBitmap(archivo);
-    const escala = Math.min(1, MAX_LADO / Math.max(bitmap.width, bitmap.height));
-    if (escala === 1 && archivo.size < 800_000) return archivo;
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.round(bitmap.width * escala);
-    canvas.height = Math.round(bitmap.height * escala);
-    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise((ok) => canvas.toBlob(ok, 'image/jpeg', 0.85));
-    return blob ? new File([blob], 'foto.jpg', { type: 'image/jpeg' }) : archivo;
-  } catch {
-    return archivo;
-  }
-}
 
 // Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
 // Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
