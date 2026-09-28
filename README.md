@@ -66,7 +66,7 @@ Cada push posterior vuelve a publicar solo.
 
 ## Ayudante de cocina (chat con IA gratuita)
 
-El botón 🧑‍🍳 abre un chat que responde dudas de cocina y, en una receta, conoce
+El botón 🍳 abre un chat que responde dudas de cocina y, en una receta, conoce
 sus ingredientes y pasos. Usa el plan gratuito de Google Gemini a través de la
 función `api/ayudante.js` (Vercel), así la clave nunca llega al navegador.
 Sólo lo pueden usar personas con sesión iniciada, con un máximo de 40 mensajes

@@ -102,7 +102,11 @@ async function preguntar(historial, recetaVista) {
     }),
   });
   const datos = await r.json().catch(() => ({}));
-  if (!r.ok || !datos.texto) throw new Error(datos.error || 'El ayudante no pudo responder. Probá de nuevo.');
+  if (!r.ok || !datos.texto) {
+    const error = new Error(datos.error || `El ayudante no pudo responder (error ${r.status}). Probá de nuevo.`);
+    error.detalle = datos.detalle;
+    throw error;
+  }
   return datos;
 }
 
@@ -123,7 +127,7 @@ export function iniciarAyudante() {
 
   const panel = el('section', { class: 'ayudante-panel', role: 'dialog', 'aria-label': 'Ayudante de cocina', hidden: true },
     el('header', { class: 'ayudante-cabecera' },
-      el('span', { class: 'ayudante-avatar', 'aria-hidden': 'true' }, '🧑‍🍳'),
+      el('span', { class: 'ayudante-avatar', 'aria-hidden': 'true' }, '🍳'),
       el('div', {},
         el('strong', {}, 'Ayudante de cocina'),
         el('small', {}, 'Con IA · puede equivocarse')),
@@ -134,7 +138,7 @@ export function iniciarAyudante() {
   const boton = el('button', {
     type: 'button', class: 'ayudante-boton', 'aria-label': 'Abrir el ayudante de cocina', title: 'Ayudante de cocina',
     onclick: () => abrir(panel.hidden),
-  }, el('span', { 'aria-hidden': 'true' }, '🧑‍🍳'), el('span', { class: 'ayudante-boton-texto' }, 'Ayudante'));
+  }, el('span', { 'aria-hidden': 'true' }, '🍳'), el('span', { class: 'ayudante-boton-texto' }, 'Ayudante'));
 
   document.body.append(boton, panel);
   document.body.classList.add('con-ayudante');
@@ -191,8 +195,9 @@ export function iniciarAyudante() {
     lista.scrollTop = lista.scrollHeight;
   };
 
-  function error(texto) {
-    lista.append(el('p', { class: 'ayudante-error', role: 'alert' }, texto));
+  function error(texto, detalle) {
+    lista.append(el('p', { class: 'ayudante-error', role: 'alert' }, texto,
+      detalle && el('small', {}, detalle)));
     lista.scrollTop = lista.scrollHeight;
   }
 
@@ -218,7 +223,7 @@ export function iniciarAyudante() {
       dibujar();
       entrada.value = texto;
       ajustarAlto();
-      error(err.message || 'No se pudo conectar. Revisá tu conexión.');
+      error(err.message || 'No se pudo conectar. Revisá tu conexión.', err.detalle);
     } finally {
       enviarBtn.disabled = false;
       entrada.focus();

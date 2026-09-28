@@ -141,7 +141,7 @@ export async function vistaReceta(id) {
       ayudanteDisponible() && el('button', {
         type: 'button', class: 'boton-secundario', title: 'Preguntale al ayudante de cocina sobre esta receta',
         onclick: abrirAyudante,
-      }, '🧑‍🍳 Ayudante')));
+      }, '🍳 Ayudante')));
 
   // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
   const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {

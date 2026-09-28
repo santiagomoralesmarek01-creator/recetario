@@ -1162,6 +1162,9 @@ body.con-ayudante .panel-flotante { bottom: 80px; }
 
 .ayudante-bienvenida .ayudante-nota { margin: 14px 0 0; font-size: 0.78rem; }
 .ayudante-error { margin: 0; align-self: center; text-align: center; font-size: 0.88rem; color: #b3261e; }
+.ayudante-error small { display: block; margin-top: 4px; color: var(--texto-suave); font-size: 0.75rem; overflow-wrap: anywhere; }
+@media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .ayudante-error { color: #ff8a80; } }
+:root[data-tema="oscuro"] .ayudante-error { color: #ff8a80; }
 
 .ayudante-contexto {
   margin: 0;
