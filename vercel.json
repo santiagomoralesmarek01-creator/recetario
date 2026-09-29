@@ -47,7 +47,7 @@
       "destination": "/api/sitemap"
     },
     {
-      "source": "/((?!api/|data/|img/|css/|js/|docs/)(?!.*\\.[A-Za-z0-9]{2,12}$).*)",
+      "source": "/((?!api/|data/|img/|css/|js/|docs/|_vercel/)(?!.*\\.[A-Za-z0-9]{2,12}$).*)",
       "destination": "/api/pagina?ruta=$1"
     }
   ],

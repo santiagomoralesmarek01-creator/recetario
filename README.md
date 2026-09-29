@@ -186,6 +186,9 @@ toma el del idioma del navegador.
 
 En `js/config.js`, `ANALITICA`:
 
+- `vercel` (activado): [Vercel Web Analytics](https://vercel.com/docs/analytics).
+  Hay que habilitarlo en el panel del proyecto → **Analytics** → *Enable*. Cuenta
+  visitas, secciones, países y dispositivos. Sólo funciona en el sitio publicado.
 - `plausible`: el dominio cargado en [plausible.io](https://plausible.io) (tiene
   prueba gratis). Cuenta cada sección y estos eventos: *Qué hay a mano* (alguien
   cargó ingredientes), *Medalla*, *Manitas* (mensaje enviado), *Juego* y

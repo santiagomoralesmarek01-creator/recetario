@@ -1,5 +1,5 @@
-// Analítica sin cookies: Plausible (secciones y eventos) o Cloudflare Web
-// Analytics (sólo visitas). Se configura en js/config.js; si está vacío no
+// Analítica sin cookies: Vercel Web Analytics (visitas y secciones), Plausible
+// (secciones y eventos) o Cloudflare Web Analytics (sólo visitas). Se configura en js/config.js; si está vacío no
 // se carga nada. No se manda ningún dato personal: sólo el nombre del evento
 // y datos generales (qué juego, cuántos ingredientes).
 import { ANALITICA } from './config.js';
@@ -13,7 +13,12 @@ function cargarScript(src, atributos) {
 }
 
 export function iniciarAnalitica() {
-  const { plausible, cloudflare } = ANALITICA || {};
+  const { plausible, cloudflare, vercel } = ANALITICA || {};
+  // Vercel Web Analytics: el script lo sirve el propio sitio y sigue los cambios de dirección.
+  if (vercel && !/^(localhost|127\.)/.test(location.hostname)) {
+    window.va = window.va || function (...args) { (window.vaq = window.vaq || []).push(args); };
+    cargarScript('/_vercel/insights/script.js', {});
+  }
   if (plausible) {
     // Cola para los eventos que pasen antes de que cargue el script.
     window.plausible = window.plausible || function (...args) { (window.plausible.q = window.plausible.q || []).push(args); };
