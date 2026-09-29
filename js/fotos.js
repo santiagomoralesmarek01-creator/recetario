@@ -83,7 +83,14 @@ export async function guardarFoto(recetaId, archivo, credito = '') {
   const subida = await sb.storage.from('fotos-recetas').upload(ruta, foto, { cacheControl: '31536000', contentType: foto.type });
   if (subida.error) throw new Error(subida.error.message);
   const url = sb.storage.from('fotos-recetas').getPublicUrl(ruta).data.publicUrl;
-  const { error } = await sb.from('fotos_recetas').upsert({ receta_id: recetaId, url, credito: credito.trim() || null });
+  return guardarFotoUrl(recetaId, url, credito, sb);
+}
+
+// Asigna a la receta una foto que ya está en internet (p. ej. de Wikimedia).
+export async function guardarFotoUrl(recetaId, url, credito = '', sb = null) {
+  if (!usuario()) throw new Error('Tenés que iniciar sesión.');
+  sb ??= await cliente();
+  const { error } = await sb.from('fotos_recetas').upsert({ receta_id: recetaId, url, credito: credito.trim().slice(0, 200) || null });
   if (error) {
     throw new Error(/row-level security|42501/.test(`${error.message} ${error.code}`)
       ? 'Tu cuenta no es administradora (ver README).'
