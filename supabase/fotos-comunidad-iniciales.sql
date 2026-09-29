@@ -57,7 +57,7 @@ where u.email = 'intersanti6@gmail.com' and r.nombre = 'Arepas reina pepiada'
 on conflict (receta_id) do update set url = excluded.url, credito = excluded.credito, updated_at = now();
 
 insert into public.fotos_recetas (receta_id, url, credito)
-select 'u-' || r.id, 'https://commons.wikimedia.org/wiki/Special:FilePath/MayasNOLARopaVieja.jpg?width=800', 'Wikimedia Commons (ver autor y licencia) https://commons.wikimedia.org/wiki/File:MayasNOLARopaVieja.jpg'
+select 'u-' || r.id, 'https://commons.wikimedia.org/wiki/Special:FilePath/Ropa_vieja,_arroz_y_pl%C3%A1tano_macho.jpg?width=800', 'Wikimedia Commons (ver autor y licencia) https://commons.wikimedia.org/wiki/File:Ropa_vieja,_arroz_y_pl%C3%A1tano_macho.jpg'
 from public.recetas r join auth.users u on u.id = r.user_id
 where u.email = 'intersanti6@gmail.com' and r.nombre = 'Ropa vieja'
 on conflict (receta_id) do update set url = excluded.url, credito = excluded.credito, updated_at = now();

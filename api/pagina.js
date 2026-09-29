@@ -74,6 +74,15 @@ function enlaces(titulo, lista) {
   return `<nav class="pagina-estatica" aria-label="${escapar(titulo)}"><h2>${escapar(titulo)}</h2><ul>${lista.map(([href, texto]) => `<li><a href="${escapar(href)}">${escapar(texto)}</a></li>`).join('')}</ul></nav>`;
 }
 
+// Enlaces a recetas de la misma categoría (primero las de la casa), para que
+// Google recorra el sitio y reparta relevancia entre recetas.
+function parecidas(r) {
+  return todas()
+    .filter((o) => o.categoria === r.categoria && String(o.id) !== String(r.id))
+    .slice(0, 8)
+    .map((o) => [rutaReceta(o.id, o.nombre), o.nombre]);
+}
+
 function todas() {
   return [...recetasDeLaCasa(), ...indiceDelMundo()];
 }
@@ -88,11 +97,11 @@ async function armar(ruta) {
     if (!r) return { estado: 404, titulo: `Receta no encontrada · A Mano`, indexar: false };
     const canonica = rutaReceta(r.id, r.nombre);
     return {
-      titulo: `${r.nombre}${r.origen ? ` (${r.origen})` : ''} · Receta · A Mano`,
+      titulo: `Receta de ${r.nombre} paso a paso · A Mano`,
       descripcion: recortar(r.descripcion || `Receta de ${r.nombre} paso a paso: ${r.ingredientes.length} ingredientes${r.origen ? `, cocina de ${r.origen}` : ''}. Con reemplazos para lo que no se consigue.`),
       imagen: r.imagen,
       canonica,
-      contenido: contenidoReceta(r),
+      contenido: contenidoReceta(r) + enlaces(`Más recetas de ${(CATEGORIAS[r.categoria] || 'la casa').toLowerCase()}`, parecidas(r)),
       jsonld: datosEstructurados(r, SITIO + canonica),
       indexar: true,
     };
