@@ -36,6 +36,12 @@ function duracion(minutos) {
   return `PT${h ? `${h}H` : ''}${m % 60 ? `${m % 60}M` : ''}`;
 }
 
+// Título corto de un paso: su primera frase, o "Paso N" si es muy larga.
+function nombrePaso(texto, i) {
+  const frase = String(texto).split(/(?<=[.:;!?])\s|,\s/)[0].replace(/[.:;,]$/, '').trim();
+  return frase && frase.length <= 70 ? frase : `Paso ${i + 1}`;
+}
+
 function datosEstructurados(r, url) {
   const datos = {
     '@context': 'https://schema.org',
@@ -50,7 +56,9 @@ function datosEstructurados(r, url) {
     totalTime: duracion(r.minutos),
     keywords: r.etiquetas?.length ? r.etiquetas.join(', ') : undefined,
     recipeIngredient: r.ingredientes,
-    recipeInstructions: r.pasos.map((texto, i) => ({ '@type': 'HowToStep', position: i + 1, text: texto })),
+    recipeInstructions: r.pasos.map((texto, i) => ({
+      '@type': 'HowToStep', position: i + 1, name: nombrePaso(texto, i), text: texto, url: `${url}#paso-${i + 1}`,
+    })),
     author: r.autor ? { '@type': 'Person', name: r.autor } : { '@type': 'Organization', name: 'A Mano' },
   };
   // "<" escapado para que el JSON no pueda cerrar la etiqueta <script>.
@@ -65,7 +73,7 @@ function contenidoReceta(r) {
   <h2>Ingredientes</h2>
   <ul>${r.ingredientes.map((i) => `<li>${escapar(i)}</li>`).join('')}</ul>
   <h2>Preparación</h2>
-  <ol>${r.pasos.map((p) => `<li>${escapar(p)}</li>`).join('')}</ol>
+  <ol>${r.pasos.map((p, i) => `<li id="paso-${i + 1}">${escapar(p)}</li>`).join('')}</ol>
 </article>`;
 }
 
