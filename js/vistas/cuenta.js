@@ -58,12 +58,15 @@ export function vistaEntrar(modo = 'entrar') {
             ir(tomarDestino());
           } else {
             form.replaceChildren(el('p', { class: 'exito' },
-              `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`));
+              `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`),
+            el('p', { class: 'meta aviso-spam' },
+              '¿No te llegó? Revisá la carpeta de spam o correo no deseado (y marcalo como "No es spam" para que los próximos lleguen bien). Puede tardar unos minutos.'));
           }
         } else {
           await recuperarClave(email);
           form.replaceChildren(el('p', { class: 'exito' },
-            `Si existe una cuenta con ${email}, te llegará un enlace para cambiar la contraseña.`));
+            `Si existe una cuenta con ${email}, te llegará un enlace para cambiar la contraseña.`),
+            el('p', { class: 'meta aviso-spam' }, 'Si no lo ves en unos minutos, revisá la carpeta de spam o correo no deseado.'));
         }
       } catch (err) {
         error.textContent = err.message;
@@ -77,6 +80,7 @@ export function vistaEntrar(modo = 'entrar') {
     modo !== 'recuperar' && campos.clave,
     modo === 'registro' && el('p', { class: 'meta aceptacion' }, 'Crear una cuenta implica aceptar los ',
       el('a', { href: '/terminos' }, 'Términos'), ' y la ', el('a', { href: '/privacidad' }, 'Política de privacidad'), '.'),
+    modo === 'registro' && el('p', { class: 'meta aviso-spam' }, 'Te vamos a mandar un email para confirmar la cuenta. Si no aparece, fijate en spam o correo no deseado.'),
     error,
     boton);
 

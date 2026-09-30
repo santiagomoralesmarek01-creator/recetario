@@ -3,7 +3,7 @@
 // latinoamericanos y tiene tres dificultades.
 import { el, mostrar, cargando, vigencia } from '../dom.js';
 import { crearImagen, IMG_PLATO_GENERICO } from '../imagenes.js';
-import { bandera, continenteDe } from '../paises.js';
+import { bandera, continenteDe, LATINOAMERICA } from '../paises.js';
 import { normalizar } from '../ingredientes.js';
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, elegirRecetas, MODOS } from './datos.js';
@@ -15,12 +15,12 @@ const RONDAS = 10;
 
 // segundos por ronda, cuántas opciones falsas son del mismo continente y puntos máximos por ronda.
 const REGLAS = {
-  facil: { segundos: 20, cercanas: 0, puntos: 50 },
+  facil: { segundos: 20, cercanas: 2, puntos: 50 },
   normal: { segundos: 15, cercanas: 2, puntos: 80 },
   dificil: { segundos: 10, cercanas: 3, puntos: 100 },
 };
 const DETALLES = {
-  facil: 'Platos de Latinoamérica, 20 segundos y opciones de otros continentes.',
+  facil: 'Platos de Latinoamérica, 20 segundos y opciones de la región y del resto del mundo.',
   normal: 'Más platos del mundo, 15 segundos y opciones parecidas.',
   dificil: 'Cocina de todo el mundo, 10 segundos y todas las opciones del mismo continente.',
 };
@@ -46,9 +46,11 @@ function armarRondas({ recetas, paisesConRecetas }, modo) {
   }
   return elegirRecetas(unaPorPais, RONDAS, MODOS[modo].latinas).map((r) => {
     const otros = paisesConRecetas.filter((p) => p !== r.origen);
-    const mismo = (p) => continenteDe(p) === continenteDe(r.origen);
+    // Para un plato latinoamericano, "cerca" es otro país de Latinoamérica
+    // (no Estados Unidos o Canadá, que también son de América).
+    const mismo = r.latina ? (p) => LATINOAMERICA.has(p) : (p) => continenteDe(p) === continenteDe(r.origen);
     const cerca = mezclar(otros.filter(mismo)).slice(0, reglas.cercanas);
-    const lejos = mezclar(otros.filter((p) => !cerca.includes(p) && (reglas.cercanas ? true : !mismo(p)))).slice(0, 3 - cerca.length);
+    const lejos = mezclar(otros.filter((p) => !cerca.includes(p))).slice(0, 3 - cerca.length);
     return { receta: r, opciones: mezclar([r.origen, ...cerca, ...lejos]) };
   });
 }

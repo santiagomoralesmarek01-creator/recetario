@@ -36,7 +36,7 @@ export async function iniciarAuth() {
 function mensajeError(error) {
   const m = error?.message || '';
   if (/invalid login credentials/i.test(m)) return 'Email o contraseña incorrectos.';
-  if (/email not confirmed/i.test(m)) return 'Tenés que confirmar tu email antes de entrar (revisá tu casilla).';
+  if (/email not confirmed/i.test(m)) return 'Tenés que confirmar tu email antes de entrar. Revisá tu casilla y también la carpeta de spam.';
   if (/already registered/i.test(m)) return 'Ya existe una cuenta con ese email.';
   if (/password should be at least/i.test(m)) return 'La contraseña debe tener al menos 6 caracteres.';
   if (/rate limit/i.test(m)) return 'Demasiados intentos. Esperá unos minutos.';

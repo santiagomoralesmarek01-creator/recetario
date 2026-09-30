@@ -2136,6 +2136,7 @@ ul.cifras { list-style: none; padding: 0; }
 .legal p, .legal li { line-height: 1.65; }
 .legal ul { padding-left: 22px; }
 .aceptacion { margin: 4px 0 12px; font-size: 0.88rem; }
+.aviso-spam { margin: 0 0 12px; font-size: 0.85rem; }
 
 /* Tilde de cuenta oficial */
 .verificada { display: inline-flex; align-items: center; justify-content: center; width: 1.05em; height: 1.05em; margin-left: 4px; border-radius: 50%; background: var(--hierba); color: var(--texto-sobre-hierba); vertical-align: -0.12em; }
