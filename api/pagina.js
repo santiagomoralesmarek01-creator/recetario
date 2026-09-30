@@ -160,7 +160,7 @@ function inyectar(html, p, ruta) {
     .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${escapar(imagen)}$2`)
     .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${escapar(url)}$2`);
   // og:image:width/height describen la imagen general; con una foto de receta no aplican.
-  if (p.imagen) salida = salida.replace(/\s*<meta property="og:image:(width|height)" content="\d+" \/>/g, '');
+  if (p.imagen) salida = salida.replace(/\s*<meta property="og:image:(width|height|type|alt)" content="[^"]*" \/>/g, '');
   const extras = [
     !p.indexar && '<meta name="robots" content="noindex" />',
     p.jsonld && `<script type="application/ld+json">${p.jsonld}</script>`,
