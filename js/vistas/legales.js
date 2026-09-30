@@ -45,7 +45,7 @@ export function vistaPrivacidad() {
       'los "me gusta", las recetas completadas en el modo cocina y los puntos de los juegos (para las medallas y el ranking semanal);',
       'las preferencias de trato y país;',
       'cuántos mensajes se le mandaron a Manitas en el día (sólo la cantidad, para el límite diario).'],
-    'Es público: el nombre visible, las recetas marcadas como públicas y el lugar en el ranking de los juegos (nombre, país y puntos). El email nunca se muestra.',
+    'Es público: el nombre visible, las recetas marcadas como públicas, el lugar en el ranking de los juegos (nombre, país y puntos) y el perfil de cada cuenta, que muestra el nombre, el país, desde cuándo usa A Mano, las medallas ganadas y cuántas recetas subió, cocinó y cuántos me gusta recibió. El email nunca se muestra.',
 
     ['h2', 'Manitas, el asistente con inteligencia artificial'],
     'Manitas usa servicios gratuitos de inteligencia artificial de terceros: Groq y Google Gemini. Cuando se le escribe, se envían a esos servicios el texto de la charla, la receta que se está mirando (si hay una), el país y el trato elegidos. No se envía el email ni el nombre. En sus planes gratuitos, estos proveedores pueden usar las conversaciones para mejorar sus productos, por eso conviene no escribirle datos personales a Manitas. Las respuestas las genera una IA y pueden tener errores.',

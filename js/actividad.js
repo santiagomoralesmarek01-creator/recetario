@@ -90,6 +90,19 @@ export async function misLogros() {
   return data;
 }
 
+// Perfil público de otra persona (o el propio): nombre, país y logros.
+// null si la cuenta no existe o si falta la función en Supabase.
+export async function perfilPublico(userId) {
+  if (!hayBackend) return null;
+  const sb = await cliente();
+  const { data, error } = await sb.rpc('perfil_publico', { p_user: userId });
+  if (error) {
+    console.warn('No se pudo cargar el perfil:', error.message);
+    return null;
+  }
+  return data || null;
+}
+
 // Tope de puntos por día que cuentan para el ranking (el mismo que en
 // ranking_semanal_puestos de supabase/esquema.sql). Los récords no tienen tope.
 export const PUNTOS_POR_DIA = 1500;

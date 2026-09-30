@@ -211,40 +211,62 @@ drop policy if exists "Ver mis medallas unicas" on public.medallas_unicas;
 create policy "Ver mis medallas unicas" on public.medallas_unicas
   for select to authenticated using (auth.uid() = user_id);
 
--- Todo lo que hace falta para calcular las medallas, en una sola llamada.
-create or replace function public.mis_logros()
+-- Todo lo que hace falta para calcular las medallas de una cuenta, en una
+-- sola llamada. Es interna: se usa desde mis_logros y perfil_publico.
+create or replace function public.logros_de(p_user uuid)
 returns jsonb
 language sql stable security definer set search_path = public
 as $$
   select jsonb_build_object(
-    'recetas_subidas', (select count(*) from public.recetas where user_id = auth.uid()),
-    'me_gusta_dados', (select count(*) from public.me_gusta where user_id = auth.uid()),
+    'recetas_subidas', (select count(*) from public.recetas where user_id = p_user),
+    'me_gusta_dados', (select count(*) from public.me_gusta where user_id = p_user),
     'me_gusta_recibidos', (
       select count(*) from public.me_gusta m
       join public.recetas r on m.receta_id = 'u-' || r.id::text
-      where r.user_id = auth.uid() and m.user_id <> auth.uid()),
-    'recetas_cocinadas', (select count(*) from public.actividad where user_id = auth.uid() and tipo = 'receta-cocinada'),
+      where r.user_id = p_user and m.user_id <> p_user),
+    'recetas_cocinadas', (select count(*) from public.actividad where user_id = p_user and tipo = 'receta-cocinada'),
     'juegos', coalesce((
       select jsonb_object_agg(tipo, jsonb_build_object('partidas', partidas, 'mejor', mejor, 'total', total))
       from (
         select tipo, count(*) as partidas, max(puntos) as mejor, sum(puntos) as total
-        from public.actividad where user_id = auth.uid() and tipo like 'juego-%'
+        from public.actividad where user_id = p_user and tipo like 'juego-%'
         group by tipo
       ) j), '{}'::jsonb),
     'dias_plato', coalesce((
       select jsonb_agg(dia order by dia desc) from (
         select dia from public.actividad
-        where user_id = auth.uid() and tipo = 'juego-plato-del-dia' and puntos > 0
+        where user_id = p_user and tipo = 'juego-plato-del-dia' and puntos > 0
         order by dia desc limit 400
       ) d), '[]'::jsonb),
+    'platos_adivinados', (
+      select count(distinct dia) from public.actividad
+      where user_id = p_user and tipo = 'juego-plato-del-dia' and puntos > 0),
+    -- La racha más larga de días seguidos acertando el plato del día: una medalla
+    -- de racha, una vez ganada, no se pierde.
+    'racha_maxima', coalesce((
+      select max(n) from (
+        select count(*) as n from (
+          select dia, dia - (row_number() over (order by dia))::int as grupo
+          from (select distinct dia from public.actividad
+                where user_id = p_user and tipo = 'juego-plato-del-dia' and puntos > 0) d
+        ) g group by grupo
+      ) x), 0),
     'unicas', coalesce((
       select jsonb_agg(jsonb_build_object('id', id, 'nombre', nombre, 'descripcion', descripcion, 'icono', icono) order by created_at)
-      from public.medallas_unicas where user_id = auth.uid()), '[]'::jsonb)
-  )
-  where auth.uid() is not null;
+      from public.medallas_unicas where user_id = p_user), '[]'::jsonb)
+  );
+$$;
+revoke all on function public.logros_de(uuid) from public, anon, authenticated;
+
+create or replace function public.mis_logros()
+returns jsonb
+language sql stable security definer set search_path = public
+as $$
+  select public.logros_de(auth.uid()) where auth.uid() is not null;
 $$;
 revoke all on function public.mis_logros() from public, anon;
 grant execute on function public.mis_logros() to authenticated;
+
 
 -- Ranking de los juegos de los últimos 7 días (sólo el nombre visible).
 create or replace function public.ranking_semanal()
@@ -331,6 +353,25 @@ create policy "Crear mi perfil" on public.perfiles
 drop policy if exists "Cambiar mi perfil" on public.perfiles;
 create policy "Cambiar mi perfil" on public.perfiles
   for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Perfil público de una cuenta: nombre visible, país y logros (sin fechas de
+-- juego ni email). Lo puede ver cualquiera, como las recetas públicas.
+create or replace function public.perfil_publico(p_user uuid)
+returns jsonb
+language sql stable security definer set search_path = public
+as $$
+  select jsonb_build_object(
+    'nombre', coalesce(nullif(trim(u.raw_user_meta_data ->> 'nombre'), ''), 'Cocinero/a'),
+    'pais', p.pais,
+    'desde', to_char(u.created_at, 'YYYY-MM'),
+    'soy_yo', coalesce(u.id = auth.uid(), false)
+  ) || (public.logros_de(u.id) - 'dias_plato')
+  from auth.users u
+  left join public.perfiles p on p.user_id = u.id
+  where u.id = p_user;
+$$;
+revoke all on function public.perfil_publico(uuid) from public;
+grant execute on function public.perfil_publico(uuid) to anon, authenticated;
 
 -- Ranking de la semana (se reinicia el lunes a las 00:00 de Argentina), en
 -- general o de un país, con un tope de 1.500 puntos por día. Devuelve los 5 primeros y, si la persona está más

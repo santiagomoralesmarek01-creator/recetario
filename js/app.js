@@ -6,7 +6,7 @@ import { vistaInicio, vistaCategoria, vistaBusqueda, vistaPaises, vistaPais, vis
 import { vistaReceta } from './vistas/receta.js';
 import { vistaEntrar, vistaMisRecetas, vistaNuevaClave } from './vistas/cuenta.js';
 import { vistaFormulario } from './vistas/formulario.js';
-import { vistaComunidad, vistaAutor } from './vistas/comunidad.js';
+import { vistaComunidad, vistaPerfil } from './vistas/comunidad.js';
 import { vistaDespensa } from './vistas/despensa.js';
 import { iniciarPanel } from './panelCocina.js';
 import { iniciarTema } from './tema.js';
@@ -140,7 +140,8 @@ async function router() {
       case 'privacidad': return vistaPrivacidad();
       case 'terminos': return vistaTerminos();
       case 'comunidad': return await vistaComunidad(param);
-      case 'autor': return param ? await vistaAutor(param) : await vistaComunidad();
+      case 'perfil':
+      case 'autor': return param ? await vistaPerfil(param) : await vistaComunidad();
       case 'pais': return param ? await vistaPais(param) : await vistaPaises();
       case 'entrar': return vistaEntrar('entrar');
       case 'registro': return vistaEntrar('registro');

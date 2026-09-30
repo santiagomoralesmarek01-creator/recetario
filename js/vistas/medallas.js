@@ -8,8 +8,9 @@ import { evaluar, MEDALLAS, rachaPlatoDelDia, revisarMedallas } from '../medalla
 import { sinBackend } from './cuenta.js';
 import { sello } from '../sello.js';
 import { icono } from '../iconos.js';
+import { rutaPerfil } from './comunidad.js';
 
-function tarjeta(m) {
+export function tarjeta(m) {
   return el('li', { class: `medalla${m.ganada ? ' ganada' : ''}${m.unica ? ' medalla-unica' : ''}` },
     m.unica && el('span', { class: 'medalla-etiqueta' }, 'Única'),
     sello(m, { clase: 'medalla-sello' }),
@@ -55,7 +56,8 @@ export async function vistaMedallas() {
       el('div', {},
         el('p', { class: 'portada-antetitulo' }, nombreVisible()),
         el('h1', {}, 'Mis medallas'),
-        el('p', { class: 'meta' }, `Conseguiste ${ganadas} de ${medallas.length}.`)),
+        el('p', { class: 'meta' }, `Conseguiste ${ganadas} de ${medallas.length}.`),
+        el('a', { class: 'medallas-perfil', href: rutaPerfil(usuario().id) }, 'Ver mi perfil público →')),
       el('div', { class: 'medallas-total', 'aria-hidden': 'true' },
         sello({ icono: 'medalla', ganada: ganadas > 0 }),
         el('strong', {}, ganadas))),

@@ -9,6 +9,9 @@ import { evento } from './analitica.js';
 
 const juego = (l, tipo) => l.juegos?.[tipo] || { partidas: 0, mejor: 0, total: 0 };
 const partidasTotales = (l) => Object.values(l.juegos || {}).reduce((s, j) => s + Number(j.partidas || 0), 0);
+// Las medallas de racha, una vez ganadas, quedan: cuenta la racha más larga.
+const mejorRacha = (l) => Math.max(Number(l.racha_maxima || 0), rachaPlatoDelDia(l.dias_plato));
+const platosAdivinados = (l) => Number(l.platos_adivinados ?? (l.dias_plato || []).length);
 
 // Días seguidos acertando el plato del día, terminando hoy o ayer (hora de Argentina).
 export function rachaPlatoDelDia(dias = [], hoy = diaArgentina()) {
@@ -45,10 +48,10 @@ export const MEDALLAS = [
   { id: 'cocinada-20', icono: 'gorro', especial: true, nombre: 'Maestro de la cocina', descripcion: 'Completar 20 recetas distintas', grupo: 'En la cocina', valor: (l) => l.recetas_cocinadas, meta: 20 },
   { id: 'jugar-1', icono: 'juegos', nombre: 'A jugar', descripcion: 'Jugar tu primera partida', grupo: 'Juegos', valor: partidasTotales, meta: 1 },
   { id: 'jugar-25', icono: 'dificultad', nombre: 'Fanático de los juegos', descripcion: 'Jugar 25 partidas', grupo: 'Juegos', valor: partidasTotales, meta: 25 },
-  { id: 'plato-1', icono: 'plato', nombre: 'Buen paladar', descripcion: 'Adivinar un Plato del día', grupo: 'Juegos', valor: (l) => (l.dias_plato || []).length, meta: 1 },
-  { id: 'racha-3', icono: 'fuego', nombre: 'En racha', descripcion: 'Adivinar el Plato del día 3 días seguidos', grupo: 'Juegos', valor: (l) => rachaPlatoDelDia(l.dias_plato), meta: 3 },
-  { id: 'racha-7', icono: 'fuego', especial: true, nombre: 'Semana perfecta', descripcion: 'Adivinar el Plato del día 7 días seguidos', grupo: 'Juegos', valor: (l) => rachaPlatoDelDia(l.dias_plato), meta: 7 },
-  { id: 'plato-30', icono: 'libro', especial: true, nombre: 'Enciclopedia culinaria', descripcion: 'Adivinar 30 Platos del día', grupo: 'Juegos', valor: (l) => (l.dias_plato || []).length, meta: 30 },
+  { id: 'plato-1', icono: 'plato', nombre: 'Buen paladar', descripcion: 'Adivinar un Plato del día', grupo: 'Juegos', valor: platosAdivinados, meta: 1 },
+  { id: 'racha-3', icono: 'fuego', nombre: 'En racha', descripcion: 'Adivinar el Plato del día 3 días seguidos', grupo: 'Juegos', valor: mejorRacha, meta: 3 },
+  { id: 'racha-7', icono: 'fuego', especial: true, nombre: 'Semana perfecta', descripcion: 'Adivinar el Plato del día 7 días seguidos', grupo: 'Juegos', valor: mejorRacha, meta: 7 },
+  { id: 'plato-30', icono: 'libro', especial: true, nombre: 'Enciclopedia culinaria', descripcion: 'Adivinar 30 Platos del día', grupo: 'Juegos', valor: platosAdivinados, meta: 30 },
   { id: 'pais-800', icono: 'pais', nombre: 'Trotamundos', descripcion: 'Hacer 800 puntos en Adiviná el país (en normal o difícil)', grupo: 'Juegos', valor: (l) => juego(l, 'juego-pais').mejor, meta: 800 },
   { id: 'falta-1000', icono: 'rompecabezas', nombre: 'Ojo de chef', descripcion: 'Acertar las 10 de ¿Qué le falta? en difícil', grupo: 'Juegos', valor: (l) => juego(l, 'juego-falta').mejor, meta: 1000 },
   { id: 'armar-800', icono: 'olla', nombre: 'Arquitecto del sabor', descripcion: 'Hacer 800 puntos en Armá el plato (en normal o difícil)', grupo: 'Juegos', valor: (l) => juego(l, 'juego-armar').mejor, meta: 800 },
