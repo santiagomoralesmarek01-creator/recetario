@@ -192,6 +192,25 @@ create policy "Registrar mi actividad" on public.actividad
   for insert to authenticated
   with check (auth.uid() = user_id and dia between current_date - 1 and current_date + 1);
 
+-- Medallas únicas: reconocimientos especiales que se dan a mano a una cuenta
+-- (por ejemplo "Mejor flan del mundo"). Cada uno ve sólo las suyas.
+--   insert into public.medallas_unicas (user_id, id, nombre, descripcion, icono)
+--   select id, 'mi-medalla', 'Nombre', 'Descripción', 'trofeo' from auth.users where email = 'cuenta@ejemplo.com'
+--   on conflict do nothing;
+create table if not exists public.medallas_unicas (
+  user_id     uuid not null references auth.users (id) on delete cascade,
+  id          text not null check (id ~ '^[a-z0-9-]{1,40}$'),
+  nombre      text not null check (char_length(nombre) between 1 and 60),
+  descripcion text not null default '' check (char_length(descripcion) <= 140),
+  icono       text not null default 'trofeo',
+  created_at  timestamptz not null default now(),
+  primary key (user_id, id)
+);
+alter table public.medallas_unicas enable row level security;
+drop policy if exists "Ver mis medallas unicas" on public.medallas_unicas;
+create policy "Ver mis medallas unicas" on public.medallas_unicas
+  for select to authenticated using (auth.uid() = user_id);
+
 -- Todo lo que hace falta para calcular las medallas, en una sola llamada.
 create or replace function public.mis_logros()
 returns jsonb
@@ -217,7 +236,10 @@ as $$
         select dia from public.actividad
         where user_id = auth.uid() and tipo = 'juego-plato-del-dia' and puntos > 0
         order by dia desc limit 400
-      ) d), '[]'::jsonb)
+      ) d), '[]'::jsonb),
+    'unicas', coalesce((
+      select jsonb_agg(jsonb_build_object('id', id, 'nombre', nombre, 'descripcion', descripcion, 'icono', icono) order by created_at)
+      from public.medallas_unicas where user_id = auth.uid()), '[]'::jsonb)
   )
   where auth.uid() is not null;
 $$;

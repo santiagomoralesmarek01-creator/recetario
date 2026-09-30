@@ -1,6 +1,7 @@
 // Sello circular de las medallas: borde levemente irregular (como estampado a
 // mano) y el ícono de la medalla adentro. Estados: bloqueada (contorno),
-// lograda (relleno Maíz, ícono Hierba) y especial (relleno Ají, ícono crema).
+// lograda (relleno Maíz, ícono Hierba), especial (relleno Ají, ícono crema)
+// y única (relleno Hierba, aro e ícono Maíz: reconocimientos dados a mano).
 import { trazos } from './iconos.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -27,6 +28,7 @@ const BORDE = (() => {
 
 export function estadoSello(medalla) {
   if (!medalla.ganada) return 'bloqueada';
+  if (medalla.unica) return 'unica';
   return medalla.especial ? 'especial' : 'lograda';
 }
 

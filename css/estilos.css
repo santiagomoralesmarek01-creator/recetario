@@ -2037,6 +2037,14 @@ ul.cifras { list-style: none; padding: 0; }
 .sello-especial .sello-borde { fill: #C8401F; stroke: #C8401F; }
 .sello-especial .sello-aro { stroke: rgba(251, 246, 236, 0.55); }
 .sello-especial .sello-icono { color: #FBF6EC; }
+.sello-unica .sello-borde { fill: #1F4D3A; stroke: #F2B632; stroke-width: 1.5; }
+.sello-unica .sello-aro { stroke: #F2B632; }
+.sello-unica .sello-icono { color: #F2B632; }
+.medalla-unica { position: relative; border-color: var(--maiz) !important; box-shadow: 0 0 0 1px var(--maiz), var(--sombra, none); }
+.medalla-etiqueta {
+  position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 999px;
+  background: var(--maiz); color: #1F1A15; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) .sello-bloqueada .sello-borde, :root:not([data-tema="claro"]) .sello-bloqueada .sello-aro { stroke: var(--borde); }
 }

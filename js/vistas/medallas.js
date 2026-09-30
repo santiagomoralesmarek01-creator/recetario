@@ -10,7 +10,8 @@ import { sello } from '../sello.js';
 import { icono } from '../iconos.js';
 
 function tarjeta(m) {
-  return el('li', { class: `medalla${m.ganada ? ' ganada' : ''}` },
+  return el('li', { class: `medalla${m.ganada ? ' ganada' : ''}${m.unica ? ' medalla-unica' : ''}` },
+    m.unica && el('span', { class: 'medalla-etiqueta' }, 'Única'),
     sello(m, { clase: 'medalla-sello' }),
     el('strong', {}, m.nombre),
     el('span', { class: 'medalla-descripcion' }, m.descripcion),

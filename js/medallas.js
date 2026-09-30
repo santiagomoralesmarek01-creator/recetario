@@ -54,11 +54,20 @@ export const MEDALLAS = [
   { id: 'armar-800', icono: 'olla', nombre: 'Arquitecto del sabor', descripcion: 'Hacer 800 puntos en Armá el plato (en normal o difícil)', grupo: 'Juegos', valor: (l) => juego(l, 'juego-armar').mejor, meta: 800 },
 ];
 
+// Medallas únicas: reconocimientos que se dan a mano a una cuenta (tabla
+// medallas_unicas). Sólo aparecen para quien las tiene.
+function unicas(logros) {
+  return (logros.unicas || []).map((u) => ({
+    id: `unica-${u.id}`, icono: u.icono || 'trofeo', nombre: u.nombre, descripcion: u.descripcion || '',
+    grupo: 'Únicas', unica: true, especial: true, actual: 1, meta: 1, ganada: true,
+  }));
+}
+
 export function evaluar(logros) {
-  return MEDALLAS.map((m) => {
+  return [...unicas(logros), ...MEDALLAS.map((m) => {
     const valor = Number(m.valor(logros) || 0);
     return { ...m, actual: Math.min(valor, m.meta), ganada: valor >= m.meta };
-  });
+  })];
 }
 
 // ---------- aviso de medalla nueva ----------
@@ -81,8 +90,8 @@ function mostrarAviso(medallas) {
       el('small', {}, medallas.length > 1 ? t('medalla.nuevas', { n: medallas.length }) : 'Nueva medalla'),
       el('strong', {}, m.nombre),
       el('span', {}, m.descripcion)));
-  // Confeti sólo en logros grandes (la racha de 7 días).
-  if (medallas.some((x) => CON_CONFETI.has(x.id))) nodo.append(confeti());
+  // Confeti sólo en logros grandes (la racha de 7 días y las medallas únicas).
+  if (medallas.some(conConfeti)) nodo.append(confeti());
   for (const x of medallas) evento('Medalla', { medalla: x.id });
   document.body.append(nodo);
   requestAnimationFrame(() => nodo.classList.add('visible'));
@@ -90,6 +99,7 @@ function mostrarAviso(medallas) {
 }
 
 const CON_CONFETI = new Set(['racha-7']);
+const conConfeti = (m) => CON_CONFETI.has(m.id) || m.unica;
 
 function confeti() {
   const capa = el('span', { class: 'confeti', 'aria-hidden': 'true' });
