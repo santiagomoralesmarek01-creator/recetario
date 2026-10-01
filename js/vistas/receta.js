@@ -21,6 +21,7 @@ import { dialogoFoto } from './fotosRecetas.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
+import { CONTACTO } from '../config.js';
 import { ir } from '../rutas.js';
 import { marcaVerificada } from '../verificadas.js';
 
@@ -269,7 +270,9 @@ export async function vistaReceta(id) {
           : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.'),
         r.origenDatos === 'mealdb' && r.nombreOriginal && el('p', { class: 'nota-traduccion' }, r.pasosEnIngles
           ? 'Estamos terminando de traducir los pasos de esta receta: por ahora se muestran en inglés.'
-          : 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.')),
+          : 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.'),
+        CONTACTO && el('p', { class: 'meta receta-reportar' }, '¿Algo está mal o no se entiende? ',
+          el('a', { href: `mailto:${CONTACTO}?subject=${encodeURIComponent(`Receta: ${r.nombre}`)}&body=${encodeURIComponent(`${location.href}\n\n`)}` }, 'Avisanos'), '.')),
       barraCocina)
   );
   pintar();

@@ -778,6 +778,7 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 }
 
 .receta-pasos { margin-top: 36px; }
+.receta-reportar { margin-top: 18px; font-size: 0.9rem; }
 .pasos { list-style: none; padding: 0; margin: 16px 0 0; max-width: 80ch; }
 
 /* Barra de progreso fija abajo mientras se lee la receta */

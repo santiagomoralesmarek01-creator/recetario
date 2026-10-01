@@ -16,4 +16,4 @@ export const ANALITICA = { plausible: '', cloudflare: '', vercel: true };
 
 // Email de contacto que aparece en la Política de privacidad y los Términos
 // (pedidos de acceso o borrado de datos, reclamos). Vacío = todavía no se publicó.
-export const CONTACTO = '';
+export const CONTACTO = 'amanorecetas@gmail.com';
