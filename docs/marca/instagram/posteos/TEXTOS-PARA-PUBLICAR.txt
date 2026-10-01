@@ -43,8 +43,8 @@ Te damos pistas y tenés que adivinar qué plato es. Uno nuevo cada día, sumás
 
 HISTORIAS
 ---------
-06-historia-encuesta.png → subila y agregá el sticker "Encuesta" en el recuadro punteado: "Con dulce de leche" / "Con crema".
-07-historia-link.png → agregá el sticker "Enlace" con amanorecetas.com.ar en el recuadro punteado.
+06-historia-encuesta.png → subila y agregá el sticker "Encuesta" en el espacio libre de abajo: "Con dulce de leche" / "Con crema".
+07-historia-link.png → agregá el sticker "Enlace" con amanorecetas.com.ar debajo del botón.
 
 PLANTILLAS (fondo transparente donde va tu foto)
 ------------------------------------------------
