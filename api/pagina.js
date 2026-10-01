@@ -59,7 +59,7 @@ function datosEstructurados(r, url) {
     recipeInstructions: r.pasos.map((texto, i) => ({
       '@type': 'HowToStep', position: i + 1, name: nombrePaso(texto, i), text: texto, url: `${url}#paso-${i + 1}`,
     })),
-    author: r.autor ? { '@type': 'Person', name: r.autor } : { '@type': 'Organization', name: 'A Mano' },
+    author: r.autor ? { '@type': 'Person', name: r.autor } : { '@type': 'Organization', name: 'A Mano', url: `${SITIO}/` },
   };
   // "<" escapado para que el JSON no pueda cerrar la etiqueta <script>.
   return JSON.stringify(datos).replace(/</g, '\\u003c');
