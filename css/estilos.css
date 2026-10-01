@@ -744,12 +744,38 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 .receta-foto.portada-sin-foto { border-radius: var(--radio); }
 
 .receta-ingredientes h2, .receta-pasos h2 { margin: 0 0 2px; }
+/* En la receta, los ingredientes son una lista dentro de una sola tarjeta (dos
+   columnas en pantallas anchas), con renglones parejos y separadores finos. */
 .receta-ingredientes .ingredientes {
   margin-top: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 28px;
+  padding: 4px 16px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
 }
-.receta-ingredientes .ingrediente img { width: 44px; height: 44px; }
+.receta-ingredientes .ingrediente {
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--borde);
+  border-radius: 0;
+}
+.receta-ingredientes .ingrediente:nth-child(-n+2) { border-top: 0; }
+.receta-ingredientes .ingrediente label { padding: 10px 0; gap: 12px; align-items: center; }
+.receta-ingredientes .ingrediente img {
+  width: 40px; height: 40px; padding: 5px; border-radius: 50%;
+  background: var(--fondo-2); box-sizing: border-box;
+}
+.receta-ingredientes .ingrediente-texto { min-width: 0; gap: 1px; }
+.receta-ingredientes .ingrediente strong { line-height: 1.25; }
+.receta-ingredientes .medida { font-size: 0.875rem; line-height: 1.3; }
+.receta-ingredientes .ingrediente.hecho { background: none; }
+.receta-ingredientes .ingrediente.dificil-de-conseguir { border-color: var(--borde); }
+@media (max-width: 760px) {
+  .receta-ingredientes .ingredientes { grid-template-columns: 1fr; padding: 2px 14px; }
+  .receta-ingredientes .ingrediente:nth-child(2) { border-top: 1px solid var(--borde); }
+}
 
 .receta-pasos { margin-top: 36px; }
 .pasos { list-style: none; padding: 0; margin: 16px 0 0; max-width: 80ch; }
