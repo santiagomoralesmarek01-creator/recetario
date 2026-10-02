@@ -25,8 +25,8 @@ const SECCIONES = {
   'que-tengo': { titulo: '¿Qué hay a mano? Recetas con lo que tenés · A Mano', descripcion: 'Elegí los ingredientes que hay en casa y mirá qué recetas se pueden hacer.' },
   juegos: { titulo: 'Juegos de cocina: Plato del día y más · A Mano', descripcion: 'Adiviná el plato del día, el país de cada receta y el ingrediente que falta.' },
   comunidad: { titulo: 'Recetas de la comunidad · A Mano', descripcion: 'Recetas caseras que comparte la gente de A Mano.' },
-  torneo: { titulo: 'Torneo de juegos con premio · A Mano', descripcion: 'Jugá a los juegos de cocina de A Mano y competí por un premio en plata cada quincena. Gratis, para mayores de 18 en Argentina.' },
-  bases: { titulo: 'Bases y condiciones del torneo · A Mano', descripcion: 'Reglas del torneo quincenal de juegos y de la receta del mes de A Mano: requisitos, premios y pago.' },
+  torneo: { titulo: 'Torneo de juegos con premio · A Mano', descripcion: 'Jugá a los juegos de cocina de A Mano y competí por un premio en plata cada 15 días. Gratis, para mayores de 18 en Argentina.' },
+  bases: { titulo: 'Bases y condiciones del torneo · A Mano', descripcion: 'Reglas del torneo de juegos (cada 15 días) y de la receta del mes de A Mano: requisitos, premios y pago.' },
   privacidad: { titulo: 'Política de privacidad · A Mano', descripcion: 'Qué datos guarda A Mano, para qué y cómo pedir acceso o borrarlos.' },
   terminos: { titulo: 'Términos y condiciones · A Mano', descripcion: 'Condiciones de uso de A Mano, sus recetas, Manitas y la comunidad.' },
 };

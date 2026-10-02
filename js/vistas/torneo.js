@@ -55,9 +55,9 @@ export function tarjetaTorneo() {
     .then(([e, filas]) => {
       const yo = filas.find((f) => f.soyYo);
       cuerpo.replaceChildren(...[
-        el('p', { class: 'torneo-premio' }, el('strong', {}, pesos(e.premioJuegos)), ' para el puesto 1 de cada quincena.'),
+        el('p', { class: 'torneo-premio' }, el('strong', {}, pesos(e.premioJuegos)), ' cada 15 días para el puesto 1 del ranking.'),
         el('p', { class: 'meta' }, yaEmpezo(e)
-          ? ['Quincena ', textoPeriodo(e.inicio, e.fin), ' · cierra en ', el('strong', {}, faltaParaCierre(e.fin))]
+          ? ['Torneo ', textoPeriodo(e.inicio, e.fin), ' · cierra en ', el('strong', {}, faltaParaCierre(e.fin))]
           : `Empieza el ${fechaLarga(diaSiguiente(e.fin))}. Mientras tanto, practicá.`),
         usuario() && oficialesHoy(e),
         usuario() && yo && el('p', { class: 'torneo-puesto' }, `Vas ${yo.puesto}° con ${yo.puntos.toLocaleString('es-AR')} puntos.`),
@@ -79,7 +79,7 @@ function cajaInscripcion(estado, alInscribirse) {
     const habil = new Date(`${estado.fin}T23:59:59-03:00`).getTime() - desde.getTime() >= estado.antiguedadDias * 86400000;
     return el('div', { class: 'torneo-inscripcion lista' },
       el('p', {}, icono('tilde'), ' Estás inscripto/a. Tus partidas oficiales suman para el premio.'),
-      !habil && el('p', { class: 'meta' }, `Tu cuenta es nueva: para cobrar el premio tiene que tener al menos ${estado.antiguedadDias} días al cierre de la quincena. Igual sumás puntos.`));
+      !habil && el('p', { class: 'meta' }, `Tu cuenta es nueva: para cobrar el premio tiene que tener al menos ${estado.antiguedadDias} días al cierre del torneo. Igual sumás puntos.`));
   }
   const mayor = el('input', { type: 'checkbox' });
   const argentina = el('input', { type: 'checkbox' });
@@ -124,7 +124,7 @@ function listaGanadores(lista) {
       el('strong', {}, g.user_id ? el('a', { href: rutaPerfil(g.user_id) }, g.nombre) : g.nombre),
       el('small', {}, g.tipo === 'receta'
         ? ['Receta del mes (', nombreMes(g.periodo), '): ', g.receta_id ? el('a', { href: rutaReceta(g.receta_id, g.receta_nombre || '') }, g.receta_nombre) : g.receta_nombre]
-        : `Torneo de juegos · quincena del ${g.periodo.split('-').reverse().join('/')}`)),
+        : `Torneo de juegos · período del ${g.periodo.split('-').reverse().join('/')}`)),
     g.monto && el('span', { class: 'torneo-ganadores-monto' }, pesos(g.monto)))));
 }
 
@@ -146,7 +146,7 @@ export async function vistaTorneo() {
   mostrar(
     el('a', { class: 'volver', href: '/juegos' }, '← Juegos'),
     el('section', { class: 'torneo-portada' },
-      el('p', { class: 'portada-antetitulo' }, yaEmpezo(estado) ? `Quincena ${textoPeriodo(estado.inicio, estado.fin)}` : 'Próximamente'),
+      el('p', { class: 'portada-antetitulo' }, yaEmpezo(estado) ? `Torneo ${textoPeriodo(estado.inicio, estado.fin)}` : 'Próximamente'),
       el('h1', {}, 'Torneo de juegos'),
       el('p', { class: 'torneo-premio grande' }, el('strong', {}, pesos(estado.premioJuegos)), ' para el puesto 1'),
       yaEmpezo(estado)
@@ -156,14 +156,14 @@ export async function vistaTorneo() {
     cajaInscripcion(estado, () => vistaTorneo()),
     usuario() && el('section', { class: 'seccion' }, el('h2', {}, 'Tus partidas oficiales de hoy'), oficialesHoy(estado)),
     el('section', { class: 'seccion' },
-      el('h2', {}, yaEmpezo(estado) ? 'Ranking de la quincena' : 'Ranking de prueba (todavía sin premio)'),
-      tablaRanking(filas, { vacio: 'Todavía nadie jugó esta quincena. ¡Arrancá vos!' })),
+      el('h2', {}, yaEmpezo(estado) ? 'Ranking del torneo' : 'Ranking de prueba (todavía sin premio)'),
+      tablaRanking(filas, { vacio: 'Todavía nadie jugó en este torneo. ¡Arrancá vos!' })),
     el('section', { class: 'seccion torneo-reglas' },
       el('h2', {}, 'Cómo funciona'),
       el('ul', {},
         el('li', {}, 'Suman ', el('strong', {}, 'Adiviná el país, ¿Qué le falta? y Armá el plato'), '. El Plato del día no suma: es el mismo para todos.'),
         el('li', {}, el('strong', {}, 'Cada día cuenta tu primera partida de cada juego'), ' (la oficial). Las demás son de práctica: elegí bien la dificultad, en Difícil se ganan más puntos.'),
-        el('li', {}, 'Los puntos los calcula el sistema, ronda por ronda. Cada quincena empieza de cero.'),
+        el('li', {}, 'Los puntos los calcula el sistema, ronda por ronda. Cada 15 días empieza un torneo nuevo, de cero.'),
         el('li', {}, 'Si hay empate, gana quien jugó sus partidas oficiales en menos tiempo.'),
         el('li', {}, 'Para cobrar: ser mayor de 18, vivir en Argentina, seguir a ', el('a', { href: enlaceInstagram(INSTAGRAM), target: '_blank', rel: 'noopener' }, `@${INSTAGRAM}`), ' en Instagram, estar inscripto/a y tener una sola cuenta. El pago es por transferencia a una cuenta a tu nombre.')),
       el('p', {}, el('a', { href: '/bases' }, 'Leer las bases y condiciones completas'))),
@@ -218,7 +218,7 @@ export function vidrieraRecetasDelMes() {
 export function vistaBases() {
   document.title = 'Bases y condiciones del torneo · A Mano';
   mostrar(pagina('Bases y condiciones: torneo de juegos y receta del mes', [
-    'Estas bases regulan los premios de A Mano (amanorecetas.com.ar): el torneo quincenal de juegos y la receta del mes. Participar implica aceptarlas. Son concursos gratuitos de habilidad: no hace falta comprar nada y no interviene el azar en la elección de ganadores.',
+    'Estas bases regulan los premios de A Mano (amanorecetas.com.ar): el torneo de juegos (cada 15 días) y la receta del mes. Participar implica aceptarlas. Son concursos gratuitos de habilidad: no hace falta comprar nada y no interviene el azar en la elección de ganadores.',
     ['h2', '1. Quién puede participar'],
     ['lista',
       'Personas mayores de 18 años que vivan en la República Argentina.',
@@ -228,10 +228,10 @@ export function vistaBases() {
       'Una sola cuenta por persona. No pueden ganar premios las personas que administran A Mano.'],
     ['h2', '2. Torneo de juegos'],
     ['lista',
-      'Se juega por quincenas (14 días). Cada quincena cierra el último día a las 23:59 (hora de Argentina) y la siguiente empieza de cero. Las fechas y el premio vigentes se muestran en la página del torneo.',
+      'Se juega en períodos de 14 días, de lunes a domingo de la semana siguiente: un torneo nuevo cada 15 días. Cada período cierra el domingo a las 23:59 (hora de Argentina) y el siguiente empieza de cero. Las fechas y el premio vigentes se muestran en la página del torneo.',
       'Suman los juegos "Adiviná el país", "¿Qué le falta?" y "Armá el plato". El "Plato del día" no suma.',
       'Cada día cuenta solamente la primera partida de cada juego (la "partida oficial"), en la dificultad que se elija. Una partida empezada y abandonada cuenta con los puntos que tenga.',
-      'Los puntos los calcula el sistema de A Mano, que arma cada ronda y mide el tiempo de respuesta. El ranking suma las partidas oficiales de la quincena.',
+      'Los puntos los calcula el sistema de A Mano, que arma cada ronda y mide el tiempo de respuesta. El ranking suma las partidas oficiales del período.',
       'Gana el primer puesto entre las personas habilitadas. Si hay empate en puntos, gana quien sumó sus partidas oficiales en menos tiempo total; si sigue el empate, quien llegó primero a ese puntaje.'],
     ['h2', '3. Receta del mes'],
     ['lista',
@@ -276,7 +276,7 @@ export async function vistaAdminTorneo() {
     tabla.replaceChildren(el('p', { class: 'meta' }, 'Cargando…'));
     try {
       const filas = await panelTorneo(Number(numero.value));
-      if (!filas.length) { tabla.replaceChildren(el('p', { class: 'meta' }, 'Sin partidas oficiales en esa quincena.')); return; }
+      if (!filas.length) { tabla.replaceChildren(el('p', { class: 'meta' }, 'Sin partidas oficiales en ese período.')); return; }
       tabla.replaceChildren(el('table', {},
         el('thead', {}, el('tr', {}, ['#', 'Nombre', 'Email', 'Instagram', 'Puntos', 'Partidas', 'Tiempo', 'Habilitado', 'Cuenta desde', 'Rápidas', 'Mín. ms', 'Mismo disp.', ''].map((h) => el('th', {}, h)))),
         el('tbody', {}, filas.map((f) => {
@@ -290,7 +290,7 @@ export async function vistaAdminTorneo() {
             el('td', {}, el('button', {
               type: 'button', class: 'boton-secundario', onclick: async () => {
                 const per = await periodoDe(Number(numero.value));
-                const monto = Number(prompt(`Premio para ${f.nombre} (quincena del ${per}):`, estado.premioJuegos));
+                const monto = Number(prompt(`Premio para ${f.nombre} (período del ${per}):`, estado.premioJuegos));
                 if (!monto) return;
                 try {
                   await registrarGanador({ tipo: 'juegos', periodo: per, user_id: f.user_id, nombre: f.nombre, monto });
@@ -304,7 +304,7 @@ export async function vistaAdminTorneo() {
       tabla.replaceChildren(el('p', { class: 'error' }, err.message));
     }
   }
-  // Fecha de inicio de una quincena (para identificarla).
+  // Fecha de inicio de un período (para identificarla).
   async function periodoDe(n) {
     const base = new Date(`${estado.inicio}T12:00:00Z`);
     base.setUTCDate(base.getUTCDate() + (n - estado.numero) * 14);
@@ -364,10 +364,10 @@ export async function vistaAdminTorneo() {
 
   mostrar(
     el('h1', {}, 'Panel del torneo'),
-    el('p', { class: 'meta' }, `Quincena actual: n.º ${estado.numero} (${textoPeriodo(estado.inicio, estado.fin)}). Antes de pagar revisá las alertas ("Rápidas": respuestas en menos de 0,7 s; "Mismo disp.": otras cuentas desde el mismo navegador) y entrá a su Instagram para confirmar que sigue a @${INSTAGRAM}.`),
+    el('p', { class: 'meta' }, `Período actual: n.º ${estado.numero} (${textoPeriodo(estado.inicio, estado.fin)}). Antes de pagar revisá las alertas ("Rápidas": respuestas en menos de 0,7 s; "Mismo disp.": otras cuentas desde el mismo navegador) y entrá a su Instagram para confirmar que sigue a @${INSTAGRAM}.`),
     el('section', { class: 'seccion' },
-      el('h2', {}, 'Top 20 de la quincena'),
-      el('label', { class: 'admin-filtro' }, 'Quincena n.º ', numero, el('button', { type: 'button', class: 'boton-secundario', onclick: cargarTop }, 'Ver')),
+      el('h2', {}, 'Top 20 del período'),
+      el('label', { class: 'admin-filtro' }, 'Período n.º ', numero, el('button', { type: 'button', class: 'boton-secundario', onclick: cargarTop }, 'Ver')),
       tabla),
     el('section', { class: 'seccion' },
       el('h2', {}, 'Receta del mes'),
