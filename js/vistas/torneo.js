@@ -7,7 +7,7 @@ import { usuario, pedirLogin } from '../auth.js';
 import { soyAdmin } from '../fotos.js';
 import {
   estadoTorneo, rankingTorneo, inscribirme, ganadores, panelTorneo, candidatasRecetaDelMes, registrarGanador, marcarPagado,
-  textoPeriodo, faltaParaCierre, pesos, nombreMes, fechaLarga, diaSiguiente,
+  textoPeriodo, faltaParaCierre, pesos, nombreMes, fechaLarga, diaSiguiente, INSTAGRAM, enlaceInstagram,
 } from '../torneo.js';
 import { icono } from '../iconos.js';
 import { rutaPerfil } from './comunidad.js';
@@ -83,16 +83,22 @@ function cajaInscripcion(estado, alInscribirse) {
   }
   const mayor = el('input', { type: 'checkbox' });
   const argentina = el('input', { type: 'checkbox' });
+  const sigo = el('input', { type: 'checkbox' });
   const bases = el('input', { type: 'checkbox' });
+  const instagram = el('input', {
+    type: 'text', placeholder: '@tuusuario', maxlength: '31', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
+    value: estado.instagram ? `@${estado.instagram}` : '',
+  });
   const boton = el('button', { type: 'submit', class: 'boton' }, 'Inscribirme');
   return el('form', {
     class: 'torneo-inscripcion',
     onsubmit: async (ev) => {
       ev.preventDefault();
-      if (!mayor.checked || !argentina.checked || !bases.checked) { aviso('Marcá las tres casillas para inscribirte.', 'error'); return; }
+      if (!mayor.checked || !argentina.checked || !sigo.checked || !bases.checked) { aviso('Marcá las cuatro casillas para inscribirte.', 'error'); return; }
+      if (!/^@?[A-Za-z0-9._]{1,30}$/.test(instagram.value.trim())) { aviso('Escribí tu usuario de Instagram (por ejemplo: @tuusuario).', 'error'); instagram.focus(); return; }
       boton.disabled = true;
       try {
-        await inscribirme();
+        await inscribirme(instagram.value.trim());
         aviso('¡Listo! Ya estás en el torneo.');
         alInscribirse();
       } catch (err) {
@@ -102,9 +108,11 @@ function cajaInscripcion(estado, alInscribirse) {
     },
   },
   el('p', {}, el('strong', {}, 'Inscribite para competir por el premio')),
-  el('label', {}, mayor, ' Soy mayor de 18 años'),
-  el('label', {}, argentina, ' Vivo en Argentina'),
-  el('label', {}, bases, ' Leí y acepto las ', el('a', { href: '/bases', target: '_blank' }, 'bases y condiciones')),
+  el('label', {}, mayor, el('span', {}, 'Soy mayor de 18 años')),
+  el('label', {}, argentina, el('span', {}, 'Vivo en Argentina')),
+  el('label', {}, sigo, el('span', {}, 'Sigo a ', el('a', { href: enlaceInstagram(INSTAGRAM), target: '_blank', rel: 'noopener' }, `@${INSTAGRAM}`), ' en Instagram')),
+  el('label', { class: 'torneo-instagram' }, el('span', {}, 'Tu usuario de Instagram (para verificarlo si ganás)'), instagram),
+  el('label', {}, bases, el('span', {}, 'Leí y acepto las ', el('a', { href: '/bases', target: '_blank' }, 'bases y condiciones'))),
   boton);
 }
 
@@ -157,7 +165,7 @@ export async function vistaTorneo() {
         el('li', {}, el('strong', {}, 'Cada día cuenta tu primera partida de cada juego'), ' (la oficial). Las demás son de práctica: elegí bien la dificultad, en Difícil se ganan más puntos.'),
         el('li', {}, 'Los puntos los calcula el sistema, ronda por ronda. Cada quincena empieza de cero.'),
         el('li', {}, 'Si hay empate, gana quien jugó sus partidas oficiales en menos tiempo.'),
-        el('li', {}, 'Para cobrar: ser mayor de 18, vivir en Argentina, estar inscripto/a y tener una sola cuenta. El pago es por transferencia a una cuenta a tu nombre.')),
+        el('li', {}, 'Para cobrar: ser mayor de 18, vivir en Argentina, seguir a ', el('a', { href: enlaceInstagram(INSTAGRAM), target: '_blank', rel: 'noopener' }, `@${INSTAGRAM}`), ' en Instagram, estar inscripto/a y tener una sola cuenta. El pago es por transferencia a una cuenta a tu nombre.')),
       el('p', {}, el('a', { href: '/bases' }, 'Leer las bases y condiciones completas'))),
     el('section', { class: 'seccion' }, el('h2', {}, 'Ganadores'), listaGanadores(lista)));
 }
@@ -214,7 +222,8 @@ export function vistaBases() {
     ['h2', '1. Quién puede participar'],
     ['lista',
       'Personas mayores de 18 años que vivan en la República Argentina.',
-      'Con una cuenta en A Mano con el email confirmado y la inscripción al torneo hecha (casillas de edad, residencia y aceptación de estas bases).',
+      'Con una cuenta en A Mano con el email confirmado y la inscripción al torneo hecha (edad, residencia, usuario de Instagram y aceptación de estas bases).',
+      'Seguir a la cuenta oficial @amanorecetas en Instagram, con el usuario informado en la inscripción. Se verifica al cierre de cada período y antes del pago.',
       'Para cobrar un premio, la cuenta tiene que tener al menos 7 días de antigüedad al cierre del período.',
       'Una sola cuenta por persona. No pueden ganar premios las personas que administran A Mano.'],
     ['h2', '2. Torneo de juegos'],
@@ -233,7 +242,7 @@ export function vistaBases() {
     ['lista',
       'El monto de cada premio se publica en la página del torneo antes del inicio de cada período. Es en pesos argentinos y no se puede cambiar por otra cosa.',
       'Dentro de los 7 días del cierre, A Mano contacta a la persona ganadora por el email de su cuenta. Tiene 7 días para responder con su nombre completo, una foto de su DNI y un CBU, CVU o alias de una cuenta a su nombre.',
-      'Si no responde a tiempo, no cumple los requisitos o los datos no coinciden, el premio pasa al siguiente puesto habilitado (o a otra receta, en el caso de la receta del mes).',
+      'Si no responde a tiempo, no cumple los requisitos (por ejemplo, si no sigue a @amanorecetas) o los datos no coinciden, el premio pasa al siguiente puesto habilitado (o a otra receta, en el caso de la receta del mes).',
       'El pago se hace por transferencia dentro de los 10 días de recibidos los datos. Si correspondiera algún impuesto o retención, se le informa a la persona ganadora antes de pagar.',
       'Los ganadores se publican en la web y en las redes de A Mano con su nombre visible en la cuenta (nunca su DNI ni su email).'],
     ['h2', '5. Juego limpio'],
@@ -269,11 +278,12 @@ export async function vistaAdminTorneo() {
       const filas = await panelTorneo(Number(numero.value));
       if (!filas.length) { tabla.replaceChildren(el('p', { class: 'meta' }, 'Sin partidas oficiales en esa quincena.')); return; }
       tabla.replaceChildren(el('table', {},
-        el('thead', {}, el('tr', {}, ['#', 'Nombre', 'Email', 'Puntos', 'Partidas', 'Tiempo', 'Habilitado', 'Cuenta desde', 'Rápidas', 'Mín. ms', 'Mismo disp.', ''].map((h) => el('th', {}, h)))),
+        el('thead', {}, el('tr', {}, ['#', 'Nombre', 'Email', 'Instagram', 'Puntos', 'Partidas', 'Tiempo', 'Habilitado', 'Cuenta desde', 'Rápidas', 'Mín. ms', 'Mismo disp.', ''].map((h) => el('th', {}, h)))),
         el('tbody', {}, filas.map((f) => {
           const alertas = Number(f.respuestas_rapidas) > 3 || Number(f.cuentas_mismo_dispositivo) > 0;
           return el('tr', { class: alertas ? 'alerta' : '' },
             el('td', {}, f.puesto), el('td', {}, el('a', { href: rutaPerfil(f.user_id) }, f.nombre)), el('td', {}, f.email),
+            el('td', {}, f.instagram ? el('a', { href: enlaceInstagram(f.instagram), target: '_blank', rel: 'noopener' }, `@${f.instagram}`) : '—'),
             el('td', {}, Number(f.puntos).toLocaleString('es-AR')), el('td', {}, f.partidas), el('td', {}, `${f.segundos} s`),
             el('td', {}, f.habilitado ? 'Sí' : 'No'), el('td', {}, new Date(f.cuenta_desde).toLocaleDateString('es-AR')),
             el('td', {}, f.respuestas_rapidas), el('td', {}, f.ms_minimo), el('td', {}, f.cuentas_mismo_dispositivo),
@@ -309,10 +319,12 @@ export async function vistaAdminTorneo() {
       const filas = await candidatasRecetaDelMes(mes.value);
       if (!filas.length) { candidatas.replaceChildren(el('p', { class: 'meta' }, 'No hay recetas de la comunidad que participen ese mes.')); return; }
       candidatas.replaceChildren(el('table', {},
-        el('thead', {}, el('tr', {}, ['Receta', 'Autor', 'Me gusta', 'Publicada', 'Habilitado', ''].map((h) => el('th', {}, h)))),
+        el('thead', {}, el('tr', {}, ['Receta', 'Autor', 'Instagram', 'Me gusta', 'Publicada', 'Habilitado', ''].map((h) => el('th', {}, h)))),
         el('tbody', {}, filas.map((f) => el('tr', {},
           el('td', {}, el('a', { href: rutaReceta(`u-${f.id}`, f.nombre), target: '_blank' }, f.nombre)),
-          el('td', {}, el('a', { href: rutaPerfil(f.user_id) }, f.autor || '—')), el('td', {}, f.me_gusta),
+          el('td', {}, el('a', { href: rutaPerfil(f.user_id) }, f.autor || '—')),
+          el('td', {}, f.instagram ? el('a', { href: enlaceInstagram(f.instagram), target: '_blank', rel: 'noopener' }, `@${f.instagram}`) : '—'),
+          el('td', {}, f.me_gusta),
           el('td', {}, new Date(f.creada).toLocaleDateString('es-AR')),
           el('td', { title: 'Inscripto en el torneo y con la antigüedad mínima al cierre del mes' }, f.habilitado ? 'Sí' : 'No'),
           el('td', {}, el('button', {
@@ -352,7 +364,7 @@ export async function vistaAdminTorneo() {
 
   mostrar(
     el('h1', {}, 'Panel del torneo'),
-    el('p', { class: 'meta' }, `Quincena actual: n.º ${estado.numero} (${textoPeriodo(estado.inicio, estado.fin)}). Antes de pagar revisá las alertas: "Rápidas" son respuestas en menos de 0,7 s y "Mismo disp." son otras cuentas que jugaron desde el mismo navegador.`),
+    el('p', { class: 'meta' }, `Quincena actual: n.º ${estado.numero} (${textoPeriodo(estado.inicio, estado.fin)}). Antes de pagar revisá las alertas ("Rápidas": respuestas en menos de 0,7 s; "Mismo disp.": otras cuentas desde el mismo navegador) y entrá a su Instagram para confirmar que sigue a @${INSTAGRAM}.`),
     el('section', { class: 'seccion' },
       el('h2', {}, 'Top 20 de la quincena'),
       el('label', { class: 'admin-filtro' }, 'Quincena n.º ', numero, el('button', { type: 'button', class: 'boton-secundario', onclick: cargarTop }, 'Ver')),

@@ -6,7 +6,7 @@ import { cliente, hayBackend } from './supabase.js';
 import { usuario } from './auth.js';
 
 // Versión de las bases que acepta quien se inscribe (cambiarla si cambian las bases).
-export const VERSION_BASES = '2026-10';
+export const VERSION_BASES = '2026-10b';
 
 function errorLegible(error) {
   const m = `${error?.message || ''} ${error?.code || ''}`;
@@ -64,7 +64,9 @@ export async function rankingTorneo(numero = null) {
   }));
 }
 
-export const inscribirme = () => rpc('torneo_inscribirme', { p_mayor: true, p_argentina: true, p_bases: VERSION_BASES });
+export const INSTAGRAM = 'amanorecetas';
+export const inscribirme = (instagram) => rpc('torneo_inscribirme', { p_mayor: true, p_argentina: true, p_bases: VERSION_BASES, p_instagram: instagram });
+export const enlaceInstagram = (usuario) => `https://www.instagram.com/${encodeURIComponent(usuario)}/`;
 
 export async function ganadores() {
   const sb = await cliente();

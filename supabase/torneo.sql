@@ -91,18 +91,26 @@ alter table public.torneo_inscripciones enable row level security;
 drop policy if exists "Ver mi inscripción" on public.torneo_inscripciones;
 create policy "Ver mi inscripción" on public.torneo_inscripciones for select to authenticated using (auth.uid() = user_id);
 
-create or replace function public.torneo_inscribirme(p_mayor boolean, p_argentina boolean, p_bases text)
+-- Usuario de Instagram: es requisito seguir a @amanorecetas (se verifica a mano antes de pagar).
+alter table public.torneo_inscripciones add column if not exists instagram text
+  check (instagram ~ '^[a-z0-9._]{1,30}$');
+
+drop function if exists public.torneo_inscribirme(boolean, boolean, text);
+create or replace function public.torneo_inscribirme(p_mayor boolean, p_argentina boolean, p_bases text, p_instagram text)
 returns void language plpgsql security definer set search_path = public as $$
+declare
+  ig text := lower(regexp_replace(trim(coalesce(p_instagram, '')), '^@', ''));
 begin
   if auth.uid() is null then raise exception 'Tenés que iniciar sesión.'; end if;
   if not (p_mayor and p_argentina) then raise exception 'Para participar hay que ser mayor de 18 y vivir en Argentina.'; end if;
-  insert into torneo_inscripciones (user_id, mayor_de_edad, vive_argentina, bases_version)
-  values (auth.uid(), true, true, left(p_bases, 20))
-  on conflict (user_id) do update set bases_version = excluded.bases_version;
+  if ig !~ '^[a-z0-9._]{1,30}$' then raise exception 'Escribí tu usuario de Instagram (por ejemplo: @tuusuario).'; end if;
+  insert into torneo_inscripciones (user_id, mayor_de_edad, vive_argentina, bases_version, instagram)
+  values (auth.uid(), true, true, left(p_bases, 20), ig)
+  on conflict (user_id) do update set bases_version = excluded.bases_version, instagram = excluded.instagram;
 end;
 $$;
-revoke all on function public.torneo_inscribirme(boolean, boolean, text) from public, anon;
-grant execute on function public.torneo_inscribirme(boolean, boolean, text) to authenticated;
+revoke all on function public.torneo_inscribirme(boolean, boolean, text, text) from public, anon;
+grant execute on function public.torneo_inscribirme(boolean, boolean, text, text) to authenticated;
 
 -- ---------- partidas ----------
 create table if not exists public.partidas (
@@ -435,7 +443,7 @@ language sql stable security definer set search_path = public as $$
     select rank() over (order by t.puntos desc, t.segundos asc) as puesto, t.user_id,
       coalesce(nullif(trim(u.raw_user_meta_data ->> 'nombre'), ''), 'Cocinero/a') as nombre,
       t.puntos, t.partidas, t.segundos,
-      (exists (select 1 from torneo_inscripciones i where i.user_id = t.user_id)
+      (exists (select 1 from torneo_inscripciones i where i.user_id = t.user_id and i.instagram is not null)
         and u.created_at <= ((select fin from per) - (select antiguedad_dias from cfg))::timestamp + interval '1 day') as habilitado,
       t.user_id = auth.uid() as soy_yo
     from t join auth.users u on u.id = t.user_id),
@@ -455,7 +463,8 @@ returns jsonb language sql stable security definer set search_path = public as $
     'numero', p.numero, 'inicio', p.inicio, 'fin', p.fin, 'hoy', dia_argentina(),
     'premioJuegos', c.premio_juegos, 'premioReceta', c.premio_receta, 'antiguedadDias', c.antiguedad_dias,
     'recetaDesde', c.receta_desde,
-    'inscripto', exists (select 1 from torneo_inscripciones i where i.user_id = auth.uid()),
+    'inscripto', exists (select 1 from torneo_inscripciones i where i.user_id = auth.uid() and i.instagram is not null),
+    'instagram', (select instagram from torneo_inscripciones i where i.user_id = auth.uid()),
     'cuentaDesde', (select created_at from auth.users where id = auth.uid()),
     'oficialesHoy', coalesce((select jsonb_object_agg(juego, jsonb_build_object('puntos', puntos, 'terminada', terminada_at is not null))
       from partidas where user_id = auth.uid() and oficial and dia = dia_argentina()), '{}'::jsonb))
@@ -489,8 +498,9 @@ create policy "Administrar ganadores" on public.ganadores for all to authenticat
 -- Top 20 del período con datos para revisar antes de pagar: email, antigüedad,
 -- tiempos sospechosos (respuestas en menos de 0,7 s) y cuentas que jugaron
 -- desde el mismo dispositivo.
+drop function if exists public.torneo_admin(int);
 create or replace function public.torneo_admin(p_numero int default null)
-returns table (puesto bigint, user_id uuid, nombre text, email text, puntos bigint, partidas bigint, segundos bigint,
+returns table (puesto bigint, user_id uuid, nombre text, email text, instagram text, puntos bigint, partidas bigint, segundos bigint,
                habilitado boolean, cuenta_desde timestamptz, respuestas_rapidas bigint, ms_minimo bigint, cuentas_mismo_dispositivo bigint)
 language plpgsql stable security definer set search_path = public as $$
 begin
@@ -509,8 +519,9 @@ begin
            where pa.dispositivo is not null and pa.dia between per.inicio - 30 and per.fin)
   select rank() over (order by t.pts desc, t.seg asc), t.user_id,
     coalesce(nullif(trim(u.raw_user_meta_data ->> 'nombre'), ''), 'Cocinero/a')::text, u.email::text,
+    (select i.instagram from torneo_inscripciones i where i.user_id = t.user_id),
     t.pts, t.n, t.seg,
-    (exists (select 1 from torneo_inscripciones i where i.user_id = t.user_id)
+    (exists (select 1 from torneo_inscripciones i where i.user_id = t.user_id and i.instagram is not null)
       and u.created_at <= ((select fin from per) - (select antiguedad_dias from cfg))::timestamp + interval '1 day'),
     u.created_at,
     (select count(*) from resp where resp.user_id = t.user_id and resp.ms < 700),
@@ -530,7 +541,7 @@ grant execute on function public.torneo_admin(int) to authenticated;
 -- su cuenta tiene la antigüedad mínima al cierre del mes.
 drop function if exists public.receta_mes_candidatas(text);
 create or replace function public.receta_mes_candidatas(p_mes text)
-returns table (id uuid, nombre text, autor text, user_id uuid, me_gusta bigint, creada timestamptz, imagen text, habilitado boolean)
+returns table (id uuid, nombre text, autor text, user_id uuid, me_gusta bigint, creada timestamptz, imagen text, habilitado boolean, instagram text)
 language plpgsql stable security definer set search_path = public as $$
 declare
   cierre date := (to_date(p_mes || '-01', 'YYYY-MM-DD') + interval '1 month' - interval '1 day')::date;
@@ -543,8 +554,9 @@ begin
   return query
   select r.id, r.nombre, r.autor_nombre, r.user_id,
     (select count(*) from me_gusta m where m.receta_id = 'u-' || r.id::text), r.created_at, r.imagen_url,
-    (exists (select 1 from torneo_inscripciones i where i.user_id = r.user_id)
-      and u.created_at <= (cierre - c.antiguedad_dias)::timestamp + interval '1 day')
+    (exists (select 1 from torneo_inscripciones i where i.user_id = r.user_id and i.instagram is not null)
+      and u.created_at <= (cierre - c.antiguedad_dias)::timestamp + interval '1 day'),
+    (select i.instagram from torneo_inscripciones i where i.user_id = r.user_id)
   from recetas r join auth.users u on u.id = r.user_id
   where r.publica and to_char(r.created_at at time zone 'America/Argentina/Buenos_Aires', 'YYYY-MM') = p_mes
     and dia_argentina(r.created_at) >= c.receta_desde

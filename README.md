@@ -213,7 +213,8 @@ visitas de *Juego* con `plato-del-dia`: es el desafío que trae gente todos los 
   días, premios, antigüedad mínima de la cuenta y `receta_desde`, desde cuándo cuentan
   las recetas). Empieza el lunes 5 de octubre de 2026 con $15.000 por quincena y
   $30.000 por la receta del mes. Ejemplo: `update torneo_config set premio_juegos = 20000;`
-- **Para cobrar:** inscripción en `/torneo` (mayor de 18, vive en Argentina, acepta
+- **Para cobrar:** inscripción en `/torneo` (mayor de 18, vive en Argentina, sigue a @amanorecetas
+  en Instagram y da su usuario, acepta
   `/bases`) y cuenta con 7 días de antigüedad al cierre. Se paga con DNI y CBU a nombre propio.
 - **Panel:** `/admin/torneo` (administradores): top 20 con alertas (respuestas en menos
   de 0,7 s y cuentas desde el mismo navegador), elegir la receta del mes, registrar
