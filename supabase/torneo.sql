@@ -53,7 +53,7 @@ $$;
 -- ---------- configuración ----------
 create table if not exists public.torneo_config (
   id             int primary key default 1 check (id = 1),
-  inicio         date not null default '2026-10-05',   -- primer día del primer período
+  inicio         date not null default '2026-10-12',   -- primer día del primer período
   dias           int not null default 14,              -- duración de cada período
   premio_juegos  int not null default 10000,           -- en pesos
   premio_receta  int not null default 10000,
