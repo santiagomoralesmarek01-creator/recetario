@@ -2,7 +2,7 @@ import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
 import { usuario, nombreVisible, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
-import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO, IMG_PLATO_GENERICO } from '../imagenes.js';
+import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
 import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedida, cargarIngredientes } from '../ingredientes.js';
@@ -17,10 +17,11 @@ import { ir, rutaReceta } from '../rutas.js';
 // Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
 function filaIngrediente(datos = {}) {
   let clave = datos.imagen || '';
-  const vista = crearImagen(IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO, 'ingrediente-vista');
+  const vista = crearImagen(IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO, 'ingrediente-vista vacia');
   const mostrarImagen = () => {
     const k = clave || ingredienteEnIngles(nombre.value);
     vista.src = k ? urlIngrediente(k) : IMG_INGREDIENTE_GENERICO;
+    vista.classList.toggle('vacia', !k);
   };
 
   const lista = el('ul', { class: 'sugerencias', role: 'listbox', hidden: true });
@@ -164,26 +165,53 @@ export async function vistaFormulario(uuid = null) {
 
   let archivoFoto = null;
   let urlFoto = receta?.imagen || '';
-  const vistaFoto = crearImagen(urlFoto || IMG_PLATO_GENERICO, 'Vista previa', IMG_PLATO_GENERICO, 'foto-vista');
+  // Zona de foto: vacía invita a subir una; con foto la muestra con "Cambiar" y "Quitar".
+  const vistaFoto = el('img', { class: 'foto-zona-img', alt: 'Vista previa de la foto' });
+  const zonaFoto = el('label', { class: 'foto-zona' });
+  function pintarFoto(src) {
+    if (src) vistaFoto.src = src;
+    zonaFoto.classList.toggle('con-foto', Boolean(src));
+  }
+  vistaFoto.addEventListener('error', () => {
+    if (!vistaFoto.getAttribute('src')) return;
+    aviso('No se pudo cargar esa imagen. Probá con otra.', 'error');
+    pintarFoto('');
+  });
   const inputUrl = el('input', {
-    name: 'imagen_url', type: 'url', placeholder: 'o pegá el enlace de una imagen', value: urlFoto.includes('/fotos-recetas/') ? '' : urlFoto,
+    name: 'imagen_url', type: 'url', placeholder: 'https://…', value: urlFoto.includes('/fotos-recetas/') ? '' : urlFoto,
     onchange: (e) => {
       archivoFoto = null;
       urlFoto = e.target.value.trim();
-      vistaFoto.src = urlFoto || IMG_PLATO_GENERICO;
+      pintarFoto(urlFoto);
     },
   });
   const inputArchivo = el('input', {
-    type: 'file', accept: 'image/*', capture: 'environment',
+    type: 'file', accept: 'image/*', class: 'foto-zona-archivo',
     onchange: async (e) => {
       const f = e.target.files[0];
       if (!f) return;
       if (f.size > 15_000_000) { aviso('La foto es demasiado grande (máx. 15 MB).', 'error'); return; }
       archivoFoto = await reducirImagen(f);
       inputUrl.value = '';
-      vistaFoto.src = URL.createObjectURL(archivoFoto);
+      pintarFoto(URL.createObjectURL(archivoFoto));
     },
   });
+  const quitarFoto = el('button', {
+    type: 'button', class: 'foto-zona-quitar', 'aria-label': 'Quitar foto',
+    onclick: (e) => {
+      e.preventDefault();
+      archivoFoto = null; urlFoto = ''; inputUrl.value = ''; inputArchivo.value = '';
+      pintarFoto('');
+    },
+  }, icono('cerrar'), 'Quitar');
+  zonaFoto.append(inputArchivo, vistaFoto,
+    el('span', { class: 'foto-zona-vacia' },
+      el('span', { class: 'foto-zona-icono' }, icono('foto')),
+      el('strong', {}, 'Subí o sacá una foto del plato'),
+      el('span', { class: 'meta' }, 'Tocá acá · JPG o PNG'),
+    ),
+    el('span', { class: 'foto-zona-cambiar' }, icono('foto'), 'Cambiar foto'));
+  pintarFoto(urlFoto);
 
   const listaIngredientes = el('ul', { class: 'lista-editable' },
     (receta?.ingredientesCrudos?.length ? receta.ingredientesCrudos : [{}, {}, {}]).map(filaIngrediente));
@@ -261,11 +289,11 @@ export async function vistaFormulario(uuid = null) {
     el('fieldset', {},
       el('legend', {}, 'Foto'),
       el('div', { class: 'foto-editor' },
-        vistaFoto,
-        el('div', {},
-          el('label', { class: 'campo' }, el('span', {}, 'Subir o sacar una foto'), inputArchivo),
-          el('label', { class: 'campo' }, el('span', {}, 'Enlace'), inputUrl),
-          el('p', { class: 'meta' }, 'Si no ponés foto, la receta se muestra con un collage de sus ingredientes.')))),
+        el('div', { class: 'foto-zona-marco' }, zonaFoto, quitarFoto),
+        el('details', { class: 'foto-enlace' },
+          el('summary', {}, '¿La foto está en internet? Pegá el enlace'),
+          el('label', { class: 'campo' }, el('span', {}, 'Enlace de la imagen'), inputUrl)),
+        el('p', { class: 'meta' }, 'Opcional. Si no ponés foto, la receta se muestra con un collage de sus ingredientes.'))),
 
     el('fieldset', {},
       el('legend', {}, 'Ingredientes *'),
