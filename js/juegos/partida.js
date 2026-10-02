@@ -3,12 +3,13 @@
 import { el } from '../dom.js';
 import { usuario, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
-import { registrarActividad } from '../actividad.js';
+import { registrarActividad, actividadGuardada } from '../actividad.js';
 import { guardarRecord, leerRecords, compartir, MODOS, modoGuardado, guardarModo } from './datos.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
 import { ruta } from '../rutas.js';
+import { juegaEnServidor } from '../torneo.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -33,15 +34,20 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
     el('p', { class: 'falta-pregunta' }, 'Elegí la dificultad'),
     el('div', { class: 'modo-opciones' }, botones),
     el('p', { class: 'meta modo-nota' }, icono('pais'), ' Priorizamos platos latinoamericanos: en Fácil son todos de la región y en Difícil se suma más cocina del mundo.'),
+    juego !== 'plato-del-dia' && el('p', { class: 'meta modo-nota' }, icono('trofeo'), juegaEnServidor()
+      ? ' Tu primera partida de hoy de este juego es la oficial del torneo: en Difícil se ganan más puntos.'
+      : [' Entrá con tu cuenta para que tus partidas sumen al ', el('a', { href: '/torneo' }, 'torneo con premio'), '.']),
     el('div', { class: 'juego-siguiente' },
       el('button', { type: 'button', class: 'boton', onclick: () => { guardarModo(juego, modo); alEmpezar(modo); } }, t('juego.empezar'))));
 }
 
-export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alReintentar, alCambiarModo, textoCompartir }) {
+// partida: la del servidor (con sesión); ya guardó los puntos y dice si fue la oficial del torneo.
+export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, partida = null, alReintentar, alCambiarModo, textoCompartir }) {
   const clave = modo ? `${juego}:${modo}` : juego;
   const recordAnterior = leerRecords()[clave]?.mejor || 0;
   const esRecord = guardarRecord(juego, puntos, modo) && recordAnterior > 0;
-  registrarActividad(`juego-${juego}`, { puntos, detalle: modo }).catch((err) => console.warn(err));
+  if (partida) actividadGuardada();
+  else registrarActividad(`juego-${juego}`, { puntos, detalle: modo }).catch((err) => console.warn(err));
   evento('Juego', { juego, modo: modo || '' });
   const invitado = hayBackend && !usuario();
   const porcentaje = puntos / maximo;
@@ -51,6 +57,9 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
     el('p', { class: `portada-antetitulo${modo ? ` nivel-${MODOS[modo].nivel}` : ''}` }, titulo, modo && [' · ', el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), MODOS[modo].nombre]),
     el('p', { class: 'juego-fin-puntos' }, el('strong', {}, puntos), ` / ${maximo} puntos`),
     detalle && el('p', { class: 'meta' }, detalle),
+    partida && (partida.oficial
+      ? el('p', { class: 'juego-oficial' }, icono('trofeo'), ` Partida oficial del torneo: sumaste ${puntos} puntos. `, el('a', { href: '/torneo' }, 'Ver ranking'))
+      : el('p', { class: 'meta juego-practica' }, 'Partida de práctica: la oficial de hoy de este juego ya la jugaste. Mañana tenés otra.')),
     esRecord
       ? el('p', { class: 'juego-record' }, icono('trofeo'), ` ${t('juego.nuevo-record')}`)
       : recordAnterior > 0 && el('p', { class: 'meta' }, `Tu récord${modo ? ` en ${MODOS[modo].nombre.toLowerCase()}` : ''}: ${Math.max(recordAnterior, puntos)} puntos`),
@@ -62,6 +71,15 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, alR
       alCambiarModo && el('button', { type: 'button', class: 'boton-secundario', onclick: alCambiarModo }, t('juego.cambiar-dificultad')),
       el('button', { type: 'button', class: 'boton-secundario', onclick: () => compartir(textoCompartir) }, t('juego.compartir')),
       el('a', { class: 'boton-secundario boton', href: '/juegos' }, t('juego.otros'))));
+}
+
+// Cuando falla el servidor en medio de una partida: mensaje y reintentar.
+export function errorDePartida(err, alReintentar, alSalir) {
+  return el('div', { class: 'estado juego-error' },
+    el('p', {}, err?.message || 'No se pudo continuar la partida.'),
+    el('div', { class: 'acciones' },
+      el('button', { type: 'button', class: 'boton', onclick: alReintentar }, 'Reintentar'),
+      el('button', { type: 'button', class: 'boton-secundario', onclick: alSalir }, 'Volver')));
 }
 
 // Marcador de la parte de arriba: ronda, puntos y (opcional) tiempo.

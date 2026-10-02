@@ -8,9 +8,9 @@ import { CONTACTO } from '../config.js';
 const ACTUALIZADO = '28 de septiembre de 2026';
 
 // Bloques: 'texto' | ['lista', ...items] | ['h2', 'título']
-function pagina(titulo, bloques) {
+export function pagina(titulo, bloques, { volver = ['/', '← Inicio'] } = {}) {
   return el('article', { class: 'legal' },
-    el('a', { class: 'volver', href: '/' }, '← Inicio'),
+    el('a', { class: 'volver', href: volver[0] }, volver[1]),
     el('h1', {}, titulo),
     el('p', { class: 'meta' }, `Última actualización: ${ACTUALIZADO}.`),
     bloques.map((b) => {
@@ -20,7 +20,7 @@ function pagina(titulo, bloques) {
     }));
 }
 
-const contacto = () => (CONTACTO
+export const contacto = () => (CONTACTO
   ? el('a', { href: `mailto:${CONTACTO}` }, CONTACTO)
   : 'el email de contacto que se publicará en esta página');
 

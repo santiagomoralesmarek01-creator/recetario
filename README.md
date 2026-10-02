@@ -199,6 +199,26 @@ En `js/config.js`, `ANALITICA`:
 Vacío, no se carga nada. Para la retención (si vuelven), mirar en Plausible las
 visitas de *Juego* con `plato-del-dia`: es el desafío que trae gente todos los días.
 
+## Torneo de juegos y receta del mes (con premio)
+
+- **Instalar:** en Supabase → SQL Editor, correr `supabase/torneo.sql` y después
+  `supabase/juegos-datos-1.sql`, `-2.sql` y `-3.sql` (el catálogo de los juegos).
+  Si cambian las recetas, regenerar el catálogo con `scripts/generar-datos-juegos.mjs`.
+- **Puntaje en el servidor:** con sesión iniciada, "Adiviná el país", "¿Qué le falta?"
+  y "Armá el plato" los arma y corrige Postgres (`partida_empezar`, `partida_ronda`,
+  `partida_responder`): cada ronda se entrega al pedirla, el tiempo lo mide el servidor
+  y el navegador ya no puede guardar puntos de estos juegos. Sin sesión se juega como práctica.
+- **Partida oficial:** la primera de cada juego de cada día. El Plato del día no suma.
+- **Quincenas:** se configuran en la tabla `torneo_config` (fecha de inicio, días,
+  premios y antigüedad mínima de la cuenta). Ejemplo para cambiar el premio:
+  `update torneo_config set premio_juegos = 15000;`
+- **Para cobrar:** inscripción en `/torneo` (mayor de 18, vive en Argentina, acepta
+  `/bases`) y cuenta con 7 días de antigüedad al cierre. Se paga con DNI y CBU a nombre propio.
+- **Panel:** `/admin/torneo` (administradores): top 20 con alertas (respuestas en menos
+  de 0,7 s y cuentas desde el mismo navegador), elegir la receta del mes, registrar
+  ganadores y marcar pagos. Los ganadores se ven en `/torneo` y la receta ganadora
+  muestra la insignia "Receta del mes".
+
 ## Estructura
 
 ```

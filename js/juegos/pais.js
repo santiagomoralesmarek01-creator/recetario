@@ -7,7 +7,8 @@ import { bandera, continenteDe, LATINOAMERICA } from '../paises.js';
 import { normalizar } from '../ingredientes.js';
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, elegirRecetas, MODOS } from './datos.js';
-import { finDePartida, marcador, elegirModo } from './partida.js';
+import { finDePartida, marcador, elegirModo, errorDePartida } from './partida.js';
+import { juegaEnServidor, nuevaPartida } from '../torneo.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 
@@ -82,20 +83,45 @@ export async function juegoPais() {
     zona.replaceChildren(elegirModo({ juego: 'pais', detalles: DETALLES, alEmpezar: empezar }));
   }
 
-  function empezar(modo) {
+  async function empezar(modo) {
     const reglas = REGLAS[modo];
-    const rondas = armarRondas(datos, modo);
+    // Con sesión, la partida la arma y la corrige el servidor (cuenta para el torneo).
+    let partida = null;
+    if (juegaEnServidor()) {
+      zona.replaceChildren(el('p', { class: 'estado' }, 'Armando la partida…'));
+      try {
+        partida = await nuevaPartida('pais', modo);
+      } catch (err) {
+        zona.replaceChildren(errorDePartida(err, () => empezar(modo), inicio));
+        return;
+      }
+    }
+    const rondas = partida ? null : armarRondas(datos, modo);
+    const total = partida ? partida.total : rondas.length;
     let indice = 0;
     let puntos = 0;
     let aciertos = 0;
     const marcas = [];
     tablero.nodo.hidden = false;
 
-    function ronda() {
+    async function ronda() {
       if (!zona.isConnected) return parar();
-      if (indice >= rondas.length) return terminar();
-      const { receta, opciones } = rondas[indice];
-      tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
+      if (indice >= total) return terminar();
+      let actual;
+      if (partida) {
+        try {
+          const d = await partida.ronda();
+          indice = d.indice;
+          actual = { receta: { nombre: d.receta.nombre, imagen: d.receta.imagen, imagenGrande: d.receta.imagen, codigoCategoria: d.receta.categoria }, opciones: d.opciones };
+        } catch (err) {
+          zona.replaceChildren(errorDePartida(err, ronda, inicio));
+          return;
+        }
+      } else {
+        actual = rondas[indice];
+      }
+      const { receta, opciones } = actual;
+      tablero.pintar({ ronda: indice + 1, total, puntos });
       const inicioRonda = Date.now();
       let respondida = false;
 
@@ -103,24 +129,37 @@ export async function juegoPais() {
         type: 'button', class: 'opcion', onclick: () => responder(pais),
       }, bandera(pais, 'opcion-bandera'), el('span', {}, pais)));
 
-      function responder(pais) {
+      async function responder(pais) {
         if (respondida) return;
         respondida = true;
         parar();
-        const restante = Math.max(0, reglas.segundos - (Date.now() - inicioRonda) / 1000);
-        const bien = pais === receta.origen;
-        if (bien) {
-          aciertos++;
-          puntos += Math.round(reglas.puntos / 2 + (reglas.puntos / 2) * (restante / reglas.segundos));
+        botones.forEach((b) => { b.disabled = true; });
+        let bien;
+        let correcta;
+        if (partida) {
+          try {
+            const res = await partida.responder(indice, pais);
+            bien = res.bien;
+            correcta = res.respuesta;
+            puntos = res.puntos;
+          } catch (err) {
+            zona.replaceChildren(errorDePartida(err, () => { indice++; ronda(); }, inicio));
+            return;
+          }
+        } else {
+          const restante = Math.max(0, reglas.segundos - (Date.now() - inicioRonda) / 1000);
+          bien = pais === receta.origen;
+          correcta = receta.origen;
+          if (bien) puntos += Math.round(reglas.puntos / 2 + (reglas.puntos / 2) * (restante / reglas.segundos));
         }
+        if (bien) aciertos++;
         marcas.push(bien ? '🟩' : '🟥');
         botones.forEach((b, i) => {
-          b.disabled = true;
-          if (opciones[i] === receta.origen) b.classList.add('correcta');
+          if (opciones[i] === correcta) b.classList.add('correcta');
           else if (opciones[i] === pais) b.classList.add('incorrecta');
         });
-        tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
-        aviso.textContent = pais == null ? `Se acabó el tiempo. Era ${receta.origen}.` : bien ? t('juego.correcto') : `Era ${receta.origen}.`;
+        tablero.pintar({ ronda: indice + 1, total, puntos });
+        aviso.textContent = pais == null ? `Se acabó el tiempo. Era ${correcta}.` : bien ? t('juego.correcto') : `Era ${correcta}.`;
         aviso.className = `juego-aviso ${bien ? 'bien' : 'mal'}`;
         setTimeout(() => { indice++; ronda(); }, bien ? 1000 : 1800);
       }
@@ -153,10 +192,11 @@ export async function juegoPais() {
         titulo: 'Adiviná el país',
         puntos,
         maximo: RONDAS * reglas.puntos,
-        detalle: `Acertaste ${aciertos} de ${rondas.length} países.`,
+        detalle: `Acertaste ${aciertos} de ${total} países.`,
+        partida,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
-        textoCompartir: `🌎 A Mano · Adiviná el país (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos (${aciertos}/${rondas.length})`,
+        textoCompartir: `🌎 A Mano · Adiviná el país (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos (${aciertos}/${total})`,
       }));
     }
 

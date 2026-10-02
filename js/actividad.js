@@ -11,6 +11,8 @@ export function alCambiarActividad(fn) {
   return () => oyentes.delete(fn);
 }
 const avisar = () => oyentes.forEach((fn) => { try { fn(); } catch (err) { console.warn(err); } });
+// Para cuando la actividad la guardó el servidor (partidas del torneo).
+export const actividadGuardada = avisar;
 
 function errorLegible(error) {
   const m = `${error?.message || ''} ${error?.code || ''}`;

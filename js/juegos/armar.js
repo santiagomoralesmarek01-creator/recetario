@@ -5,7 +5,8 @@ import { el, mostrar, cargando, vigencia } from '../dom.js';
 import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, raiz, elegirRecetas, MODOS } from './datos.js';
-import { finDePartida, marcador, elegirModo } from './partida.js';
+import { finDePartida, marcador, elegirModo, errorDePartida } from './partida.js';
+import { juegaEnServidor, nuevaPartida } from '../torneo.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 
@@ -66,21 +67,51 @@ export async function juegoArmar() {
     zona.replaceChildren(elegirModo({ juego: 'armar', detalles: DETALLES, alEmpezar: empezar }));
   }
 
-  function empezar(modo) {
+  async function empezar(modo) {
     const reglas = REGLAS[modo];
-    const rondas = armarRondas(datos, modo);
+    // Con sesión, la partida la arma y la corrige el servidor (cuenta para el torneo).
+    let partida = null;
+    if (juegaEnServidor()) {
+      zona.replaceChildren(el('p', { class: 'estado' }, 'Armando la partida…'));
+      try {
+        partida = await nuevaPartida('armar', modo);
+      } catch (err) {
+        zona.replaceChildren(errorDePartida(err, () => empezar(modo), inicio));
+        return;
+      }
+    }
+    const rondas = partida ? null : armarRondas(datos, modo);
+    const total = partida ? partida.total : rondas.length;
     let indice = 0;
     let puntos = 0;
     let perfectos = 0;
     const marcas = [];
     tablero.nodo.hidden = false;
 
-    function ronda() {
+    async function ronda() {
       if (!zona.isConnected) return;
-      if (indice >= rondas.length) return terminar();
-      const { receta, correctos, alacena } = rondas[indice];
-      const necesarios = correctos.length;
-      tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
+      if (indice >= total) return terminar();
+      let actual;
+      if (partida) {
+        try {
+          const d = await partida.ronda();
+          indice = d.indice;
+          actual = {
+            receta: { nombre: d.receta.nombre, imagen: d.receta.imagen, imagenGrande: d.receta.imagen, categoria: d.receta.categoriaEs, codigoCategoria: d.receta.categoria, origen: d.receta.origen },
+            correctos: null,
+            alacena: d.alacena.map((x) => ({ nombre: x.n, imagen: x.i })),
+          };
+        } catch (err) {
+          zona.replaceChildren(errorDePartida(err, ronda, inicio));
+          return;
+        }
+      } else {
+        actual = rondas[indice];
+      }
+      const { receta, alacena } = actual;
+      let { correctos } = actual;
+      const necesarios = correctos ? correctos.length : reglas.correctos;
+      tablero.pintar({ ronda: indice + 1, total, puntos });
       const elegidos = new Set();
       let servido = false;
 
@@ -90,7 +121,7 @@ export async function juegoArmar() {
       const aviso = el('p', { class: 'juego-aviso', role: 'status' });
       const siguiente = el('button', {
         type: 'button', class: 'boton', hidden: true, onclick: () => { indice++; ronda(); },
-      }, indice + 1 < rondas.length ? 'Siguiente plato →' : 'Ver resultado');
+      }, indice + 1 < total ? 'Siguiente plato →' : 'Ver resultado');
 
       const fichas = alacena.map((ing) => el('button', {
         type: 'button', class: 'armar-ficha', 'aria-pressed': 'false', onclick: () => alternar(ing),
@@ -119,13 +150,32 @@ export async function juegoArmar() {
         pintar();
       }
 
-      function servirPlato() {
+      async function servirPlato() {
         if (servido) return;
         servido = true;
-        const bien = [...elegidos].filter((i) => correctos.includes(i)).length;
-        const mal = elegidos.size - bien;
-        const ganados = Math.max(0, bien * reglas.acierto - mal * reglas.error);
-        puntos += ganados;
+        servir.disabled = true;
+        fichas.forEach((f) => { f.disabled = true; });
+        let bien;
+        let mal;
+        let ganados;
+        if (partida) {
+          try {
+            const res = await partida.responder(indice, [...elegidos].map((i) => i.nombre));
+            correctos = alacena.filter((i) => res.respuesta.includes(i.nombre));
+            bien = res.aciertosRonda;
+            mal = res.erroresRonda;
+            ganados = res.ganados;
+            puntos = res.puntos;
+          } catch (err) {
+            zona.replaceChildren(errorDePartida(err, () => { indice++; ronda(); }, inicio));
+            return;
+          }
+        } else {
+          bien = [...elegidos].filter((i) => correctos.includes(i)).length;
+          mal = elegidos.size - bien;
+          ganados = Math.max(0, bien * reglas.acierto - mal * reglas.error);
+          puntos += ganados;
+        }
         if (bien === necesarios) perfectos++;
         marcas.push(bien === necesarios ? '🟩' : bien >= necesarios - 2 ? '🟨' : '🟥');
         fichas.forEach((f, i) => {
@@ -134,7 +184,7 @@ export async function juegoArmar() {
           if (correctos.includes(ing)) f.classList.add(elegidos.has(ing) ? 'correcta' : 'faltó');
           else if (elegidos.has(ing)) f.classList.add('incorrecta');
         });
-        tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos });
+        tablero.pintar({ ronda: indice + 1, total, puntos });
         aviso.textContent = bien === necesarios
           ? t('juego.perfecto', { n: ganados })
           : `Acertaste ${bien} de ${necesarios}${mal ? ` y pusiste ${mal} que no iba${mal > 1 ? 'n' : ''}` : ''}: +${ganados}. Los que faltaron están marcados.`;
@@ -170,7 +220,8 @@ export async function juegoArmar() {
         titulo: 'Armá el plato',
         puntos,
         maximo: RONDAS * reglas.correctos * reglas.acierto,
-        detalle: `Platos perfectos: ${perfectos} de ${rondas.length}.`,
+        detalle: `Platos perfectos: ${perfectos} de ${total}.`,
+        partida,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
         textoCompartir: `🥘 A Mano · Armá el plato (${MODOS[modo].nombre})\n${marcas.join('')}\n${puntos} puntos`,

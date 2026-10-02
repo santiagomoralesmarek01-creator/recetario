@@ -16,6 +16,7 @@ import { vistaJuegos, vistaJuego } from './vistas/juegos.js';
 import { vistaMedallas } from './vistas/medallas.js';
 import { iniciarMedallas } from './medallas.js';
 import { vistaFotos } from './vistas/fotosRecetas.js';
+import { vistaTorneo, vistaBases, vistaAdminTorneo } from './vistas/torneo.js';
 import { soyAdmin } from './fotos.js';
 import { icono } from './iconos.js';
 import { t, aplicarTextos } from './textos.js';
@@ -61,7 +62,8 @@ function menuUsuario(u) {
   const nombre = nombreVisible(u);
   // Sólo para administradores: se agrega cuando se confirma.
   const enlaceAdmin = el('a', { href: '/fotos', role: 'menuitem', hidden: true }, icono('foto'), 'Fotos de recetas');
-  soyAdmin().then((si) => { enlaceAdmin.hidden = !si; });
+  const enlaceTorneo = el('a', { href: '/admin/torneo', role: 'menuitem', hidden: true }, icono('trofeo'), 'Panel del torneo');
+  soyAdmin().then((si) => { enlaceAdmin.hidden = !si; enlaceTorneo.hidden = !si; });
   const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
     el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
     el('a', { href: '/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
@@ -69,6 +71,7 @@ function menuUsuario(u) {
     el('a', { href: '/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
     el('a', { href: '/preferencias', role: 'menuitem' }, icono('ajustes'), 'Preferencias'),
     enlaceAdmin,
+    enlaceTorneo,
     el('button', {
       type: 'button', role: 'menuitem',
       onclick: async () => {
@@ -136,6 +139,9 @@ async function router() {
       case 'juegos': return param ? await vistaJuego(param) : vistaJuegos();
       case 'medallas': return await vistaMedallas();
       case 'fotos': return await vistaFotos();
+      case 'torneo': return await vistaTorneo();
+      case 'bases': return vistaBases();
+      case 'admin': return param === 'torneo' ? await vistaAdminTorneo() : await vistaInicio();
       case 'preferencias': return vistaPreferencias();
       case 'privacidad': return vistaPrivacidad();
       case 'terminos': return vistaTerminos();

@@ -22,6 +22,18 @@ import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
 import { CONTACTO } from '../config.js';
+import { premioDeReceta, nombreMes } from '../torneo.js';
+
+// "Receta del mes · octubre 2026" si ganó el premio (se completa al llegar el dato).
+function insigniaRecetaDelMes(id) {
+  const nodo = el('p', { class: 'insignia-receta-mes', hidden: true });
+  premioDeReceta(id).then((g) => {
+    if (!g) return;
+    nodo.replaceChildren(icono('trofeo'), ` Receta del mes · ${nombreMes(g.periodo)}`);
+    nodo.hidden = false;
+  });
+  return nodo;
+}
 import { ir } from '../rutas.js';
 import { marcaVerificada } from '../verificadas.js';
 
@@ -241,6 +253,7 @@ export async function vistaReceta(id) {
         r.autor && el('p', { class: 'meta' }, 'Receta de ',
           r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor), marcaVerificada(r.userId),
           r.publica === false && [' · ', icono('candado'), 'privada']),
+        r.origenDatos === 'usuario' && insigniaRecetaDelMes(r.id),
         r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
         el('ul', { class: 'datos-rapidos' },
           datos.map(([simbolo, valor, texto, clase]) =>

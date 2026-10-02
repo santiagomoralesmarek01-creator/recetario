@@ -4,7 +4,8 @@ import { el, mostrar, cargando, vigencia } from '../dom.js';
 import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, elegirRecetas, MODOS } from './datos.js';
-import { finDePartida, marcador, elegirModo } from './partida.js';
+import { finDePartida, marcador, elegirModo, errorDePartida } from './partida.js';
+import { juegaEnServidor, nuevaPartida } from '../torneo.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 
@@ -63,19 +64,52 @@ export async function juegoFalta() {
     zona.replaceChildren(elegirModo({ juego: 'falta', detalles: DETALLES, alEmpezar: empezar }));
   }
 
-  function empezar(modo) {
+  async function empezar(modo) {
     const reglas = REGLAS[modo];
-    const rondas = armarRondas(datos, modo);
+    // Con sesión, la partida la arma y la corrige el servidor (cuenta para el torneo).
+    let partida = null;
+    if (juegaEnServidor()) {
+      zona.replaceChildren(el('p', { class: 'estado' }, 'Armando la partida…'));
+      try {
+        partida = await nuevaPartida('falta', modo);
+      } catch (err) {
+        zona.replaceChildren(errorDePartida(err, () => empezar(modo), inicio));
+        return;
+      }
+    }
+    const rondas = partida ? null : armarRondas(datos, modo);
+    const total = partida ? partida.total : rondas.length;
     let indice = 0;
     let aciertos = 0;
+    let puntos = 0;
     const marcas = [];
     tablero.nodo.hidden = false;
 
-    function ronda() {
+    async function ronda() {
       if (!zona.isConnected) return;
-      if (indice >= rondas.length) return terminar();
-      const { receta, oculto, opciones } = rondas[indice];
-      tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos: aciertos * reglas.puntos });
+      if (indice >= total) return terminar();
+      let actual;
+      if (partida) {
+        try {
+          const d = await partida.ronda();
+          indice = d.indice;
+          const ing = (x) => ({ nombre: x.n, imagen: x.i });
+          const oculto = { nombre: '', imagen: IMG_INGREDIENTE_GENERICO };
+          actual = {
+            receta: { nombre: d.receta.nombre, imagen: d.receta.imagen, categoria: d.receta.categoriaEs, codigoCategoria: d.receta.categoria, origen: d.receta.origen,
+              ingredientes: d.ingredientes.map((x) => (x ? ing(x) : oculto)) },
+            oculto,
+            opciones: d.opciones.map(ing),
+          };
+        } catch (err) {
+          zona.replaceChildren(errorDePartida(err, ronda, inicio));
+          return;
+        }
+      } else {
+        actual = rondas[indice];
+      }
+      const { receta, oculto, opciones } = actual;
+      tablero.pintar({ ronda: indice + 1, total, puntos });
       let respondida = false;
       const hueco = el('li', { class: 'falta-hueco' }, el('span', { class: 'falta-signo' }, '?'), el('span', {}, '¿…?'));
 
@@ -83,21 +117,36 @@ export async function juegoFalta() {
         type: 'button', class: 'opcion opcion-ingrediente', onclick: () => responder(ing),
       }, crearImagen(ing.imagen, '', IMG_INGREDIENTE_GENERICO), el('span', {}, ing.nombre)));
 
-      function responder(ing) {
+      async function responder(ing) {
         if (respondida) return;
         respondida = true;
-        const bien = ing === oculto;
+        botones.forEach((b) => { b.disabled = true; });
+        let bien;
+        let correcta = oculto;
+        if (partida) {
+          try {
+            const res = await partida.responder(indice, ing.nombre);
+            bien = res.bien;
+            puntos = res.puntos;
+            correcta = opciones.find((o) => o.nombre === res.respuesta) || { nombre: res.respuesta, imagen: res.respuestaImagen };
+          } catch (err) {
+            zona.replaceChildren(errorDePartida(err, () => { indice++; ronda(); }, inicio));
+            return;
+          }
+        } else {
+          bien = ing === oculto;
+          if (bien) puntos += reglas.puntos;
+        }
         if (bien) aciertos++;
         marcas.push(bien ? '🟩' : '🟥');
         botones.forEach((b, i) => {
-          b.disabled = true;
-          if (opciones[i] === oculto) b.classList.add('correcta');
+          if (opciones[i] === correcta) b.classList.add('correcta');
           else if (opciones[i] === ing) b.classList.add('incorrecta');
         });
-        hueco.replaceChildren(crearImagen(oculto.imagen, '', IMG_INGREDIENTE_GENERICO), el('strong', {}, oculto.nombre));
+        hueco.replaceChildren(crearImagen(correcta.imagen, '', IMG_INGREDIENTE_GENERICO), el('strong', {}, correcta.nombre));
         hueco.classList.add(bien ? 'bien' : 'mal');
-        tablero.pintar({ ronda: indice + 1, total: rondas.length, puntos: aciertos * reglas.puntos });
-        aviso.textContent = bien ? t('juego.exacto') : `Le faltaba: ${oculto.nombre}.`;
+        tablero.pintar({ ronda: indice + 1, total, puntos });
+        aviso.textContent = bien ? t('juego.exacto') : `Le faltaba: ${correcta.nombre}.`;
         aviso.className = `juego-aviso ${bien ? 'bien' : 'mal'}`;
         siguiente.hidden = false;
         siguiente.focus();
@@ -106,7 +155,7 @@ export async function juegoFalta() {
       const aviso = el('p', { class: 'juego-aviso', role: 'status' });
       const siguiente = el('button', {
         type: 'button', class: 'boton', hidden: true, onclick: () => { indice++; ronda(); },
-      }, indice + 1 < rondas.length ? 'Siguiente →' : 'Ver resultado');
+      }, indice + 1 < total ? 'Siguiente →' : 'Ver resultado');
 
       zona.replaceChildren(
         el('div', { class: 'falta-receta' },
@@ -128,12 +177,13 @@ export async function juegoFalta() {
         juego: 'falta',
         modo,
         titulo: '¿Qué le falta?',
-        puntos: aciertos * reglas.puntos,
+        puntos,
         maximo: RONDAS * reglas.puntos,
-        detalle: `Adivinaste ${aciertos} de ${rondas.length} ingredientes.`,
+        detalle: `Adivinaste ${aciertos} de ${total} ingredientes.`,
+        partida,
         alReintentar: () => empezar(modo),
         alCambiarModo: inicio,
-        textoCompartir: `🧩 A Mano · ¿Qué le falta? (${MODOS[modo].nombre})\n${marcas.join('')}\n${aciertos}/${rondas.length} ingredientes`,
+        textoCompartir: `🧩 A Mano · ¿Qué le falta? (${MODOS[modo].nombre})\n${marcas.join('')}\n${aciertos}/${total} ingredientes`,
       }));
     }
 

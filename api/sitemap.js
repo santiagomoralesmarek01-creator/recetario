@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const paises = [...new Set([...casa, ...mundo].map((r) => r.origen).filter(Boolean))];
 
   const urls = [
-    ['/', '1.0'], ['/casa', '0.9'], ['/paises', '0.7'], ['/faciles', '0.7'], ['/que-tengo', '0.8'], ['/juegos', '0.6'], ['/comunidad', '0.6'], ['/privacidad', '0.2'], ['/terminos', '0.2'],
+    ['/', '1.0'], ['/casa', '0.9'], ['/paises', '0.7'], ['/faciles', '0.7'], ['/que-tengo', '0.8'], ['/juegos', '0.6'], ['/torneo', '0.6'], ['/bases', '0.3'], ['/comunidad', '0.6'], ['/privacidad', '0.2'], ['/terminos', '0.2'],
     ...categorias.map((c) => [`/categoria/${encodeURIComponent(c)}`, '0.6']),
     ...paises.map((p) => [`/pais/${encodeURIComponent(p)}`, '0.6']),
     ...casa.map((r) => [rutaReceta(r.id, r.nombre), '0.9']),

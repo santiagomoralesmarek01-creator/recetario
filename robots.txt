@@ -12,5 +12,6 @@ Disallow: /fotos
 Disallow: /buscar/
 Disallow: /medallas
 Disallow: /preferencias
+Disallow: /admin/
 
 Sitemap: https://amanorecetas.com.ar/sitemap.xml
