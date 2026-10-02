@@ -191,6 +191,18 @@ button:active:not(:disabled), .boton:active { transform: translateY(2px); }
 }
 .nav-principal a:hover { color: var(--texto); background: var(--fondo-2); }
 .nav-principal a.activo { color: var(--aji-texto); background: var(--aji-suave); }
+/* Pastilla de "Premio" en Juegos y Comunidad */
+.nav-premio {
+  display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; padding: 2px 7px 2px 5px; border-radius: 999px;
+  background: var(--maiz); color: #1F1A15; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase;
+  vertical-align: 2px; line-height: 1.3;
+}
+.nav-premio .icono { width: 12px; height: 12px; }
+/* En una sola fila (pantallas anchas) y en el celular, sólo el trofeo: no entra el texto. */
+@media (max-width: 900px), (min-width: 1401px) {
+  .nav-premio { padding: 3px; margin-left: 4px; }
+  .nav-premio span { display: none; }
+}
 
 .buscador {
   position: relative;
@@ -1130,7 +1142,7 @@ ol.lista-editable { padding-left: 1.4rem; list-style-position: outside; }
 .boton-tema[aria-pressed="true"] .icono-sol { display: block; }
 .boton-tema[aria-pressed="true"] .icono-luna { display: none; }
 /* Cuando no entra todo en una fila: arriba logo, buscador y botones; abajo las secciones */
-@media (max-width: 1240px) {
+@media (max-width: 1400px) {
   .cabecera-interior { flex-wrap: wrap; gap: 10px 14px; }
   .buscador { order: 3; flex: 1 1 220px; max-width: none; margin: 0; }
   .boton-tema, .menu { order: 3; }
