@@ -53,13 +53,15 @@ $$;
 -- ---------- configuración ----------
 create table if not exists public.torneo_config (
   id             int primary key default 1 check (id = 1),
-  inicio         date not null default '2026-10-12',   -- primer día del primer período
+  inicio         date not null default '2026-10-05',   -- primer día del primer período
   dias           int not null default 14,              -- duración de cada período
-  premio_juegos  int not null default 10000,           -- en pesos
-  premio_receta  int not null default 10000,
+  premio_juegos  int not null default 15000,           -- en pesos
+  premio_receta  int not null default 30000,
   antiguedad_dias int not null default 7                -- antigüedad mínima de la cuenta al cierre
 );
 insert into public.torneo_config (id) values (1) on conflict do nothing;
+-- Desde cuándo cuentan las recetas para la receta del mes.
+alter table public.torneo_config add column if not exists receta_desde date not null default '2026-10-05';
 alter table public.torneo_config enable row level security;
 drop policy if exists "Ver configuración del torneo" on public.torneo_config;
 create policy "Ver configuración del torneo" on public.torneo_config for select to anon, authenticated using (true);
@@ -452,6 +454,7 @@ returns jsonb language sql stable security definer set search_path = public as $
   select jsonb_build_object(
     'numero', p.numero, 'inicio', p.inicio, 'fin', p.fin, 'hoy', dia_argentina(),
     'premioJuegos', c.premio_juegos, 'premioReceta', c.premio_receta, 'antiguedadDias', c.antiguedad_dias,
+    'recetaDesde', c.receta_desde,
     'inscripto', exists (select 1 from torneo_inscripciones i where i.user_id = auth.uid()),
     'cuentaDesde', (select created_at from auth.users where id = auth.uid()),
     'oficialesHoy', coalesce((select jsonb_object_agg(juego, jsonb_build_object('puntos', puntos, 'terminada', terminada_at is not null))
@@ -522,19 +525,29 @@ $$;
 revoke all on function public.torneo_admin(int) from public, anon;
 grant execute on function public.torneo_admin(int) to authenticated;
 
--- Recetas de la comunidad publicadas en un mes (para elegir la receta del mes).
+-- Recetas de la comunidad publicadas en un mes (para elegir la receta del mes),
+-- desde la fecha de inicio del concurso. habilitado: el autor está inscripto y
+-- su cuenta tiene la antigüedad mínima al cierre del mes.
+drop function if exists public.receta_mes_candidatas(text);
 create or replace function public.receta_mes_candidatas(p_mes text)
-returns table (id uuid, nombre text, autor text, user_id uuid, me_gusta bigint, creada timestamptz, imagen text)
+returns table (id uuid, nombre text, autor text, user_id uuid, me_gusta bigint, creada timestamptz, imagen text, habilitado boolean)
 language plpgsql stable security definer set search_path = public as $$
+declare
+  cierre date := (to_date(p_mes || '-01', 'YYYY-MM-DD') + interval '1 month' - interval '1 day')::date;
+  c torneo_config;
 begin
   if not exists (select 1 from administradores a where a.user_id = auth.uid()) then
     raise exception 'Sólo para administradores.';
   end if;
+  select * into c from torneo_config where torneo_config.id = 1;
   return query
   select r.id, r.nombre, r.autor_nombre, r.user_id,
-    (select count(*) from me_gusta m where m.receta_id = 'u-' || r.id::text), r.created_at, r.imagen_url
-  from recetas r
+    (select count(*) from me_gusta m where m.receta_id = 'u-' || r.id::text), r.created_at, r.imagen_url,
+    (exists (select 1 from torneo_inscripciones i where i.user_id = r.user_id)
+      and u.created_at <= (cierre - c.antiguedad_dias)::timestamp + interval '1 day')
+  from recetas r join auth.users u on u.id = r.user_id
   where r.publica and to_char(r.created_at at time zone 'America/Argentina/Buenos_Aires', 'YYYY-MM') = p_mes
+    and dia_argentina(r.created_at) >= c.receta_desde
     and not exists (select 1 from administradores a where a.user_id = r.user_id)
   order by 5 desc, r.created_at;
 end;

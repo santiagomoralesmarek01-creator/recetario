@@ -162,6 +162,49 @@ export async function vistaTorneo() {
     el('section', { class: 'seccion' }, el('h2', {}, 'Ganadores'), listaGanadores(lista)));
 }
 
+// ---------- receta del mes ----------
+
+const mesDe = (iso) => iso.slice(0, 7);
+
+// Aviso para Comunidad y Nueva receta: premio del mes y cómo participar.
+export function avisoRecetaDelMes() {
+  const caja = el('aside', { class: 'aviso-receta-mes', hidden: true });
+  estadoTorneo().then((e) => {
+    const empezo = e.hoy >= e.recetaDesde;
+    caja.replaceChildren(
+      el('span', { class: 'aviso-receta-mes-icono', 'aria-hidden': 'true' }, icono('trofeo')),
+      el('div', {},
+        el('strong', {}, empezo
+          ? `Receta del mes de ${nombreMes(mesDe(e.hoy)).split(' ')[0]}: ${pesos(e.premioReceta)}`
+          : `Receta del mes: ${pesos(e.premioReceta)} desde el ${fechaLarga(e.recetaDesde)}`),
+        el('p', {}, empezo
+          ? 'Subí tu receta casera este mes y participás. Elige un jurado por originalidad, claridad y fotos. '
+          : 'Las recetas que se publiquen desde ese día participan. Elige un jurado por originalidad, claridad y fotos. ',
+        usuario() && !e.inscripto ? [el('a', { href: '/torneo' }, 'Inscribite'), ' para poder cobrar · '] : '',
+        el('a', { href: '/bases' }, 'Ver bases'))));
+    caja.hidden = false;
+  }).catch(() => { /* sin torneo instalado: no se muestra */ });
+  return caja;
+}
+
+// Vidriera de recetas ganadoras (se oculta si todavía no hay).
+export function vidrieraRecetasDelMes() {
+  const seccion = el('section', { class: 'seccion vidriera-receta-mes', hidden: true });
+  ganadores().then((lista) => {
+    const recetas = lista.filter((g) => g.tipo === 'receta' && g.receta_id);
+    if (!recetas.length) return;
+    seccion.replaceChildren(
+      el('h2', {}, icono('trofeo'), ' Recetas del mes'),
+      el('ul', { class: 'vidriera-lista' }, recetas.slice(0, 6).map((g) => el('li', {},
+        el('a', { href: rutaReceta(g.receta_id, g.receta_nombre || '') },
+          el('small', {}, nombreMes(g.periodo)),
+          el('strong', {}, g.receta_nombre),
+          el('span', {}, `por ${g.nombre}`))))));
+    seccion.hidden = false;
+  }).catch(() => {});
+  return seccion;
+}
+
 // ---------- bases y condiciones ----------
 
 export function vistaBases() {
@@ -264,13 +307,14 @@ export async function vistaAdminTorneo() {
     candidatas.replaceChildren(el('p', { class: 'meta' }, 'Cargando…'));
     try {
       const filas = await candidatasRecetaDelMes(mes.value);
-      if (!filas.length) { candidatas.replaceChildren(el('p', { class: 'meta' }, 'No hay recetas de la comunidad publicadas ese mes.')); return; }
+      if (!filas.length) { candidatas.replaceChildren(el('p', { class: 'meta' }, 'No hay recetas de la comunidad que participen ese mes.')); return; }
       candidatas.replaceChildren(el('table', {},
-        el('thead', {}, el('tr', {}, ['Receta', 'Autor', 'Me gusta', 'Publicada', ''].map((h) => el('th', {}, h)))),
+        el('thead', {}, el('tr', {}, ['Receta', 'Autor', 'Me gusta', 'Publicada', 'Habilitado', ''].map((h) => el('th', {}, h)))),
         el('tbody', {}, filas.map((f) => el('tr', {},
           el('td', {}, el('a', { href: rutaReceta(`u-${f.id}`, f.nombre), target: '_blank' }, f.nombre)),
           el('td', {}, el('a', { href: rutaPerfil(f.user_id) }, f.autor || '—')), el('td', {}, f.me_gusta),
           el('td', {}, new Date(f.creada).toLocaleDateString('es-AR')),
+          el('td', { title: 'Inscripto en el torneo y con la antigüedad mínima al cierre del mes' }, f.habilitado ? 'Sí' : 'No'),
           el('td', {}, el('button', {
             type: 'button', class: 'boton-secundario', onclick: async () => {
               const monto = Number(prompt(`Premio para "${f.nombre}" (receta de ${nombreMes(mes.value)}):`, estado.premioReceta));

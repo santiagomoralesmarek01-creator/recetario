@@ -209,9 +209,10 @@ visitas de *Juego* con `plato-del-dia`: es el desafío que trae gente todos los 
   `partida_responder`): cada ronda se entrega al pedirla, el tiempo lo mide el servidor
   y el navegador ya no puede guardar puntos de estos juegos. Sin sesión se juega como práctica.
 - **Partida oficial:** la primera de cada juego de cada día. El Plato del día no suma.
-- **Quincenas:** se configuran en la tabla `torneo_config` (fecha de inicio, días,
-  premios y antigüedad mínima de la cuenta). Ejemplo para cambiar el premio:
-  `update torneo_config set premio_juegos = 15000;`
+- **Quincenas y premios:** se configuran en la tabla `torneo_config` (inicio del torneo,
+  días, premios, antigüedad mínima de la cuenta y `receta_desde`, desde cuándo cuentan
+  las recetas). Empieza el lunes 5 de octubre de 2026 con $15.000 por quincena y
+  $30.000 por la receta del mes. Ejemplo: `update torneo_config set premio_juegos = 20000;`
 - **Para cobrar:** inscripción en `/torneo` (mayor de 18, vive en Argentina, acepta
   `/bases`) y cuenta con 7 días de antigüedad al cierre. Se paga con DNI y CBU a nombre propio.
 - **Panel:** `/admin/torneo` (administradores): top 20 con alertas (respuestas en menos
