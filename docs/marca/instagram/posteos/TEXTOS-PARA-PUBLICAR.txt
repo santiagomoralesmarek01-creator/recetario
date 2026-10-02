@@ -56,3 +56,14 @@ plantilla-historia-texto.png: fondo verde para tips o frases. Escribí en blanco
 
 Colores de la marca: rojo ají #C8401F · verde hierba #1F4D3A · amarillo maíz #F2B632 · crema #FBF6EC
 Fuentes: Bricolage Grotesque (títulos) · DM Sans (texto) · Fraunces itálica (frases)
+
+10-empanadas (carrusel de 4: subilas juntas, en orden 1 → 4, formato 4:5)
+--------------------------------------------------------------------------
+Viernes de empanadas 🥟 Carne cortada a cuchillo, como tiene que ser.
+El secreto está en la última foto 👀 (spoiler: paciencia).
+¿Cuántas te comés vos? Te leemos 👇
+Guardala 🔖 y la receta completa con temporizador está en amanorecetas.com.ar
+#empanadas #empanadasargentinas #empanadasdecarne #recetasargentinas #cocinacasera
+
+11-historia-encuesta-empanadas.png → sticker "Encuesta": "Al horno 🔥" / "Fritas 🫕" en el espacio libre.
+12-historia-plato-del-dia.png → sticker "Enlace": amanorecetas.com.ar/juegos con el texto "Jugar ahora".
