@@ -3,6 +3,12 @@
 Web de recetas con cuentas de usuario, recetas propias y modo cocina.
 Hecho con HTML, CSS y JavaScript, sin build ni dependencias que instalar.
 
+**Demo:** <https://recetario-n3sscylrx-marekk1.vercel.app/>
+
+![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20Storage-3ECF8E?logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/deploy-Vercel-000000?logo=vercel&logoColor=white)
+
 ## Qué hace
 
 - **Repertorio de tres fuentes**
