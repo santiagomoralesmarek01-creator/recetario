@@ -1,0 +1,4 @@
+# Vercel no necesita publicar las herramientas de mantenimiento
+scripts/
+data/fuente/
+.github/

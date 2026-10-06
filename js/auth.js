@@ -1,4 +1,5 @@
 import { cliente, hayBackend } from './supabase.js';
+import { ir, ruta } from './rutas.js';
 
 let usuarioActual = null;
 const oyentes = new Set();
@@ -28,14 +29,14 @@ export async function iniciarAuth() {
   sb.auth.onAuthStateChange((evento, sesion) => {
     actualizar(sesion?.user);
     // El enlace de "recuperar contraseña" abre la web con una sesión temporal.
-    if (evento === 'PASSWORD_RECOVERY') location.hash = '#/nueva-clave';
+    if (evento === 'PASSWORD_RECOVERY') ir('/nueva-clave');
   });
 }
 
 function mensajeError(error) {
   const m = error?.message || '';
   if (/invalid login credentials/i.test(m)) return 'Email o contraseña incorrectos.';
-  if (/email not confirmed/i.test(m)) return 'Tenés que confirmar tu email antes de entrar (revisá tu casilla).';
+  if (/email not confirmed/i.test(m)) return 'Tenés que confirmar tu email antes de entrar. Revisá tu casilla y también la carpeta de spam.';
   if (/already registered/i.test(m)) return 'Ya existe una cuenta con ese email.';
   if (/password should be at least/i.test(m)) return 'La contraseña debe tener al menos 6 caracteres.';
   if (/rate limit/i.test(m)) return 'Demasiados intentos. Esperá unos minutos.';
@@ -55,7 +56,7 @@ export async function registrarse(nombre, email, password) {
   const { data, error } = await sb.auth.signUp({
     email,
     password,
-    options: { data: { nombre }, emailRedirectTo: location.origin + location.pathname },
+    options: { data: { nombre }, emailRedirectTo: `${location.origin}/` },
   });
   if (error) throw new Error(mensajeError(error));
   if (data.session) actualizar(data.user);
@@ -65,7 +66,7 @@ export async function registrarse(nombre, email, password) {
 export async function recuperarClave(email) {
   const sb = await cliente();
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: location.origin + location.pathname,
+    redirectTo: `${location.origin}/`,
   });
   if (error) throw new Error(mensajeError(error));
 }
@@ -76,8 +77,37 @@ export async function cambiarClave(password) {
   if (error) throw new Error(mensajeError(error));
 }
 
+// Token de la sesión, para las funciones del servidor (el ayudante de cocina).
+export async function tokenAcceso() {
+  const sb = await cliente();
+  const { data } = await sb.auth.getSession();
+  return data.session?.access_token ?? null;
+}
+
 export async function salir() {
   const sb = await cliente();
   await sb.auth.signOut();
   actualizar(null);
+}
+
+// Página a la que volver después de entrar (por ejemplo, "Crear receta").
+const CLAVE_VOLVER = 'recetario:volverA';
+
+export function pedirLogin(volverA = ruta()) {
+  try { sessionStorage.setItem(CLAVE_VOLVER, volverA); } catch { /* sin almacenamiento */ }
+  ir('/entrar');
+}
+
+export function hayDestinoPendiente() {
+  try { return Boolean(sessionStorage.getItem(CLAVE_VOLVER)); } catch { return false; }
+}
+
+export function tomarDestino(porDefecto = '/mis-recetas') {
+  try {
+    const destino = sessionStorage.getItem(CLAVE_VOLVER);
+    sessionStorage.removeItem(CLAVE_VOLVER);
+    return destino || porDefecto;
+  } catch {
+    return porDefecto;
+  }
 }

@@ -1,62 +1,156 @@
 import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
-import { usuario, nombreVisible } from '../auth.js';
+import { usuario, nombreVisible, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
-import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO, IMG_PLATO_GENERICO } from '../imagenes.js';
+import { crearImagen, urlIngrediente, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
 import { CATEGORIAS, ingredienteEnIngles } from '../traducciones.js';
 import { sinBackend } from './cuenta.js';
+import { sugerir, buscarExacto, UNIDADES, SIN_CANTIDAD, armarMedida, separarMedida, cargarIngredientes } from '../ingredientes.js';
+import { revisarMedallas } from '../medallas.js';
+import { reducirImagen } from '../fotos.js';
+import { NOMBRES_PAISES } from '../paises.js';
+import { icono } from '../iconos.js';
+import { t } from '../textos.js';
+import { ir, rutaReceta } from '../rutas.js';
+import { avisoRecetaDelMes } from './torneo.js';
 
-const MAX_LADO = 1600;
-
-// Achica la foto en el navegador antes de subirla: menos espera y menos espacio usado.
-async function reducirImagen(archivo) {
-  if (!archivo.type.startsWith('image/') || archivo.type === 'image/gif') return archivo;
-  try {
-    const bitmap = await createImageBitmap(archivo);
-    const escala = Math.min(1, MAX_LADO / Math.max(bitmap.width, bitmap.height));
-    if (escala === 1 && archivo.size < 800_000) return archivo;
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.round(bitmap.width * escala);
-    canvas.height = Math.round(bitmap.height * escala);
-    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise((ok) => canvas.toBlob(ok, 'image/jpeg', 0.85));
-    return blob ? new File([blob], 'foto.jpg', { type: 'image/jpeg' }) : archivo;
-  } catch {
-    return archivo;
-  }
-}
-
+// Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
+// Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
 function filaIngrediente(datos = {}) {
-  const vista = crearImagen(IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO, 'ingrediente-vista');
-  const actualizarVista = (nombre) => {
-    const clave = ingredienteEnIngles(nombre);
-    vista.src = clave ? urlIngrediente(clave) : IMG_INGREDIENTE_GENERICO;
+  let clave = datos.imagen || '';
+  const vista = crearImagen(IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO, 'ingrediente-vista vacia');
+  const mostrarImagen = () => {
+    const k = clave || ingredienteEnIngles(nombre.value);
+    vista.src = k ? urlIngrediente(k) : IMG_INGREDIENTE_GENERICO;
+    vista.classList.toggle('vacia', !k);
   };
+
+  const lista = el('ul', { class: 'sugerencias', role: 'listbox', hidden: true });
+  let opciones = [];
+  let activa = -1;
+
   const nombre = el('input', {
-    name: 'ing-nombre', placeholder: 'Ingrediente (ej: cebolla)', value: datos.nombre || '',
-    'aria-label': 'Ingrediente', maxlength: '80',
-    onchange: (e) => actualizarVista(e.target.value),
+    name: 'ing-nombre', placeholder: 'Buscá un ingrediente…', value: datos.nombre || '',
+    'aria-label': 'Ingrediente', maxlength: '80', autocomplete: 'off', role: 'combobox', 'aria-autocomplete': 'list',
   });
-  const fila = el('li', { class: 'fila-editable' },
+
+  function cerrar() {
+    lista.hidden = true;
+    activa = -1;
+    nombre.setAttribute('aria-expanded', 'false');
+  }
+
+  function marcar(i) {
+    activa = i;
+    [...lista.children].forEach((li, j) => li.classList.toggle('activa', j === i));
+  }
+
+  function elegir(ing) {
+    nombre.value = ing.nombre;
+    clave = ing.clave;
+    mostrarImagen();
+    cerrar();
+    cantidad.focus();
+  }
+
+  async function actualizarSugerencias() {
+    const texto = nombre.value;
+    opciones = await sugerir(texto);
+    if (nombre.value !== texto) return; // el usuario siguió escribiendo
+    lista.replaceChildren(...opciones.map((ing, i) =>
+      el('li', {
+        role: 'option',
+        // mousedown en vez de click: se dispara antes de que el input pierda el foco
+        onmousedown: (e) => { e.preventDefault(); elegir(ing); },
+        onmouseenter: () => marcar(i),
+      },
+      crearImagen(ing.clave ? urlIngrediente(ing.clave) : IMG_INGREDIENTE_GENERICO, '', IMG_INGREDIENTE_GENERICO),
+      el('span', {}, ing.nombre))));
+    lista.hidden = opciones.length === 0;
+    nombre.setAttribute('aria-expanded', String(!lista.hidden));
+    marcar(opciones.length ? 0 : -1);
+  }
+
+  nombre.addEventListener('input', () => { clave = ''; actualizarSugerencias(); });
+  nombre.addEventListener('focus', () => { if (nombre.value) actualizarSugerencias(); });
+  nombre.addEventListener('blur', async () => {
+    cerrar();
+    if (!clave && nombre.value.trim()) {
+      const exacto = await buscarExacto(nombre.value);
+      if (exacto) clave = exacto.clave;
+    }
+    mostrarImagen();
+  });
+  nombre.addEventListener('keydown', (e) => {
+    if (lista.hidden) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); marcar((activa + 1) % opciones.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); marcar((activa - 1 + opciones.length) % opciones.length); }
+    else if (e.key === 'Enter' && activa >= 0) { e.preventDefault(); elegir(opciones[activa]); }
+    else if (e.key === 'Escape') cerrar();
+  });
+
+  const { cantidad: cant, unidad: unid } = separarMedida(datos.medida || '');
+  const cantidad = el('input', {
+    name: 'ing-cantidad', placeholder: 'Cant.', value: cant, 'aria-label': 'Cantidad',
+    inputmode: 'decimal', maxlength: '12', class: 'campo-cantidad',
+  });
+  const unidad = el('select', {
+    name: 'ing-unidad', 'aria-label': 'Unidad',
+    onchange: () => {
+      cantidad.disabled = SIN_CANTIDAD.has(unidad.value);
+      if (cantidad.disabled) cantidad.value = '';
+    },
+  }, UNIDADES.map(([valor, singular, plural]) =>
+    el('option', { value: valor, selected: valor === unid }, valor ? plural : 'unidades')));
+  cantidad.disabled = SIN_CANTIDAD.has(unid);
+
+  const fila = el('li', { class: 'fila-editable fila-ingrediente' },
     vista,
-    nombre,
-    el('input', { name: 'ing-medida', placeholder: 'Cantidad (ej: 2 unidades)', value: datos.medida || '', 'aria-label': 'Cantidad', maxlength: '60' }),
-    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar ingrediente', onclick: () => fila.remove() }, '✕'));
-  actualizarVista(datos.nombre || '');
+    el('div', { class: 'combo' }, nombre, lista),
+    cantidad,
+    unidad,
+    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar ingrediente', onclick: () => fila.remove() }, icono('cerrar')));
+  fila.leer = () => ({
+    nombre: nombre.value.trim(),
+    medida: armarMedida(cantidad.value, unidad.value),
+    ...(clave ? { imagen: clave } : {}),
+  });
+  mostrarImagen();
   return fila;
 }
 
+// Cada paso se puede subir, bajar o tener uno nuevo justo debajo, para no
+// tener que reescribir todo cuando uno se olvida algo del principio.
 function filaPaso(texto = '') {
-  const fila = el('li', { class: 'fila-editable' },
-    el('textarea', { name: 'paso', rows: '2', placeholder: 'Describí este paso…', 'aria-label': 'Paso', maxlength: '1000' }, texto),
-    el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', onclick: () => fila.remove() }, '✕'));
+  const area = el('textarea', { name: 'paso', rows: '2', placeholder: 'Describí este paso…', 'aria-label': 'Paso', maxlength: '1000' }, texto);
+  const mover = (haciaArriba) => {
+    const vecino = haciaArriba ? fila.previousElementSibling : fila.nextElementSibling;
+    if (!vecino) return;
+    fila.parentNode.insertBefore(fila, haciaArriba ? vecino : vecino.nextElementSibling);
+    area.focus();
+  };
+  const fila = el('li', { class: 'fila-editable fila-paso' },
+    area,
+    el('div', { class: 'paso-controles' },
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Subir paso', title: 'Subir', onclick: () => mover(true) }, '↑'),
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Bajar paso', title: 'Bajar', onclick: () => mover(false) }, '↓'),
+      el('button', {
+        type: 'button', class: 'boton-icono', 'aria-label': 'Insertar un paso debajo', title: 'Insertar paso debajo',
+        onclick: () => {
+          const nueva = filaPaso();
+          fila.after(nueva);
+          nueva.querySelector('textarea').focus();
+        },
+      }, '+'),
+      el('button', { type: 'button', class: 'boton-icono', 'aria-label': 'Quitar paso', title: 'Quitar', onclick: () => fila.remove() }, icono('cerrar'))));
   return fila;
 }
 
 export async function vistaFormulario(uuid = null) {
   if (!hayBackend) return sinBackend();
   const u = usuario();
-  if (!u) { location.hash = '#/entrar'; return; }
+  if (!u) { pedirLogin(); return; }
+  cargarIngredientes(); // se precarga para que el buscador responda al instante
 
   let receta = null;
   if (uuid) {
@@ -72,31 +166,58 @@ export async function vistaFormulario(uuid = null) {
 
   let archivoFoto = null;
   let urlFoto = receta?.imagen || '';
-  const vistaFoto = crearImagen(urlFoto || IMG_PLATO_GENERICO, 'Vista previa', IMG_PLATO_GENERICO, 'foto-vista');
+  // Zona de foto: vacía invita a subir una; con foto la muestra con "Cambiar" y "Quitar".
+  const vistaFoto = el('img', { class: 'foto-zona-img', alt: 'Vista previa de la foto' });
+  const zonaFoto = el('label', { class: 'foto-zona' });
+  function pintarFoto(src) {
+    if (src) vistaFoto.src = src;
+    zonaFoto.classList.toggle('con-foto', Boolean(src));
+  }
+  vistaFoto.addEventListener('error', () => {
+    if (!vistaFoto.getAttribute('src')) return;
+    aviso('No se pudo cargar esa imagen. Probá con otra.', 'error');
+    pintarFoto('');
+  });
   const inputUrl = el('input', {
-    name: 'imagen_url', type: 'url', placeholder: 'o pegá el enlace de una imagen', value: urlFoto.includes('/fotos-recetas/') ? '' : urlFoto,
+    name: 'imagen_url', type: 'url', placeholder: 'https://…', value: urlFoto.includes('/fotos-recetas/') ? '' : urlFoto,
     onchange: (e) => {
       archivoFoto = null;
       urlFoto = e.target.value.trim();
-      vistaFoto.src = urlFoto || IMG_PLATO_GENERICO;
+      pintarFoto(urlFoto);
     },
   });
   const inputArchivo = el('input', {
-    type: 'file', accept: 'image/*', capture: 'environment',
+    type: 'file', accept: 'image/*', class: 'foto-zona-archivo',
     onchange: async (e) => {
       const f = e.target.files[0];
       if (!f) return;
       if (f.size > 15_000_000) { aviso('La foto es demasiado grande (máx. 15 MB).', 'error'); return; }
       archivoFoto = await reducirImagen(f);
       inputUrl.value = '';
-      vistaFoto.src = URL.createObjectURL(archivoFoto);
+      pintarFoto(URL.createObjectURL(archivoFoto));
     },
   });
+  const quitarFoto = el('button', {
+    type: 'button', class: 'foto-zona-quitar', 'aria-label': 'Quitar foto',
+    onclick: (e) => {
+      e.preventDefault();
+      archivoFoto = null; urlFoto = ''; inputUrl.value = ''; inputArchivo.value = '';
+      pintarFoto('');
+    },
+  }, icono('cerrar'), 'Quitar');
+  zonaFoto.append(inputArchivo, vistaFoto,
+    el('span', { class: 'foto-zona-vacia' },
+      el('span', { class: 'foto-zona-icono' }, icono('foto')),
+      el('strong', {}, 'Subí o sacá una foto del plato'),
+      el('span', { class: 'meta' }, 'Tocá acá · JPG o PNG'),
+    ),
+    el('span', { class: 'foto-zona-cambiar' }, icono('foto'), 'Cambiar foto'));
+  pintarFoto(urlFoto);
 
   const listaIngredientes = el('ul', { class: 'lista-editable' },
     (receta?.ingredientesCrudos?.length ? receta.ingredientesCrudos : [{}, {}, {}]).map(filaIngrediente));
   const listaPasos = el('ol', { class: 'lista-editable' },
-    (receta?.pasos?.length ? receta.pasos : ['', '']).map(filaPaso));
+    (receta?.pasos?.length ? receta.pasos : ['', '']).map((p) => filaPaso(p)));
 
   const error = el('p', { class: 'error', role: 'alert' });
   const botonGuardar = el('button', { type: 'submit' }, uuid ? 'Guardar cambios' : 'Guardar receta');
@@ -108,10 +229,7 @@ export async function vistaFormulario(uuid = null) {
       error.textContent = '';
       const d = new FormData(form);
       const ingredientes = [...listaIngredientes.children]
-        .map((li) => ({
-          nombre: li.querySelector('[name=ing-nombre]').value.trim(),
-          medida: li.querySelector('[name=ing-medida]').value.trim(),
-        }))
+        .map((li) => li.leer())
         .filter((i) => i.nombre);
       const pasos = [...listaPasos.querySelectorAll('textarea')].map((t) => t.value.trim()).filter(Boolean);
 
@@ -141,8 +259,9 @@ export async function vistaFormulario(uuid = null) {
         if (!uuid) datos.user_id = u.id;
 
         const guardada = await misRecetas.guardar(datos, uuid);
-        aviso(uuid ? 'Cambios guardados' : '¡Receta guardada!');
-        location.hash = `#/receta/${guardada.id}`;
+        revisarMedallas();
+        aviso(uuid ? t('receta.guardada') : t('receta.publicada'));
+        ir(rutaReceta(guardada.id, guardada.nombre));
       } catch (err) {
         console.error(err);
         error.textContent = `No se pudo guardar: ${err.message}`;
@@ -161,7 +280,8 @@ export async function vistaFormulario(uuid = null) {
           Object.entries(CATEGORIAS).map(([valor, texto]) =>
             el('option', { value: valor, selected: (receta?.categoria || 'Miscellaneous') === valor }, texto)))),
       el('label', { class: 'campo' }, el('span', {}, 'Origen'),
-        el('input', { name: 'origen', placeholder: 'ej: Argentina', maxlength: '40', value: receta?.origen || '' })),
+        el('input', { name: 'origen', placeholder: 'ej: Argentina', maxlength: '40', value: receta?.origen || '', list: 'lista-paises' }),
+        el('datalist', { id: 'lista-paises' }, NOMBRES_PAISES.map((p) => el('option', { value: p })))),
       el('label', { class: 'campo' }, el('span', {}, 'Porciones'),
         el('input', { name: 'porciones', type: 'number', min: '1', max: '100', value: receta?.porciones ?? '' })),
       el('label', { class: 'campo' }, el('span', {}, 'Minutos'),
@@ -170,11 +290,11 @@ export async function vistaFormulario(uuid = null) {
     el('fieldset', {},
       el('legend', {}, 'Foto'),
       el('div', { class: 'foto-editor' },
-        vistaFoto,
-        el('div', {},
-          el('label', { class: 'campo' }, el('span', {}, 'Subir o sacar una foto'), inputArchivo),
-          el('label', { class: 'campo' }, el('span', {}, 'Enlace'), inputUrl),
-          el('p', { class: 'meta' }, 'Si no ponés foto, la receta se muestra con un collage de sus ingredientes.')))),
+        el('div', { class: 'foto-zona-marco' }, zonaFoto, quitarFoto),
+        el('details', { class: 'foto-enlace' },
+          el('summary', {}, '¿La foto está en internet? Pegá el enlace'),
+          el('label', { class: 'campo' }, el('span', {}, 'Enlace de la imagen'), inputUrl)),
+        el('p', { class: 'meta' }, 'Opcional. Si no ponés foto, la receta se muestra con un collage de sus ingredientes.'))),
 
     el('fieldset', {},
       el('legend', {}, 'Ingredientes *'),
@@ -200,7 +320,7 @@ export async function vistaFormulario(uuid = null) {
     error,
     el('div', { class: 'acciones' },
       botonGuardar,
-      el('a', { href: uuid ? `#/receta/u-${uuid}` : '#/mis-recetas' }, 'Cancelar')));
+      el('a', { href: uuid ? `/receta/u-${uuid}` : '/mis-recetas' }, 'Cancelar')));
 
-  mostrar(el('h1', {}, uuid ? 'Editar receta' : 'Nueva receta'), form);
+  mostrar(el('h1', {}, uuid ? 'Editar receta' : 'Nueva receta'), !uuid && avisoRecetaDelMes(), form);
 }

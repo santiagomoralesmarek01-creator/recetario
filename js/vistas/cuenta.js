@@ -1,14 +1,19 @@
 import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
-import { entrar, registrarse, recuperarClave, usuario, nombreVisible } from '../auth.js';
+import { entrar, registrarse, recuperarClave, usuario, nombreVisible, pedirLogin, hayDestinoPendiente, tomarDestino } from '../auth.js';
 import { hayBackend } from '../supabase.js';
 import * as misRecetas from '../misRecetas.js';
 import { grillaRecetas } from './componentes.js';
+import * as repo from '../repositorio.js';
+import { misMeGusta } from '../actividad.js';
+import { icono } from '../iconos.js';
+import { t } from '../textos.js';
+import { ir } from '../rutas.js';
 
 export function sinBackend() {
   mostrar(el('div', { class: 'estado' },
     el('h1', {}, 'Cuentas no disponibles todavía'),
     el('p', {}, 'Falta configurar Supabase en js/config.js (ver README).'),
-    el('a', { href: '#/' }, 'Volver al inicio')));
+    el('a', { href: '/' }, 'Volver al inicio')));
 }
 
 function campo(etiqueta, props) {
@@ -17,7 +22,7 @@ function campo(etiqueta, props) {
 
 export function vistaEntrar(modo = 'entrar') {
   if (!hayBackend) return sinBackend();
-  if (usuario()) { location.hash = '#/mis-recetas'; return; }
+  if (usuario()) { ir(tomarDestino()); return; }
 
   const titulos = { entrar: 'Entrar', registro: 'Crear cuenta', recuperar: 'Recuperar contraseña' };
   const error = el('p', { class: 'error', role: 'alert' });
@@ -45,20 +50,23 @@ export function vistaEntrar(modo = 'entrar') {
         if (modo === 'entrar') {
           await entrar(email, datos.get('clave'));
           aviso(`¡Hola, ${nombreVisible()}!`);
-          location.hash = '#/mis-recetas';
+          ir(tomarDestino());
         } else if (modo === 'registro') {
           const activa = await registrarse(datos.get('nombre').trim(), email, datos.get('clave'));
           if (activa) {
             aviso('¡Cuenta creada!');
-            location.hash = '#/mis-recetas';
+            ir(tomarDestino());
           } else {
             form.replaceChildren(el('p', { class: 'exito' },
-              `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`));
+              `Te enviamos un email a ${email}. Confirmá tu cuenta y después entrá.`),
+            el('p', { class: 'meta aviso-spam' },
+              '¿No te llegó? Revisá la carpeta de spam o correo no deseado (y marcalo como "No es spam" para que los próximos lleguen bien). Puede tardar unos minutos.'));
           }
         } else {
           await recuperarClave(email);
           form.replaceChildren(el('p', { class: 'exito' },
-            `Si existe una cuenta con ${email}, te llegará un enlace para cambiar la contraseña.`));
+            `Si existe una cuenta con ${email}, te llegará un enlace para cambiar la contraseña.`),
+            el('p', { class: 'meta aviso-spam' }, 'Si no lo ves en unos minutos, revisá la carpeta de spam o correo no deseado.'));
         }
       } catch (err) {
         error.textContent = err.message;
@@ -70,18 +78,24 @@ export function vistaEntrar(modo = 'entrar') {
     modo === 'registro' && campos.nombre,
     campos.email,
     modo !== 'recuperar' && campos.clave,
+    modo === 'registro' && el('p', { class: 'meta aceptacion' }, 'Crear una cuenta implica aceptar los ',
+      el('a', { href: '/terminos' }, 'Términos'), ' y la ', el('a', { href: '/privacidad' }, 'Política de privacidad'), '.'),
+    modo === 'registro' && el('p', { class: 'meta aviso-spam' }, 'Te vamos a mandar un email para confirmar la cuenta. Si no aparece, fijate en spam o correo no deseado.'),
     error,
     boton);
 
   const pestanas = el('nav', { class: 'pestanas' },
     ['entrar', 'registro'].map((m) =>
-      el('a', { href: m === 'entrar' ? '#/entrar' : '#/registro', class: m === modo ? 'activa' : '' }, titulos[m])));
+      el('a', { href: m === 'entrar' ? '/entrar' : '/registro', class: m === modo ? 'activa' : '' }, titulos[m])));
 
   mostrar(el('div', { class: 'tarjeta-cuenta' },
+    modo !== 'recuperar' && el('p', { class: 'explicacion-cuenta' }, hayDestinoPendiente()
+      ? 'Para crear y guardar tus recetas necesitás una cuenta. Es gratis, y el resto de la página se usa sin registrarte.'
+      : 'Con una cuenta podés crear tus propias recetas y tenerlas guardadas. Para ver y cocinar recetas no hace falta.'),
     modo !== 'recuperar' ? pestanas : el('h1', {}, titulos[modo]),
     form,
-    modo === 'entrar' && el('p', { class: 'meta' }, el('a', { href: '#/recuperar' }, '¿Olvidaste tu contraseña?')),
-    modo === 'recuperar' && el('p', { class: 'meta' }, el('a', { href: '#/entrar' }, '← Volver'))));
+    modo === 'entrar' && el('p', { class: 'meta' }, el('a', { href: '/recuperar' }, '¿Olvidaste tu contraseña?')),
+    modo === 'recuperar' && el('p', { class: 'meta' }, el('a', { href: '/entrar' }, '← Volver'))));
   form.querySelector('input')?.focus();
 }
 
@@ -95,7 +109,7 @@ export function vistaNuevaClave(cambiarClave) {
       try {
         await cambiarClave(new FormData(form).get('clave'));
         aviso('Contraseña actualizada');
-        location.hash = '#/mis-recetas';
+        ir('/mis-recetas');
       } catch (err) {
         error.textContent = err.message;
       }
@@ -110,20 +124,30 @@ export function vistaNuevaClave(cambiarClave) {
 export async function vistaMisRecetas() {
   if (!hayBackend) return sinBackend();
   const u = usuario();
-  if (!u) { location.hash = '#/entrar'; return; }
+  if (!u) { pedirLogin(); return; }
   const vigente = vigencia();
   cargando();
-  const recetas = await misRecetas.listarMias(u.id);
+  const [recetas, favoritas] = await Promise.all([
+    misRecetas.listarMias(u.id),
+    misMeGusta().then((ids) => repo.resumenes([...ids])).catch(() => []),
+  ]);
   if (!vigente()) return;
   mostrar(
     el('div', { class: 'seccion-titulo' },
       el('h1', {}, `Mis recetas`),
-      el('a', { class: 'boton', href: '#/nueva' }, '+ Nueva receta')),
+      el('div', { class: 'acciones' },
+        el('a', { class: 'boton-secundario boton', href: '/medallas' }, icono('medalla'), 'Mis medallas'),
+        el('a', { class: 'boton', href: '/nueva' }, icono('mas'), 'Nueva receta'))),
     el('p', { class: 'meta' }, `Hola, ${nombreVisible(u)}. Tenés ${recetas.length} receta${recetas.length === 1 ? '' : 's'} guardada${recetas.length === 1 ? '' : 's'}.`),
     recetas.length
       ? grillaRecetas(recetas)
       : el('div', { class: 'estado' },
         el('p', {}, 'Todavía no cargaste ninguna receta.'),
-        el('a', { class: 'boton', href: '#/nueva' }, 'Crear la primera'))
+        el('a', { class: 'boton', href: '/nueva' }, 'Crear la primera')),
+    el('section', { class: 'seccion' },
+      el('h2', {}, 'Tus favoritas'),
+      favoritas.length
+        ? grillaRecetas(favoritas)
+        : el('p', { class: 'meta' }, t('cuenta.favoritas-vacio')))
   );
 }

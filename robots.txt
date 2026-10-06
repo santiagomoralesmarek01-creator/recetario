@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /mis-recetas
+Disallow: /nueva
+Disallow: /editar/
+Disallow: /entrar
+Disallow: /registro
+Disallow: /recuperar
+Disallow: /nueva-clave
+Disallow: /fotos
+Disallow: /buscar/
+Disallow: /medallas
+Disallow: /preferencias
+Disallow: /admin/
+
+Sitemap: https://amanorecetas.com.ar/sitemap.xml

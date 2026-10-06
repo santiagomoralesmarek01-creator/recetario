@@ -1,0 +1,15 @@
+{
+  "name": "A Mano · Cocina latinoamericana a tu medida",
+  "short_name": "A Mano",
+  "description": "Con lo que hay, alcanza. Recetas latinoamericanas que se adaptan a tu país, a tu heladera y a tu nivel.",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF6EC",
+  "theme_color": "#C8401F",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

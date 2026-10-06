@@ -1,0 +1,35 @@
+# Prueba el prompt de Manitas con 20 preguntas y deja las respuestas en el
+# resumen de la ejecución. Se corre a mano desde la pestaña Actions.
+# Necesita el secreto GROQ_API_KEY (Settings → Secrets and variables → Actions).
+name: Probar Manitas
+
+on:
+  workflow_dispatch:
+    inputs:
+      trato:
+        description: 'Trato'
+        type: choice
+        options: [neutro, vos, tu]
+        default: neutro
+      pais:
+        description: 'País de la persona'
+        default: 'México'
+
+permissions:
+  contents: read
+
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 20 preguntas a Manitas
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TRATO: ${{ inputs.trato }}
+          PAIS: ${{ inputs.pais }}
+        run: node scripts/probar-manitas.mjs "$TRATO" "$PAIS"

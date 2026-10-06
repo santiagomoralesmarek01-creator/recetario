@@ -1,0 +1,87 @@
+name: Traducir catálogo al español
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/traducir-catalogo.py
+      - scripts/medidas.py
+      - data/fuente/nombres-es.json
+      - data/fuente/ingredientes-es.json
+      - data/fuente/origenes-es.json
+      - data/recetas-casa.json
+      - data/fuente/mealdb-en.json
+      - .github/workflows/traducir-catalogo.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: traducir-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FRAGMENTOS: 8
+
+jobs:
+  # Los pasos pendientes se reparten en 8 partes que se traducen en paralelo.
+  traducir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        fragmento: [1, 2, 3, 4, 5, 6, 7, 8]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: .github/workflows/traducir-catalogo.yml
+      - name: Guardar modelos de Argos entre corridas
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/argos-translate
+          key: argos-en-es-v1
+      - name: Instalar Argos Translate (CPU)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install argostranslate
+      - run: python scripts/traducir-catalogo.py --fragmento ${{ matrix.fragmento }}/${{ env.FRAGMENTOS }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pasos-${{ matrix.fragmento }}
+          path: fragmentos-traduccion/
+          if-no-files-found: ignore
+          retention-days: 3
+
+  # Junta lo traducido (aunque algún fragmento haya fallado) y arma data/mealdb/.
+  armar:
+    needs: traducir
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pasos-*
+          path: fragmentos-traduccion
+          merge-multiple: true
+      - run: python scripts/traducir-catalogo.py
+      - name: Calcular la dificultad de cada receta
+        run: node scripts/clasificar-dificultad.mjs
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/mealdb data/ingredientes.json data/fuente/pasos-es.json
+          git diff --cached --quiet && echo "Sin cambios" && exit 0
+          git commit -m "Actualizar catálogo en español"
+          git push

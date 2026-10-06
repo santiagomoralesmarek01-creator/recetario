@@ -14,28 +14,50 @@ export function urlIngrediente(nombreEnIngles, tamano = 'Small') {
   return `${BASE_INGREDIENTES}/${encodeURIComponent(nombreEnIngles.trim())}${sufijo}.png`;
 }
 
-// TheMealDB sirve una miniatura agregando "/small" a la URL de la foto del plato.
+// TheMealDB sirve versiones chicas agregando "/small" (~250 px) o "/medium"
+// (~350 px) a la URL de la foto del plato; sin sufijo es la grande (~700 px).
 export function urlPlato(urlOriginal, { miniatura = false } = {}) {
   if (!urlOriginal) return IMG_PLATO_GENERICO;
   return miniatura ? `${urlOriginal}/small` : urlOriginal;
 }
 
+// Para tarjetas: la mediana en pantallas comunes y la grande en pantallas de
+// alta densidad (celulares, notebooks con "retina"), así no se ve borrosa.
+export function fuentesPlato(urlOriginal) {
+  return {
+    src: `${urlOriginal}/medium`,
+    srcset: `${urlOriginal}/medium 350w, ${urlOriginal} 700w`,
+    sizes: '(max-width: 700px) 48vw, 290px',
+  };
+}
+
+const SUFIJO_CHICO = /\/(small|medium)$/;
+
 // Crea un <img> con carga diferida y reemplazo automático si la imagen falla.
-export function crearImagen(src, alt, reemplazo, clase = '') {
+// `fuentes` opcional: { srcset, sizes } para que el navegador elija el tamaño.
+export function crearImagen(src, alt, reemplazo, clase = '', fuentes = null) {
   const img = document.createElement('img');
   img.loading = 'lazy';
   img.decoding = 'async';
   img.alt = alt;
   if (clase) img.className = clase;
   img.addEventListener('error', () => {
-    // Si también falla la miniatura, probamos la original antes del genérico.
-    if (img.src.endsWith('/small') && !img.dataset.reintento) {
+    // Si falla una versión chica, probamos la original antes del genérico.
+    const actual = img.currentSrc || img.src;
+    if (SUFIJO_CHICO.test(actual) && !img.dataset.reintento) {
       img.dataset.reintento = '1';
-      img.src = img.src.slice(0, -'/small'.length);
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
+      img.src = actual.replace(SUFIJO_CHICO, '');
       return;
     }
+    img.removeAttribute('srcset');
     if (!img.src.endsWith(reemplazo)) img.src = reemplazo;
   });
+  if (fuentes?.srcset) {
+    img.sizes = fuentes.sizes || '100vw';
+    img.srcset = fuentes.srcset;
+  }
   img.src = src || reemplazo;
   return img;
 }

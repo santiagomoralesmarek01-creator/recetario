@@ -2,12 +2,40 @@ import { el, mostrar, cargando, aviso, vigencia } from '../dom.js';
 import * as repo from '../repositorio.js';
 import * as misRecetas from '../misRecetas.js';
 import { crearImagen, IMG_INGREDIENTE_GENERICO } from '../imagenes.js';
-import { traducirCategoria } from '../traducciones.js';
-import { usuario } from '../auth.js';
+import { traducirCategoria, traducirOrigen } from '../traducciones.js';
+import { usuario, pedirLogin } from '../auth.js';
+import { hayBackend } from '../supabase.js';
+import { contarMeGusta, misMeGusta, alternarMeGusta, registrarActividad } from '../actividad.js';
 import {
   leerProgreso, guardarProgreso, pantallaSoportada, mantenerPantalla, pantallaActiva,
+  recetaActual, fijarActual, soltarActual, alCambiarCocina,
 } from '../cocina.js';
-import { portada, metaReceta } from './componentes.js';
+import { portada } from './componentes.js';
+import { bandera, rutaPais } from '../paises.js';
+import { rutaAutor } from './comunidad.js';
+import { contextoReceta, ayudanteDisponible, abrirAyudante, preguntarRapido, RAPIDOS, avatarManitas } from '../ayudante.js';
+import { tiemposEnTexto, textoDuracion, iniciarTemporizador, elegirTiempo } from '../temporizador.js';
+import { clasificar, explicar, NIVELES } from '../dificultad.js';
+import { soyAdmin } from '../fotos.js';
+import { dialogoFoto } from './fotosRecetas.js';
+import { icono } from '../iconos.js';
+import { t } from '../textos.js';
+import { evento } from '../analitica.js';
+import { CONTACTO } from '../config.js';
+import { premioDeReceta, nombreMes } from '../torneo.js';
+
+// "Receta del mes · octubre 2026" si ganó el premio (se completa al llegar el dato).
+function insigniaRecetaDelMes(id) {
+  const nodo = el('p', { class: 'insignia-receta-mes', hidden: true });
+  premioDeReceta(id).then((g) => {
+    if (!g) return;
+    nodo.replaceChildren(icono('trofeo'), ` Receta del mes · ${nombreMes(g.periodo)}`);
+    nodo.hidden = false;
+  });
+  return nodo;
+}
+import { ir } from '../rutas.js';
+import { marcaVerificada } from '../verificadas.js';
 
 export async function vistaReceta(id) {
   const vigente = vigencia();
@@ -17,12 +45,14 @@ export async function vistaReceta(id) {
   if (!r) {
     mostrar(
       el('p', { class: 'estado' }, 'La receta no existe o es privada.'),
-      el('p', { class: 'estado' }, el('a', { href: '#/' }, 'Volver al inicio')));
+      el('p', { class: 'estado' }, el('a', { href: '/' }, 'Volver al inicio')));
     return;
   }
-  document.title = `${r.nombre} · Recetario`;
+  document.title = `${r.nombre} · A Mano`;
+  contextoReceta(r);
 
-  const progreso = leerProgreso(r.id);
+  let progreso = leerProgreso(r.id);
+  const ORIGEN = 'ficha';
   const esMia = r.origenDatos === 'usuario' && usuario()?.id === r.userId;
 
   // ---------- seguimiento de cocina ----------
@@ -31,14 +61,14 @@ export async function vistaReceta(id) {
   const itemsIngredientes = [];
   const itemsPasos = [];
 
-  function refrescar() {
+  function pintar() {
     const ing = progreso.ingredientes.size;
     const pas = progreso.pasos.size;
     const total = r.ingredientes.length + r.pasos.length;
     const hechos = ing + pas;
     barra.firstChild.style.width = total ? `${(hechos / total) * 100}%` : '0';
     textoProgreso.textContent = hechos === total && total > 0
-      ? '¡Listo! Buen provecho 🎉'
+      ? t('receta.listo')
       : `Ingredientes ${ing}/${r.ingredientes.length} · Pasos ${pas}/${r.pasos.length}`;
 
     itemsIngredientes.forEach((li, i) => li.classList.toggle('hecho', progreso.ingredientes.has(i)));
@@ -47,72 +77,139 @@ export async function vistaReceta(id) {
       li.classList.toggle('hecho', progreso.pasos.has(i));
       li.classList.toggle('actual', i === siguiente);
     });
-    guardarProgreso(r.id, progreso);
+    itemsIngredientes.forEach((li, i) => { li.querySelector('input').checked = progreso.ingredientes.has(i); });
+    itemsPasos.forEach((li, i) => { li.querySelector('input').checked = progreso.pasos.has(i); });
+  }
+
+  // Cambio hecho acá: se guarda, y la receta pasa a ser la que se está cocinando.
+  function refrescar() {
+    pintar();
+    guardarProgreso(r.id, progreso, ORIGEN);
+    if (recetaActual()?.id !== r.id && (progreso.ingredientes.size || progreso.pasos.size)) fijarActual(r);
+    avisarSiTermino();
+  }
+
+  // Con todos los pasos tildados la receta cuenta como cocinada (para las medallas).
+  let terminadaAvisada = false;
+  function avisarSiTermino() {
+    if (terminadaAvisada || !r.pasos.length || progreso.pasos.size < r.pasos.length) return;
+    terminadaAvisada = true;
+    evento('Receta cocinada');
+    registrarActividad('receta-cocinada', { detalle: r.id })
+      .then((nueva) => { if (nueva) aviso(t('receta.completada')); })
+      .catch((err) => console.warn(err));
   }
 
   function casilla(conjunto, indice, texto) {
     return el('input', {
       type: 'checkbox',
-      checked: conjunto.has(indice),
+      checked: (conjunto === 'ingredientes' ? progreso.ingredientes : progreso.pasos).has(indice),
       'aria-label': texto,
       onchange: (e) => {
-        if (e.target.checked) conjunto.add(indice); else conjunto.delete(indice);
+        const actual = conjunto === 'ingredientes' ? progreso.ingredientes : progreso.pasos;
+        if (e.target.checked) actual.add(indice); else actual.delete(indice);
         refrescar();
       },
     });
   }
 
+  // Dificultad e ingredientes difíciles de conseguir en Latinoamérica.
+  const clasificacion = clasificar(r);
+  const dificiles = new Map(clasificacion.dificiles.map((d) => [d.nombre, d]));
+
   r.ingredientes.forEach((ing, i) => {
-    itemsIngredientes.push(el('li', { class: 'ingrediente' },
+    const dificil = dificiles.get(ing.nombre);
+    itemsIngredientes.push(el('li', { class: `ingrediente${dificil ? ' dificil-de-conseguir' : ''}` },
       el('label', {},
-        casilla(progreso.ingredientes, i, ing.nombre),
+        casilla('ingredientes', i, ing.nombre),
         crearImagen(ing.imagen, '', IMG_INGREDIENTE_GENERICO),
         el('span', { class: 'ingrediente-texto' },
           el('strong', {}, ing.nombre),
-          ing.medida && el('span', { class: 'medida' }, ing.medida)))));
+          ing.medida && el('span', { class: 'medida' }, ing.medida),
+          dificil && (dificil.reemplazo
+            ? el('span', { class: 'reemplazo' }, icono('reemplazo', { clase: 'reemplazo-icono' }), `${t('reemplazo.si-no-hay')}${dificil.reemplazo}`)
+            : el('span', { class: 'reemplazo sin-reemplazo' }, t('reemplazo.dificil')))))));
   });
 
   r.pasos.forEach((paso, i) => {
+    // Si el paso menciona un tiempo ("hornear 20 minutos"), un toque arranca el temporizador.
+    const tiempos = tiemposEnTexto(paso);
     itemsPasos.push(el('li', { class: 'paso' },
       el('label', {},
-        casilla(progreso.pasos, i, `Paso ${i + 1}`),
+        casilla('pasos', i, `Paso ${i + 1}`),
         el('span', { class: 'paso-numero' }, i + 1),
-        el('span', {}, paso))));
+        el('span', {}, paso)),
+      tiempos.length > 0 && el('div', { class: 'paso-tiempos' }, tiempos.map((seg) => el('button', {
+        type: 'button', class: 'boton-tiempo', title: `Empezar un temporizador de ${textoDuracion(seg)}`,
+        onclick: () => iniciarTemporizador(seg, `Paso ${i + 1} · ${r.nombre}`),
+      }, icono('temporizador'), textoDuracion(seg))))));
   });
 
   const botonPantalla = pantallaSoportada() && el('button', {
     type: 'button',
-    class: 'boton-secundario',
+    class: `boton-secundario${pantallaActiva() ? ' activo' : ''}`,
+    title: t('receta.pantalla-ayuda'),
+    'aria-pressed': String(pantallaActiva()),
     onclick: async (e) => {
       const activa = await mantenerPantalla(!pantallaActiva());
       try { sessionStorage.setItem('recetario:pantalla', activa ? '1' : '0'); } catch { /* sin almacenamiento */ }
-      e.target.textContent = activa ? '🔆 Pantalla encendida' : '🔅 Mantener pantalla encendida';
-      e.target.classList.toggle('activo', activa);
+      e.currentTarget.classList.toggle('activo', activa);
+      e.currentTarget.setAttribute('aria-pressed', String(activa));
     },
-  }, pantallaActiva() ? '🔆 Pantalla encendida' : '🔅 Mantener pantalla encendida');
+  }, icono('pantalla'), t('receta.pantalla'));
 
-  const panelCocina = el('section', { class: 'panel-cocina' },
-    el('div', { class: 'panel-cocina-cabecera' },
-      el('h2', {}, '👩‍🍳 Modo cocina'),
-      el('div', { class: 'acciones' },
-        botonPantalla,
-        el('button', {
-          type: 'button',
-          class: 'boton-secundario',
-          onclick: () => {
-            progreso.ingredientes.clear();
-            progreso.pasos.clear();
-            itemsIngredientes.concat(itemsPasos).forEach((li) => { li.querySelector('input').checked = false; });
-            refrescar();
-          },
-        }, '↺ Reiniciar'))),
-    el('p', { class: 'meta' }, 'Tildá los ingredientes a medida que los usás y los pasos que vas terminando. Tu avance queda guardado en este dispositivo.'),
-    barra,
-    textoProgreso);
+  const botonReiniciar = el('button', {
+    type: 'button',
+    class: 'boton-secundario',
+    title: 'Destildar todo',
+    onclick: () => {
+      progreso.ingredientes.clear();
+      progreso.pasos.clear();
+      refrescar();
+    },
+  }, icono('reiniciar'), t('receta.reiniciar'));
+
+  // Seguir la receta en el panel lateral "Cocinando ahora".
+  const botonSeguir = el('button', {
+    type: 'button',
+    class: 'boton-secundario',
+    onclick: () => (recetaActual()?.id === r.id ? soltarActual() : fijarActual(r)),
+  });
+  function pintarSeguir() {
+    const siguiendo = recetaActual()?.id === r.id;
+    botonSeguir.replaceChildren(icono('fijar'), siguiendo ? t('receta.siguiendo') : t('receta.seguir'));
+    botonSeguir.title = siguiendo ? 'Dejar de mostrarla en el panel lateral' : t('receta.seguir-ayuda');
+    botonSeguir.classList.toggle('activo', siguiendo);
+    botonSeguir.setAttribute('aria-pressed', String(siguiendo));
+  }
+  pintarSeguir();
+
+  // Barra fija abajo: siempre a mano mientras se cocina.
+  const barraCocina = el('div', { class: 'barra-cocina', role: 'region', 'aria-label': 'Progreso de la receta' },
+    el('div', { class: 'barra-cocina-progreso' }, textoProgreso, barra),
+    el('div', { class: 'acciones' }, botonSeguir, botonPantalla, botonReiniciar,
+      el('button', {
+        type: 'button', class: 'boton-secundario', title: 'Poner un temporizador',
+        onclick: () => elegirTiempo(r.nombre),
+      }, icono('temporizador'), t('receta.temporizador')),
+      ayudanteDisponible() && el('button', {
+        type: 'button', class: 'boton-secundario', title: 'Preguntarle a Manitas sobre esta receta',
+        onclick: abrirAyudante,
+      }, icono('manitas'), t('manitas.nombre'))));
+
+  // Cambios hechos desde el panel lateral (u otra pestaña): se reflejan acá.
+  const dejarDeEscuchar = alCambiarCocina(({ id, origen, actual }) => {
+    if (!barraCocina.isConnected) { dejarDeEscuchar(); return; }
+    if (actual) { pintarSeguir(); return; }
+    if (id === r.id && origen !== ORIGEN) {
+      progreso = leerProgreso(r.id);
+      pintar();
+    }
+  });
 
   // ---------- acciones del dueño ----------
   const accionesDueno = esMia && el('p', { class: 'acciones' },
-    el('a', { class: 'boton', href: `#/editar/${r.uuid}` }, '✏️ Editar'),
+    el('a', { class: 'boton', href: `/editar/${r.uuid}` }, icono('editar'), 'Editar'),
     el('button', {
       type: 'button',
       class: 'boton-peligro',
@@ -121,41 +218,148 @@ export async function vistaReceta(id) {
         try {
           await misRecetas.borrar(r.uuid);
           aviso('Receta borrada');
-          location.hash = '#/mis-recetas';
+          ir('/mis-recetas');
         } catch (err) {
           aviso(`No se pudo borrar: ${err.message}`, 'error');
         }
       },
     }, 'Borrar'));
 
+  const botonMeGusta = hayBackend && botonDeMeGusta(r.id);
+
   const volver = r.categoria
-    ? el('a', { class: 'volver', href: `#/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
-    : el('a', { class: 'volver', href: '#/' }, '← Inicio');
+    ? el('a', { class: 'volver', href: `/categoria/${encodeURIComponent(r.categoria)}` }, `← ${traducirCategoria(r.categoria)}`)
+    : el('a', { class: 'volver', href: '/' }, '← Inicio');
+
+  const datos = [
+    [icono('ingrediente'), r.ingredientes.length, 'ingredientes'],
+    [icono('pasos'), r.pasos.length, 'pasos'],
+    [el('span', { class: 'punto-nivel' }), NIVELES[clasificacion.nivel].nombre, '', `nivel-${clasificacion.nivel}`],
+    r.minutos && [icono('reloj'), r.minutos, 'minutos'],
+    r.porciones && [icono('porciones'), r.porciones, 'porciones'],
+  ].filter(Boolean);
 
   mostrar(
     volver,
     el('article', { class: 'receta' },
-      el('header', { class: 'receta-cabecera' },
-        portada(r, { clase: 'receta-foto' }),
-        el('div', {},
-          el('h1', {}, r.nombre),
-          el('p', { class: 'meta' }, metaReceta(r)),
-          r.autor && el('p', { class: 'meta' }, `Receta de ${r.autor}${r.publica === false ? ' · 🔒 privada' : ''}`),
-          r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
+      el('header', { class: 'receta-titulo' },
+        el('div', { class: 'receta-titulo-fila' }, el('h1', {}, r.nombre), botonMeGusta),
+        r.origen && el('a', { class: 'enlace-pais', href: rutaPais(traducirOrigen(r.origen)) },
+          bandera(traducirOrigen(r.origen)), traducirOrigen(r.origen)),
+        el('p', { class: 'meta' }, [
+          r.categoria && traducirCategoria(r.categoria),
+          r.nombreOriginal && r.nombreOriginal !== r.nombre && `En su idioma: ${r.nombreOriginal}`,
+        ].filter(Boolean).join(' · ')),
+        r.autor && el('p', { class: 'meta' }, 'Receta de ',
+          r.publica === false ? r.autor : el('a', { href: rutaAutor(r.userId) }, r.autor), marcaVerificada(r.userId),
+          r.publica === false && [' · ', icono('candado'), 'privada']),
+        r.origenDatos === 'usuario' && insigniaRecetaDelMes(r.id),
+        r.descripcion && el('p', { class: 'descripcion' }, r.descripcion),
+        el('ul', { class: 'datos-rapidos' },
+          datos.map(([simbolo, valor, texto, clase]) =>
+            el('li', { class: clase || false }, el('span', { class: 'dato-icono', 'aria-hidden': 'true' }, simbolo),
+              el('strong', {}, valor), el('span', {}, texto)))),
+        el('p', { class: `explicacion-dificultad nivel-${clasificacion.nivel}` },
+          el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), explicar(clasificacion)),
+        (r.etiquetas?.length > 0 || r.video || r.enlace) && el('div', { class: 'receta-extras' },
           r.etiquetas?.length > 0 && el('ul', { class: 'etiquetas' }, r.etiquetas.map((t) => el('li', {}, t))),
-          el('p', { class: 'enlaces' },
-            r.video && el('a', { href: r.video, target: '_blank', rel: 'noopener' }, '▶ Ver video'),
-            r.enlace && el('a', { href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
-          accionesDueno)),
-      panelCocina,
-      el('section', {},
-        el('h2', {}, `Ingredientes (${r.ingredientes.length})`),
-        el('ul', { class: 'ingredientes' }, itemsIngredientes)),
-      el('section', {},
+          r.video && el('a', { class: 'boton-secundario boton-chico', href: r.video, target: '_blank', rel: 'noopener' }, icono('play'), 'Ver video'),
+          r.enlace && el('a', { class: 'enlace-fuente', href: r.enlace, target: '_blank', rel: 'noopener' }, 'Fuente original')),
+        accionesDueno),
+      el('div', { class: 'receta-cuerpo' },
+        columnaFoto(r),
+        el('section', { class: 'receta-ingredientes' },
+          el('h2', {}, 'Ingredientes'),
+          el('p', { class: 'meta' }, t('receta.tildar')),
+          el('ul', { class: 'ingredientes' }, itemsIngredientes),
+          el('p', { class: `nota-conseguir${dificiles.size ? '' : ' todos'}` }, icono('canasta'), dificiles.size
+            ? (dificiles.size === 1 ? t('reemplazo.aviso-uno') : t('reemplazo.aviso-varios', { n: dificiles.size }))
+            : t('reemplazo.todo-facil')),
+          ayudanteDisponible() && bloqueManitas())),
+      el('section', { class: 'receta-pasos' },
         el('h2', {}, 'Preparación'),
         r.pasos.length
           ? el('ol', { class: 'pasos' }, itemsPasos)
-          : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.')))
+          : el('p', { class: 'meta' }, 'Esta receta no tiene pasos cargados.'),
+        r.origenDatos === 'mealdb' && r.nombreOriginal && el('p', { class: 'nota-traduccion' }, r.pasosEnIngles
+          ? 'Estamos terminando de traducir los pasos de esta receta: por ahora se muestran en inglés.'
+          : 'Pasos traducidos automáticamente del inglés. Si algo no se entiende, revisá la fuente original.'),
+        CONTACTO && el('p', { class: 'meta receta-reportar' }, '¿Algo está mal o no se entiende? ',
+          el('a', { href: `mailto:${CONTACTO}?subject=${encodeURIComponent(`Receta: ${r.nombre}`)}&body=${encodeURIComponent(`${location.href}\n\n`)}` }, 'Avisanos'), '.')),
+      barraCocina)
   );
-  refrescar();
+  pintar();
+}
+
+// Corazón con la cantidad de me gusta. Sin sesión, invita a entrar.
+function botonDeMeGusta(recetaId) {
+  let mio = false;
+  let cantidad = 0;
+  const corazon = el('span', { class: 'me-gusta-icono', 'aria-hidden': 'true' }, icono('corazon'));
+  const numero = el('span', { class: 'me-gusta-numero' }, '');
+  const boton = el('button', {
+    type: 'button', class: 'boton-me-gusta', 'aria-pressed': 'false', 'aria-label': 'Me gusta',
+    onclick: async () => {
+      if (!usuario()) { pedirLogin(); return; }
+      // Se muestra al instante y se corrige si falla.
+      mio = !mio;
+      cantidad += mio ? 1 : -1;
+      pintar(true);
+      try {
+        const quedo = await alternarMeGusta(recetaId);
+        if (quedo !== mio) { cantidad += quedo ? 1 : -1; mio = quedo; pintar(); }
+      } catch (err) {
+        mio = !mio;
+        cantidad += mio ? 1 : -1;
+        pintar();
+        aviso(`No se pudo guardar el me gusta: ${err.message}`, 'error');
+      }
+    },
+  }, corazon, numero);
+  function pintar(animar = false) {
+    numero.textContent = cantidad > 0 ? String(cantidad) : '';
+    boton.classList.toggle('activo', mio);
+    boton.setAttribute('aria-pressed', String(mio));
+    boton.title = mio ? 'Quitar me gusta' : 'Me gusta';
+    if (animar && mio) { boton.classList.remove('latido'); void boton.offsetWidth; boton.classList.add('latido'); }
+  }
+  Promise.all([contarMeGusta([recetaId]), misMeGusta()])
+    .then(([conteo, mios]) => { cantidad = conteo.get(recetaId) || 0; mio = mios.has(recetaId); pintar(); })
+    .catch((err) => console.warn('Me gusta:', err.message));
+  pintar();
+  return boton;
+}
+
+// "¿Falta algo? Adaptar esta receta": botones rápidos que abren Manitas.
+function bloqueManitas() {
+  return el('div', { class: 'manitas-receta' },
+    avatarManitas(),
+    el('div', {},
+      el('strong', {}, t('manitas.adaptar')),
+      el('span', { class: 'meta' }, t('manitas.adaptar-ayuda')),
+      el('div', { class: 'manitas-rapidos' },
+        RAPIDOS.map((rapido) => el('button', { type: 'button', class: 'boton-secundario boton-chico', onclick: () => preguntarRapido(rapido) }, t(rapido.clave))))));
+}
+
+// Foto de la receta, con su crédito y (para administradores) un botón para cambiarla.
+function columnaFoto(r) {
+  const credito = el('p', { class: 'foto-credito' });
+  const foto = el('div', { class: 'receta-foto-marco' }, portada(r, { clase: 'receta-foto' }));
+  // Con fuente (fotos de Wikimedia Commons), el crédito enlaza a la página con autor y licencia.
+  const pintarCredito = () => credito.replaceChildren(...(!r.creditoFoto ? [] : r.fuenteFoto
+    ? [icono('foto'), ' ', el('a', { href: r.fuenteFoto, target: '_blank', rel: 'noopener' }, r.creditoFoto)]
+    : [icono('foto'), ` ${r.creditoFoto}`]));
+  pintarCredito();
+  const columna = el('div', { class: 'receta-foto-columna' }, foto, credito);
+  soyAdmin().then((admin) => {
+    if (!admin || !columna.isConnected) return;
+    foto.append(el('button', {
+      type: 'button', class: 'boton-cambiar-foto',
+      onclick: () => dialogoFoto(r, () => {
+        foto.firstChild.replaceWith(portada(r, { clase: 'receta-foto' }));
+        pintarCredito();
+      }),
+    }, icono('foto'), r.imagen ? 'Cambiar foto' : 'Subir foto'));
+  });
+  return columna;
 }

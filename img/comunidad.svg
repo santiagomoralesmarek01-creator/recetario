@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 100" role="img" aria-label="Comunidad">
+  <!-- Olla compartida -->
+  <path d="M40 52h80v22a16 16 0 0 1-16 16H56a16 16 0 0 1-16-16z" fill="#c8553d"/>
+  <rect x="34" y="46" width="92" height="9" rx="4.5" fill="#a6402b"/>
+  <rect x="26" y="58" width="16" height="7" rx="3.5" fill="#a6402b"/>
+  <rect x="118" y="58" width="16" height="7" rx="3.5" fill="#a6402b"/>
+  <!-- Corazón -->
+  <path d="M80 80c-9-6-14-10.5-14-16a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 5.5-5 10-14 16z" fill="#fff" opacity="0.92"/>
+  <!-- Vapor -->
+  <g fill="none" stroke="#e8b04b" stroke-width="4" stroke-linecap="round">
+    <path d="M62 38c-5-6 5-10 0-17"/>
+    <path d="M80 36c-5-6 5-10 0-17"/>
+    <path d="M98 38c-5-6 5-10 0-17"/>
+  </g>
+</svg>

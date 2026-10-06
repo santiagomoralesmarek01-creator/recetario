@@ -1,5 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:ruta*",
+      "has": [
+        {
+          "type": "host",
+          "value": "recetario-virid.vercel.app"
+        }
+      ],
+      "destination": "https://amanorecetas.com.ar/:ruta*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -27,5 +40,23 @@
         }
       ]
     }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/((?!api/|data/|img/|css/|js/|docs/|_vercel/)(?!.*\\.[A-Za-z0-9]{2,12}$).*)",
+      "destination": "/api/pagina?ruta=$1"
+    }
+  ],
+  "functions": {
+    "api/pagina.js": {
+      "includeFiles": "{index.html,data/recetas-casa.json,data/mealdb/*.json}"
+    },
+    "api/sitemap.js": {
+      "includeFiles": "{data/recetas-casa.json,data/mealdb/indice.json}"
+    }
+  }
 }

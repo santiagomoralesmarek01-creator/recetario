@@ -2,6 +2,18 @@
 // La "anon key" es pública por diseño: la seguridad la dan las políticas RLS
 // definidas en supabase/esquema.sql. Nunca pongas acá la "service_role key".
 //
-// Mientras estén vacíos, la web funciona igual pero sin login ni recetas propias.
-export const SUPABASE_URL = '';
-export const SUPABASE_ANON_KEY = '';
+// Si se vacían, la web funciona igual pero sin login ni recetas propias.
+export const SUPABASE_URL = 'https://hvkytxfkiylbyaleihyw.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2a3l0eGZraXlsYnlhbGVpaHl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNTA0MDAsImV4cCI6MjEwNTgyNjQwMH0.iJapf5vlTjG_K8QsjWWmP8qQcybD1Y7FXIwavP7d4_g';
+
+// Analítica gratuita y sin cookies (opcional; vacío = no se carga nada).
+//   plausible:  el dominio tal como está cargado en plausible.io, p. ej. 'amanorecetas.com.ar'
+//               (cuenta las secciones y los eventos: ¿Qué hay a mano?, medallas, Manitas, juegos)
+//   cloudflare: el token de Cloudflare Web Analytics (sólo cuenta visitas, no secciones ni eventos)
+//   vercel:     true para Vercel Web Analytics (visitas y secciones; hay que activarlo en
+//               el panel de Vercel → Analytics). Sólo funciona en el sitio publicado en Vercel.
+export const ANALITICA = { plausible: '', cloudflare: '', vercel: true };
+
+// Email de contacto que aparece en la Política de privacidad y los Términos
+// (pedidos de acceso o borrado de datos, reclamos). Vacío = todavía no se publicó.
+export const CONTACTO = 'amanorecetas@gmail.com';

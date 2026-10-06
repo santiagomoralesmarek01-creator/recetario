@@ -2,6 +2,8 @@
 // Para sumar recetas al repertorio alcanza con agregarlas a ese archivo.
 import { urlIngrediente, IMG_INGREDIENTE_GENERICO } from './imagenes.js';
 import { ingredienteEnIngles } from './traducciones.js';
+import { clasificar } from './dificultad.js';
+import { aplicarFotos } from './fotos.js';
 
 // Para ingredientes escritos en español: usa la clave "imagen" si viene,
 // si no intenta adivinarla con el diccionario.
@@ -19,7 +21,10 @@ export function normalizarIngredientesPropios(lista) {
 }
 
 function normalizar(r) {
+  const { nivel, dificiles } = clasificar({ ingredientes: r.ingredientes || [], pasos: r.pasos || [], minutos: r.minutos });
   return {
+    dificultad: nivel,
+    dificiles: dificiles.length,
     id: `c-${r.slug}`,
     origenDatos: 'casa',
     nombre: r.nombre,
@@ -29,6 +34,8 @@ function normalizar(r) {
     porciones: r.porciones,
     minutos: r.minutos,
     imagen: r.imagen || '',
+    creditoFoto: r.creditoFoto || '',
+    fuenteFoto: r.fuenteFoto || '',
     etiquetas: r.etiquetas || [],
     ingredientes: normalizarIngredientesPropios(r.ingredientes || []),
     pasos: r.pasos || [],
@@ -43,7 +50,7 @@ export function todas() {
       if (!r.ok) throw new Error('No se pudieron cargar las recetas de la casa');
       return r.json();
     })
-    .then((lista) => lista.map(normalizar))
+    .then((lista) => aplicarFotos(lista.map(normalizar)))
     .catch((err) => {
       promesa = null;
       console.error(err);
@@ -69,4 +76,8 @@ export async function buscar(texto) {
 
 export async function deCategoria(categoria) {
   return (await todas()).filter((r) => r.categoria === categoria);
+}
+
+export async function dePais(pais) {
+  return (await todas()).filter((r) => r.origen === pais);
 }

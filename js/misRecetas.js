@@ -3,13 +3,19 @@
 // las marcadas como públicas las pueda ver cualquiera.
 import { cliente } from './supabase.js';
 import { normalizarIngredientesPropios } from './recetasCasa.js';
+import { clasificar, ingredientesDificiles } from './dificultad.js';
+import { aplicarFotos } from './fotos.js';
 
 const TABLA = 'recetas';
 const BUCKET = 'fotos-recetas';
 const COLUMNAS_RESUMEN = 'id, nombre, categoria, origen, imagen_url, ingredientes, publica, autor_nombre, user_id';
 
 export function normalizarFila(f) {
+  const nombres = (f.ingredientes || []).map((i) => i?.nombre).filter(Boolean);
+  const conPasos = Array.isArray(f.pasos) && f.pasos.length > 0;
   return {
+    dificultad: conPasos ? clasificar({ ingredientes: nombres, pasos: f.pasos, minutos: f.minutos }).nivel : undefined,
+    dificiles: ingredientesDificiles(f.ingredientes || []).length,
     id: `u-${f.id}`,
     uuid: f.id,
     origenDatos: 'usuario',
@@ -30,12 +36,28 @@ export function normalizarFila(f) {
   };
 }
 
+// Traduce los errores de configuración más comunes a algo entendible.
+function errorLegible(error) {
+  const m = `${error?.message || ''} ${error?.code || ''}`;
+  if (/relation .*recetas.* does not exist|42P01|PGRST205|schema cache/i.test(m)) {
+    return new Error('Falta crear la tabla de recetas en Supabase (ejecutar supabase/esquema.sql).');
+  }
+  if (/bucket not found/i.test(m)) {
+    return new Error('Falta crear el espacio para fotos en Supabase (ejecutar supabase/esquema.sql).');
+  }
+  if (/row-level security|permission denied|42501/i.test(m)) {
+    return new Error('No tenés permiso para hacer eso. Probá cerrar sesión y volver a entrar.');
+  }
+  return error instanceof Error ? error : new Error(error?.message || 'Error inesperado');
+}
+
 async function consultar(armar) {
   const sb = await cliente();
   if (!sb) return [];
   const { data, error } = await armar(sb.from(TABLA));
-  if (error) throw error;
-  return (data || []).map(normalizarFila);
+  if (error) throw errorLegible(error);
+  // Fotos cargadas desde "Fotos de recetas" (reemplazan la original).
+  return aplicarFotos((data || []).map(normalizarFila));
 }
 
 export function listarMias(userId) {
@@ -44,6 +66,21 @@ export function listarMias(userId) {
 
 export function listarPublicas(limite = 12) {
   return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('publica', true).order('created_at', { ascending: false }).limit(limite));
+}
+
+// Recetas públicas de la comunidad, de a páginas, con filtros opcionales.
+// Devuelve { recetas, hayMas }.
+export async function explorarComunidad({ desde = 0, cantidad = 24, categoria = '', texto = '', autor = '' } = {}) {
+  const limpio = texto.replace(/[%_,()]/g, ' ').trim();
+  // Se pide una de más para saber si hay otra página.
+  const filas = await consultar((q) => {
+    let consulta = q.select(COLUMNAS_RESUMEN).eq('publica', true);
+    if (categoria) consulta = consulta.eq('categoria', categoria);
+    if (autor) consulta = consulta.eq('user_id', autor);
+    if (limpio) consulta = consulta.ilike('nombre', `%${limpio}%`);
+    return consulta.order('created_at', { ascending: false }).range(desde, desde + cantidad);
+  });
+  return { recetas: filas.slice(0, cantidad), hayMas: filas.length > cantidad };
 }
 
 // Devuelve las públicas y (por RLS) también las propias privadas.
@@ -55,6 +92,17 @@ export function buscar(texto) {
 
 export function deCategoria(categoria) {
   return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('categoria', categoria).limit(50));
+}
+
+export function dePais(pais) {
+  return consultar((q) => q.select(COLUMNAS_RESUMEN).eq('origen', pais).limit(50));
+}
+
+// Varias recetas por id (las públicas o propias; las demás no vienen).
+export function porIds(uuids) {
+  const validos = uuids.filter((u) => /^[0-9a-f-]{36}$/i.test(u)).slice(0, 100);
+  if (!validos.length) return Promise.resolve([]);
+  return consultar((q) => q.select(COLUMNAS_RESUMEN).in('id', validos));
 }
 
 export async function obtener(uuid) {
@@ -70,7 +118,7 @@ export async function subirFoto(userId, archivo) {
     cacheControl: '31536000',
     contentType: archivo.type,
   });
-  if (error) throw error;
+  if (error) throw errorLegible(error);
   return sb.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
 }
 
@@ -81,12 +129,12 @@ export async function guardar(datos, uuid = null) {
     ? sb.from(TABLA).update(datos).eq('id', uuid)
     : sb.from(TABLA).insert(datos);
   const { data, error } = await consulta.select('*').single();
-  if (error) throw error;
+  if (error) throw errorLegible(error);
   return normalizarFila(data);
 }
 
 export async function borrar(uuid) {
   const sb = await cliente();
   const { error } = await sb.from(TABLA).delete().eq('id', uuid);
-  if (error) throw error;
+  if (error) throw errorLegible(error);
 }
