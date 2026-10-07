@@ -2313,3 +2313,21 @@ ul.cifras { list-style: none; padding: 0; }
 .vidriera-lista span { color: var(--texto-suave); font-size: 0.9rem; }
 .torneo-instagram { flex-direction: column; align-items: stretch !important; gap: 4px !important; font-size: 0.9rem; }
 .torneo-instagram input { padding: 9px 12px; border-radius: var(--radio-chico); border: 1px solid var(--borde); background: var(--fondo); color: var(--texto); font: inherit; max-width: 280px; }
+
+/* ---------- Panel de redes (/admin/redes) ---------- */
+.chip-estado { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: var(--hierba-suave); color: var(--hierba); }
+.chip-publicada { background: var(--exito-fondo); color: var(--exito-texto); }
+.chip-error, .chip-vencida { background: var(--error-fondo); color: var(--error-texto); }
+.chip-manual, .chip-pausada { background: var(--aviso-fondo); color: var(--aviso); }
+.chip-solo_prueba { background: var(--fondo-2); color: var(--texto-suave); }
+.redes-archivos { display: flex; flex-wrap: wrap; gap: 6px; }
+.admin-tabla td.redes-texto { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.admin-tabla td.redes-detalle { white-space: normal; min-width: 220px; max-width: 360px; }
+.redes-detalle > * { display: block; }
+.redes-detalle ul { margin: 4px 0; padding-left: 18px; font-size: 0.8rem; }
+.redes-acciones { display: flex; flex-wrap: wrap; gap: 4px; }
+.redes-token { flex: 1; min-width: 0; max-width: 420px; }
+.redes-cuenta p { margin: 4px 0; }
+@media (max-width: 560px) {
+  .admin-filtro { flex-wrap: wrap; }
+}

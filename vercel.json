@@ -57,6 +57,15 @@
     },
     "api/sitemap.js": {
       "includeFiles": "{data/recetas-casa.json,data/mealdb/indice.json}"
+    },
+    "api/redes.js": {
+      "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/redes?accion=diario",
+      "schedule": "0 10 * * *"
+    }
+  ]
 }
