@@ -64,8 +64,10 @@ create table if not exists public.redes_credenciales (
   vence_en       timestamptz,
   ultimo_error   text,
   avisado_en     timestamptz,     -- último mail de aviso (para no repetir)
-  ultima_corrida timestamptz      -- última vez que corrió el publicador
+  ultima_corrida timestamptz,     -- última vez que corrió el publicador
+  modo           text             -- 'facebook' (token de página, no vence) o 'instagram' (60 días)
 );
+alter table public.redes_credenciales add column if not exists modo text;
 alter table public.redes_credenciales enable row level security;
 -- Sin políticas a propósito. Además se quitan los permisos directos.
 revoke all on public.redes_credenciales from anon, authenticated;
@@ -186,36 +188,22 @@ $$;
 revoke all on function public.redes_admin(bigint, text, timestamptz) from public, anon;
 grant execute on function public.redes_admin(bigint, text, timestamptz) to authenticated;
 
--- ---------- token desde el panel (sólo escribir, nunca leer) ----------
+-- El token nuevo se carga desde el panel a través de api/redes.js (accion=token),
+-- que lo valida con Meta y lo guarda con la service_role. Desde el navegador no
+-- se puede leer ni escribir.
 drop function if exists public.redes_guardar_token(text);
-create or replace function public.redes_guardar_token(p_token text)
-returns void
-language plpgsql security definer set search_path = public as $$
-begin
-  if not exists (select 1 from administradores a where a.user_id = auth.uid()) then
-    raise exception 'Sólo para administradores.';
-  end if;
-  if p_token is null or char_length(trim(p_token)) < 50 then raise exception 'Ese token no parece válido.'; end if;
-  insert into redes_credenciales (red, token, cargado_en, vence_en, ultimo_error, ig_user_id, usuario)
-  values ('instagram', trim(p_token), now(), now() + interval '60 days', null, null, null)
-  on conflict (red) do update set token = excluded.token, cargado_en = excluded.cargado_en,
-    vence_en = excluded.vence_en, ultimo_error = null, avisado_en = null, ig_user_id = null, usuario = null;
-end;
-$$;
-revoke all on function public.redes_guardar_token(text) from public, anon;
-grant execute on function public.redes_guardar_token(text) to authenticated;
 
 -- Estado del token para el panel, sin el token.
 drop function if exists public.redes_estado_token();
 create or replace function public.redes_estado_token()
-returns table (hay_token boolean, usuario text, ig_user_id text, cargado_en timestamptz, vence_en timestamptz,
+returns table (hay_token boolean, modo text, usuario text, ig_user_id text, cargado_en timestamptz, vence_en timestamptz,
                ultimo_error text, ultima_corrida timestamptz)
 language plpgsql stable security definer set search_path = public as $$
 begin
   if not exists (select 1 from administradores a where a.user_id = auth.uid()) then
     raise exception 'Sólo para administradores.';
   end if;
-  return query select c.token is not null, c.usuario, c.ig_user_id, c.cargado_en, c.vence_en, c.ultimo_error, c.ultima_corrida
+  return query select c.token is not null, c.modo, c.usuario, c.ig_user_id, c.cargado_en, c.vence_en, c.ultimo_error, c.ultima_corrida
     from redes_credenciales c where c.red = 'instagram';
 end;
 $$;

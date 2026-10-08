@@ -1,7 +1,8 @@
 // Datos del panel de redes (/admin/redes): calendario de Instagram, estado del
 // token y carga de semanas. Todo pasa por las funciones de supabase/redes.sql,
 // que controlan que quien llama sea administrador; el token nunca vuelve al
-// navegador. El modo de prueba lo corre api/redes.js con la sesión del admin.
+// navegador. El modo de prueba y la carga del token los hace api/redes.js con
+// la sesión del administrador.
 import { cliente } from './supabase.js';
 
 const BUCKET = 'redes';
@@ -28,10 +29,6 @@ export async function estadoToken() {
   return fila || { hay_token: false };
 }
 
-export async function guardarToken(token) {
-  const c = await sb();
-  revisar(await c.rpc('redes_guardar_token', { p_token: token }));
-}
 
 export async function accion(id, cual, fecha = null) {
   const c = await sb();
@@ -39,18 +36,23 @@ export async function accion(id, cual, fecha = null) {
 }
 
 // Llama a api/redes.js con la sesión del administrador.
-async function api(accionApi, { metodo = 'GET', id } = {}) {
+async function api(accionApi, { metodo = 'GET', id, cuerpo } = {}) {
   const c = await sb();
   const { data } = await c.auth.getSession();
   const r = await fetch(`/api/redes?accion=${accionApi}${id ? `&id=${id}` : ''}`, {
-    method: metodo, headers: { Authorization: `Bearer ${data.session?.access_token || ''}` },
+    method: metodo,
+    headers: { Authorization: `Bearer ${data.session?.access_token || ''}`, ...(cuerpo ? { 'Content-Type': 'application/json' } : {}) },
+    body: cuerpo ? JSON.stringify(cuerpo) : undefined,
   });
-  const cuerpo = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(cuerpo.error || `Error ${r.status}`);
-  return cuerpo;
+  const respuesta = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(respuesta.error || `Error ${r.status}`);
+  return respuesta;
 }
 export const probar = (id) => api('probar', { metodo: 'POST', id });
 export const cupo = () => api('estado');
+// El servidor valida el token con Meta (y si es de Facebook lo cambia por el de
+// la página, que no vence) y lo guarda. Devuelve { usuario, modo, vence_en }.
+export const guardarToken = (token) => api('token', { metodo: 'POST', cuerpo: { token } });
 
 export const urlPublica = (ruta, base) => `${base}/storage/v1/object/public/${BUCKET}/${ruta.split('/').map(encodeURIComponent).join('/')}`;
 

@@ -39,7 +39,8 @@ async function db(ruta, { metodo = 'GET', cuerpo, prefer } = {}) {
     signal: AbortSignal.timeout(15_000),
   });
   if (!r.ok) throw new Error(`Supabase ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  return r.status === 204 ? null : r.json();
+  const texto = await r.text(); // 201/204 sin cuerpo al insertar o actualizar
+  return texto ? JSON.parse(texto) : null;
 }
 
 const cambiar = (id, cambios) =>
@@ -89,16 +90,44 @@ export async function avisar(asunto, texto) {
 
 // ---------- token ----------
 
+// Modo según el token: los del inicio de sesión de Instagram empiezan con "IG";
+// los de Facebook (usuario o página), con "EAA".
+export const modoDe = (token) => (/^IG/.test(token) ? 'instagram' : 'facebook');
+
 async function cuenta() {
   const c = await credenciales();
   if (!c?.token) throw Object.assign(new Error('No hay token de Instagram cargado (cargalo en /admin/redes).'), { deToken: true });
+  const acceso = { token: c.token, modo: c.modo || modoDe(c.token) };
   if (!c.ig_user_id) {
-    const yo = await ig.yo(c.token);
-    c.ig_user_id = String(yo.user_id || yo.id);
-    c.usuario = yo.username || null;
+    if (acceso.modo !== 'instagram') throw new Error('Falta el id de la cuenta de Instagram: volvé a cargar el token desde el panel.');
+    const yo = await ig.cuentaDe(acceso);
+    c.ig_user_id = yo.id;
+    c.usuario = yo.username;
     await guardarCredenciales({ ig_user_id: c.ig_user_id, usuario: c.usuario });
   }
-  return { token: c.token, igId: c.ig_user_id, usuario: c.usuario };
+  return { acceso, igId: c.ig_user_id, usuario: c.usuario };
+}
+
+// Guarda el token que se pega en el panel. Con Facebook, el token de usuario
+// del Explorador de la API Graph se cambia por el de la página (que no vence);
+// con Instagram, se guarda el de 60 días tal cual. Nunca se devuelve el token.
+export async function guardarToken(pegado) {
+  const token = String(pegado || '').trim();
+  if (token.length < 50 || /\s/.test(token)) throw new Error('Ese token no parece válido.');
+  const ahora = new Date().toISOString();
+  let fila;
+  if (modoDe(token) === 'instagram') {
+    const yo = await ig.cuentaDe({ token, modo: 'instagram' });
+    fila = { token, modo: 'instagram', ig_user_id: yo.id, usuario: yo.username, vence_en: new Date(Date.now() + 60 * 86400_000).toISOString() };
+  } else {
+    const p = await ig.tokenDePagina(token, process.env.IG_USUARIO || 'amanorecetas');
+    fila = { token: p.token, modo: 'facebook', ig_user_id: p.igId, usuario: p.usuario, vence_en: null };
+  }
+  await db('redes_credenciales?on_conflict=red', {
+    metodo: 'POST', prefer: 'resolution=merge-duplicates',
+    cuerpo: { red: 'instagram', ...fila, cargado_en: ahora, ultimo_error: null, avisado_en: null },
+  });
+  return { usuario: fila.usuario, modo: fila.modo, vence_en: fila.vence_en };
 }
 
 // ---------- armado de contenedores ----------
@@ -106,10 +135,10 @@ async function cuenta() {
 const esVideo = (ruta) => /\.mp4$/i.test(ruta);
 
 // Crea los contenedores de una publicación y devuelve el que se publica.
-export async function crearContenedores(pub, { token, igId }) {
+export async function crearContenedores(pub, { acceso, igId }) {
   const texto = pub.texto || undefined;
   const [primero] = pub.archivos;
-  const crear = (p) => ig.crearContenedor(igId, p, token);
+  const crear = (p) => ig.crearContenedor(igId, p, acceso);
   switch (pub.tipo) {
     case 'imagen':
       return { contenedor: await crear({ image_url: urlPublica(primero), caption: texto }), hijos: null };
@@ -137,7 +166,7 @@ export async function crearContenedores(pub, { token, igId }) {
           : { image_url: urlPublica(a), is_carousel_item: true }));
       }
       // Los videos de un carrusel tienen que terminar de procesarse antes del padre.
-      for (const h of hijos.filter((_, i) => esVideo(pub.archivos[i]))) await esperarContenedor(h, token, 30_000);
+      for (const h of hijos.filter((_, i) => esVideo(pub.archivos[i]))) await esperarContenedor(h, acceso, 30_000);
       return { contenedor: await crear({ media_type: 'CAROUSEL', children: hijos.join(','), caption: texto }), hijos };
     }
     default:
@@ -148,10 +177,10 @@ export async function crearContenedores(pub, { token, igId }) {
 const pausa = (ms) => new Promise((listo) => setTimeout(listo, ms));
 
 // Consulta el contenedor hasta que deja de estar IN_PROGRESS o se acaba el tiempo.
-export async function esperarContenedor(id, token, hastaMs) {
+export async function esperarContenedor(id, acceso, hastaMs) {
   const limite = Date.now() + hastaMs;
   for (;;) {
-    const e = await ig.estadoContenedor(id, token);
+    const e = await ig.estadoContenedor(id, acceso);
     if (e.status_code !== 'IN_PROGRESS' || Date.now() + 5000 > limite) return e;
     await pausa(Number(process.env.REDES_PAUSA_MS || 5000));
   }
@@ -213,7 +242,7 @@ async function avanzar(pub, ctx) {
 
   const llego = hora <= ahora;
   const queda = TIEMPO_MAX_MS - (Date.now() - ctx.inicio);
-  const estado = await esperarContenedor(contenedor, ctx.token, llego ? Math.max(0, Math.min(queda, 25_000)) : 0);
+  const estado = await esperarContenedor(contenedor, ctx.acceso, llego ? Math.max(0, Math.min(queda, 25_000)) : 0);
   switch (estado.status_code) {
     case 'PUBLISHED':
       // Se publicó en una ejecución anterior pero no llegamos a guardar el id.
@@ -232,15 +261,15 @@ async function avanzar(pub, ctx) {
   }
   if (!llego) { await cambiar(pub.id, { bloqueada_hasta: null }); return 'lista, esperando la hora'; }
 
-  ctx.cupo ??= await ig.cupo(ctx.igId, ctx.token).catch(() => ({ usadas: 0, total: null }));
+  ctx.cupo ??= await ig.cupo(ctx.igId, ctx.acceso).catch(() => ({ usadas: 0, total: null }));
   if (ctx.cupo.total != null && ctx.cupo.usadas >= ctx.cupo.total) {
     throw Object.assign(new Error(`Se llegó al límite de publicaciones de 24 horas (${ctx.cupo.usadas}/${ctx.cupo.total}).`), { deLimite: true });
   }
-  const mediaId = await ig.publicarContenedor(ctx.igId, contenedor, ctx.token);
+  const mediaId = await ig.publicarContenedor(ctx.igId, contenedor, ctx.acceso);
   // El id se guarda antes que nada: con eso ya no se puede publicar dos veces.
   await cambiar(pub.id, { estado: 'publicada', ig_media_id: mediaId, publicada_en: new Date().toISOString(), bloqueada_hasta: null, ultimo_error: null });
   ctx.cupo.usadas++;
-  const enlace = await ig.enlaceDe(mediaId, ctx.token);
+  const enlace = await ig.enlaceDe(mediaId, ctx.acceso);
   if (enlace) await cambiar(pub.id, { enlace });
   return 'publicada';
 }
@@ -308,7 +337,7 @@ export async function probar(id) {
     const { contenedor, hijos } = await crearContenedores(pub, ctx);
     resultado.contenedor = contenedor;
     resultado.pasos.push(`Contenedor creado: ${contenedor}${hijos ? ` (láminas: ${hijos.join(', ')})` : ''}`);
-    const e = await esperarContenedor(contenedor, ctx.token, Math.max(0, 50_000 - (Date.now() - inicio)));
+    const e = await esperarContenedor(contenedor, ctx.acceso, Math.max(0, 50_000 - (Date.now() - inicio)));
     resultado.estado = e.status_code;
     resultado.pasos.push(`Estado del contenedor: ${e.status_code}${e.status ? ` (${e.status})` : ''}`);
     resultado.ok = e.status_code === 'FINISHED' || e.status_code === 'IN_PROGRESS';
@@ -321,7 +350,7 @@ export async function probar(id) {
   return resultado;
 }
 
-const cupo = (ctx) => ig.cupo(ctx.igId, ctx.token);
+const cupo = (ctx) => ig.cupo(ctx.igId, ctx.acceso);
 
 // ---------- tarea diaria (Vercel Cron, una vez por día) ----------
 // Renueva el token, revisa que el disparador esté corriendo y manda por mail
@@ -332,6 +361,18 @@ export async function tareaDiaria() {
   const c = await credenciales();
   if (!c?.token) {
     avisos.push('No hay token de Instagram cargado: no se puede publicar nada. Cargalo en el panel.');
+  } else if ((c.modo || modoDe(c.token)) === 'facebook') {
+    // El token de página no vence, pero se invalida si cambiás la contraseña de
+    // Facebook o le sacás el permiso a la app: se comprueba que siga andando.
+    try {
+      await ig.cuentaDe({ token: c.token, modo: 'facebook' }, c.ig_user_id);
+      informe.token = 'vigente (no vence)';
+      if (c.ultimo_error) await guardarCredenciales({ ultimo_error: null });
+    } catch (err) {
+      await guardarCredenciales({ ultimo_error: `Token: ${err.message}` });
+      avisos.push(`El token de Instagram dejó de funcionar: ${err.message}\nGenerá uno nuevo en el Explorador de la API Graph y cargalo en el panel.`);
+      informe.token = `error: ${err.message}`;
+    }
   } else {
     const edad = Date.now() - new Date(c.cargado_en || 0).getTime();
     if (edad > RENOVAR_CADA_DIAS * 86400_000) {
@@ -383,7 +424,7 @@ export async function tareaDiaria() {
 
 export async function resumen() {
   const c = await credenciales();
-  const r = { token: Boolean(c?.token), usuario: c?.usuario || null, vence_en: c?.vence_en || null, ultima_corrida: c?.ultima_corrida || null };
+  const r = { token: Boolean(c?.token), modo: c?.modo || null, usuario: c?.usuario || null, vence_en: c?.vence_en || null, ultima_corrida: c?.ultima_corrida || null };
   if (c?.token) {
     try { r.cupo = await cupo(await cuenta()); } catch (err) { r.error = err.message; }
   }

@@ -67,7 +67,9 @@ export async function vistaAdminRedes() {
       cuenta.replaceChildren(...[
         el('p', {}, t.hay_token
           ? [`Cuenta: ${t.usuario ? `@${t.usuario}` : '(se completa en la primera publicación o prueba)'} · Token cargado el ${new Date(t.cargado_en).toLocaleDateString('es-AR')} · `,
-            el('strong', { class: quedan != null && quedan < 10 ? 'error' : '' }, `vence en ${quedan} días`), ' (se renueva solo cada 7 días)']
+            quedan == null
+              ? el('strong', {}, 'no vence (token de página de Facebook)')
+              : [el('strong', { class: quedan < 10 ? 'error' : '' }, `vence en ${quedan} días`), ' (se renueva solo cada 7 días)']]
           : el('strong', { class: 'error' }, 'Todavía no hay token cargado: no se puede publicar.')),
         el('p', { class: 'meta' }, t.ultima_corrida
           ? `Última corrida del publicador: ${cuando(t.ultima_corrida)}${Date.now() - new Date(t.ultima_corrida) > 3600_000 ? ' — hace más de una hora: revisá pg_cron en Supabase.' : ''}`
@@ -77,14 +79,15 @@ export async function vistaAdminRedes() {
       cuenta.replaceChildren(el('p', { class: 'error' }, err.message));
     }
   }
-  const campoToken = el('input', { type: 'password', autocomplete: 'off', placeholder: 'Pegá acá el token de Meta for Developers', class: 'redes-token' });
+  const campoToken = el('input', { type: 'password', autocomplete: 'off', placeholder: 'Pegá acá el token (EAA…)', class: 'redes-token' });
   const formToken = el('form', {
     class: 'admin-filtro', onsubmit: async (e) => {
       e.preventDefault();
       try {
-        await guardarToken(campoToken.value);
+        aviso('Validando el token con Meta…');
+        const r = await guardarToken(campoToken.value);
         campoToken.value = '';
-        aviso('Token guardado. No se puede volver a ver desde acá.');
+        aviso(`Token guardado para @${r.usuario || '?'}${r.modo === 'facebook' ? ' (token de página, no vence)' : ''}. No se puede volver a ver desde acá.`);
         cargarCuenta();
       } catch (err) { aviso(err.message, 'error'); }
     },
@@ -195,7 +198,7 @@ export async function vistaAdminRedes() {
       cuenta,
       el('div', { class: 'admin-filtro' }, botonCupo, salidaCupo),
       el('details', {}, el('summary', {}, 'Cargar un token nuevo'),
-        el('p', { class: 'meta' }, 'Se guarda en Supabase y no se puede volver a leer desde la web. Ver docs/redes-instagram.md para generarlo.'),
+        el('p', { class: 'meta' }, 'Pegá el token del Explorador de la API Graph (dura 1-2 horas: cargalo enseguida). El servidor lo cambia por el de la página de Facebook, que no vence, y lo guarda en Supabase: no se puede volver a leer desde la web. Ver docs/redes-instagram.md.'),
         formToken)),
     el('section', { class: 'seccion' },
       el('h2', {}, 'Cargar una semana'),

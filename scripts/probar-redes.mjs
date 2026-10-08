@@ -13,7 +13,7 @@ process.env.CRON_SECRET = 'secreto-de-prueba-0123456789';
 process.env.RESEND_API_KEY = 'resend-de-prueba';
 process.env.REDES_PAUSA_MS = '1';
 
-const { publicarPendientes, probar, tareaDiaria, SUPABASE_URL } = await import('../api/_redes.js');
+const { publicarPendientes, probar, tareaDiaria, guardarToken, SUPABASE_URL } = await import('../api/_redes.js');
 const { default: handler } = await import('../api/redes.js');
 
 let fallos = 0;
@@ -48,13 +48,13 @@ await caso('calendario: hora de Argentina en ISO', () => {
 });
 
 // ---------- simulador de Supabase + Instagram ----------
-const IG = 'https://graph.instagram.com/v24.0';
-let filas, cred, contenedores, publicados, mails, renovaciones, fallas, llamadasPublicar;
+let filas, cred, contenedores, publicados, mails, renovaciones, fallas, llamadasPublicar, hosts;
 let siguiente = 1000;
 
 function reiniciar() {
-  filas = []; contenedores = new Map(); publicados = []; mails = []; renovaciones = 0; fallas = {}; llamadasPublicar = 0;
-  cred = { red: 'instagram', token: 'TOKEN-1', ig_user_id: null, usuario: null, cargado_en: new Date().toISOString(), vence_en: new Date(Date.now() + 50 * 86400_000).toISOString() };
+  filas = []; contenedores = new Map(); publicados = []; mails = []; renovaciones = 0; fallas = {}; llamadasPublicar = 0; hosts = new Set();
+  // Por defecto, como quedó la app: inicio de sesión con Facebook y token de página.
+  cred = { red: 'instagram', token: 'EAA-pagina', modo: 'facebook', ig_user_id: '178', usuario: 'amanorecetas', cargado_en: new Date().toISOString(), vence_en: null };
 }
 const minutos = (m) => new Date(Date.now() + m * 60_000).toISOString();
 function fila(d) {
@@ -96,6 +96,7 @@ globalThis.fetch = async (direccion, opciones = {}) => {
       for (const f of tomadas) f.bloqueada_hasta = minutos(4);
       return json(tomadas.map((f) => ({ ...f })));
     }
+    if (metodo === 'POST' && tabla === 'redes_credenciales') { cred = { ...cred, ...cuerpo }; return new Response(null, { status: 201 }); }
     const lista = tabla === 'redes_credenciales' ? [cred] : filas;
     const elegidas = filtrar(lista, url.searchParams);
     if (metodo === 'PATCH') { for (const f of elegidas) Object.assign(f, cuerpo); return new Response(null, { status: 204 }); }
@@ -104,12 +105,25 @@ globalThis.fetch = async (direccion, opciones = {}) => {
 
   if (url.origin === 'https://api.resend.com') { mails.push(cuerpo); return json({ id: 'mail' }); }
 
-  if (url.origin === 'https://graph.instagram.com') {
+  if (url.origin === 'https://graph.instagram.com' || url.origin === 'https://graph.facebook.com') {
+    hosts.add(url.origin);
     const token = url.searchParams.get('access_token') || cuerpo.access_token;
-    if (url.pathname === '/refresh_access_token') { renovaciones++; return json({ access_token: `TOKEN-${renovaciones + 1}`, expires_in: 5183944 }); }
-    if (token === 'VENCIDO') return json({ error: { message: 'Error validating access token', code: 190 } }, 400);
+    if (url.pathname === '/refresh_access_token') { renovaciones++; return json({ access_token: `IGAA-${renovaciones + 1}`, expires_in: 5183944 }); }
     const ruta = url.pathname.replace('/v24.0/', '');
-    if (ruta === 'me') return json({ user_id: '178', username: 'amanorecetas' });
+    if (ruta === 'oauth/access_token') {
+      assert.equal(url.searchParams.get('client_secret'), 'secreto-app');
+      return json({ access_token: 'EAA-usuario-largo', token_type: 'bearer', expires_in: 5183944 });
+    }
+    if (ruta === 'me/accounts') {
+      assert.equal(token, 'EAA-usuario-largo');
+      return json({ data: [
+        { name: 'Otra página', access_token: 'EAA-otra', id: '1' },
+        { name: 'A Mano', access_token: 'EAA-pagina-nueva', id: '2', instagram_business_account: { id: '178', username: 'amanorecetas' } },
+      ] });
+    }
+    if (token === 'VENCIDO') return json({ error: { message: 'Error validating access token', code: 190 } }, 400);
+    if (ruta === 'me' && url.origin === 'https://graph.instagram.com') return json({ user_id: '178', username: 'amanorecetas' });
+    if (ruta === '178' && url.searchParams.get('fields') === 'id,username') return json({ id: '178', username: 'amanorecetas' });
     if (ruta === '178/content_publishing_limit') return json({ data: [{ quota_usage: publicados.length, config: { quota_total: 100 } }] });
     if (ruta === '178/media') {
       if (fallas.crear) { fallas.crear--; return json({ error: { message: 'Invalid parameter', code: 100 } }, 400); }
@@ -178,6 +192,7 @@ await caso('publica imagen, carrusel, historia y reel con portada; prepara lo qu
   assert.deepEqual([prueba.estado, manual.estado, pausada.estado], ['solo_prueba', 'manual', 'pausada']);
   assert.equal(cred.ig_user_id, '178');
   assert.ok(cred.ultima_corrida);
+  assert.deepEqual([...hosts], ['https://graph.facebook.com'], 'con token de página publica en graph.facebook.com');
 
   // Segunda corrida: nada se repite y el reel que sale en 10 minutos ya queda preparado.
   await publicarPendientes();
@@ -268,14 +283,14 @@ await caso('modo de prueba: arma el contenedor y nunca publica', async () => {
   assert.equal(publicados.length, 0);
 });
 
-await caso('tarea diaria: renueva el token, avisa las historias a mano y si el publicador no corre', async () => {
+await caso('tarea diaria (inicio de sesión de Instagram): renueva el token, avisa las historias a mano y si el publicador no corre', async () => {
   reiniciar();
-  cred.cargado_en = minutos(-8 * 24 * 60);
+  Object.assign(cred, { token: 'IGAA-1', modo: 'instagram', vence_en: minutos(50 * 24 * 60), cargado_en: minutos(-8 * 24 * 60) });
   fila({ clave: 'hoy-manual', tipo: 'historia', fecha: minutos(1), estado: 'manual', nota: 'sticker de enlace a amanorecetas.com.ar/torneo' });
   fila({ clave: 'pendiente', tipo: 'imagen', fecha: minutos(60) });
   const r = await tareaDiaria();
   assert.equal(r.token, 'renovado');
-  assert.equal(cred.token, 'TOKEN-2');
+  assert.equal(cred.token, 'IGAA-2');
   assert.ok(new Date(cred.vence_en) > Date.now() + 59 * 86400_000);
   assert.equal(mails.length, 1);
   assert.match(mails[0].text, /subir a mano/);
@@ -287,14 +302,54 @@ await caso('tarea diaria: renueva el token, avisa las historias a mano y si el p
 
 await caso('tarea diaria: si la renovación falla, avisa por mail', async () => {
   reiniciar();
-  cred.token = 'VENCIDO';
-  cred.cargado_en = minutos(-8 * 24 * 60);
+  Object.assign(cred, { token: 'VENCIDO', modo: 'instagram', vence_en: minutos(50 * 24 * 60), cargado_en: minutos(-8 * 24 * 60) });
   const orig = globalThis.fetch;
   globalThis.fetch = (u, o) => (String(u).includes('refresh_access_token')
     ? Promise.resolve(json({ error: { message: 'Session has expired', code: 190 } }, 400)) : orig(u, o));
   try { await tareaDiaria(); } finally { globalThis.fetch = orig; }
   assert.match(cred.ultimo_error, /expired/);
   assert.match(mails[0].text, /No se pudo renovar/);
+});
+
+await caso('tarea diaria (token de página): no renueva, comprueba que ande y avisa si dejó de andar', async () => {
+  reiniciar();
+  cred.cargado_en = minutos(-30 * 24 * 60);
+  const r = await tareaDiaria();
+  assert.equal(r.token, 'vigente (no vence)');
+  assert.equal(renovaciones, 0);
+  assert.equal(mails.length, 0);
+  cred.token = 'VENCIDO';
+  await tareaDiaria();
+  assert.match(cred.ultimo_error, /validating access token/);
+  assert.match(mails[0].text, /dejó de funcionar/);
+});
+
+await caso('cargar token de Facebook: lo cambia por el de la página con Instagram, que no vence', async () => {
+  reiniciar();
+  cred = null;
+  await assert.rejects(guardarToken(`EAA${'x'.repeat(60)}`), /META_APP_ID/);
+  process.env.META_APP_ID = '1410647951177080';
+  process.env.META_APP_SECRET = 'secreto-app';
+  const r = await guardarToken(`  EAA${'x'.repeat(60)}\n`);
+  assert.deepEqual(r, { usuario: 'amanorecetas', modo: 'facebook', vence_en: null });
+  assert.equal(cred.token, 'EAA-pagina-nueva', 'guarda el token de la página que tiene Instagram');
+  assert.equal(cred.ig_user_id, '178');
+  assert.equal(cred.vence_en, null);
+  assert.ok(!JSON.stringify(r).includes('EAA'), 'el token no vuelve al navegador');
+  await assert.rejects(guardarToken('corto'), /no parece válido/);
+});
+
+await caso('inicio de sesión de Instagram: guarda el token de 60 días y publica en graph.instagram.com', async () => {
+  reiniciar();
+  const r = await guardarToken(`IGAA${'x'.repeat(60)}`);
+  assert.equal(r.modo, 'instagram');
+  assert.equal(cred.ig_user_id, '178');
+  assert.ok(new Date(cred.vence_en) > Date.now() + 59 * 86400_000);
+  hosts.clear();
+  const f = fila({ clave: 'ig', tipo: 'imagen', fecha: minutos(-1) });
+  await publicarPendientes();
+  assert.equal(f.estado, 'publicada');
+  assert.deepEqual([...hosts], ['https://graph.instagram.com']);
 });
 
 await caso('endpoint: pide el secreto', async () => {

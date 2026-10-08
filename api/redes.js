@@ -4,11 +4,12 @@
 //   GET  /api/redes?accion=diario     una vez por día, desde Vercel Cron (vercel.json)
 //   POST /api/redes?accion=probar&id=N  modo de prueba: arma el contenedor sin publicar
 //   GET  /api/redes?accion=estado     token y cupo de publicaciones
+//   POST /api/redes?accion=token      { token }: guarda un token nuevo (desde el panel)
 //
 // publicar y diario piden "Authorization: Bearer <CRON_SECRET>" (Vercel Cron lo
-// manda solo). probar y estado también aceptan la sesión de un administrador.
+// manda solo). probar, estado y token también aceptan la sesión de un administrador.
 import { timingSafeEqual } from 'node:crypto';
-import { publicarPendientes, tareaDiaria, probar, resumen, esAdmin } from './_redes.js';
+import { publicarPendientes, tareaDiaria, probar, resumen, esAdmin, guardarToken } from './_redes.js';
 
 function responder(res, estado, cuerpo) {
   res.status(estado).setHeader('Cache-Control', 'no-store').json(cuerpo);
@@ -25,7 +26,7 @@ function conSecreto(req) {
 export default async function handler(req, res) {
   const accion = String(req.query.accion || '');
   const secreto = conSecreto(req);
-  const admin = !secreto && ['probar', 'estado'].includes(accion)
+  const admin = !secreto && ['probar', 'estado', 'token'].includes(accion)
     && await esAdmin(String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')).catch(() => false);
   if (!secreto && !admin) return responder(res, 401, { error: 'No autorizado.' });
 
@@ -42,6 +43,11 @@ export default async function handler(req, res) {
         return responder(res, 200, await probar(req.query.id));
       case 'estado':
         return responder(res, 200, await resumen());
+      case 'token': {
+        if (req.method !== 'POST') return responder(res, 405, { error: 'Usá POST.' });
+        const cuerpo = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
+        return responder(res, 200, await guardarToken(cuerpo.token));
+      }
       default:
         break;
     }
