@@ -1,0 +1,297 @@
+{
+  "semana": "semana-2-7-al-13-oct",
+  "zona": "America/Argentina/Buenos_Aires",
+  "solo_prueba": true,
+  "publicaciones": [
+    {
+      "clave": "2026-10-07-historia-Mi07-historia-tip-pan-rallado",
+      "fecha": "2026-10-07T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Mi07-historia-tip-pan-rallado.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-07-reel-Mi07-reel-que-le-falta-chimichurri",
+      "fecha": "2026-10-07T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "Mi07-reel-que-le-falta-chimichurri.mp4"
+      ],
+      "texto": "¿Le pegaste? 👀 Contalo en los comentarios (sin mirar la respuesta 😅)\nEste es \"¿Qué le falta?\", uno de los 3 juegos del torneo de A Mano. Jugás todos los días y el que más suma hasta el domingo 18 se lleva $15.000.\n👉 amanorecetas.com.ar/torneo (link en la bio)\n#chimichurri #asado #trivia #juegos #cocinaargentina",
+      "portada": "Mi07-reel-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "¿Le pegaste al ingrediente? 👀 Jugá gratis y ganá $15.000 en amanorecetas.com.ar 🏆 #chimichurri #asado #trivia #fyp"
+    },
+    {
+      "clave": "2026-10-07-carrusel-Mi07-chipa-1-portada",
+      "fecha": "2026-10-07T17:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "Mi07-chipa-1-portada.png",
+        "Mi07-chipa-2-ingredientes.png",
+        "Mi07-chipa-3-pasos.png",
+        "Mi07-chipa-4-secreto.png"
+      ],
+      "texto": "Chipá casero para la merienda 🧀\nCrocante afuera, tierno adentro y con 7 ingredientes. El secreto está en la última foto 👀\nGuardalo 📌 y contanos: ¿con mate o con café?\nReceta completa en amanorecetas.com.ar/receta/c-chipa\n#chipa #merienda #recetasfaciles #recetascaseras #sintrigo #cocinaargentina",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-08-reel-J08-reel-guiso-de-lentejas",
+      "fecha": "2026-10-08T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "J08-reel-guiso-de-lentejas.mp4"
+      ],
+      "texto": "Guiso de lentejas que rinde para toda la semana 🍲\nCon chorizo colorado, panceta y bien espeso. El secreto: 10 minutos de reposo antes de servir.\nGuardalo 🔖 y contanos: ¿con pan o sin pan?\nReceta completa en amanorecetas.com.ar (link en la bio)\n#guisodelentejas #guiso #recetasargentinas #comidacasera #recetasfaciles",
+      "portada": "J08-reel-guiso-de-lentejas-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Guiso de lentejas para toda la semana 🍲 ¿con pan o sin pan? Receta en amanorecetas.com.ar #guiso #lentejas #recetasargentinas #fyp"
+    },
+    {
+      "clave": "2026-10-08-carrusel-J08-torneo-1-portada",
+      "fecha": "2026-10-08T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "J08-torneo-1-portada.png",
+        "J08-torneo-2-juegos.png",
+        "J08-torneo-3-requisitos.png"
+      ],
+      "texto": "Así se juega el torneo de A Mano 🏆\n🌎 Adiviná el país · 🧩 ¿Qué le falta? · 🍲 Armá el plato\nCuenta la primera partida del día de cada juego. Gana quien más suma hasta el domingo 18: $15.000.\nGratis · +18 · Argentina · Seguí a @amanorecetas\n👉 Inscribite en amanorecetas.com.ar/torneo (link en la bio)\n#torneo #concurso #trivia #juegos #cocinaargentina #argentina",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-08-historia-J08-historia-quedan-11-dias",
+      "fecha": "2026-10-08T20:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "J08-historia-quedan-11-dias.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": true,
+      "nota": "sticker de enlace a amanorecetas.com.ar/torneo, texto \"Sumarme\"",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-09-reel-V09-reel-adivina-el-pais-pupusas",
+      "fecha": "2026-10-09T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "V09-reel-adivina-el-pais-pupusas.mp4"
+      ],
+      "texto": "¿De qué país son las pupusas? 👀 Respondé en comentarios antes de que aparezca la respuesta.\nAsí es \"Adiviná el país\", uno de los 3 juegos del torneo de A Mano. $15.000 al que más sume hasta el domingo 18.\n👉 amanorecetas.com.ar/torneo\n#pupusas #elsalvador #comidalatina #trivia #juegos #torneo",
+      "portada": "V09-reel-adivina-el-pais-pupusas-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "¿De qué país son las pupusas? 👀 Jugá gratis y ganá $15.000 👉 amanorecetas.com.ar/torneo #pupusas #trivia #comidalatina #fyp"
+    },
+    {
+      "clave": "2026-10-09-historia-V09-historia-subi-tu-receta",
+      "fecha": "2026-10-09T13:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "V09-historia-subi-tu-receta.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": true,
+      "nota": "sticker de enlace a amanorecetas.com.ar/comunidad, texto \"Subir mi receta\"",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-09-carrusel-V09-pizza-de-molde-1-portada",
+      "fecha": "2026-10-09T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "V09-pizza-de-molde-1-portada.png",
+        "V09-pizza-de-molde-2-ingredientes.png",
+        "V09-pizza-de-molde-3-pasos.png",
+        "V09-pizza-de-molde-4-secreto.png"
+      ],
+      "texto": "Viernes de pizza 🍕 Alta, esponjosa y de molde, como en la pizzería.\nEl secreto está en la última foto: dos levados.\n¿Muzza sola o con algo arriba? Te leemos 👇\nGuardala 🔖 · Receta completa en amanorecetas.com.ar\n#pizzacasera #pizza #viernesdepizza #recetasargentinas #recetasfaciles",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-10-reel-S10-reel-tortilla-de-papas",
+      "fecha": "2026-10-10T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "S10-reel-tortilla-de-papas.mp4"
+      ],
+      "texto": "¿Con o sin cebolla? 🥔🥚 El debate eterno. Acá, con.\nTortilla de papas jugosa con 5 ingredientes. El secreto: 5 minutos de reposo antes de ir a la sartén.\nGuardala 🔖 y defendé tu postura en comentarios 👇\nReceta en amanorecetas.com.ar (link en la bio)\n#tortilladepapas #tortilla #recetasfaciles #conosincebolla #cocinacasera",
+      "portada": "S10-reel-tortilla-de-papas-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "¿Con o sin cebolla? 🥔 Tortilla de papas jugosa. Receta en amanorecetas.com.ar #tortilladepapas #conosincebolla #fyp"
+    },
+    {
+      "clave": "2026-10-10-imagen-S10-receta-del-mes",
+      "fecha": "2026-10-10T18:00:00-03:00",
+      "tipo": "imagen",
+      "archivos": [
+        "S10-receta-del-mes.png"
+      ],
+      "texto": "$30.000 para tu receta de siempre 🍲\nEsa que te enseñó tu abuela, tu vieja o el almacenero. Subila a la comunidad de A Mano y participás de la receta del mes de octubre.\n✔️ Foto propia · ✔️ Pasos claros · ✔️ Ingredientes fáciles de conseguir\nLa elige un jurado de A Mano. Bases en amanorecetas.com.ar/bases\n👉 Subila en amanorecetas.com.ar/comunidad (link en la bio)\n#recetadelmes #recetascaseras #recetasdelaabuela #cocinaargentina #concurso",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-10-historia-S10-historia-ya-jugaste",
+      "fecha": "2026-10-10T20:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "S10-historia-ya-jugaste.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": true,
+      "nota": "sticker de enlace a amanorecetas.com.ar/juegos, texto \"Jugar\"",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-11-carrusel-D11-pastafrola-1-portada",
+      "fecha": "2026-10-11T16:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "D11-pastafrola-1-portada.png",
+        "D11-pastafrola-2-ingredientes.png",
+        "D11-pastafrola-3-pasos.png",
+        "D11-pastafrola-4-secreto.png"
+      ],
+      "texto": "Domingo, mate y pastafrola 🧉\nDe membrillo, con el enrejado de siempre. El secreto: no amasar de más.\n¿Membrillo o batata? Te leemos 👇\nGuardala 🔖 · Receta completa en amanorecetas.com.ar\n#pastafrola #merienda #domingo #recetasargentinas #recetascaseras",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-11-historia-D11-historia-mitad-de-camino",
+      "fecha": "2026-10-11T19:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "D11-historia-mitad-de-camino.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": true,
+      "nota": "sticker de enlace a amanorecetas.com.ar/torneo, texto \"Ver ranking\"",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-11-reel-D11-reel-arroz-con-leche",
+      "fecha": "2026-10-11T20:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "D11-reel-arroz-con-leche.mp4"
+      ],
+      "texto": "¿Postre con lo que hay en casa? Arroz con leche 🍚\nCremoso, con canela y limón. El secreto: revolver seguido.\n¿Tibio o frío? 👇\nReceta en amanorecetas.com.ar (link en la bio)\n#arrozconleche #postrecasero #postresargentinos #recetasfaciles",
+      "portada": "D11-reel-arroz-con-leche-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Arroz con leche con lo que hay en casa 🍚 ¿tibio o frío? Receta en amanorecetas.com.ar #arrozconleche #postre #fyp"
+    },
+    {
+      "clave": "2026-10-12-historia-L12-historia-ultima-semana",
+      "fecha": "2026-10-12T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "L12-historia-ultima-semana.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": true,
+      "nota": "sticker de enlace a amanorecetas.com.ar/torneo, texto \"Jugar\"",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-12-reel-L12-reel-que-le-falta-pizza",
+      "fecha": "2026-10-12T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "L12-reel-que-le-falta-pizza.mp4"
+      ],
+      "texto": "¿Qué le falta a esta pizza? 🍕 Respondé en comentarios antes de ver la respuesta.\nAsí se juega \"¿Qué le falta?\" en el torneo de A Mano. Última semana: cierra el domingo 18 y el que más suma se lleva $15.000.\n👉 amanorecetas.com.ar/torneo\n#pizza #trivia #juegos #torneo #cocinaargentina",
+      "portada": "L12-reel-que-le-falta-pizza-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "¿Qué le falta a esta pizza? 🍕 Última semana del torneo: $15.000 👉 amanorecetas.com.ar/torneo #pizza #trivia #fyp"
+    },
+    {
+      "clave": "2026-10-12-carrusel-L12-pastel-de-papa-1-portada",
+      "fecha": "2026-10-12T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "L12-pastel-de-papa-1-portada.png",
+        "L12-pastel-de-papa-2-ingredientes.png",
+        "L12-pastel-de-papa-3-pasos.png",
+        "L12-pastel-de-papa-4-secreto.png"
+      ],
+      "texto": "Pastel de papa como el de la abuela 🥔\nCarne bien condimentada, aceitunas, huevo y puré gratinado arriba. El secreto: pintarlo con huevo.\n¿Con pasas o sin pasas? 👀 Que empiece el debate.\nGuardala 🔖 · Receta completa en amanorecetas.com.ar\n#pasteldepapa #comidacasera #recetasargentinas #recetasdelaabuela",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-13-historia-Ma13-historia-tip-crema",
+      "fecha": "2026-10-13T11:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Ma13-historia-tip-crema.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-13-carrusel-Ma13-revuelto-gramajo-1-portada",
+      "fecha": "2026-10-13T13:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "Ma13-revuelto-gramajo-1-portada.png",
+        "Ma13-revuelto-gramajo-2-ingredientes.png",
+        "Ma13-revuelto-gramajo-3-pasos.png",
+        "Ma13-revuelto-gramajo-4-secreto.png"
+      ],
+      "texto": "Revuelto gramajo, el clásico de bodegón 🍳\nPapas pay, jamón, huevo y arvejas en 25 minutos. El secreto: sacarlo del fuego con el huevo todavía cremoso.\n¿Con arvejas o sin? 👇\nGuardala 🔖 · Receta completa en amanorecetas.com.ar\n#revueltogramajo #bodegon #recetasargentinas #cenafacil",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-13-reel-Ma13-reel-tarta-de-jamon-y-queso",
+      "fecha": "2026-10-13T19:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "Ma13-reel-tarta-de-jamon-y-queso.mp4"
+      ],
+      "texto": "¿Cena sin vueltas esta noche? Tarta de jamón y queso 🥧\nLa de todos los días, con un relleno cremoso. El secreto: pincharla con tenedor.\nGuardala 🔖 para la cena.\nReceta en amanorecetas.com.ar (link en la bio)\n#tartadejamonyqueso #tarta #cenafacil #recetasargentinas",
+      "portada": "Ma13-reel-tarta-de-jamon-y-queso-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Tarta de jamón y queso para la cena 🥧 Receta en amanorecetas.com.ar #tarta #cenafacil #recetasargentinas #fyp"
+    }
+  ]
+}
