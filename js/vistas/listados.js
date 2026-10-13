@@ -90,7 +90,7 @@ export async function vistaInicio() {
         el('h2', {}, 'Clásicos latinoamericanos'),
         deCasa.length > 8 && el('a', { href: '/casa' }, `Ver las ${deCasa.length} →`)),
       el('p', { class: 'seccion-bajada' }, 'Las recetas de siempre de nuestra región, probadas y explicadas a nuestra manera.'),
-      grillaRecetas(elegirDelDia(deCasa, 8))),
+      grillaRecetas(elegirDelDia(primeroConFoto(deCasa, 8), 8))),
     paises.length > 0 && el('section', { class: 'seccion' },
       el('div', { class: 'seccion-titulo' },
         el('h2', {}, 'Viajá por la cocina de Latinoamérica y el mundo'),
@@ -105,7 +105,7 @@ export async function vistaInicio() {
         el('h2', {}, 'Recetas de la comunidad'),
         el('a', { href: rutaComunidad() }, deComunidad.length ? 'Ver todas →' : 'Ir a la comunidad →')),
       deComunidad.length
-        ? grillaRecetas(deComunidad.slice(0, 10))
+        ? grillaRecetas(conFotoAdelante(deComunidad).slice(0, 10))
         : el('p', { class: 'meta' }, 'Todavía nadie compartió recetas. ¡Podés ser la primera persona en subir una!')),
     invitacion,
     categorias.length > 0 && el('section', { class: 'seccion' },
@@ -120,6 +120,15 @@ export async function vistaInicio() {
             el('h3', {}, traducirCategoria(c.nombre))))))
   );
 }
+
+// En la portada se muestran primero las recetas con foto: las que no tienen
+// sólo aparecen si no alcanzan las que sí (para llenar `cantidad`).
+function primeroConFoto(lista, cantidad) {
+  const conFoto = lista.filter((r) => r.imagen);
+  return conFoto.length >= cantidad ? conFoto : conFotoAdelante(lista);
+}
+// Misma lista, con las que tienen foto adelante (sin cambiar el orden dentro de cada grupo).
+const conFotoAdelante = (lista) => [...lista.filter((r) => r.imagen), ...lista.filter((r) => !r.imagen)];
 
 // Una selección que cambia cada día (así la portada no muestra siempre las mismas).
 function elegirDelDia(lista, cantidad) {
