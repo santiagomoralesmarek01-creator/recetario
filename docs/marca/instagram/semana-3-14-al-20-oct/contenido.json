@@ -1,0 +1,453 @@
+{
+  "titulo": "A MANO · SEMANA DEL MIÉRCOLES 14 AL MARTES 20 DE OCTUBRE",
+  "intro": [
+    "Semana de recetas: 2 historias, 1 reel y 1 carrusel por día, y 3 imágenes extra (jueves, sábado y lunes).",
+    "Los archivos empiezan con el día: Mi14 = miércoles 14 · J15 · V16 · S17 · D18 · L19 · Ma20.",
+    "Se publica sola desde /admin/redes: generada con scripts/redes/generar-semana.mjs a partir de contenido.json.",
+    "Ninguna historia lleva sticker de enlace: todas salen solas. Los reels traen pista de audio muda (sumá música desde la app si querés).",
+    "",
+    "RESUMEN",
+    "Día      | Historias            | Reel                     | Carrusel                  | Extra",
+    "---------|----------------------|--------------------------|---------------------------|----------------------------",
+    "Mié 14   | 10:00 · 20:30        | Humita en olla (12:00)   | Pollo al horno (18:00)    | —",
+    "Jue 15   | 10:00 · 20:30        | Arepas de choclo (12:00) | Lomo saltado (18:00)      | Un plato, mil nombres (15:00)",
+    "Vie 16   | 10:00 · 20:30        | Quesadillas (12:00)      | Sopa paraguaya (18:00)    | —",
+    "Sáb 17   | 10:00 · 20:30        | Tequeños (12:00)         | Capeletis Caruso (18:00)  | Reemplazo de la semana (15:00)",
+    "Dom 18   | 10:00 · 20:30        | Bolo de fubá (17:00)     | Ñoquis de papa (12:00)    | —",
+    "Lun 19   | 10:00 · 20:30        | Guacamole (12:00)        | Arroz con pollo (18:00)   | ¿Qué hay a mano? (15:00)",
+    "Mar 20   | 10:00 · 20:30        | Papa a la huancaína (12:00) | Pascualina (18:00)     | —"
+  ],
+  "cierre": [
+    "- Respondé los comentarios, sobre todo las preguntas (\"¿gajos o rodajas?\", \"¿palta o aguacate?\"): eso hace que Instagram muestre más el posteo.",
+    "- Las historias de pregunta piden contestar por mensaje: respondé los mensajes que lleguen.",
+    "- Si alguien hace una receta y te etiqueta, compartila en historia (con su permiso).",
+    "- El cierre del torneo (domingo 18) va aparte."
+  ],
+  "dias": [
+    {
+      "fecha": "2026-10-14",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "Mi14-historia-tip-choclo", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip de reemplazo", "titulo": "¿No conseguís *choclo* fresco?",
+            "opciones": [
+              ["Choclo cremoso en lata", "2 latas reemplazan 6 choclos en la humita"],
+              ["Choclo en granos en lata", "escurrido y procesado con un poco de leche"],
+              ["Choclo congelado", "descongelado y bien escurrido"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "Mi14-reel-humita-en-olla",
+          "datos": {
+            "gancho": "Choclo, zapallo y queso en *una sola olla*", "titulo": "Humita en olla", "bajada": "cremosa, del norte argentino",
+            "minutos": 45, "porciones": 4, "chip": "Vegetariana", "icono": "olla",
+            "necesitas": [["6", "choclos (o 2 latas)"], ["300 g", "zapallo"], ["1", "cebolla"], ["1", "morrón rojo"], ["250 ml", "leche"], ["150 g", "queso fresco"]],
+            "pasos": [
+              ["Rallá el choclo (o abrí las latas)", "canasta"],
+              ["Rehogá cebolla y morrón con pimentón y comino", "fuego"],
+              ["Sumá el zapallo rallado: 5 minutos", "reloj"],
+              ["Choclo y leche, 20 minutos a fuego bajo", "olla"],
+              ["Fuera del fuego: queso y albahaca", "tilde"]
+            ],
+            "secreto": "Revolver *seguido*", "cta": "Guardala para la semana"
+          },
+          "texto": "Humita en olla: choclo, zapallo y queso en una sola olla 🌽\nCremosa, del norte argentino y vegetariana. El secreto: revolver seguido mientras espesa.\nGuardala 🔖 y contanos: ¿con choclo fresco o de lata?\nReceta completa en amanorecetas.com.ar/receta/c-humita-en-olla\n#humita #choclo #comidadelnorte #recetasargentinas #vegetariano",
+          "tiktok": "Humita en olla con choclo, zapallo y queso 🌽 Receta en amanorecetas.com.ar #humita #choclo #recetasargentinas #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "Mi14-pollo-al-horno", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Una asadera, cero vueltas", "titulo": "Pollo al horno con papas", "tamTitulo": 128, "nombreCorto": "Pollo al horno",
+            "bajada": "con limón, ajo y romero", "minutos": 80, "porciones": 4, "chip": "Una sola asadera", "icono": "fuego",
+            "ingredientes": [["4", "pata muslo"], ["1 kg", "papas"], ["1", "limón"], ["4 dientes", "ajo"], ["2 ramitas", "romero"], ["1 cdta", "pimentón"], ["4 cdas", "aceite de oliva"], ["a gusto", "sal y pimienta"]],
+            "pasos": [
+              "Precalentá el horno a 200 °C.",
+              "Condimentá el pollo con jugo de limón, ajo picado, pimentón, sal, pimienta y aceite.",
+              "Cortá las papas en gajos y ponelas en la asadera con el pollo y el romero.",
+              "Horneá 60 minutos. A mitad de cocción, da vuelta las papas.",
+              "Los últimos 10 minutos, horno al máximo."
+            ],
+            "secreto": { "titulo": "Horno al *máximo*", "texto": "Los últimos 10 minutos subí el horno al máximo: la piel queda crocante y las papas, bien doradas." },
+            "cta": "Guardala para el domingo"
+          },
+          "texto": "Pollo al horno con papas, todo en una asadera 🍗\nCon limón, ajo y romero. El secreto está en la última foto: los últimos 10 minutos, horno al máximo.\n¿Papas en gajos o en rodajas? Te leemos 👇\nGuardala 🔖 · Receta completa en amanorecetas.com.ar/receta/c-pollo-al-horno-con-papas\n#polloalhorno #pollo #recetasargentinas #comidacasera #recetasfaciles"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "Mi14-historia-pregunta-papas", "plantilla": "pregunta",
+          "datos": { "titulo": "Papas al horno: ¿en *gajos* o en *rodajas*?", "tamTitulo": 120, "opciones": ["En gajos", "En rodajas", "Con cáscara, siempre"] }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-15",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "J15-historia-tip-arroz", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip", "icono": "reiniciar", "titulo": "¿Te sobró *arroz*?", "bajada": "Acá no se tira nada.",
+            "opciones": [
+              ["Arroz salteado", "con huevo y las verduras que haya"],
+              ["Tortitas de arroz", "con huevo y queso, a la sartén"],
+              ["Ensalada fría", "con atún, tomate y choclo"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "J15-reel-arepas-de-choclo",
+          "datos": {
+            "gancho": "Arepas *dulces* con queso derretido", "titulo": "Arepas de choclo", "bajada": "como en Colombia",
+            "minutos": 30, "porciones": 6, "chip": "Para la merienda", "icono": "plato",
+            "necesitas": [["2 tazas", "choclo en granos"], ["½ taza", "harina de maíz precocida"], ["40 g", "manteca"], ["2 cdas", "azúcar"], ["3 cdas", "leche"], ["200 g", "queso fresco"]],
+            "pasos": [
+              ["Procesá el choclo con la leche", "canasta"],
+              ["Sumá harina, manteca, azúcar y sal", "olla"],
+              ["Dejá reposar 10 minutos", "reloj"],
+              ["A la sartén: 3 minutos por lado", "fuego"],
+              ["Queso entre dos arepas, 1 minuto más", "tilde"]
+            ],
+            "secreto": "10 minutos de *reposo*", "cta": "Guardala para la merienda"
+          },
+          "texto": "Arepas de choclo, dulces y con queso derretido 🌽\nAsí se comen en Colombia, en el desayuno o la merienda. El secreto: 10 minutos de reposo para que la harina absorba.\n¿Dulces o saladas? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-arepas-de-choclo\n#arepas #arepasdechoclo #comidacolombiana #merienda #recetaslatinas",
+          "tiktok": "Arepas de choclo con queso derretido 🌽 Receta en amanorecetas.com.ar #arepas #comidacolombiana #merienda #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "15:00", "archivo": "J15-mil-nombres-choclo", "plantilla": "nombres",
+          "datos": {
+            "titulo": "*Choclo*", "bajada": "el mismo grano, otro nombre",
+            "nombres": [["Choclo", "Argentina, Chile, Perú, Bolivia, Ecuador y Uruguay"], ["Elote", "México y Centroamérica"], ["Mazorca", "Colombia y España"], ["Jojoto", "Venezuela"]],
+            "pregunta": "¿Cómo le dicen en tu país?"
+          },
+          "texto": "Un plato, mil nombres: el choclo 🌽\nChoclo, elote, mazorca, jojoto... Es el mismo grano y en cada país tiene su nombre.\n¿Cómo le dicen en tu casa? Contanos en comentarios 👇\nEsta semana lo usamos en la humita y en las arepas: recetas en amanorecetas.com.ar\n#choclo #elote #mazorca #cocinalatinoamericana #recetas"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "J15-lomo-saltado", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Cocina peruana", "titulo": "Lomo saltado", "bajada": "carne, cebolla y tomate a fuego fuerte",
+            "minutos": 35, "porciones": 4, "chip": "Rápida", "icono": "fuego",
+            "ingredientes": [["600 g", "lomo o cuadril"], ["2", "cebollas moradas"], ["3", "tomates"], ["3 dientes", "ajo"], ["4 cdas", "salsa de soja"], ["2 cdas", "vinagre de vino tinto"], ["½ cdta", "comino"], ["un puñado", "cilantro"], ["4", "papas fritas"], ["300 g", "arroz cocido"]],
+            "notaIngredientes": "+ ají picante, si te gusta",
+            "pasos": [
+              "Cortá la carne en tiras gruesas y salpimentala con el comino.",
+              "Dorala en tandas, con la sartén muy caliente. Retirala.",
+              "Salteá el ajo, la cebolla en gajos y el ají: 1 minuto.",
+              "Volvé la carne y sumá tomate, soja y vinagre: 1 minuto más.",
+              "Fuera del fuego, cilantro y papas fritas. Con arroz blanco."
+            ],
+            "secreto": { "titulo": "Fuego *fuerte*, en tandas", "texto": "Si ponés toda la carne junta, la sartén se enfría y la carne hierve en vez de dorarse. Y el tomate tiene que quedar entero." },
+            "cta": "Guardala para la cena"
+          },
+          "texto": "Lomo saltado, el clásico peruano 🇵🇪\nCarne, cebolla y tomate salteados a fuego fuerte, con papas fritas y arroz. En 35 minutos.\nEl secreto está en la última foto 👀\n¿Con o sin picante? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-lomo-saltado\n#lomosaltado #comidaperuana #recetaslatinas #cenafacil #recetas"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "J15-historia-pregunta-picante", "plantilla": "pregunta",
+          "datos": { "fondo": "crema", "titulo": "¿Le ponés *picante* a todo?", "opciones": ["Sí, a todo", "Un poquito", "Nada de picante"] }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-16",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "V16-historia-tip-queso", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip", "icono": "canasta", "titulo": "¿Qué queso *se derrite* bien?", "bajada": "Para quesadillas, tostados y pizzas.",
+            "opciones": [
+              ["Mozzarella", "el clásico que estira"],
+              ["Queso de máquina", "tybo o similar, en fetas o rallado"],
+              ["Gouda o pategrás", "más sabor y se funde parejo"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "V16-reel-quesadillas",
+          "datos": {
+            "gancho": "Cena lista en *20 minutos*", "titulo": "Quesadillas", "bajada": "como en México",
+            "minutos": 20, "porciones": 4, "chip": "Vegetarianas", "icono": "plato",
+            "necesitas": [["8", "tortillas"], ["300 g", "queso que se derrita"], ["150 g", "champiñones (opcional)"], ["½", "cebolla"], ["a gusto", "cilantro"], ["a gusto", "salsa picante"]],
+            "pasos": [
+              ["Salteá champiñones y cebolla", "fuego"],
+              ["Tortilla en la sartén seca", "olla"],
+              ["Queso en una mitad", "canasta"],
+              ["Doblá y dorá de los dos lados", "reiniciar"],
+              ["Con cilantro y salsa picante", "tilde"]
+            ],
+            "secreto": "Sartén *seca*", "cta": "Guardala para hoy"
+          },
+          "texto": "Quesadillas: cena lista en 20 minutos 🧀\nTortilla, queso que se derrita bien y, si hay, champiñones. El secreto: sartén seca, así la tortilla queda crocante.\n¿Con picante o sin? 👇\nReceta completa en amanorecetas.com.ar/receta/c-quesadillas\n#quesadillas #comidamexicana #cenarapida #recetasfaciles #vegetariano",
+          "tiktok": "Quesadillas en 20 minutos 🧀 Receta en amanorecetas.com.ar #quesadillas #cenarapida #comidamexicana #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "V16-sopa-paraguaya", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Cocina paraguaya", "titulo": "Sopa paraguaya", "tamTitulo": 140, "bajada": "se llama sopa, pero es un pan de maíz",
+            "minutos": 60, "porciones": 8, "chip": "Para acompañar", "icono": "plato",
+            "ingredientes": [["300 g", "harina de maíz (polenta)"], ["2", "cebollas"], ["300 g", "queso fresco"], ["400 ml", "leche"], ["4", "huevos"], ["100 g", "manteca"], ["1 cdta", "polvo de hornear"], ["1 cdta", "sal"]],
+            "pasos": [
+              "Rehogá las cebollas picadas en la mitad de la manteca.",
+              "Batí los huevos con la leche, el resto de la manteca derretida, la sal y las cebollas.",
+              "Sumá la polenta con el polvo de hornear y el queso en cubos.",
+              "A una fuente enmantecada y al horno a 190 °C, 40 minutos.",
+              "Dejá entibiar y cortá en cuadrados."
+            ],
+            "secreto": { "titulo": "Dejala *entibiar*", "texto": "Recién salida del horno se desarma. Tibia, se corta en cuadrados prolijos y el queso sigue fundido." },
+            "cta": "Guardala para el asado"
+          },
+          "texto": "Sopa paraguaya: se llama sopa, pero es un pan de maíz 🌽\nHúmeda, con queso y cebolla. Para acompañar un asado o comer sola.\nEl secreto está en la última foto 👀\n¿La conocías? 👇\nReceta completa en amanorecetas.com.ar/receta/c-sopa-paraguaya\n#sopaparaguaya #paraguay #recetaslatinas #recetascaseras #maiz"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "V16-historia-pregunta-viernes", "plantilla": "pregunta",
+          "datos": { "titulo": "¿Qué hay para cenar este *viernes*?", "tamTitulo": 120, "opciones": ["Pizza", "Quesadillas", "Lo que haya en la heladera"] }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-17",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "S17-historia-tip-tequenos", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip", "icono": "tilde", "titulo": "Que los tequeños *no se abran*", "bajada": "Tres cosas que ayudan.",
+            "opciones": [
+              ["Masa bien fina", "y estirada pareja"],
+              ["Puntas bien selladas", "apretalas con los dedos"],
+              ["Aceite bien caliente", "para que se doren rápido"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "S17-reel-tequenos",
+          "datos": {
+            "gancho": "El bocado de *todas las fiestas*", "titulo": "Tequeños", "bajada": "como en Venezuela",
+            "minutos": 50, "porciones": 20, "chip": "Para compartir", "icono": "plato",
+            "necesitas": [["300 g", "harina 0000"], ["50 g", "manteca"], ["1", "huevo"], ["100 ml", "agua"], ["400 g", "queso firme"], ["c/n", "aceite para freír"]],
+            "pasos": [
+              ["Amasá y dejá descansar 20 minutos", "reloj"],
+              ["Queso en bastones de 7 cm", "canasta"],
+              ["Masa fina, en tiras de 2 cm", "pasos"],
+              ["Envolvé en espiral y sellá las puntas", "reiniciar"],
+              ["Freí hasta dorar", "fuego"]
+            ],
+            "secreto": "Sellá bien *las puntas*", "cta": "Guardala para la juntada"
+          },
+          "texto": "Tequeños: el bocado de todas las fiestas venezolanas 🧀\nBastones de queso envueltos en masa y fritos. El secreto: sellar bien las puntas para que no se abran.\n¿Con salsa o solos? 👇\nReceta completa en amanorecetas.com.ar/receta/c-tequenos\n#tequenos #comidavenezolana #picada #recetaslatinas #paracompartir",
+          "tiktok": "Tequeños caseros 🧀 Receta en amanorecetas.com.ar #tequenos #comidavenezolana #picada #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "15:00", "archivo": "S17-reemplazo-manteca", "plantilla": "reemplazo",
+          "datos": {
+            "falta": "Manteca", "usar": "Aceite neutro", "titulo": "¿Sin *manteca*?",
+            "texto": "En bizcochuelos y budines podés usar aceite neutro: quedan más húmedos. Para masas de tarta u hojaldre, no sirve.",
+            "dato": "Regla fácil: *¾ de la cantidad*. Si pide 100 g de manteca, usá 75 g de aceite."
+          },
+          "texto": "Reemplazo de la semana: ¿sin manteca? 🧈\nEn bizcochuelos y budines podés usar aceite neutro: ¾ de la cantidad. Si la receta pide 100 g de manteca, van 75 g de aceite.\nOjo: para masas de tarta u hojaldre no sirve.\nGuardalo 🔖 · Más reemplazos en amanorecetas.com.ar\n#reemplazos #tipsdecocina #cocinacasera #bizcochuelo #recetas"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "S17-capeletis-caruso", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Nació en Montevideo", "titulo": "Capeletis a la Caruso", "tamTitulo": 128, "nombreCorto": "A la Caruso",
+            "bajada": "crema, jamón y champiñones", "minutos": 30, "porciones": 4, "chip": "Rápida", "icono": "pasta",
+            "ingredientes": [["750 g", "capeletis"], ["350 ml", "crema de leche"], ["150 g", "jamón cocido"], ["200 g", "champiñones"], ["1", "cebolla"], ["30 g", "manteca"], ["60 g", "queso rallado"], ["una pizca", "nuez moscada"]],
+            "pasos": [
+              "Poné a hervir abundante agua con sal.",
+              "En la manteca, rehogá la cebolla picada y los champiñones fileteados hasta dorar.",
+              "Sumá el jamón en tiras y la crema. 5 minutos a fuego bajo, con nuez moscada y el queso.",
+              "Cociná los capeletis, escurrilos y mezclalos con la salsa."
+            ],
+            "secreto": { "titulo": "Fuego *bajo*", "texto": "Cinco minutos a fuego bajo alcanzan para que la crema espese y tome el sabor del jamón y los champiñones." },
+            "cta": "Guardala para el domingo"
+          },
+          "texto": "Capeletis a la Caruso, la salsa que nació en Montevideo 🇺🇾\nCrema, jamón, champiñones y queso, en 30 minutos.\nEl secreto está en la última foto 👀\n¿Caruso o bolognesa? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-capeletis-a-la-caruso\n#capeletis #salsacaruso #pastas #recetasuruguayas #cenafacil"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "S17-historia-pregunta-salsa", "plantilla": "pregunta",
+          "datos": { "fondo": "crema", "titulo": "Pasta: ¿salsa *blanca* o *roja*?", "opciones": ["Blanca", "Roja", "Mixta, la de siempre"] }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-18",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "D18-historia-pregunta-pastas", "plantilla": "pregunta",
+          "datos": { "ceja": "Domingo de pastas", "titulo": "¿Cuál va *hoy*?", "opciones": ["Ñoquis", "Ravioles", "Tallarines"] }
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "12:00", "archivo": "D18-noquis-de-papa", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Domingo de pastas", "titulo": "Ñoquis de papa", "bajada": "livianos y caseros",
+            "minutos": 60, "porciones": 4, "chip": "6 ingredientes", "icono": "pasta",
+            "ingredientes": [["1 kg", "papas"], ["250 g", "harina"], ["1", "huevo"], ["3 cdas", "queso rallado"], ["una pizca", "nuez moscada"], ["a gusto", "sal"]],
+            "pasos": [
+              "Hervé las papas con cáscara. Pelalas y pisalas en caliente.",
+              "Con el puré tibio, sumá el huevo, el queso, la nuez moscada y la sal.",
+              "Agregá la harina de a poco, hasta que la masa no se pegue.",
+              "Hacé cilindros de 2 cm, cortalos en trozos y marcalos con un tenedor.",
+              "Cocinalos en agua hirviendo con sal: cuando suben, están.",
+              "Con tomate, bolognesa o manteca y salvia."
+            ],
+            "secreto": { "titulo": "Harina *de a poco*", "texto": "Cuanta menos harina, más livianos. Agregala de a poco y frená cuando la masa deja de pegarse." },
+            "cta": "Guardala para el 29"
+          },
+          "texto": "Ñoquis de papa, livianos y caseros 🥔\nCon 6 ingredientes y la salsa que más te guste. Y si los guardás para el 29, mejor.\nEl secreto está en la última foto 👀\n¿Con qué salsa? 👇\nReceta completa en amanorecetas.com.ar/receta/c-noquis-de-papa\n#noquis #noquisdel29 #pastacasera #domingo #recetasargentinas"
+        },
+        {
+          "clase": "REEL", "hora": "17:00", "archivo": "D18-reel-bolo-de-fuba",
+          "datos": {
+            "gancho": "Bizcochuelo de *maíz* para el mate", "titulo": "Bolo de fubá", "bajada": "como en Brasil",
+            "minutos": 55, "porciones": 10, "chip": "Para la merienda", "icono": "postre",
+            "necesitas": [["1 taza", "polenta fina"], ["1 taza", "harina 0000"], ["1 taza", "azúcar"], ["3", "huevos"], ["1 taza", "leche"], ["½ taza", "aceite"], ["1 cda", "polvo de hornear"]],
+            "pasos": [
+              ["Horno a 180 °C y molde con agujero", "fuego"],
+              ["Licuá huevos, leche, aceite y azúcar", "olla"],
+              ["Mezclalo con las dos harinas", "canasta"],
+              ["Polvo de hornear, con movimientos suaves", "tilde"],
+              ["40 minutos, hasta que el palillo salga seco", "reloj"]
+            ],
+            "secreto": "Polvo de hornear *al final*", "tamSecreto": 112, "cta": "Guardala para la merienda"
+          },
+          "texto": "Bolo de fubá: el bizcochuelo de maíz de Brasil 🇧🇷\nHúmedo y perfumado, para el mate o el café de la tarde. Si te gusta, con un toque de anís.\n¿Mate o café? 👇\nReceta completa en amanorecetas.com.ar/receta/c-bolo-de-fuba\n#bolodefuba #bolodemilho #merienda #comidabrasilera #recetaslatinas",
+          "tiktok": "Bolo de fubá, el bizcochuelo de maíz de Brasil 🇧🇷 Receta en amanorecetas.com.ar #bolodefuba #merienda #fyp"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "D18-historia-tip-noquis", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip", "icono": "reloj", "titulo": "¿Cuándo están *listos* los ñoquis?", "tamTitulo": 108, "bajada": "Sin mirar el reloj.",
+            "opciones": [
+              ["Cuando suben", "a la superficie, ya están"],
+              ["Sacalos con espumadera", "de a tandas"],
+              ["Directo a la salsa", "así no se pegan"]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-19",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "L19-historia-tip-palta", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip", "icono": "canasta", "titulo": "¿Cómo saber si la *palta* está lista?", "tamTitulo": 104, "bajada": "Palta o aguacate, según dónde estés.",
+            "opciones": [
+              ["Cede apenas al apretar", "con suavidad, sin hundirse"],
+              ["El cabito sale fácil", "y abajo se ve verde"],
+              ["¿Está dura?", "1 o 2 días en una bolsa de papel con una banana"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "L19-reel-guacamole",
+          "datos": {
+            "gancho": "Sin cocción, en *15 minutos*", "titulo": "Guacamole", "bajada": "como en México",
+            "minutos": 15, "porciones": 4, "chip": "Sin cocción", "icono": "canasta",
+            "necesitas": [["3", "paltas maduras"], ["1", "tomate"], ["¼", "cebolla morada"], ["un puñado", "cilantro"], ["1", "lima o limón"], ["opcional", "jalapeño o ají"]],
+            "pasos": [
+              ["Pisá la palta con un tenedor, dejando trozos", "canasta"],
+              ["Sumá tomate, cebolla, cilantro y ají, picados fino", "olla"],
+              ["Lima y sal, y a la mesa", "tilde"]
+            ],
+            "secreto": "Pisar con *tenedor*", "cta": "Guardala para la picada"
+          },
+          "texto": "Guacamole en 15 minutos, sin cocción 🥑\nPalta (aguacate), tomate, cebolla, cilantro y lima. El secreto: pisar con tenedor y dejar algunos trozos.\n¿Con totopos o con tortillas? 👇\nReceta completa en amanorecetas.com.ar/receta/c-guacamole\n#guacamole #palta #aguacate #comidamexicana #picada",
+          "tiktok": "Guacamole en 15 minutos 🥑 Receta en amanorecetas.com.ar #guacamole #palta #comidamexicana #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "15:00", "archivo": "L19-que-hay-a-mano", "plantilla": "funcion",
+          "datos": {
+            "ceja": "En la web", "icono": "canasta", "titulo": "¿Qué hay en tu *heladera*?",
+            "texto": "Marcá lo que tenés y A Mano te muestra qué podés cocinar, con reemplazos para lo que falta.",
+            "chips": ["Gratis", "Con reemplazos", "Desde el celular"], "url": "amanorecetas.com.ar/que-tengo"
+          },
+          "texto": "¿Qué hay en tu heladera? 🧺\nEn A Mano marcás los ingredientes que tenés y te mostramos qué podés cocinar, con reemplazos para lo que falta.\nProbalo en amanorecetas.com.ar/que-tengo (link en la bio)\n#quecocino #recetasconloquehay #cocinacasera #recetasfaciles #amanorecetas"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "L19-arroz-con-pollo", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Olla única", "titulo": "Guiso de arroz con pollo", "tamTitulo": 118, "nombreCorto": "Arroz con pollo",
+            "bajada": "de esos que resuelven la noche", "minutos": 50, "porciones": 4, "chip": "Económico", "icono": "olla",
+            "ingredientes": [["4", "pata muslo"], ["300 g", "arroz"], ["1", "cebolla"], ["1", "morrón rojo"], ["1", "zanahoria"], ["2 dientes", "ajo"], ["400 g", "tomate triturado"], ["1 litro", "caldo de pollo"], ["1 cda", "pimentón"], ["1 hoja", "laurel"]],
+            "notaIngredientes": "+ arvejas, si hay",
+            "pasos": [
+              "Dorá el pollo salado en una olla con aceite. Retiralo.",
+              "Rehogá la cebolla, el morrón, la zanahoria y el ajo picados.",
+              "Tomate, pimentón y laurel. Volvé el pollo con medio caldo: 20 minutos.",
+              "Sumá el arroz y el resto del caldo caliente: unos 18 minutos.",
+              "Arvejas, 5 minutos de reposo tapado y a la mesa."
+            ],
+            "secreto": { "titulo": "Caldo *caliente*", "texto": "Si le sumás caldo frío, cortás la cocción del arroz y queda pasado por fuera y duro por dentro." },
+            "cta": "Guardala para la semana"
+          },
+          "texto": "Guiso de arroz con pollo, de olla única 🍲\nArroz, pollo y verduras: uno de esos platos que resuelven cualquier noche.\nEl secreto está en la última foto 👀\n¿Con o sin arvejas? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-guiso-de-arroz-con-pollo\n#arrozconpollo #guiso #comidacasera #recetasargentinas #economico"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "L19-historia-pregunta-palta", "plantilla": "pregunta",
+          "datos": { "fondo": "crema", "titulo": "¿Cómo le decís: *palta* o *aguacate*?", "tamTitulo": 116, "opciones": ["Palta", "Aguacate", "Las dos, depende"] }
+        }
+      ]
+    },
+    {
+      "fecha": "2026-10-20",
+      "items": [
+        {
+          "clase": "HISTORIA", "hora": "10:00", "archivo": "Ma20-historia-tip-aji-amarillo", "plantilla": "tip",
+          "nota": "sin sticker (guardala en la destacada \"Tips\")",
+          "datos": {
+            "ceja": "Tip de reemplazo", "titulo": "¿No conseguís *ají amarillo*?", "bajada": "Para la papa a la huancaína.",
+            "opciones": [
+              ["Morrón amarillo asado", "más una pizca de ají picante"],
+              ["Pasta de ají amarillo", "la venden en almacenes peruanos"]
+            ]
+          }
+        },
+        {
+          "clase": "REEL", "hora": "12:00", "archivo": "Ma20-reel-papa-a-la-huancaina",
+          "datos": {
+            "gancho": "La salsa que se hace *en la licuadora*", "tamGancho": 140, "titulo": "Papa a la huancaína", "tamTitulo": 124, "tamPortada": 140,
+            "bajada": "como en Perú", "minutos": 30, "porciones": 4, "chip": "Vegetariana", "icono": "plato",
+            "necesitas": [["6", "papas"], ["200 g", "queso fresco"], ["150 ml", "leche evaporada"], ["3 cdas", "ají amarillo en pasta"], ["4", "galletitas de agua"], ["2", "huevos duros"]],
+            "pasos": [
+              ["Hervé las papas y cortalas en rodajas", "olla"],
+              ["Licuá queso, leche, ají, galletitas, ajo y aceite", "reiniciar"],
+              ["Papas sobre lechuga, bañadas en salsa", "plato"],
+              ["Huevo duro y aceitunas", "tilde"]
+            ],
+            "secreto": "Galletitas *para espesar*", "tamSecreto": 112, "cta": "Guardala para el finde"
+          },
+          "texto": "Papa a la huancaína, la salsa peruana que se hace en la licuadora 🥔\nQueso, ají amarillo y leche evaporada, con galletitas de agua para espesar.\n¿La probaste? 👇\nReceta completa en amanorecetas.com.ar/receta/c-papa-a-la-huancaina\n#papaalahuancaina #comidaperuana #recetaslatinas #entrada #vegetariano",
+          "tiktok": "Papa a la huancaína 🥔 Receta en amanorecetas.com.ar #papaalahuancaina #comidaperuana #fyp"
+        },
+        {
+          "clase": "PUBLICACIÓN", "hora": "18:00", "archivo": "Ma20-pascualina", "plantilla": "carrusel",
+          "datos": {
+            "ceja": "Río de la Plata", "titulo": "Pascualina", "bajada": "con huevos enteros escondidos",
+            "minutos": 70, "porciones": 8, "chip": "Vegetariana", "icono": "plato",
+            "ingredientes": [["2", "tapas de tarta"], ["2 atados", "acelga"], ["1", "cebolla"], ["250 g", "ricota"], ["80 g", "queso rallado"], ["6", "huevos"], ["una pizca", "nuez moscada"], ["2 cdas", "aceite de oliva"]],
+            "pasos": [
+              "Hervé la acelga 3 minutos, escurrila muy bien y picala.",
+              "Rehogá la cebolla, sumá la acelga 5 minutos y dejá enfriar.",
+              "Mezclá con la ricota, el queso, 2 huevos, nuez moscada y sal.",
+              "Molde con una tapa, el relleno y 4 huecos con un huevo en cada uno.",
+              "Tapá, repulgá y pintá con huevo o leche.",
+              "Horno a 180 °C, 40 minutos."
+            ],
+            "secreto": { "titulo": "Acelga bien *escurrida*", "texto": "Apretala con las manos hasta que no largue más agua. Si no, la tarta queda aguada y la masa de abajo, cruda." },
+            "cta": "Guardala para mañana"
+          },
+          "texto": "Pascualina, la tarta de acelga del Río de la Plata 🥬\nCon ricota y huevos enteros escondidos en el relleno: cuando la cortás, aparecen.\nEl secreto está en la última foto 👀\n¿Acelga o espinaca? 👇\nReceta completa en amanorecetas.com.ar/receta/c-pascualina\n#pascualina #tartadeacelga #recetasuruguayas #vegetariano #comidacasera"
+        },
+        {
+          "clase": "HISTORIA", "hora": "20:30", "archivo": "Ma20-historia-pregunta-semana", "plantilla": "pregunta",
+          "datos": { "titulo": "¿Cuál de la semana *vas a hacer*?", "tamTitulo": 120, "opciones": ["Pollo al horno", "Lomo saltado", "Ñoquis de papa"] }
+        }
+      ]
+    }
+  ]
+}

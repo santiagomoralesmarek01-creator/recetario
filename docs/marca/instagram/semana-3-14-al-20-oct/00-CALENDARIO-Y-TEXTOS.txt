@@ -1,0 +1,219 @@
+A MANO · SEMANA DEL MIÉRCOLES 14 AL MARTES 20 DE OCTUBRE
+========================================================
+Semana de recetas: 2 historias, 1 reel y 1 carrusel por día, y 3 imágenes extra (jueves, sábado y lunes).
+Los archivos empiezan con el día: Mi14 = miércoles 14 · J15 · V16 · S17 · D18 · L19 · Ma20.
+Se publica sola desde /admin/redes: generada con scripts/redes/generar-semana.mjs a partir de contenido.json.
+Ninguna historia lleva sticker de enlace: todas salen solas. Los reels traen pista de audio muda (sumá música desde la app si querés).
+
+RESUMEN
+Día      | Historias            | Reel                     | Carrusel                  | Extra
+---------|----------------------|--------------------------|---------------------------|----------------------------
+Mié 14   | 10:00 · 20:30        | Humita en olla (12:00)   | Pollo al horno (18:00)    | —
+Jue 15   | 10:00 · 20:30        | Arepas de choclo (12:00) | Lomo saltado (18:00)      | Un plato, mil nombres (15:00)
+Vie 16   | 10:00 · 20:30        | Quesadillas (12:00)      | Sopa paraguaya (18:00)    | —
+Sáb 17   | 10:00 · 20:30        | Tequeños (12:00)         | Capeletis Caruso (18:00)  | Reemplazo de la semana (15:00)
+Dom 18   | 10:00 · 20:30        | Bolo de fubá (17:00)     | Ñoquis de papa (12:00)    | —
+Lun 19   | 10:00 · 20:30        | Guacamole (12:00)        | Arroz con pollo (18:00)   | ¿Qué hay a mano? (15:00)
+Mar 20   | 10:00 · 20:30        | Papa a la huancaína (12:00) | Pascualina (18:00)     | —
+
+================================================================
+MIÉRCOLES 14
+================================================================
+HISTORIA · Mi14-historia-tip-choclo · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · Mi14-reel-humita-en-olla.mp4 (portada: Mi14-reel-humita-en-olla-portada.png) · 12:00
+Instagram:
+Humita en olla: choclo, zapallo y queso en una sola olla 🌽
+Cremosa, del norte argentino y vegetariana. El secreto: revolver seguido mientras espesa.
+Guardala 🔖 y contanos: ¿con choclo fresco o de lata?
+Receta completa en amanorecetas.com.ar/receta/c-humita-en-olla
+#humita #choclo #comidadelnorte #recetasargentinas #vegetariano
+TikTok:
+Humita en olla con choclo, zapallo y queso 🌽 Receta en amanorecetas.com.ar #humita #choclo #recetasargentinas #fyp
+
+PUBLICACIÓN · Mi14-pollo-al-horno-1 a 4 · 18:00
+Pollo al horno con papas, todo en una asadera 🍗
+Con limón, ajo y romero. El secreto está en la última foto: los últimos 10 minutos, horno al máximo.
+¿Papas en gajos o en rodajas? Te leemos 👇
+Guardala 🔖 · Receta completa en amanorecetas.com.ar/receta/c-pollo-al-horno-con-papas
+#polloalhorno #pollo #recetasargentinas #comidacasera #recetasfaciles
+
+HISTORIA · Mi14-historia-pregunta-papas · 20:30 · sin sticker
+
+================================================================
+JUEVES 15
+================================================================
+HISTORIA · J15-historia-tip-arroz · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · J15-reel-arepas-de-choclo.mp4 (portada: J15-reel-arepas-de-choclo-portada.png) · 12:00
+Instagram:
+Arepas de choclo, dulces y con queso derretido 🌽
+Así se comen en Colombia, en el desayuno o la merienda. El secreto: 10 minutos de reposo para que la harina absorba.
+¿Dulces o saladas? Te leemos 👇
+Receta completa en amanorecetas.com.ar/receta/c-arepas-de-choclo
+#arepas #arepasdechoclo #comidacolombiana #merienda #recetaslatinas
+TikTok:
+Arepas de choclo con queso derretido 🌽 Receta en amanorecetas.com.ar #arepas #comidacolombiana #merienda #fyp
+
+PUBLICACIÓN · J15-mil-nombres-choclo · 15:00
+Un plato, mil nombres: el choclo 🌽
+Choclo, elote, mazorca, jojoto... Es el mismo grano y en cada país tiene su nombre.
+¿Cómo le dicen en tu casa? Contanos en comentarios 👇
+Esta semana lo usamos en la humita y en las arepas: recetas en amanorecetas.com.ar
+#choclo #elote #mazorca #cocinalatinoamericana #recetas
+
+PUBLICACIÓN · J15-lomo-saltado-1 a 4 · 18:00
+Lomo saltado, el clásico peruano 🇵🇪
+Carne, cebolla y tomate salteados a fuego fuerte, con papas fritas y arroz. En 35 minutos.
+El secreto está en la última foto 👀
+¿Con o sin picante? Te leemos 👇
+Receta completa en amanorecetas.com.ar/receta/c-lomo-saltado
+#lomosaltado #comidaperuana #recetaslatinas #cenafacil #recetas
+
+HISTORIA · J15-historia-pregunta-picante · 20:30 · sin sticker
+
+================================================================
+VIERNES 16
+================================================================
+HISTORIA · V16-historia-tip-queso · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · V16-reel-quesadillas.mp4 (portada: V16-reel-quesadillas-portada.png) · 12:00
+Instagram:
+Quesadillas: cena lista en 20 minutos 🧀
+Tortilla, queso que se derrita bien y, si hay, champiñones. El secreto: sartén seca, así la tortilla queda crocante.
+¿Con picante o sin? 👇
+Receta completa en amanorecetas.com.ar/receta/c-quesadillas
+#quesadillas #comidamexicana #cenarapida #recetasfaciles #vegetariano
+TikTok:
+Quesadillas en 20 minutos 🧀 Receta en amanorecetas.com.ar #quesadillas #cenarapida #comidamexicana #fyp
+
+PUBLICACIÓN · V16-sopa-paraguaya-1 a 4 · 18:00
+Sopa paraguaya: se llama sopa, pero es un pan de maíz 🌽
+Húmeda, con queso y cebolla. Para acompañar un asado o comer sola.
+El secreto está en la última foto 👀
+¿La conocías? 👇
+Receta completa en amanorecetas.com.ar/receta/c-sopa-paraguaya
+#sopaparaguaya #paraguay #recetaslatinas #recetascaseras #maiz
+
+HISTORIA · V16-historia-pregunta-viernes · 20:30 · sin sticker
+
+================================================================
+SÁBADO 17
+================================================================
+HISTORIA · S17-historia-tip-tequenos · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · S17-reel-tequenos.mp4 (portada: S17-reel-tequenos-portada.png) · 12:00
+Instagram:
+Tequeños: el bocado de todas las fiestas venezolanas 🧀
+Bastones de queso envueltos en masa y fritos. El secreto: sellar bien las puntas para que no se abran.
+¿Con salsa o solos? 👇
+Receta completa en amanorecetas.com.ar/receta/c-tequenos
+#tequenos #comidavenezolana #picada #recetaslatinas #paracompartir
+TikTok:
+Tequeños caseros 🧀 Receta en amanorecetas.com.ar #tequenos #comidavenezolana #picada #fyp
+
+PUBLICACIÓN · S17-reemplazo-manteca · 15:00
+Reemplazo de la semana: ¿sin manteca? 🧈
+En bizcochuelos y budines podés usar aceite neutro: ¾ de la cantidad. Si la receta pide 100 g de manteca, van 75 g de aceite.
+Ojo: para masas de tarta u hojaldre no sirve.
+Guardalo 🔖 · Más reemplazos en amanorecetas.com.ar
+#reemplazos #tipsdecocina #cocinacasera #bizcochuelo #recetas
+
+PUBLICACIÓN · S17-capeletis-caruso-1 a 4 · 18:00
+Capeletis a la Caruso, la salsa que nació en Montevideo 🇺🇾
+Crema, jamón, champiñones y queso, en 30 minutos.
+El secreto está en la última foto 👀
+¿Caruso o bolognesa? Te leemos 👇
+Receta completa en amanorecetas.com.ar/receta/c-capeletis-a-la-caruso
+#capeletis #salsacaruso #pastas #recetasuruguayas #cenafacil
+
+HISTORIA · S17-historia-pregunta-salsa · 20:30 · sin sticker
+
+================================================================
+DOMINGO 18
+================================================================
+HISTORIA · D18-historia-pregunta-pastas · 10:00 · sin sticker
+
+PUBLICACIÓN · D18-noquis-de-papa-1 a 4 · 12:00
+Ñoquis de papa, livianos y caseros 🥔
+Con 6 ingredientes y la salsa que más te guste. Y si los guardás para el 29, mejor.
+El secreto está en la última foto 👀
+¿Con qué salsa? 👇
+Receta completa en amanorecetas.com.ar/receta/c-noquis-de-papa
+#noquis #noquisdel29 #pastacasera #domingo #recetasargentinas
+
+REEL · D18-reel-bolo-de-fuba.mp4 (portada: D18-reel-bolo-de-fuba-portada.png) · 17:00
+Instagram:
+Bolo de fubá: el bizcochuelo de maíz de Brasil 🇧🇷
+Húmedo y perfumado, para el mate o el café de la tarde. Si te gusta, con un toque de anís.
+¿Mate o café? 👇
+Receta completa en amanorecetas.com.ar/receta/c-bolo-de-fuba
+#bolodefuba #bolodemilho #merienda #comidabrasilera #recetaslatinas
+TikTok:
+Bolo de fubá, el bizcochuelo de maíz de Brasil 🇧🇷 Receta en amanorecetas.com.ar #bolodefuba #merienda #fyp
+
+HISTORIA · D18-historia-tip-noquis · 20:30 · sin sticker (guardala en la destacada "Tips")
+
+================================================================
+LUNES 19
+================================================================
+HISTORIA · L19-historia-tip-palta · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · L19-reel-guacamole.mp4 (portada: L19-reel-guacamole-portada.png) · 12:00
+Instagram:
+Guacamole en 15 minutos, sin cocción 🥑
+Palta (aguacate), tomate, cebolla, cilantro y lima. El secreto: pisar con tenedor y dejar algunos trozos.
+¿Con totopos o con tortillas? 👇
+Receta completa en amanorecetas.com.ar/receta/c-guacamole
+#guacamole #palta #aguacate #comidamexicana #picada
+TikTok:
+Guacamole en 15 minutos 🥑 Receta en amanorecetas.com.ar #guacamole #palta #comidamexicana #fyp
+
+PUBLICACIÓN · L19-que-hay-a-mano · 15:00
+¿Qué hay en tu heladera? 🧺
+En A Mano marcás los ingredientes que tenés y te mostramos qué podés cocinar, con reemplazos para lo que falta.
+Probalo en amanorecetas.com.ar/que-tengo (link en la bio)
+#quecocino #recetasconloquehay #cocinacasera #recetasfaciles #amanorecetas
+
+PUBLICACIÓN · L19-arroz-con-pollo-1 a 4 · 18:00
+Guiso de arroz con pollo, de olla única 🍲
+Arroz, pollo y verduras: uno de esos platos que resuelven cualquier noche.
+El secreto está en la última foto 👀
+¿Con o sin arvejas? Te leemos 👇
+Receta completa en amanorecetas.com.ar/receta/c-guiso-de-arroz-con-pollo
+#arrozconpollo #guiso #comidacasera #recetasargentinas #economico
+
+HISTORIA · L19-historia-pregunta-palta · 20:30 · sin sticker
+
+================================================================
+MARTES 20
+================================================================
+HISTORIA · Ma20-historia-tip-aji-amarillo · 10:00 · sin sticker (guardala en la destacada "Tips")
+
+REEL · Ma20-reel-papa-a-la-huancaina.mp4 (portada: Ma20-reel-papa-a-la-huancaina-portada.png) · 12:00
+Instagram:
+Papa a la huancaína, la salsa peruana que se hace en la licuadora 🥔
+Queso, ají amarillo y leche evaporada, con galletitas de agua para espesar.
+¿La probaste? 👇
+Receta completa en amanorecetas.com.ar/receta/c-papa-a-la-huancaina
+#papaalahuancaina #comidaperuana #recetaslatinas #entrada #vegetariano
+TikTok:
+Papa a la huancaína 🥔 Receta en amanorecetas.com.ar #papaalahuancaina #comidaperuana #fyp
+
+PUBLICACIÓN · Ma20-pascualina-1 a 4 · 18:00
+Pascualina, la tarta de acelga del Río de la Plata 🥬
+Con ricota y huevos enteros escondidos en el relleno: cuando la cortás, aparecen.
+El secreto está en la última foto 👀
+¿Acelga o espinaca? 👇
+Receta completa en amanorecetas.com.ar/receta/c-pascualina
+#pascualina #tartadeacelga #recetasuruguayas #vegetariano #comidacasera
+
+HISTORIA · Ma20-historia-pregunta-semana · 20:30 · sin sticker
+
+================================================================
+DURANTE LA SEMANA (10 minutos por día, a mano)
+================================================================
+- Respondé los comentarios, sobre todo las preguntas ("¿gajos o rodajas?", "¿palta o aguacate?"): eso hace que Instagram muestre más el posteo.
+- Las historias de pregunta piden contestar por mensaje: respondé los mensajes que lleguen.
+- Si alguien hace una receta y te etiqueta, compartila en historia (con su permiso).
+- El cierre del torneo (domingo 18) va aparte.

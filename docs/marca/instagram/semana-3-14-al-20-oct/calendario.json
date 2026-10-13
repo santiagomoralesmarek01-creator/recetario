@@ -1,0 +1,431 @@
+{
+  "semana": "semana-3-14-al-20-oct",
+  "zona": "America/Argentina/Buenos_Aires",
+  "solo_prueba": false,
+  "publicaciones": [
+    {
+      "clave": "2026-10-14-historia-Mi14-historia-tip-choclo",
+      "fecha": "2026-10-14T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Mi14-historia-tip-choclo.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-14-reel-Mi14-reel-humita-en-olla",
+      "fecha": "2026-10-14T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "Mi14-reel-humita-en-olla.mp4"
+      ],
+      "texto": "Humita en olla: choclo, zapallo y queso en una sola olla 🌽\nCremosa, del norte argentino y vegetariana. El secreto: revolver seguido mientras espesa.\nGuardala 🔖 y contanos: ¿con choclo fresco o de lata?\nReceta completa en amanorecetas.com.ar/receta/c-humita-en-olla\n#humita #choclo #comidadelnorte #recetasargentinas #vegetariano",
+      "portada": "Mi14-reel-humita-en-olla-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Humita en olla con choclo, zapallo y queso 🌽 Receta en amanorecetas.com.ar #humita #choclo #recetasargentinas #fyp"
+    },
+    {
+      "clave": "2026-10-14-carrusel-Mi14-pollo-al-horno-1-portada",
+      "fecha": "2026-10-14T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "Mi14-pollo-al-horno-1-portada.png",
+        "Mi14-pollo-al-horno-2-ingredientes.png",
+        "Mi14-pollo-al-horno-3-pasos.png",
+        "Mi14-pollo-al-horno-4-secreto.png"
+      ],
+      "texto": "Pollo al horno con papas, todo en una asadera 🍗\nCon limón, ajo y romero. El secreto está en la última foto: los últimos 10 minutos, horno al máximo.\n¿Papas en gajos o en rodajas? Te leemos 👇\nGuardala 🔖 · Receta completa en amanorecetas.com.ar/receta/c-pollo-al-horno-con-papas\n#polloalhorno #pollo #recetasargentinas #comidacasera #recetasfaciles",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-14-historia-Mi14-historia-pregunta-papas",
+      "fecha": "2026-10-14T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Mi14-historia-pregunta-papas.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-15-historia-J15-historia-tip-arroz",
+      "fecha": "2026-10-15T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "J15-historia-tip-arroz.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-15-reel-J15-reel-arepas-de-choclo",
+      "fecha": "2026-10-15T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "J15-reel-arepas-de-choclo.mp4"
+      ],
+      "texto": "Arepas de choclo, dulces y con queso derretido 🌽\nAsí se comen en Colombia, en el desayuno o la merienda. El secreto: 10 minutos de reposo para que la harina absorba.\n¿Dulces o saladas? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-arepas-de-choclo\n#arepas #arepasdechoclo #comidacolombiana #merienda #recetaslatinas",
+      "portada": "J15-reel-arepas-de-choclo-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Arepas de choclo con queso derretido 🌽 Receta en amanorecetas.com.ar #arepas #comidacolombiana #merienda #fyp"
+    },
+    {
+      "clave": "2026-10-15-imagen-J15-mil-nombres-choclo",
+      "fecha": "2026-10-15T15:00:00-03:00",
+      "tipo": "imagen",
+      "archivos": [
+        "J15-mil-nombres-choclo.png"
+      ],
+      "texto": "Un plato, mil nombres: el choclo 🌽\nChoclo, elote, mazorca, jojoto... Es el mismo grano y en cada país tiene su nombre.\n¿Cómo le dicen en tu casa? Contanos en comentarios 👇\nEsta semana lo usamos en la humita y en las arepas: recetas en amanorecetas.com.ar\n#choclo #elote #mazorca #cocinalatinoamericana #recetas",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-15-carrusel-J15-lomo-saltado-1-portada",
+      "fecha": "2026-10-15T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "J15-lomo-saltado-1-portada.png",
+        "J15-lomo-saltado-2-ingredientes.png",
+        "J15-lomo-saltado-3-pasos.png",
+        "J15-lomo-saltado-4-secreto.png"
+      ],
+      "texto": "Lomo saltado, el clásico peruano 🇵🇪\nCarne, cebolla y tomate salteados a fuego fuerte, con papas fritas y arroz. En 35 minutos.\nEl secreto está en la última foto 👀\n¿Con o sin picante? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-lomo-saltado\n#lomosaltado #comidaperuana #recetaslatinas #cenafacil #recetas",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-15-historia-J15-historia-pregunta-picante",
+      "fecha": "2026-10-15T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "J15-historia-pregunta-picante.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-16-historia-V16-historia-tip-queso",
+      "fecha": "2026-10-16T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "V16-historia-tip-queso.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-16-reel-V16-reel-quesadillas",
+      "fecha": "2026-10-16T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "V16-reel-quesadillas.mp4"
+      ],
+      "texto": "Quesadillas: cena lista en 20 minutos 🧀\nTortilla, queso que se derrita bien y, si hay, champiñones. El secreto: sartén seca, así la tortilla queda crocante.\n¿Con picante o sin? 👇\nReceta completa en amanorecetas.com.ar/receta/c-quesadillas\n#quesadillas #comidamexicana #cenarapida #recetasfaciles #vegetariano",
+      "portada": "V16-reel-quesadillas-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Quesadillas en 20 minutos 🧀 Receta en amanorecetas.com.ar #quesadillas #cenarapida #comidamexicana #fyp"
+    },
+    {
+      "clave": "2026-10-16-carrusel-V16-sopa-paraguaya-1-portada",
+      "fecha": "2026-10-16T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "V16-sopa-paraguaya-1-portada.png",
+        "V16-sopa-paraguaya-2-ingredientes.png",
+        "V16-sopa-paraguaya-3-pasos.png",
+        "V16-sopa-paraguaya-4-secreto.png"
+      ],
+      "texto": "Sopa paraguaya: se llama sopa, pero es un pan de maíz 🌽\nHúmeda, con queso y cebolla. Para acompañar un asado o comer sola.\nEl secreto está en la última foto 👀\n¿La conocías? 👇\nReceta completa en amanorecetas.com.ar/receta/c-sopa-paraguaya\n#sopaparaguaya #paraguay #recetaslatinas #recetascaseras #maiz",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-16-historia-V16-historia-pregunta-viernes",
+      "fecha": "2026-10-16T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "V16-historia-pregunta-viernes.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-17-historia-S17-historia-tip-tequenos",
+      "fecha": "2026-10-17T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "S17-historia-tip-tequenos.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-17-reel-S17-reel-tequenos",
+      "fecha": "2026-10-17T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "S17-reel-tequenos.mp4"
+      ],
+      "texto": "Tequeños: el bocado de todas las fiestas venezolanas 🧀\nBastones de queso envueltos en masa y fritos. El secreto: sellar bien las puntas para que no se abran.\n¿Con salsa o solos? 👇\nReceta completa en amanorecetas.com.ar/receta/c-tequenos\n#tequenos #comidavenezolana #picada #recetaslatinas #paracompartir",
+      "portada": "S17-reel-tequenos-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Tequeños caseros 🧀 Receta en amanorecetas.com.ar #tequenos #comidavenezolana #picada #fyp"
+    },
+    {
+      "clave": "2026-10-17-imagen-S17-reemplazo-manteca",
+      "fecha": "2026-10-17T15:00:00-03:00",
+      "tipo": "imagen",
+      "archivos": [
+        "S17-reemplazo-manteca.png"
+      ],
+      "texto": "Reemplazo de la semana: ¿sin manteca? 🧈\nEn bizcochuelos y budines podés usar aceite neutro: ¾ de la cantidad. Si la receta pide 100 g de manteca, van 75 g de aceite.\nOjo: para masas de tarta u hojaldre no sirve.\nGuardalo 🔖 · Más reemplazos en amanorecetas.com.ar\n#reemplazos #tipsdecocina #cocinacasera #bizcochuelo #recetas",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-17-carrusel-S17-capeletis-caruso-1-portada",
+      "fecha": "2026-10-17T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "S17-capeletis-caruso-1-portada.png",
+        "S17-capeletis-caruso-2-ingredientes.png",
+        "S17-capeletis-caruso-3-pasos.png",
+        "S17-capeletis-caruso-4-secreto.png"
+      ],
+      "texto": "Capeletis a la Caruso, la salsa que nació en Montevideo 🇺🇾\nCrema, jamón, champiñones y queso, en 30 minutos.\nEl secreto está en la última foto 👀\n¿Caruso o bolognesa? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-capeletis-a-la-caruso\n#capeletis #salsacaruso #pastas #recetasuruguayas #cenafacil",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-17-historia-S17-historia-pregunta-salsa",
+      "fecha": "2026-10-17T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "S17-historia-pregunta-salsa.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-18-historia-D18-historia-pregunta-pastas",
+      "fecha": "2026-10-18T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "D18-historia-pregunta-pastas.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-18-carrusel-D18-noquis-de-papa-1-portada",
+      "fecha": "2026-10-18T12:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "D18-noquis-de-papa-1-portada.png",
+        "D18-noquis-de-papa-2-ingredientes.png",
+        "D18-noquis-de-papa-3-pasos.png",
+        "D18-noquis-de-papa-4-secreto.png"
+      ],
+      "texto": "Ñoquis de papa, livianos y caseros 🥔\nCon 6 ingredientes y la salsa que más te guste. Y si los guardás para el 29, mejor.\nEl secreto está en la última foto 👀\n¿Con qué salsa? 👇\nReceta completa en amanorecetas.com.ar/receta/c-noquis-de-papa\n#noquis #noquisdel29 #pastacasera #domingo #recetasargentinas",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-18-reel-D18-reel-bolo-de-fuba",
+      "fecha": "2026-10-18T17:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "D18-reel-bolo-de-fuba.mp4"
+      ],
+      "texto": "Bolo de fubá: el bizcochuelo de maíz de Brasil 🇧🇷\nHúmedo y perfumado, para el mate o el café de la tarde. Si te gusta, con un toque de anís.\n¿Mate o café? 👇\nReceta completa en amanorecetas.com.ar/receta/c-bolo-de-fuba\n#bolodefuba #bolodemilho #merienda #comidabrasilera #recetaslatinas",
+      "portada": "D18-reel-bolo-de-fuba-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Bolo de fubá, el bizcochuelo de maíz de Brasil 🇧🇷 Receta en amanorecetas.com.ar #bolodefuba #merienda #fyp"
+    },
+    {
+      "clave": "2026-10-18-historia-D18-historia-tip-noquis",
+      "fecha": "2026-10-18T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "D18-historia-tip-noquis.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-19-historia-L19-historia-tip-palta",
+      "fecha": "2026-10-19T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "L19-historia-tip-palta.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-19-reel-L19-reel-guacamole",
+      "fecha": "2026-10-19T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "L19-reel-guacamole.mp4"
+      ],
+      "texto": "Guacamole en 15 minutos, sin cocción 🥑\nPalta (aguacate), tomate, cebolla, cilantro y lima. El secreto: pisar con tenedor y dejar algunos trozos.\n¿Con totopos o con tortillas? 👇\nReceta completa en amanorecetas.com.ar/receta/c-guacamole\n#guacamole #palta #aguacate #comidamexicana #picada",
+      "portada": "L19-reel-guacamole-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Guacamole en 15 minutos 🥑 Receta en amanorecetas.com.ar #guacamole #palta #comidamexicana #fyp"
+    },
+    {
+      "clave": "2026-10-19-imagen-L19-que-hay-a-mano",
+      "fecha": "2026-10-19T15:00:00-03:00",
+      "tipo": "imagen",
+      "archivos": [
+        "L19-que-hay-a-mano.png"
+      ],
+      "texto": "¿Qué hay en tu heladera? 🧺\nEn A Mano marcás los ingredientes que tenés y te mostramos qué podés cocinar, con reemplazos para lo que falta.\nProbalo en amanorecetas.com.ar/que-tengo (link en la bio)\n#quecocino #recetasconloquehay #cocinacasera #recetasfaciles #amanorecetas",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-19-carrusel-L19-arroz-con-pollo-1-portada",
+      "fecha": "2026-10-19T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "L19-arroz-con-pollo-1-portada.png",
+        "L19-arroz-con-pollo-2-ingredientes.png",
+        "L19-arroz-con-pollo-3-pasos.png",
+        "L19-arroz-con-pollo-4-secreto.png"
+      ],
+      "texto": "Guiso de arroz con pollo, de olla única 🍲\nArroz, pollo y verduras: uno de esos platos que resuelven cualquier noche.\nEl secreto está en la última foto 👀\n¿Con o sin arvejas? Te leemos 👇\nReceta completa en amanorecetas.com.ar/receta/c-guiso-de-arroz-con-pollo\n#arrozconpollo #guiso #comidacasera #recetasargentinas #economico",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-19-historia-L19-historia-pregunta-palta",
+      "fecha": "2026-10-19T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "L19-historia-pregunta-palta.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-20-historia-Ma20-historia-tip-aji-amarillo",
+      "fecha": "2026-10-20T10:00:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Ma20-historia-tip-aji-amarillo.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker (guardala en la destacada \"Tips\")",
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-20-reel-Ma20-reel-papa-a-la-huancaina",
+      "fecha": "2026-10-20T12:00:00-03:00",
+      "tipo": "reel",
+      "archivos": [
+        "Ma20-reel-papa-a-la-huancaina.mp4"
+      ],
+      "texto": "Papa a la huancaína, la salsa peruana que se hace en la licuadora 🥔\nQueso, ají amarillo y leche evaporada, con galletitas de agua para espesar.\n¿La probaste? 👇\nReceta completa en amanorecetas.com.ar/receta/c-papa-a-la-huancaina\n#papaalahuancaina #comidaperuana #recetaslatinas #entrada #vegetariano",
+      "portada": "Ma20-reel-papa-a-la-huancaina-portada.png",
+      "manual": false,
+      "nota": null,
+      "tiktok": "Papa a la huancaína 🥔 Receta en amanorecetas.com.ar #papaalahuancaina #comidaperuana #fyp"
+    },
+    {
+      "clave": "2026-10-20-carrusel-Ma20-pascualina-1-portada",
+      "fecha": "2026-10-20T18:00:00-03:00",
+      "tipo": "carrusel",
+      "archivos": [
+        "Ma20-pascualina-1-portada.png",
+        "Ma20-pascualina-2-ingredientes.png",
+        "Ma20-pascualina-3-pasos.png",
+        "Ma20-pascualina-4-secreto.png"
+      ],
+      "texto": "Pascualina, la tarta de acelga del Río de la Plata 🥬\nCon ricota y huevos enteros escondidos en el relleno: cuando la cortás, aparecen.\nEl secreto está en la última foto 👀\n¿Acelga o espinaca? 👇\nReceta completa en amanorecetas.com.ar/receta/c-pascualina\n#pascualina #tartadeacelga #recetasuruguayas #vegetariano #comidacasera",
+      "portada": null,
+      "manual": false,
+      "nota": null,
+      "tiktok": null
+    },
+    {
+      "clave": "2026-10-20-historia-Ma20-historia-pregunta-semana",
+      "fecha": "2026-10-20T20:30:00-03:00",
+      "tipo": "historia",
+      "archivos": [
+        "Ma20-historia-pregunta-semana.png"
+      ],
+      "texto": null,
+      "portada": null,
+      "manual": false,
+      "nota": "sin sticker",
+      "tiktok": null
+    }
+  ]
+}
