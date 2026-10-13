@@ -110,7 +110,8 @@ export async function resumenes(ids) {
   const porId = new Map([...delCatalogo, ...deCasa, ...deUsuarios].map((r) => [r.id, r]));
   return ids.map((id) => porId.get(id)).filter(Boolean);
 }
-export const recetasDeLaComunidad = () => (hayBackend ? seguro(comunidad.listarPublicas()) : Promise.resolve([]));
+// Se piden más de las que se muestran para poder poner primero las que tienen foto.
+export const recetasDeLaComunidad = () => (hayBackend ? seguro(comunidad.listarPublicas(30)) : Promise.resolve([]));
 export const explorarComunidad = (opciones) => comunidad.explorarComunidad(opciones);
 
 export async function categorias() {
