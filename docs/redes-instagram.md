@@ -143,7 +143,16 @@ Si devuelve 401, el `CRON_SECRET` de Vercel no es igual al de Vault.
 
 ## Cada semana
 
-1. Generá la carpeta de la semana como siempre (PNG, MP4 y `00-CALENDARIO-Y-TEXTOS.txt`).
+1. Armá la carpeta de la semana. Hay dos caminos:
+   - **Con el generador** (como la semana 3): se escribe un `contenido.json` con las
+     recetas, los textos y las horas de cada publicación, y
+     `node scripts/redes/generar-semana.mjs docs/marca/instagram/semana-N-…`
+     dibuja todas las piezas con las plantillas de la marca
+     (`scripts/redes/plantillas.mjs`): carruseles, historias, imágenes y reels MP4 con
+     portada y pista de audio muda. También escribe `00-CALENDARIO-Y-TEXTOS.txt` y
+     `calendario.json`, así que el paso 2 ya está hecho. Necesita Chromium con
+     Playwright y ffmpeg; con `--solo <archivo>` regenera una sola pieza.
+   - **A mano**: PNG, MP4 y `00-CALENDARIO-Y-TEXTOS.txt` como en la semana 2.
 2. `node scripts/redes-calendario.mjs docs/marca/instagram/semana-3-… --anio 2026`
    escribe `calendario.json` y avisa si algo no cumple los límites de Instagram
    (texto de más de 2.200 caracteres, más de 30 hashtags, más de 10 láminas…).
