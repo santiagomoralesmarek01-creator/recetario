@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Emulador móvil</title>
+  <style>
+    :root {
+      --fondo: #f3f1ec;
+      --panel: #ffffff;
+      --borde: #e2ddd3;
+      --texto: #1f1d1a;
+      --suave: #6f6a61;
+      --acento: #c8452c;
+      --acento-texto: #ffffff;
+      --marco: #16161a;
+      --marco-brillo: #3a3a42;
+      --pantalla: #ffffff;
+      --sombra: 0 30px 60px -20px rgba(0, 0, 0, .35);
+      --aviso-fondo: #fff4d6;
+      --aviso-texto: #6b5000;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --fondo: #141413;
+        --panel: #1e1d1b;
+        --borde: #33312d;
+        --texto: #f1eee8;
+        --suave: #a29d93;
+        --acento: #e8674c;
+        --marco: #050506;
+        --marco-brillo: #2b2b31;
+        --sombra: 0 30px 60px -20px rgba(0, 0, 0, .8);
+        --aviso-fondo: #3a3120;
+        --aviso-texto: #f0d694;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --fondo: #141413;
+      --panel: #1e1d1b;
+      --borde: #33312d;
+      --texto: #f1eee8;
+      --suave: #a29d93;
+      --acento: #e8674c;
+      --marco: #050506;
+      --marco-brillo: #2b2b31;
+      --sombra: 0 30px 60px -20px rgba(0, 0, 0, .8);
+      --aviso-fondo: #3a3120;
+      --aviso-texto: #f0d694;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--fondo);
+      color: var(--texto);
+      font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Barra superior */
+    .barra {
+      background: var(--panel);
+      border-bottom: 1px solid var(--borde);
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .marca { font-weight: 700; letter-spacing: -.01em; margin-right: 6px; white-space: nowrap; }
+    .marca span { color: var(--acento); }
+    form.url {
+      flex: 1 1 320px;
+      display: flex;
+      gap: 8px;
+      min-width: 0;
+    }
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      border: 1px solid var(--borde);
+      border-radius: 999px;
+      background: var(--fondo);
+      color: var(--texto);
+      font: inherit;
+    }
+    input[type="text"]:focus { outline: 2px solid var(--acento); outline-offset: 1px; }
+    button, select {
+      font: inherit;
+      color: var(--texto);
+      background: var(--fondo);
+      border: 1px solid var(--borde);
+      border-radius: 999px;
+      padding: 9px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button:hover, select:hover { border-color: var(--suave); }
+    button.primario {
+      background: var(--acento);
+      border-color: var(--acento);
+      color: var(--acento-texto);
+      font-weight: 600;
+    }
+    .controles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .icono { padding: 9px 12px; }
+
+    /* Escenario */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 20px;
+      overflow: auto;
+    }
+    .escala { flex: none; }
+    .escala .telefono { transform-origin: top left; }
+    .telefono {
+      position: relative;
+      background: var(--marco);
+      border-radius: 54px;
+      padding: 14px;
+      box-shadow: var(--sombra), inset 0 0 0 2px var(--marco-brillo);
+      transition: width .3s ease, height .3s ease, border-radius .3s ease, transform .25s ease;
+    }
+    .telefono.tablet { border-radius: 36px; padding: 22px; }
+    .telefono.chico { border-radius: 40px; padding: 60px 14px; }
+    .pantalla {
+      position: relative;
+      background: var(--pantalla);
+      border-radius: 40px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    .telefono.tablet .pantalla { border-radius: 16px; }
+    .telefono.chico .pantalla { border-radius: 4px; }
+
+    .estado {
+      height: 44px;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      font: 600 14px/1 system-ui, sans-serif;
+      color: #111;
+      background: #fff;
+      position: relative;
+      z-index: 2;
+    }
+    .estado .iconos { display: flex; gap: 5px; align-items: center; }
+    .isla {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 30px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 3;
+    }
+    .telefono.android .isla { width: 12px; height: 12px; top: 16px; border-radius: 50%; }
+    .telefono.tablet .isla, .telefono.chico .isla { display: none; }
+    .telefono.chico .estado { height: 22px; font-size: 12px; padding: 0 10px; }
+    .telefono.tablet .estado { height: 28px; font-size: 12px; padding: 0 18px; }
+    .boton-inicio {
+      display: none;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--marco-brillo);
+    }
+    .telefono.chico .boton-inicio { display: block; }
+
+    iframe {
+      border: 0;
+      width: 100%;
+      flex: 1;
+      background: #fff;
+      display: block;
+    }
+    .indicador {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px; height: 5px;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, .55);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .telefono.chico .indicador, .telefono.tablet .indicador { display: none; }
+
+    .vacio {
+      position: absolute;
+      inset: 44px 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 10px;
+      padding: 24px;
+      color: #6f6a61;
+      background: #fafaf8;
+      font-size: 14px;
+    }
+    .vacio[hidden] { display: none; }
+    .vacio strong { color: #1f1d1a; font-size: 17px; }
+
+    .carga {
+      position: absolute;
+      top: 44px; left: 0;
+      height: 3px;
+      width: 0;
+      background: var(--acento);
+      z-index: 4;
+      transition: width 1.2s ease, opacity .3s;
+    }
+
+    .info {
+      margin-top: 18px;
+      color: var(--suave);
+      font-size: 13px;
+      text-align: center;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .aviso {
+      margin: 14px auto 0;
+      max-width: 520px;
+      background: var(--aviso-fondo);
+      color: var(--aviso-texto);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      text-align: center;
+    }
+    .recientes { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+    .recientes button { font-size: 12px; padding: 5px 10px; color: var(--suave); }
+
+    @media (max-width: 640px) {
+      .marca { display: none; }
+      .controles { width: 100%; }
+      .controles select { flex: 1; min-width: 0; }
+      main { padding-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="barra">
+    <div class="marca">Emulador<span>.</span>móvil</div>
+    <form class="url" id="formulario">
+      <input type="text" id="direccion" placeholder="Pegá un link o dominio, ej: amanorecetas.com.ar" autocomplete="off" spellcheck="false" inputmode="url" aria-label="Dirección del sitio">
+      <button class="primario" type="submit">Ver</button>
+    </form>
+    <div class="controles">
+      <select id="dispositivo" aria-label="Dispositivo"></select>
+      <button class="icono" id="girar" title="Girar">⟲</button>
+      <button class="icono" id="recargar" title="Recargar">↻</button>
+      <button class="icono" id="abrir" title="Abrir en pestaña nueva">↗</button>
+      <button class="icono" id="tema" title="Cambiar tema" aria-label="Cambiar tema"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <div class="escala" id="escala">
+      <div class="telefono" id="telefono">
+        <div class="pantalla">
+          <div class="estado">
+            <span id="hora">9:41</span>
+            <span class="iconos" aria-hidden="true">
+              <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1" fill="currentColor"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="currentColor"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="currentColor"/></svg>
+              <svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.5" fill="currentColor"/><rect x="23" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".45"/></svg>
+            </span>
+          </div>
+          <div class="isla"></div>
+          <div class="carga" id="carga"></div>
+          <iframe id="marco" title="Vista previa" referrerpolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
+          <div class="vacio" id="vacio">
+            <strong>Probá cualquier sitio</strong>
+            Escribí un link arriba y mirá cómo se ve en el celular.
+          </div>
+          <div class="indicador"></div>
+        </div>
+        <div class="boton-inicio"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <span id="medidas"></span>
+      <span>Zoom: <button class="icono" id="menos" style="padding:2px 9px">−</button> <span id="zoom">100%</span> <button class="icono" id="mas" style="padding:2px 9px">+</button></span>
+    </div>
+    <div class="recientes" id="recientes"></div>
+    <p class="aviso">Algunos sitios (Google, Instagram, bancos…) bloquean que se los muestre dentro de otra página. Si la pantalla queda en blanco o con error, es por eso: usá ↗ para abrirlo aparte.</p>
+  </main>
+
+  <script type="module">
+    const DISPOSITIVOS = [
+      { id: 'iphone15', nombre: 'iPhone 15 / 15 Pro', ancho: 393, alto: 852, tipo: 'iphone' },
+      { id: 'iphone15max', nombre: 'iPhone 15 Pro Max', ancho: 430, alto: 932, tipo: 'iphone' },
+      { id: 'iphonese', nombre: 'iPhone SE', ancho: 375, alto: 667, tipo: 'chico' },
+      { id: 'pixel8', nombre: 'Google Pixel 8', ancho: 412, alto: 915, tipo: 'android' },
+      { id: 'galaxys23', nombre: 'Samsung Galaxy S23', ancho: 360, alto: 780, tipo: 'android' },
+      { id: 'galaxya', nombre: 'Samsung Galaxy A (gama media)', ancho: 384, alto: 854, tipo: 'android' },
+      { id: 'ipadmini', nombre: 'iPad mini', ancho: 744, alto: 1133, tipo: 'tablet' },
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const marco = $('marco'), telefono = $('telefono'), escala = $('escala');
+    const selector = $('dispositivo'), direccion = $('direccion');
+
+    const leer = (clave, defecto) => {
+      try { return JSON.parse(localStorage.getItem(clave)) ?? defecto; } catch { return defecto; }
+    };
+    const guardar = (clave, valor) => {
+      try { localStorage.setItem(clave, JSON.stringify(valor)); } catch {}
+    };
+
+    const estado = {
+      dispositivo: leer('emu.dispositivo', 'iphone15'),
+      horizontal: false,
+      zoom: null, // null = automático
+      url: '',
+      recientes: leer('emu.recientes', []),
+    };
+
+    for (const d of DISPOSITIVOS) selector.add(new Option(`${d.nombre} · ${d.ancho}×${d.alto}`, d.id));
+    if (!DISPOSITIVOS.some((d) => d.id === estado.dispositivo)) estado.dispositivo = 'iphone15';
+    selector.value = estado.dispositivo;
+
+    function normalizar(texto) {
+      let t = texto.trim();
+      if (!t) return '';
+      if (!/^https?:\/\//i.test(t)) t = (/^(localhost|127\.|192\.168\.)/.test(t) ? 'http://' : 'https://') + t;
+      try { return new URL(t).href; } catch { return ''; }
+    }
+
+    function dibujar() {
+      const d = DISPOSITIVOS.find((x) => x.id === estado.dispositivo);
+      const ancho = estado.horizontal ? d.alto : d.ancho;
+      const alto = estado.horizontal ? d.ancho : d.alto;
+      const borde = d.tipo === 'tablet' ? 22 : 14;
+      const bordeVertical = d.tipo === 'chico' ? (estado.horizontal ? 14 : 60) : borde;
+      const bordeHorizontal = d.tipo === 'chico' && estado.horizontal ? 60 : borde;
+      const barraEstado = d.tipo === 'chico' ? 22 : d.tipo === 'tablet' ? 28 : 44;
+
+      telefono.className = `telefono ${d.tipo}`;
+      telefono.style.padding = `${bordeVertical}px ${bordeHorizontal}px`;
+      // El ancho del iframe es el ancho real del dispositivo: así el sitio aplica sus media queries.
+      telefono.style.width = `${ancho + bordeHorizontal * 2}px`;
+      telefono.style.height = `${alto + barraEstado + bordeVertical * 2}px`;
+      $('vacio').style.top = `${barraEstado}px`;
+      $('carga').style.top = `${barraEstado}px`;
+
+      const disponibleAncho = window.innerWidth - 32;
+      const disponibleAlto = window.innerHeight - document.querySelector('.barra').offsetHeight - 150;
+      const auto = Math.min(1, disponibleAncho / (ancho + bordeHorizontal * 2), disponibleAlto / (alto + barraEstado + bordeVertical * 2));
+      const zoom = estado.zoom ?? Math.max(0.3, auto);
+      telefono.style.transform = `scale(${zoom})`;
+      escala.style.width = `${(ancho + bordeHorizontal * 2) * zoom}px`;
+      escala.style.height = `${(alto + barraEstado + bordeVertical * 2) * zoom}px`;
+      $('zoom').textContent = `${Math.round(zoom * 100)}%`;
+      $('medidas').textContent = `${d.nombre} · ${ancho}×${alto} px${estado.horizontal ? ' · horizontal' : ''}`;
+    }
+
+    function cargar(url) {
+      if (!url) return;
+      estado.url = url;
+      direccion.value = url;
+      $('vacio').hidden = true;
+      const carga = $('carga');
+      carga.style.transition = 'none';
+      carga.style.opacity = 1;
+      carga.style.width = '0';
+      requestAnimationFrame(() => {
+        carga.style.transition = 'width 1.2s ease, opacity .3s';
+        carga.style.width = '80%';
+      });
+      marco.src = url;
+      estado.recientes = [url, ...estado.recientes.filter((u) => u !== url)].slice(0, 5);
+      guardar('emu.recientes', estado.recientes);
+      pintarRecientes();
+      const params = new URLSearchParams(location.search);
+      params.set('url', url);
+      history.replaceState(null, '', `?${params}`);
+    }
+
+    marco.addEventListener('load', () => {
+      const carga = $('carga');
+      carga.style.width = '100%';
+      setTimeout(() => (carga.style.opacity = 0), 300);
+    });
+
+    function pintarRecientes() {
+      const caja = $('recientes');
+      caja.replaceChildren();
+      for (const u of estado.recientes) {
+        const b = document.createElement('button');
+        b.textContent = new URL(u).host + new URL(u).pathname.replace(/\/$/, '');
+        b.title = u;
+        b.onclick = () => cargar(u);
+        caja.append(b);
+      }
+    }
+
+    function reloj() {
+      const ahora = new Date();
+      $('hora').textContent = `${ahora.getHours()}:${String(ahora.getMinutes()).padStart(2, '0')}`;
+    }
+
+    $('formulario').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const url = normalizar(direccion.value);
+      if (url) cargar(url);
+      else direccion.select();
+    });
+    selector.addEventListener('change', () => {
+      estado.dispositivo = selector.value;
+      guardar('emu.dispositivo', estado.dispositivo);
+      dibujar();
+    });
+    $('girar').onclick = () => { estado.horizontal = !estado.horizontal; dibujar(); };
+    $('recargar').onclick = () => { if (estado.url) cargar(estado.url); };
+    $('abrir').onclick = () => { if (estado.url) window.open(estado.url, '_blank', 'noopener'); };
+    $('mas').onclick = () => { estado.zoom = Math.min(1.5, (estado.zoom ?? parseFloat($('zoom').textContent) / 100) + 0.1); dibujar(); };
+    $('menos').onclick = () => { estado.zoom = Math.max(0.3, (estado.zoom ?? parseFloat($('zoom').textContent) / 100) - 0.1); dibujar(); };
+    $('tema').onclick = () => {
+      const oscuro = document.documentElement.dataset.theme
+        ? document.documentElement.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = oscuro ? 'light' : 'dark';
+      guardar('emu.tema', document.documentElement.dataset.theme);
+    };
+    window.addEventListener('resize', dibujar);
+
+    const temaGuardado = leer('emu.tema', null);
+    if (temaGuardado) document.documentElement.dataset.theme = temaGuardado;
+
+    reloj();
+    setInterval(reloj, 30_000);
+    pintarRecientes();
+    dibujar();
+
+    const inicial = normalizar(new URLSearchParams(location.search).get('url') ?? '');
+    if (inicial) cargar(inicial);
+  </script>
+</body>
+</html>
