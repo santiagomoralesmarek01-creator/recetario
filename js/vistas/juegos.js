@@ -1,4 +1,4 @@
-// Sección Juegos: portada con el torneo, los 4 juegos y el acceso a las
+// Sección Juegos: portada, los 4 juegos y el acceso a las
 // medallas. Cada juego vive en js/juegos/.
 import { el, mostrar } from '../dom.js';
 import { hayBackend } from '../supabase.js';
@@ -11,7 +11,6 @@ import { juegoArmar } from '../juegos/armar.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { conPalabraDestacada } from './listados.js';
-import { tarjetaTorneo } from './torneo.js';
 
 const JUEGOS = {
   'plato-del-dia': juegoPlatoDelDia,
@@ -50,7 +49,6 @@ export function vistaJuegos() {
       el('p', { class: 'portada-antetitulo' }, 'Juegos de cocina'),
       el('h1', {}, ...conPalabraDestacada(t('juegos.titulo'), 'comida')),
       el('p', { class: 'meta' }, t('juegos.bajada'))),
-    hayBackend && tarjetaTorneo(),
     el('div', { class: 'juegos-lista' },
       tarjetaJuego({
         ruta: 'plato-del-dia', icono: icono('plato'), titulo: `Plato del día #${numeroDelDia()}`, clase: 'destacado',

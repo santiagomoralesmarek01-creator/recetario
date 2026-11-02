@@ -11,6 +11,16 @@
       ],
       "destination": "https://amanorecetas.com.ar/:ruta*",
       "permanent": true
+    },
+    {
+      "source": "/(torneo|bases)",
+      "destination": "/juegos",
+      "permanent": true
+    },
+    {
+      "source": "/admin/torneo",
+      "destination": "/",
+      "permanent": false
     }
   ],
   "headers": [

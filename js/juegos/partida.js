@@ -1,5 +1,5 @@
 // Pantalla de fin de partida, común a los juegos: puntos, récord, guardado
-// para el ranking y las medallas, y botones para compartir o volver a jugar.
+// para las medallas, y botones para compartir o volver a jugar.
 import { el } from '../dom.js';
 import { usuario, pedirLogin } from '../auth.js';
 import { hayBackend } from '../supabase.js';
@@ -9,7 +9,6 @@ import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { evento } from '../analitica.js';
 import { ruta } from '../rutas.js';
-import { juegaEnServidor } from '../torneo.js';
 
 // Pantalla para elegir la dificultad antes de jugar. detalles: { facil, normal, dificil } → texto.
 export function elegirModo({ juego, detalles, alEmpezar }) {
@@ -34,14 +33,11 @@ export function elegirModo({ juego, detalles, alEmpezar }) {
     el('p', { class: 'falta-pregunta' }, 'Elegí la dificultad'),
     el('div', { class: 'modo-opciones' }, botones),
     el('p', { class: 'meta modo-nota' }, icono('pais'), ' Priorizamos platos latinoamericanos: en Fácil son todos de la región y en Difícil se suma más cocina del mundo.'),
-    juego !== 'plato-del-dia' && el('p', { class: 'meta modo-nota' }, icono('trofeo'), juegaEnServidor()
-      ? ' Tu primera partida de hoy de este juego es la oficial del torneo: en Difícil se ganan más puntos.'
-      : [' Entrá con tu cuenta para que tus partidas sumen al ', el('a', { href: '/torneo' }, 'torneo con premio'), '.']),
     el('div', { class: 'juego-siguiente' },
       el('button', { type: 'button', class: 'boton', onclick: () => { guardarModo(juego, modo); alEmpezar(modo); } }, t('juego.empezar'))));
 }
 
-// partida: la del servidor (con sesión); ya guardó los puntos y dice si fue la oficial del torneo.
+// partida: la del servidor (con sesión); ya guardó los puntos.
 export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, partida = null, alReintentar, alCambiarModo, textoCompartir }) {
   const clave = modo ? `${juego}:${modo}` : juego;
   const recordAnterior = leerRecords()[clave]?.mejor || 0;
@@ -57,9 +53,6 @@ export function finDePartida({ juego, modo, titulo, puntos, maximo, detalle, par
     el('p', { class: `portada-antetitulo${modo ? ` nivel-${MODOS[modo].nivel}` : ''}` }, titulo, modo && [' · ', el('span', { class: 'punto-nivel', 'aria-hidden': 'true' }), MODOS[modo].nombre]),
     el('p', { class: 'juego-fin-puntos' }, el('strong', {}, puntos), ` / ${maximo} puntos`),
     detalle && el('p', { class: 'meta' }, detalle),
-    partida && (partida.oficial
-      ? el('p', { class: 'juego-oficial' }, icono('trofeo'), ` Partida oficial del torneo: sumaste ${puntos} puntos. `, el('a', { href: '/torneo' }, 'Ver ranking'))
-      : el('p', { class: 'meta juego-practica' }, 'Partida de práctica: la oficial de hoy de este juego ya la jugaste. Mañana tenés otra.')),
     esRecord
       ? el('p', { class: 'juego-record' }, icono('trofeo'), ` ${t('juego.nuevo-record')}`)
       : recordAnterior > 0 && el('p', { class: 'meta' }, `Tu récord${modo ? ` en ${MODOS[modo].nombre.toLowerCase()}` : ''}: ${Math.max(recordAnterior, puntos)} puntos`),

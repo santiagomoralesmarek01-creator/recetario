@@ -205,27 +205,17 @@ En `js/config.js`, `ANALITICA`:
 Vacío, no se carga nada. Para la retención (si vuelven), mirar en Plausible las
 visitas de *Juego* con `plato-del-dia`: es el desafío que trae gente todos los días.
 
-## Torneo de juegos y receta del mes (con premio)
+## Juegos con sesión (puntaje en el servidor)
 
 - **Instalar:** en Supabase → SQL Editor, correr `supabase/torneo.sql` y después
   `supabase/juegos-datos-1.sql`, `-2.sql` y `-3.sql` (el catálogo de los juegos).
   Si cambian las recetas, regenerar el catálogo con `scripts/generar-datos-juegos.mjs`.
-- **Puntaje en el servidor:** con sesión iniciada, "Adiviná el país", "¿Qué le falta?"
-  y "Armá el plato" los arma y corrige Postgres (`partida_empezar`, `partida_ronda`,
-  `partida_responder`): cada ronda se entrega al pedirla, el tiempo lo mide el servidor
-  y el navegador ya no puede guardar puntos de estos juegos. Sin sesión se juega como práctica.
-- **Partida oficial:** la primera de cada juego de cada día. El Plato del día no suma.
-- **Quincenas y premios:** se configuran en la tabla `torneo_config` (inicio del torneo,
-  días, premios, antigüedad mínima de la cuenta y `receta_desde`, desde cuándo cuentan
-  las recetas). Empieza el lunes 5 de octubre de 2026 con $15.000 por quincena y
-  $30.000 por la receta del mes. Ejemplo: `update torneo_config set premio_juegos = 20000;`
-- **Para cobrar:** inscripción en `/torneo` (mayor de 18, vive en Argentina, sigue a @amanorecetas
-  en Instagram y da su usuario, acepta
-  `/bases`) y cuenta con 7 días de antigüedad al cierre. Se paga con DNI y CBU a nombre propio.
-- **Panel:** `/admin/torneo` (administradores): top 20 con alertas (respuestas en menos
-  de 0,7 s y cuentas desde el mismo navegador), elegir la receta del mes, registrar
-  ganadores y marcar pagos. Los ganadores se ven en `/torneo` y la receta ganadora
-  muestra la insignia "Receta del mes".
+- Con sesión iniciada, "Adiviná el país", "¿Qué le falta?" y "Armá el plato" los arma y
+  corrige Postgres (`partida_empezar`, `partida_ronda`, `partida_responder`, en
+  `js/partidas.js`) y así suman a las medallas. Sin sesión se juegan en el navegador.
+- El torneo con premios y la receta del mes se sacaron de la web (noviembre de 2026):
+  `/torneo` y `/bases` redirigen a `/juegos`. Las tablas del torneo siguen en la base
+  de datos pero la web ya no las usa.
 
 ## Estructura
 

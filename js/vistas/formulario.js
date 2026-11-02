@@ -12,7 +12,6 @@ import { NOMBRES_PAISES } from '../paises.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 import { ir, rutaReceta } from '../rutas.js';
-import { avisoRecetaDelMes } from './torneo.js';
 
 // Fila de ingrediente: buscador con sugerencias (con imagen) + cantidad + unidad.
 // Se puede escribir un ingrediente que no esté en la lista; la imagen se intenta adivinar.
@@ -322,5 +321,5 @@ export async function vistaFormulario(uuid = null) {
       botonGuardar,
       el('a', { href: uuid ? `/receta/u-${uuid}` : '/mis-recetas' }, 'Cancelar')));
 
-  mostrar(el('h1', {}, uuid ? 'Editar receta' : 'Nueva receta'), !uuid && avisoRecetaDelMes(), form);
+  mostrar(el('h1', {}, uuid ? 'Editar receta' : 'Nueva receta'), form);
 }

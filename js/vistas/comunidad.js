@@ -10,7 +10,6 @@ import { tarjeta } from './medallas.js';
 import { traducirOrigen } from '../traducciones.js';
 import { bandera } from '../paises.js';
 import { icono } from '../iconos.js';
-import { avisoRecetaDelMes, vidrieraRecetasDelMes } from './torneo.js';
 
 const POR_PAGINA = 24;
 
@@ -95,8 +94,6 @@ export async function vistaComunidad(categoria = '') {
         el('h1', {}, 'Recetas de la comunidad'),
         el('p', { class: 'meta' }, 'Recetas caseras que compartió la gente de A Mano.')),
       el('a', { class: 'boton', href: '/nueva' }, 'Subir mi receta')),
-    !categoria && avisoRecetaDelMes(),
-    !categoria && vidrieraRecetasDelMes(),
     el('div', { class: 'comunidad-filtros' }, buscador, chips),
     resultados,
   );

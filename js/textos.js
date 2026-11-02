@@ -92,9 +92,9 @@ const TEXTOS = {
   // Juegos
   'juegos.titulo': { neutro: '¿Cuánto sabemos de comida?', vos: '¿Cuánto sabés de comida?', tu: '¿Cuánto sabes de comida?' },
   'juegos.bajada': {
-    neutro: 'Platos, países e ingredientes para adivinar con las recetas de A Mano, con prioridad para la cocina latinoamericana. Cada acierto suma para el ranking y las medallas; en difícil, vale más.',
-    vos: 'Adiviná platos, países e ingredientes con las recetas de A Mano, con prioridad para la cocina latinoamericana. Sumá puntos, subí en el ranking y ganá medallas: en difícil, cada acierto vale más.',
-    tu: 'Adivina platos, países e ingredientes con las recetas de A Mano, con prioridad para la cocina latinoamericana. Suma puntos, sube en el ranking y gana medallas: en difícil, cada acierto vale más.',
+    neutro: 'Platos, países e ingredientes para adivinar con las recetas de A Mano, con prioridad para la cocina latinoamericana. Cada acierto suma puntos para tu récord y tus medallas; en difícil, vale más.',
+    vos: 'Adiviná platos, países e ingredientes con las recetas de A Mano, con prioridad para la cocina latinoamericana. Sumá puntos, superá tu récord y ganá medallas: en difícil, cada acierto vale más.',
+    tu: 'Adivina platos, países e ingredientes con las recetas de A Mano, con prioridad para la cocina latinoamericana. Suma puntos, supera tu récord y gana medallas: en difícil, cada acierto vale más.',
   },
   'juegos.elegir-dificultad': { neutro: 'Dificultad a elección: ', vos: 'Elegís la dificultad: ', tu: 'Eliges la dificultad: ' },
   'juegos.jugar-hoy': 'Jugar el Plato del día',
@@ -115,7 +115,7 @@ const TEXTOS = {
   'juego.compartir': 'Compartir',
   'juego.otros': 'Otros juegos',
   'juego.entrar': { neutro: 'Entrar', vos: 'Entrá', tu: 'Entra' },
-  'juego.entrar-texto': ' para sumar puntos al ranking semanal y ganar medallas.',
+  'juego.entrar-texto': ' para guardar tus puntos y ganar medallas.',
   'juego.copiado': { neutro: 'Resultado copiado: listo para pegar.', vos: 'Resultado copiado: pegalo donde quieras.', tu: 'Resultado copiado: pégalo donde quieras.' },
 
   // Manitas

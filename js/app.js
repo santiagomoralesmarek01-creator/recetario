@@ -16,7 +16,6 @@ import { vistaJuegos, vistaJuego } from './vistas/juegos.js';
 import { vistaMedallas } from './vistas/medallas.js';
 import { iniciarMedallas } from './medallas.js';
 import { vistaFotos } from './vistas/fotosRecetas.js';
-import { vistaTorneo, vistaBases, vistaAdminTorneo } from './vistas/torneo.js';
 import { vistaAdminRedes } from './vistas/redes.js';
 import { soyAdmin } from './fotos.js';
 import { icono } from './iconos.js';
@@ -63,9 +62,8 @@ function menuUsuario(u) {
   const nombre = nombreVisible(u);
   // Sólo para administradores: se agrega cuando se confirma.
   const enlaceAdmin = el('a', { href: '/fotos', role: 'menuitem', hidden: true }, icono('foto'), 'Fotos de recetas');
-  const enlaceTorneo = el('a', { href: '/admin/torneo', role: 'menuitem', hidden: true }, icono('trofeo'), 'Panel del torneo');
   const enlaceRedes = el('a', { href: '/admin/redes', role: 'menuitem', hidden: true }, icono('calendario'), 'Panel de redes');
-  soyAdmin().then((si) => { enlaceAdmin.hidden = !si; enlaceTorneo.hidden = !si; enlaceRedes.hidden = !si; });
+  soyAdmin().then((si) => { enlaceAdmin.hidden = !si; enlaceRedes.hidden = !si; });
   const opciones = el('div', { class: 'usuario-opciones', role: 'menu', hidden: true },
     el('p', { class: 'usuario-nombre' }, el('small', {}, 'Sesión iniciada como'), el('strong', {}, nombre)),
     el('a', { href: '/mis-recetas', role: 'menuitem' }, icono('libro'), 'Mis recetas y favoritas'),
@@ -73,7 +71,6 @@ function menuUsuario(u) {
     el('a', { href: '/juegos', role: 'menuitem' }, icono('juegos'), 'Juegos'),
     el('a', { href: '/preferencias', role: 'menuitem' }, icono('ajustes'), 'Preferencias'),
     enlaceAdmin,
-    enlaceTorneo,
     enlaceRedes,
     el('button', {
       type: 'button', role: 'menuitem',
@@ -142,10 +139,7 @@ async function router() {
       case 'juegos': return param ? await vistaJuego(param) : vistaJuegos();
       case 'medallas': return await vistaMedallas();
       case 'fotos': return await vistaFotos();
-      case 'torneo': return await vistaTorneo();
-      case 'bases': return vistaBases();
       case 'admin':
-        if (param === 'torneo') return await vistaAdminTorneo();
         if (param === 'redes') return await vistaAdminRedes();
         return await vistaInicio();
       case 'preferencias': return vistaPreferencias();
