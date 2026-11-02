@@ -5,7 +5,7 @@ import { crearImagen, IMG_PLATO_GENERICO, IMG_INGREDIENTE_GENERICO } from '../im
 import { portada } from '../vistas/componentes.js';
 import { cargarDatos, mezclar, esTrivial, ingredientesFalsos, elegirRecetas, MODOS } from './datos.js';
 import { finDePartida, marcador, elegirModo, errorDePartida } from './partida.js';
-import { juegaEnServidor, nuevaPartida } from '../torneo.js';
+import { juegaEnServidor, nuevaPartida } from '../partidas.js';
 import { icono } from '../iconos.js';
 import { t } from '../textos.js';
 
@@ -66,7 +66,7 @@ export async function juegoFalta() {
 
   async function empezar(modo) {
     const reglas = REGLAS[modo];
-    // Con sesión, la partida la arma y la corrige el servidor (cuenta para el torneo).
+    // Con sesión, la partida la arma y la corrige el servidor (suma a las medallas).
     let partida = null;
     if (juegaEnServidor()) {
       zona.replaceChildren(el('p', { class: 'estado' }, 'Armando la partida…'));

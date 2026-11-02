@@ -184,7 +184,7 @@ export async function juegoPlatoDelDia() {
         el('li', {}, el('strong', {}, icono('fuego'), ` ${racha}`), el('span', {}, `día${racha === 1 ? '' : 's'} de racha`))),
       invitado && el('p', { class: 'juego-invitacion' },
         el('button', { type: 'button', class: 'boton-texto', onclick: () => pedirLogin(ruta()) }, 'Entrá'),
-        ' para sumar los puntos al ranking y ganar medallas.'),
+        ' para guardar tus puntos y ganar medallas.'),
       el('div', { class: 'acciones' },
         el('button', {
           type: 'button', class: 'boton',

@@ -25,8 +25,6 @@ const SECCIONES = {
   'que-tengo': { titulo: '¿Qué hay a mano? Recetas con lo que tenés · A Mano', descripcion: 'Elegí los ingredientes que hay en casa y mirá qué recetas se pueden hacer.' },
   juegos: { titulo: 'Juegos de cocina: Plato del día y más · A Mano', descripcion: 'Adiviná el plato del día, el país de cada receta y el ingrediente que falta.' },
   comunidad: { titulo: 'Recetas de la comunidad · A Mano', descripcion: 'Recetas caseras que comparte la gente de A Mano.' },
-  torneo: { titulo: 'Torneo de juegos con premio · A Mano', descripcion: 'Jugá a los juegos de cocina de A Mano y competí por un premio en plata cada 15 días. Gratis, para mayores de 18 en Argentina.' },
-  bases: { titulo: 'Bases y condiciones del torneo · A Mano', descripcion: 'Reglas del torneo de juegos (cada 15 días) y de la receta del mes de A Mano: requisitos, premios y pago.' },
   privacidad: { titulo: 'Política de privacidad · A Mano', descripcion: 'Qué datos guarda A Mano, para qué y cómo pedir acceso o borrarlos.' },
   terminos: { titulo: 'Términos y condiciones · A Mano', descripcion: 'Condiciones de uso de A Mano, sus recetas, Manitas y la comunidad.' },
 };
@@ -36,6 +34,26 @@ function duracion(minutos) {
   if (!m) return undefined;
   const h = Math.floor(m / 60);
   return `PT${h ? `${h}H` : ''}${m % 60 ? `${m % 60}M` : ''}`;
+}
+
+// Título para Google: el nombre del plato primero (es lo que la gente busca)
+// y, si entra en ~60 caracteres, "receta paso a paso".
+function tituloReceta(r) {
+  const opciones = [`${r.nombre}: receta paso a paso | A Mano`, `${r.nombre}: receta | A Mano`];
+  return opciones.find((t) => t.length <= 62) || `${r.nombre} | A Mano`;
+}
+
+// Descripción para Google con datos concretos de la receta: la descripción
+// propia (si tiene) y después ingredientes, tiempo, porciones y origen.
+function descripcionReceta(r) {
+  const datos = [
+    `${r.ingredientes.length} ingredientes`,
+    Number(r.minutos) > 0 && `listo en ${r.minutos} min`,
+    Number(r.porciones) > 0 && `${r.porciones} porciones`,
+  ].filter(Boolean).join(', ');
+  const origen = r.origen ? ` Cocina de ${r.origen}.` : '';
+  if (r.descripcion) return recortar(`${r.descripcion.replace(/\.?$/, '.')} ${datos[0].toUpperCase()}${datos.slice(1)}.${origen}`);
+  return recortar(`Cómo hacer ${r.nombre[0].toLowerCase()}${r.nombre.slice(1)}: ${datos}.${origen} Paso a paso y con reemplazos para lo que no se consigue.`);
 }
 
 // Título corto de un paso: su primera frase, o "Paso N" si es muy larga.
@@ -107,8 +125,8 @@ async function armar(ruta) {
     if (!r) return { estado: 404, titulo: `Receta no encontrada · A Mano`, indexar: false };
     const canonica = rutaReceta(r.id, r.nombre);
     return {
-      titulo: `Receta de ${r.nombre} paso a paso · A Mano`,
-      descripcion: recortar(r.descripcion || `Receta de ${r.nombre} paso a paso: ${r.ingredientes.length} ingredientes${r.origen ? `, cocina de ${r.origen}` : ''}. Con reemplazos para lo que no se consigue.`),
+      titulo: tituloReceta(r),
+      descripcion: descripcionReceta(r),
       imagen: r.imagen,
       canonica,
       contenido: contenidoReceta(r) + enlaces(`Más recetas de ${(CATEGORIAS[r.categoria] || 'la casa').toLowerCase()}`, parecidas(r)),

@@ -45,7 +45,7 @@ export function vistaPreferencias() {
     el('div', { class: 'opciones-trato' }, opcionesTrato)),
   el('fieldset', {},
     el('legend', {}, 'País'),
-    el('p', { class: 'meta' }, 'Manitas usa los nombres de ingredientes de ese país y el ranking de los juegos tiene una pestaña por país.'),
+    el('p', { class: 'meta' }, 'Manitas usa los nombres de ingredientes de ese país.'),
     selectorPais),
   el('p', { class: 'meta' }, usuario() ? 'Se guardan en la cuenta: siguen en cualquier dispositivo.' : 'Se guardan en este dispositivo. Con una cuenta, siguen en cualquier otro.'),
   el('div', { class: 'acciones' }, el('button', { type: 'submit', class: 'boton' }, 'Guardar')));
