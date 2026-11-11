@@ -2,3 +2,6 @@
 scripts/
 data/fuente/
 .github/
+
+# Herramientas aparte (se publican en su propio proyecto de Vercel)
+herramientas/
