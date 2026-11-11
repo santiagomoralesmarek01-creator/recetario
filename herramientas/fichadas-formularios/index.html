@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fichadas a formularios</title>
+  <meta name="description" content="Pegá tus fichadas y obtené los formularios de cambio de horario, compenso y horas extra ya completos.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8F%B1%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Fichadas a formularios</h1>
+    <span class="count" id="count-label"></span>
+  </header>
+
+  <!-- Mis datos: se muestra la primera vez o al tocar "Editar mis datos" -->
+  <section class="panel" id="config" hidden>
+    <h2>Mis datos</h2>
+    <p class="hint-top">Se completan una sola vez y quedan guardados solo en este navegador.</p>
+    <form id="form-config" class="grilla">
+      <label>Legajo
+        <input name="legajo" inputmode="numeric" pattern="\d{1,5}" maxlength="5" required placeholder="Ej. 21408">
+      </label>
+      <label>Hora de entrada habitual
+        <input name="entrada" type="time" step="1800" value="08:00" required>
+      </label>
+      <label class="ancho">Correo institucional <span class="opcional">(opcional)</span>
+        <input name="correo" type="email" autocomplete="email" placeholder="nombre@…">
+        <small>Los formularios se abren con esa cuenta de Google aunque tengas otras abiertas.</small>
+      </label>
+      <label class="ancho">Sábados que trabajás
+        <input name="sabados" placeholder="24/10/2026, 21/11/2026, 12/12/2026">
+        <small>Esas semanas son tu horario base (8 h + sábado 5 h) y no llevan cambio de horario. Los demás sábados van como FRANCO.</small>
+      </label>
+      <label class="ancho">Feriados y días no laborables
+        <input name="feriados">
+        <small>No llevan formulario.</small>
+      </label>
+      <label>Autoriza
+        <input name="autoriza" value="Patricia Cirino" required>
+      </label>
+      <label class="check">
+        <input name="salidaViernes" type="checkbox" checked>
+        Si el viernes falta la salida, suponer fin de jornada
+      </label>
+      <div class="ancho fila-botones">
+        <button type="submit" class="btn">Guardar</button>
+        <button type="button" class="btn-link" id="cancelar-config">Cancelar</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="search-wrap">
+    <textarea id="fichadas" rows="6" spellcheck="false" placeholder="Pegá acá tus fichadas tal cual salen del sistema…&#10;&#10;02-11-2026	07:49	Entrada&#10;02-11-2026	17:01	Salida"></textarea>
+    <button class="clear-btn" id="clear-btn" type="button" aria-label="Limpiar">×</button>
+  </div>
+  <div class="fila-botones">
+    <button id="procesar" type="button" class="btn btn-grande">Generar formularios</button>
+    <button id="toggle-extras" type="button" class="btn-link">+ Agregar horas extra fuera de las fichadas</button>
+  </div>
+  <div class="extras-wrap" id="extras-wrap" hidden>
+    <input id="extras" spellcheck="false" placeholder="Una por línea o separadas por coma, ej. 14/10 07:00 a 08:00">
+  </div>
+  <div class="hint">Tolera fechas con guiones o barras. Días seguidos con el mismo horario se agrupan en un solo formulario.</div>
+
+  <div id="avisos"></div>
+  <div id="stats" class="stats"></div>
+  <div id="results"></div>
+
+  <details class="plegable" id="enviados-box" hidden>
+    <summary>Ya enviados (<span id="cant-enviados">0</span>)</summary>
+    <div id="lista-enviados" class="lista"></div>
+  </details>
+
+  <details class="plegable" id="detalle" hidden>
+    <summary>Detalle por día</summary>
+    <div class="tabla-scroll"><table id="tabla-dias">
+      <thead><tr><th>Día</th><th>Fichadas</th><th>Se declara</th><th>Tarde</th><th>Ausencia / extra</th><th>Estado</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </details>
+
+  <footer>
+    <div class="fila-botones centro">
+      <button type="button" id="exportar" class="btn-link">Descargar copia</button>
+      <label class="btn-link">Cargar copia<input type="file" id="importar" accept="application/json" hidden></label>
+      <button type="button" id="borrar" class="btn-link peligro">Borrar todo</button>
+    </div>
+    <p>Uso interno · No oficial · Tus fichadas quedan solo en este navegador.</p>
+  </footer>
+</div>
+
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
