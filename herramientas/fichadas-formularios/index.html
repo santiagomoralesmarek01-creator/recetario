@@ -9,96 +9,90 @@
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <header class="cabecera">
+<div class="app">
+  <header>
     <h1>Fichadas a formularios</h1>
-    <p>Pegá tus fichadas y te devuelvo los formularios de <b>cambio de horario</b>, <b>compenso</b> y <b>horas extra</b> ya completos. Los abrís con tu cuenta institucional, revisás y tocás Enviar: cada formulario sale desde tu propia cuenta.</p>
-    <p class="privado">🔒 Todo queda guardado solo en este navegador. Nada se envía a ningún servidor.</p>
+    <span class="count" id="count-label"></span>
   </header>
 
-  <main>
-    <details class="tarjeta" id="config" open>
-      <summary><h2>1. Mis datos</h2><span class="estado" id="config-estado"></span></summary>
-      <form id="form-config" class="grilla">
-        <label>Legajo
-          <input name="legajo" inputmode="numeric" pattern="\d{1,5}" maxlength="5" required placeholder="Ej. 21408">
-        </label>
-        <label>Correo institucional (opcional)
-          <input name="correo" type="email" autocomplete="email" placeholder="nombre@hospital…">
-          <small>Los formularios se abren con esta cuenta de Google, aunque tengas otras abiertas. Queda guardado solo acá.</small>
-        </label>
-        <label>Hora de entrada habitual
-          <input name="entrada" type="time" step="1800" value="08:00" required>
-          <small>Semana común: 9 h (ej. 08:00 a 17:00). Semana con sábado: 8 h de lunes a viernes y 5 h el sábado.</small>
-        </label>
-        <label>Autoriza
-          <input name="autoriza" value="Patricia Cirino" required>
-          <small>Tiene que ser igual a la opción del formulario.</small>
-        </label>
-        <label class="ancho">Sábados que trabajás
-          <textarea name="sabados" rows="2" placeholder="24/10/2026, 21/11/2026, 12/12/2026"></textarea>
-          <small>Esas semanas son tu horario base y no llevan cambio de horario. Los demás sábados llevan FRANCO.</small>
-        </label>
-        <label class="ancho">Feriados y días no laborables
-          <textarea name="feriados" rows="2"></textarea>
-          <small>No llevan formulario. Separá las fechas con comas o una por línea.</small>
-        </label>
-        <label class="check ancho">
-          <input name="salidaViernes" type="checkbox" checked>
-          Si el viernes todavía no tiene salida fichada, suponer el fin de la jornada
-        </label>
-        <div class="ancho acciones"><button type="submit">Guardar mis datos</button></div>
-      </form>
-    </details>
-
-    <section class="tarjeta" id="carga">
-      <h2>2. Fichadas</h2>
-      <label>Pegá las fichadas tal cual salen del sistema
-        <textarea id="fichadas" rows="8" spellcheck="false" placeholder="02-11-2026	07:49	Entrada&#10;02-11-2026	17:01	Salida&#10;03-11-2026	07:24	Entrada"></textarea>
+  <!-- Mis datos: se muestra la primera vez o al tocar "Editar mis datos" -->
+  <section class="panel" id="config" hidden>
+    <h2>Mis datos</h2>
+    <p class="hint-top">Se completan una sola vez y quedan guardados solo en este navegador.</p>
+    <form id="form-config" class="grilla">
+      <label>Legajo
+        <input name="legajo" inputmode="numeric" pattern="\d{1,5}" maxlength="5" required placeholder="Ej. 21408">
       </label>
-      <details class="extra-manual">
-        <summary>Horas extra que no salen de las fichadas (opcional)</summary>
-        <label>Una por línea, por ejemplo: <code>14/10 07:00 a 08:00</code>
-          <textarea id="extras" rows="2" spellcheck="false"></textarea>
-        </label>
-      </details>
-      <div class="acciones"><button id="procesar" type="button">Generar formularios</button></div>
-      <ul id="avisos" class="avisos" aria-live="polite"></ul>
-    </section>
-
-    <section class="tarjeta" id="formularios" hidden>
-      <h2>3. Formularios para enviar</h2>
-      <p class="ayuda">Abrí cada uno, revisalo y tocá Enviar en el formulario. Después tildá <b>Enviado</b> acá.</p>
-      <div id="lista-pendientes"></div>
-      <details id="enviados-box"><summary>Ya enviados (<span id="cant-enviados">0</span>)</summary><div id="lista-enviados"></div></details>
-    </section>
-
-    <section class="tarjeta" id="resumen" hidden>
-      <h2>Resumen</h2>
-      <div id="resumen-contenido"></div>
-    </section>
-
-    <section class="tarjeta" id="detalle" hidden>
-      <h2>Detalle por día</h2>
-      <div class="tabla-scroll"><table id="tabla-dias">
-        <thead><tr><th>Día</th><th>Fichadas</th><th>Se declara</th><th>Tarde</th><th>Ausencia / extra</th><th>Estado</th></tr></thead>
-        <tbody></tbody>
-      </table></div>
-    </section>
-
-    <details class="tarjeta" id="datos">
-      <summary><h2>Mis registros</h2></summary>
-      <p class="ayuda">Para pasar tus registros a otro dispositivo, descargalos acá y cargalos allá.</p>
-      <div class="acciones">
-        <button type="button" id="exportar" class="secundario">Descargar copia</button>
-        <label class="boton secundario">Cargar copia<input type="file" id="importar" accept="application/json" hidden></label>
-        <button type="button" id="borrar" class="peligro">Borrar todo</button>
+      <label>Hora de entrada habitual
+        <input name="entrada" type="time" step="1800" value="08:00" required>
+      </label>
+      <label class="ancho">Correo institucional <span class="opcional">(opcional)</span>
+        <input name="correo" type="email" autocomplete="email" placeholder="nombre@…">
+        <small>Los formularios se abren con esa cuenta de Google aunque tengas otras abiertas.</small>
+      </label>
+      <label class="ancho">Sábados que trabajás
+        <input name="sabados" placeholder="24/10/2026, 21/11/2026, 12/12/2026">
+        <small>Esas semanas son tu horario base (8 h + sábado 5 h) y no llevan cambio de horario. Los demás sábados van como FRANCO.</small>
+      </label>
+      <label class="ancho">Feriados y días no laborables
+        <input name="feriados">
+        <small>No llevan formulario.</small>
+      </label>
+      <label>Autoriza
+        <input name="autoriza" value="Patricia Cirino" required>
+      </label>
+      <label class="check">
+        <input name="salidaViernes" type="checkbox" checked>
+        Si el viernes falta la salida, suponer fin de jornada
+      </label>
+      <div class="ancho fila-botones">
+        <button type="submit" class="btn">Guardar</button>
+        <button type="button" class="btn-link" id="cancelar-config">Cancelar</button>
       </div>
-    </details>
-  </main>
+    </form>
+  </section>
 
-  <footer>Las reglas: tolerancia de 25 minutos tarde por período (16 al 15) · horarios en medias horas · horas extra solo enteras (mínimo 1 h) · días seguidos con el mismo horario van en un solo formulario.</footer>
+  <div class="search-wrap">
+    <textarea id="fichadas" rows="6" spellcheck="false" placeholder="Pegá acá tus fichadas tal cual salen del sistema…&#10;&#10;02-11-2026	07:49	Entrada&#10;02-11-2026	17:01	Salida"></textarea>
+    <button class="clear-btn" id="clear-btn" type="button" aria-label="Limpiar">×</button>
+  </div>
+  <div class="fila-botones">
+    <button id="procesar" type="button" class="btn btn-grande">Generar formularios</button>
+    <button id="toggle-extras" type="button" class="btn-link">+ Agregar horas extra fuera de las fichadas</button>
+  </div>
+  <div class="extras-wrap" id="extras-wrap" hidden>
+    <input id="extras" spellcheck="false" placeholder="Una por línea o separadas por coma, ej. 14/10 07:00 a 08:00">
+  </div>
+  <div class="hint">Tolera fechas con guiones o barras. Días seguidos con el mismo horario se agrupan en un solo formulario.</div>
 
-  <script src="logic.js"></script>
-  <script src="app.js"></script>
+  <div id="avisos"></div>
+  <div id="stats" class="stats"></div>
+  <div id="results"></div>
+
+  <details class="plegable" id="enviados-box" hidden>
+    <summary>Ya enviados (<span id="cant-enviados">0</span>)</summary>
+    <div id="lista-enviados" class="lista"></div>
+  </details>
+
+  <details class="plegable" id="detalle" hidden>
+    <summary>Detalle por día</summary>
+    <div class="tabla-scroll"><table id="tabla-dias">
+      <thead><tr><th>Día</th><th>Fichadas</th><th>Se declara</th><th>Tarde</th><th>Ausencia / extra</th><th>Estado</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </details>
+
+  <footer>
+    <div class="fila-botones centro">
+      <button type="button" id="exportar" class="btn-link">Descargar copia</button>
+      <label class="btn-link">Cargar copia<input type="file" id="importar" accept="application/json" hidden></label>
+      <button type="button" id="borrar" class="btn-link peligro">Borrar todo</button>
+    </div>
+    <p>Uso interno · No oficial · Tus fichadas quedan solo en este navegador.</p>
+  </footer>
+</div>
+
+<script src="logic.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
