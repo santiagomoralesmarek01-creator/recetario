@@ -24,7 +24,10 @@ function conSecreto(req) {
 }
 
 export default async function handler(req, res) {
-  const accion = String(req.query.accion || '');
+  // Los parámetros se leen con URL y no con req.query: el req.query de Vercel usa url.parse(),
+  // que Node marca como obsoleto (aviso DEP0169 en cada llamada).
+  const parametros = new URL(req.url || '/', 'http://localhost').searchParams;
+  const accion = parametros.get('accion') || '';
   const secreto = conSecreto(req);
   const admin = !secreto && ['probar', 'estado', 'token'].includes(accion)
     && await esAdmin(String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')).catch(() => false);
@@ -39,8 +42,8 @@ export default async function handler(req, res) {
         return responder(res, 200, await tareaDiaria());
       case 'probar':
         if (req.method !== 'POST') return responder(res, 405, { error: 'Usá POST.' });
-        if (!/^\d+$/.test(String(req.query.id || ''))) return responder(res, 400, { error: 'Falta el id.' });
-        return responder(res, 200, await probar(req.query.id));
+        if (!/^\d+$/.test(parametros.get('id') || '')) return responder(res, 400, { error: 'Falta el id.' });
+        return responder(res, 200, await probar(parametros.get('id')));
       case 'estado':
         return responder(res, 200, await resumen());
       case 'token': {
