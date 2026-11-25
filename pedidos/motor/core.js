@@ -367,11 +367,12 @@ function cuentas() {
   const descs = [];
   for (const d of D.descuentos || []) {
     if (!d.porcentaje) continue;
-    let base = 0;
-    if (d.tipo === 'pago' && form.pago === d.pago) base = sub;
-    else if (d.tipo === 'entrega' && form.entrega === d.entrega) base = sub;
-    else if (d.tipo === 'minimo' && sub >= d.minimo) base = sub;
-    else if (d.tipo === 'categoria') base = carrito.filter((l) => l.cat === d.categoria).reduce((a, l) => a + (l.precio ?? 0) * l.cant, 0);
+    // condiciones combinables: pago, entrega, minimo, categoria (todas las que estén deben cumplirse)
+    if (d.tipo === 'info') continue;
+    if (d.pago && form.pago !== d.pago) continue;
+    if (d.entrega && form.entrega !== d.entrega) continue;
+    if (d.minimo && sub < d.minimo) continue;
+    const base = d.categoria ? carrito.filter((l) => l.cat === d.categoria).reduce((a, l) => a + (l.precio ?? 0) * l.cant, 0) : sub;
     if (base > 0) descs.push({ texto: d.texto || `${d.porcentaje}% off`, monto: Math.round((base * d.porcentaje) / 100) });
   }
   const envio = form.entrega && form.entrega === D.entrega?.envio_nombre && D.entrega?.envio_costo != null ? D.entrega.envio_costo : 0;

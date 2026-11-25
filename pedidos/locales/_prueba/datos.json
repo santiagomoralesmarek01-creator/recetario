@@ -9,7 +9,7 @@
   "entrega": {"opciones": ["Retiro en el local", "Envío a domicilio"], "envio_costo": 1500},
   "pagos": ["Efectivo", "Transferencia"],
   "descuentos": [
-    {"tipo": "pago", "pago": "Efectivo", "porcentaje": 10, "texto": "10% pagando en efectivo"},
+    {"tipo": "pago", "pago": "Efectivo", "entrega": "Retiro en el local", "porcentaje": 10, "texto": "10% en efectivo retirando"},
     {"tipo": "info", "texto": "Los martes, 2x1 en muzza (sólo informativo)"}
   ],
   "categorias": [

@@ -50,7 +50,8 @@ se publica (está en `.vercelignore`).
 - `combo` (sushi): `combos` [{piezas, precio, nombre?}], `paso` (piezas por variedad, 5 por defecto); los ítems son las variedades.
 - `docena` (empanadas): `docena` {precio_unidad, precio_media, precio_docena}; si falta la unidad se vende por media/docena.
 - sin armador: se agrega directo; con `variantes` se elige una.
-Descuentos (`descuentos[]`): `pago`, `entrega`, `minimo`, `categoria` con `porcentaje`; `info` sólo muestra el texto.
+Descuentos (`descuentos[]`): `porcentaje` + condiciones combinables `pago`, `entrega`, `minimo`, `categoria`
+(todas las presentes deben cumplirse; ej. efectivo **y** retiro). `tipo: "info"` sólo muestra el texto.
 
 ## Reglas de diseño
 - Nada de estilo por defecto: paleta, tipografía y composición salen de lo que el local es.
