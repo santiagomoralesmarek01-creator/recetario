@@ -1,0 +1,6 @@
+{
+  "nota": "Local FICTICIO para probar el motor. No es una demo ni va al registro.",
+  "layout": "menu-impreso",
+  "tipografias": [{"familia": "Fraunces", "pesos": [400, 700], "uso": "títulos"}, {"familia": "Inter", "pesos": [400, 700], "uso": "texto"}],
+  "colores": [{"hex": "#f6f1e7", "uso": "fondo"}, {"hex": "#1f1b16", "uso": "texto"}, {"hex": "#b4441f", "uso": "acento"}]
+}

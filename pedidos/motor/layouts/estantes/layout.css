@@ -1,0 +1,25 @@
+/* Estantes: cada categoría es una fila que se desliza de costado */
+.es-cab { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.5rem 1.25rem .5rem; }
+.es-cab h1 { font-size: clamp(2rem, 9vw, 3.4rem); }
+.es-cab p { color: var(--pi-suave); }
+.es-logo { width: 4rem; }
+.es-info { display: flex; flex-wrap: wrap; gap: .3rem 1.5rem; padding: 0 1.25rem 1rem; font-size: .88rem; color: var(--pi-suave); }
+.es-info ul { list-style: none; padding: 0; margin: 0; }
+.es-info a { color: inherit; }
+.es-carta { padding-bottom: 7rem; }
+.es-estante { padding: 1.25rem 0 .5rem; }
+.es-estante .pi-seccion-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 0 1.25rem .6rem; }
+.es-estante .pi-seccion-cab h2 { font-size: 1.45rem; }
+.es-estante .pi-seccion-cab p { font-size: .85rem; color: var(--pi-suave); }
+.es-estante .pi-armar { margin: 0 1.25rem .75rem; border: 0; background: var(--pi-acento); color: var(--pi-sobre-acento); padding: .55rem .95rem; border-radius: var(--pi-radio); font-weight: 700; }
+.es-fila { display: grid; grid-auto-flow: column; grid-auto-columns: min(68%, 15rem); gap: .9rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 1.25rem .75rem; scroll-padding-inline: 1.25rem; scrollbar-width: thin; }
+.es-plato { scroll-snap-align: start; display: grid; grid-template-rows: auto auto 1fr auto; gap: .35rem; padding-bottom: .25rem; }
+.es-plato img { aspect-ratio: 4/3; width: 100%; object-fit: cover; border-radius: var(--pi-radio); }
+.es-plato:not([data-con-foto]) { border-top: 4px solid var(--pi-acento); padding-top: .75rem; }
+.es-plato h3 { font: 700 1.02rem/1.25 var(--pi-cuerpo); }
+.es-desc { color: var(--pi-suave); font-size: .84rem; }
+.es-pie { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+.es-plato .pi-precio { font-weight: 700; }
+.es-plato .pi-agregar { border: 0; border-radius: 99px; padding: .4rem .85rem; background: var(--pi-acento); color: var(--pi-sobre-acento); font-weight: 700; font-size: .85rem; }
+.pi-listo .es-fila { animation: es-entra .8s both cubic-bezier(.2,.7,.2,1); animation-delay: calc(var(--pi-i) * 90ms); }
+@keyframes es-entra { from { opacity: 0; transform: translateX(2rem); } }

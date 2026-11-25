@@ -1,0 +1,31 @@
+/* Carta tipo menú impreso: hoja centrada, renglones con puntos guía, sin fotos */
+.mi-hoja { max-width: 40rem; margin: 0 auto; padding: 2.5rem 1.25rem 7rem; }
+.mi-cab { text-align: center; display: grid; justify-items: center; gap: .6rem; padding-bottom: 1.5rem; }
+.mi-logo { width: 5.5rem; height: auto; }
+.mi-cab h1 { font-size: clamp(2.2rem, 9vw, 3.6rem); }
+.mi-bajada { color: var(--pi-suave); font-style: italic; }
+.mi-horarios { list-style: none; padding: 0; margin: 0; font-size: .9rem; color: var(--pi-suave); }
+.mi-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem 1.1rem; padding: .8rem 0; border-block: 1px solid var(--pi-linea); margin-bottom: 2rem; }
+.mi-nav a { color: inherit; text-decoration: none; padding: .2rem 0; }
+.mi-nav a:hover { text-decoration: underline; }
+.mi-carta .pi-seccion { margin-bottom: 2.75rem; }
+.mi-carta .pi-seccion-cab { text-align: center; margin-bottom: 1rem; }
+.mi-carta .pi-seccion-cab h2 { font-size: 1.7rem; }
+.mi-carta .pi-seccion-cab p { color: var(--pi-suave); font-size: .9rem; margin-top: .3rem; }
+.mi-carta .pi-armar { display: block; margin: 0 auto 1rem; background: none; border: 1.5px solid currentColor; border-radius: var(--pi-radio); padding: .45rem 1rem; }
+.mi-plato { display: grid; grid-template-columns: 1fr auto; column-gap: .75rem; padding: .7rem 0; }
+.mi-renglon { display: flex; align-items: baseline; gap: .4rem; min-width: 0; }
+.mi-renglon h3 { font-size: 1.1rem; font-family: var(--pi-cuerpo); font-weight: 700; }
+.mi-puntos { flex: 1; border-bottom: 2px dotted var(--pi-linea); transform: translateY(-.3em); min-width: 1rem; }
+.mi-plato .pi-precio { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mi-desc { grid-column: 1; color: var(--pi-suave); font-size: .92rem; font-style: italic; }
+.mi-plato .pi-agregar { grid-column: 2; grid-row: 1 / span 2; align-self: center; background: none; border: 0; color: var(--pi-acento); font-weight: 700; padding: .4rem 0 .4rem .4rem; text-decoration: underline; text-underline-offset: .2em; }
+.mi-plato[data-en-pedido] .mi-renglon h3::after { content: " ✓"; color: var(--pi-acento); }
+.mi-pie { text-align: center; color: var(--pi-suave); font-size: .9rem; display: grid; gap: .4rem; padding-top: 1.5rem; border-top: 1px solid var(--pi-linea); }
+.mi-pie a { color: inherit; }
+.mi-descuentos { list-style: none; padding: 0; margin: 0 0 .5rem; color: var(--pi-texto); }
+[data-pi="barra"] { max-width: 40rem; margin-inline: auto; }
+.pi-listo .mi-cab > * { animation: mi-entra .7s both cubic-bezier(.2,.7,.2,1); }
+.pi-listo .mi-cab > :nth-child(2) { animation-delay: .12s; }
+.pi-listo .mi-cab > :nth-child(n+3) { animation-delay: .24s; }
+@keyframes mi-entra { from { opacity: 0; transform: translateY(.6rem); } }

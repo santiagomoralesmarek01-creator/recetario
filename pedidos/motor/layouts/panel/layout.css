@@ -1,0 +1,34 @@
+/* Panel: identidad a la izquierda, carta al centro, pedido siempre a la vista */
+.pa-marco { display: grid; gap: 1.5rem; padding: 1rem 1rem 7rem; max-width: 1280px; margin: 0 auto; }
+.pa-lado { display: grid; gap: .6rem; align-content: start; }
+.pa-logo { width: 4rem; }
+.pa-lado h1 { font-size: 2rem; }
+.pa-bajada, .pa-info { color: var(--pi-suave); font-size: .9rem; }
+.pa-info { list-style: none; padding: 0; margin: 0; }
+a.pa-info { color: var(--pi-suave); }
+.pa-nav { display: flex; gap: .4rem; overflow-x: auto; position: sticky; top: 0; z-index: 10; background: var(--pi-fondo); padding: .5rem 0; scrollbar-width: none; }
+.pa-nav a { flex: none; color: inherit; text-decoration: none; padding: .35rem .75rem; border-radius: var(--pi-radio); background: color-mix(in srgb, var(--pi-texto) 7%, transparent); }
+.pa-carta .pi-seccion { margin-bottom: 2rem; }
+.pa-carta .pi-seccion-cab { margin-bottom: .5rem; }
+.pa-carta .pi-seccion-cab h2 { font-size: 1.4rem; }
+.pa-carta .pi-seccion-cab p { color: var(--pi-suave); font-size: .9rem; }
+.pa-carta .pi-armar { margin: .25rem 0 .75rem; border: 0; background: var(--pi-acento); color: var(--pi-sobre-acento); padding: .55rem .9rem; border-radius: var(--pi-radio); font-weight: 700; }
+.pa-plato { display: grid; grid-template-columns: auto 1fr auto; gap: .8rem; align-items: center; padding: .75rem 0; border-bottom: 1px solid var(--pi-linea); }
+.pa-plato img { width: 4.5rem; height: 4.5rem; object-fit: cover; border-radius: var(--pi-radio); }
+.pa-plato:not([data-con-foto]) { grid-template-columns: 1fr auto; }
+.pa-txt h3 { font: 700 1rem/1.25 var(--pi-cuerpo); }
+.pa-txt p { color: var(--pi-suave); font-size: .85rem; }
+.pa-accion { display: grid; justify-items: end; gap: .3rem; }
+.pa-plato .pi-precio { font-weight: 700; white-space: nowrap; }
+.pa-plato .pi-agregar { border: 1.5px solid var(--pi-acento); color: var(--pi-acento); background: none; border-radius: var(--pi-radio); padding: .3rem .7rem; font-weight: 700; font-size: .85rem; }
+.pa-plato[data-en-pedido] .pi-agregar { background: var(--pi-acento); color: var(--pi-sobre-acento); }
+.pa-pedido { display: flex; flex-direction: column; background: var(--pi-superficie); border-radius: var(--pi-radio); border: 1px solid var(--pi-linea); }
+@media (min-width: 960px) {
+  .pa-marco { grid-template-columns: 14rem 1fr 22rem; align-items: start; padding-bottom: 2rem; }
+  .pa-lado, .pa-pedido { position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); }
+  .pa-pedido .pi-dlg-cuerpo { overflow: auto; }
+  .pa-nav { display: grid; position: static; padding: .5rem 0; }
+  .pa-barra { display: none; }
+}
+.pi-listo .pa-pedido { animation: pa-entra .6s .2s both ease-out; }
+@keyframes pa-entra { from { opacity: 0; transform: translateX(1rem); } }

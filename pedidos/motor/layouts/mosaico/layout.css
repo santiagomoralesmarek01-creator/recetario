@@ -1,0 +1,29 @@
+/* Mosaico de fotos grandes: la foto manda, el texto acompaña */
+.mo-cab { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8rem; padding: 1rem; max-width: var(--pi-ancho); margin: 0 auto; }
+.mo-logo { width: 3.25rem; height: 3.25rem; object-fit: contain; }
+.mo-ident h1 { font-size: 1.6rem; }
+.mo-ident p { color: var(--pi-suave); font-size: .9rem; }
+.mo-ig { color: inherit; font-size: .85rem; }
+.mo-nav { position: sticky; top: 0; z-index: 10; display: flex; gap: .4rem; overflow-x: auto; padding: .6rem 1rem; background: var(--pi-fondo); scrollbar-width: none; }
+.mo-nav a { flex: none; padding: .4rem .9rem; border-radius: 99px; border: 1.5px solid var(--pi-linea); color: inherit; text-decoration: none; font-size: .9rem; }
+.mo-carta { max-width: var(--pi-ancho); margin: 0 auto; padding: .5rem 1rem 7rem; }
+.mo-carta .pi-seccion { margin: 1.5rem 0 2.5rem; }
+.mo-carta .pi-seccion-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; }
+.mo-carta .pi-seccion-cab h2 { font-size: 1.5rem; }
+.mo-carta .pi-seccion-cab p { color: var(--pi-suave); font-size: .85rem; }
+.mo-carta .pi-armar { width: 100%; margin-bottom: 1rem; padding: .8rem; border-radius: var(--pi-radio); border: 2px dashed var(--pi-acento); background: none; color: var(--pi-acento); font-weight: 700; }
+.mo-carta .pi-platos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(46%, 15rem), 1fr)); gap: 1rem .75rem; }
+.mo-plato:not([data-con-foto]) { padding: 3rem .9rem .9rem; border-radius: var(--pi-radio); background: color-mix(in srgb, var(--pi-acento) 12%, var(--pi-fondo)); }
+.mo-plato { position: relative; display: grid; align-content: start; gap: .5rem; }
+.mo-foto { aspect-ratio: 1; border-radius: var(--pi-radio); overflow: hidden; background: color-mix(in srgb, var(--pi-acento) 14%, var(--pi-fondo)); display: grid; }
+.mo-foto img { width: 100%; height: 100%; object-fit: cover; grid-area: 1/1; }
+.mo-plato:not([data-con-foto]) .mo-foto { display: none; }
+.mo-txt h3 { font-size: 1.02rem; font-family: var(--pi-cuerpo); font-weight: 700; }
+.mo-desc { font-size: .82rem; color: var(--pi-suave); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mo-plato .pi-precio { font-weight: 700; margin-top: .15rem; }
+.mo-plato .pi-agregar { position: absolute; top: .5rem; right: .5rem; border: 0; border-radius: 99px; padding: .45rem .8rem; background: var(--pi-fondo); color: var(--pi-texto); font-weight: 700; font-size: .85rem; box-shadow: 0 1px 0 var(--pi-linea); }
+.mo-plato[data-en-pedido] .pi-agregar { background: var(--pi-acento); color: var(--pi-sobre-acento); }
+.mo-pie { max-width: var(--pi-ancho); margin: 0 auto; padding: 1rem 1rem 8rem; color: var(--pi-suave); font-size: .9rem; }
+.mo-pie ul { list-style: none; padding: 0; margin: 0 0 .5rem; }
+.pi-listo .mo-plato { animation: mo-entra .5s both ease-out; animation-delay: calc(var(--pi-i) * 60ms); }
+@keyframes mo-entra { from { opacity: 0; transform: scale(.97); } }

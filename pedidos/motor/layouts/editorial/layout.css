@@ -1,0 +1,28 @@
+/* Lista editorial: nombres de platos enormes, todo lo demás chico y al costado */
+.ed-cab { padding: 2.5rem 1.25rem 1.5rem; max-width: var(--pi-ancho); margin: 0 auto; }
+.ed-cab h1 { font-size: clamp(3rem, 16vw, 8rem); letter-spacing: -.03em; line-height: .9; margin: .4rem 0 1rem; }
+.ed-bajada { color: var(--pi-suave); max-width: 28ch; }
+.ed-datos { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; font-size: .9rem; color: var(--pi-suave); }
+.ed-datos ul { list-style: none; padding: 0; margin: 0; }
+.ed-datos a { color: inherit; }
+.ed-nav { display: flex; gap: 1.25rem; overflow-x: auto; padding: .75rem 1.25rem; border-block: 1px solid var(--pi-texto); position: sticky; top: 0; z-index: 10; background: var(--pi-fondo); scrollbar-width: none; }
+.ed-nav a { flex: none; color: inherit; text-decoration: none; font-weight: 700; }
+.ed-carta { max-width: var(--pi-ancho); margin: 0 auto; padding: 0 1.25rem 7rem; counter-reset: plato; }
+.ed-carta .pi-seccion { padding-top: 2.5rem; }
+.ed-carta .pi-seccion-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--pi-texto); }
+.ed-carta .pi-seccion-cab h2 { font-size: 1rem; font-family: var(--pi-cuerpo); font-weight: 700; }
+.ed-carta .pi-seccion-cab p { font-size: .85rem; color: var(--pi-suave); }
+.ed-carta .pi-armar { margin: 1rem 0 0; border: 0; background: var(--pi-acento); color: var(--pi-sobre-acento); padding: .6rem 1rem; border-radius: var(--pi-radio); font-weight: 700; }
+.ed-plato { counter-increment: plato; display: grid; gap: .5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--pi-linea); }
+.ed-plato h3 { font-size: clamp(2rem, 10vw, 4.5rem); letter-spacing: -.02em; line-height: .95; }
+.ed-plato h3::before { content: counter(plato, decimal-leading-zero); font: 400 .8rem/1 var(--pi-cuerpo); vertical-align: top; margin-right: .5rem; color: var(--pi-suave); letter-spacing: 0; }
+.ed-lado { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: .25rem 1rem; }
+.ed-plato .pi-precio { font-weight: 700; font-variant-numeric: tabular-nums; }
+.ed-desc { color: var(--pi-suave); font-size: .9rem; max-width: 42ch; }
+.ed-plato .pi-agregar { border: 1.5px solid var(--pi-texto); background: none; border-radius: 99px; padding: .35rem .9rem; font-weight: 700; }
+.ed-plato[data-en-pedido] .pi-agregar { background: var(--pi-texto); color: var(--pi-fondo); }
+@media (min-width: 800px) { .ed-plato { grid-template-columns: 1.4fr 1fr; align-items: end; } }
+.ed-pie { max-width: var(--pi-ancho); margin: 0 auto; padding: 1rem 1.25rem 8rem; color: var(--pi-suave); }
+.ed-pie ul { list-style: none; padding: 0; margin: 0 0 .5rem; }
+.pi-listo .ed-cab h1 { animation: ed-entra .9s both cubic-bezier(.2,.8,.2,1); }
+@keyframes ed-entra { from { opacity: 0; letter-spacing: .05em; } }

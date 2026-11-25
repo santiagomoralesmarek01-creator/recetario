@@ -1,0 +1,6 @@
+# Lo generado y las fotos de locales reales no van al repo (no se publican)
+.cache/
+locales/*/index.html
+locales/*/fotos/
+locales/*/salida/
+__pycache__/

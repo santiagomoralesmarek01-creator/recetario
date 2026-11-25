@@ -1,0 +1,38 @@
+{
+  "nombre": "Cocina de Prueba",
+  "rubro": "mixto",
+  "bajada": "Local ficticio para probar el motor",
+  "instagram": "@cocina.de.prueba",
+  "direccion": "Calle Falsa 123",
+  "whatsapp_demo": "5491100000000",
+  "horarios": [{"dias": "Mar a Dom", "horas": "19 a 23"}],
+  "entrega": {"opciones": ["Retiro en el local", "Envío a domicilio"], "envio_costo": 1500},
+  "pagos": ["Efectivo", "Transferencia"],
+  "descuentos": [
+    {"tipo": "pago", "pago": "Efectivo", "porcentaje": 10, "texto": "10% pagando en efectivo"},
+    {"tipo": "info", "texto": "Los martes, 2x1 en muzza (sólo informativo)"}
+  ],
+  "categorias": [
+    {"id": "pizzas", "nombre": "Pizzas", "armador": "mitad", "nota": "Grande, 8 porciones",
+     "items": [
+       {"id": "muzza", "nombre": "Muzzarella", "desc": "Salsa, muzzarella, orégano", "precio": 9000},
+       {"id": "napo", "nombre": "Napolitana", "desc": "Muzza, tomate, ajo", "precio": 10500},
+       {"id": "fuga", "nombre": "Fugazzeta", "desc": "Cebolla y muzza", "precio": 10000},
+       {"id": "espe", "nombre": "Especial", "desc": "Jamón y morrones", "precio": null}
+     ]},
+    {"id": "burgers", "nombre": "Hamburguesas", "armador": "capas",
+     "extras": [{"nombre": "Cheddar", "precio": 800}, {"nombre": "Panceta", "precio": 1200}, {"nombre": "Huevo", "precio": 700}],
+     "quitar": ["cebolla", "pepinos"],
+     "items": [
+       {"id": "clasica", "nombre": "Clásica", "desc": "Carne, cheddar, cebolla", "variantes": [{"nombre": "Simple", "precio": 7500}, {"nombre": "Doble", "precio": 9500}, {"nombre": "Triple", "precio": 11500}]}
+     ]},
+    {"id": "sushi", "nombre": "Sushi", "armador": "combo", "paso": 5,
+     "combos": [{"piezas": 15, "precio": 14000}, {"piezas": 30, "precio": 26000}],
+     "items": [{"id": "phila", "nombre": "Philadelphia"}, {"id": "new", "nombre": "New York"}, {"id": "ebi", "nombre": "Ebi furai"}]},
+    {"id": "empanadas", "nombre": "Empanadas", "armador": "docena", "nota": "Unidad $1.300 · media $7.000 · docena $13.000",
+     "docena": {"precio_unidad": 1300, "precio_media": 7000, "precio_docena": 13000},
+     "items": [{"id": "carne", "nombre": "Carne cortada a cuchillo"}, {"id": "jyq", "nombre": "Jamón y queso"}, {"id": "humita", "nombre": "Humita"}, {"id": "cap", "nombre": "Capresse"}]},
+    {"id": "bebidas", "nombre": "Bebidas",
+     "items": [{"id": "agua", "nombre": "Agua 500 ml", "precio": 1500}, {"id": "cerveza", "nombre": "Cerveza 1 L", "precio": 4500}]}
+  ]
+}
