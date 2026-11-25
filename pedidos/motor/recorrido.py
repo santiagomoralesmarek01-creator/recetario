@@ -10,6 +10,26 @@ from playwright.sync_api import sync_playwright
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+# formato: (ancho css, alto css, escala de render, salida ancho x alto)
+FORMATOS = {
+    'vertical': {'video': (360, 640, 3, 1080, 1920), 'fotos': (360, 780, 3)},
+    'horizontal': {'video': (1280, 720, 1.5, 1080, 608), 'fotos': (1440, 900, 2)},
+}
+
+
+def elegir_formato(slug, argv):
+    """Orden: argumento en la línea de comandos > "formato" en brief.json > vertical."""
+    f = next((a for a in argv if a in FORMATOS), None)
+    if not f:
+        try:
+            f = json.loads((RAIZ / 'locales' / slug / 'brief.json').read_text()).get('formato')
+        except FileNotFoundError:
+            pass
+    f = f or 'vertical'
+    if f not in FORMATOS:
+        raise SystemExit(f'Formato "{f}" no válido: vertical u horizontal')
+    return f
+
 INIT_JS = r"""
 window.PI_SIN_MEMORIA = true;
 window.__pi = { t: 0, inicio: 0 };
@@ -50,6 +70,7 @@ html { scroll-behavior: auto !important; }
 #__wa .__wa-chat { padding: 1rem; overflow: hidden; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
 #__wa pre { align-self: flex-end; max-width: 88%; margin: 0; white-space: pre-wrap; font: .86rem/1.4 system-ui, sans-serif;
   background: #d9fdd3; color: #111; padding: .7rem .8rem; border-radius: .6rem 0 .6rem .6rem; box-shadow: 0 1px 0 rgba(0,0,0,.12); }
+@media (min-width: 700px) { #__wa .__wa-chat { justify-content: center; } #__wa pre { align-self: center; max-width: 34rem; font-size: 1.05rem; padding: 1rem 1.2rem; } }
 """
 
 

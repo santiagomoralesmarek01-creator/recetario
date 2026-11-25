@@ -28,7 +28,8 @@ se publica (está en `.vercelignore`).
     "tipografias": [{"familia": "Google Font", "pesos": [400, 700], "uso": "títulos"}, {"familia": "…", "pesos": [400], "uso": "texto"}],
     "colores": [{"hex": "#…", "uso": "fondo", "de_donde": "toldo / logo / packaging…"}],
     "portada": "idea concreta para la portada",
-    "memorable": "el único elemento que se recuerda"}
+    "memorable": "el único elemento que se recuerda",
+    "formato": "vertical u horizontal (lo elige Santi; si no dice, vertical)"}
    ```
    Distinto de lo registrado en layout, paleta y tipografías.
 2. `datos.json` (formato: ver `locales/_prueba/datos.json`). Lo que no se lee bien va como
@@ -38,9 +39,12 @@ se publica (está en `.vercelignore`).
 3. `estilo.css`, idealmente < 150 líneas: variables `--pi-fondo --pi-texto --pi-suave --pi-acento
    --pi-sobre-acento --pi-superficie --pi-linea --pi-titulo --pi-cuerpo --pi-radio` + el elemento memorable.
    `url(fotos/x.jpg)` se embebe sola.
-4. `python3 build.py <slug>` → `python3 capturas.py <slug>` → mirar sólo `1-portada.png` y
-   `4-pedido.png` → máximo dos rondas de arreglos → `python3 video.py <slug>`.
-   Salidas en `locales/<slug>/salida/`.
+4. `python3 build.py <slug>` → `python3 capturas.py <slug>` → mirar sólo la portada y el
+   pedido → máximo dos rondas de arreglos → `python3 video.py <slug>`.
+   Formato: `vertical` (1080×1920, celular: Reels, Estados) u `horizontal` (1080×608, la web en
+   compu). Se pasa como argumento (`python3 video.py <slug> horizontal`) o va en `brief.json`
+   (`"formato"`); si no, vertical. Lo elige Santi: si no lo dijo, preguntar antes de grabar.
+   Salidas en `locales/<slug>/salida/` con el formato en el nombre (`<slug>-horizontal.mp4`).
 5. Anotar la fila en `registro.md` y entregar video, capturas y mensaje.
 
 ## Armadores (`categorias[].armador`)
